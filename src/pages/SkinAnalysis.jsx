@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import ProductRecommendations from "../components/ProductRecommendations";
 import {
   analyzeSkinImage,
   isUsingDemoMode,
   sendFollowUp,
 } from "../services/analyzeSkin";
+import { getRecommendedProducts } from "../services/recommendProducts";
 import "./SkinAnalysis.css";
 
 function formatMessage(text) {
@@ -30,6 +32,7 @@ export default function SkinAnalysis() {
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
   const chatEndRef = useRef(null);
+  const productsRef = useRef(null);
   const streamRef = useRef(null);
 
   const [mode, setMode] = useState("choose");
@@ -51,6 +54,20 @@ export default function SkinAnalysis() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  const analysisText = useMemo(() => {
+    const analysis = messages.find((m) => m.role === "assistant" && !m.isError);
+    return analysis?.content || "";
+  }, [messages]);
+
+  const recommendations = useMemo(() => {
+    if (!analysisText) return null;
+    return getRecommendedProducts(analysisText);
+  }, [analysisText]);
+
+  const scrollToProducts = () => {
+    productsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const startCamera = async () => {
     setCameraError("");
@@ -185,6 +202,8 @@ export default function SkinAnalysis() {
     setInput("");
     setCameraError("");
   };
+
+  const hasAnalysis = Boolean(recommendations?.products.length);
 
   return (
     <div className="analyze-page">
@@ -321,6 +340,16 @@ export default function SkinAnalysis() {
           </div>
 
           <form className="analyze-input-form" onSubmit={handleSendMessage}>
+            {hasAnalysis && (
+              <button
+                type="button"
+                className="analyze-products-btn"
+                onClick={scrollToProducts}
+                title="Xem sản phẩm gợi ý"
+              >
+                🛍
+              </button>
+            )}
             <input
               type="text"
               placeholder="Hỏi thêm về da, routine, sản phẩm..."
@@ -334,6 +363,22 @@ export default function SkinAnalysis() {
           </form>
         </main>
       </div>
+
+      {hasAnalysis && (
+        <div ref={productsRef}>
+          <ProductRecommendations
+            products={recommendations.products}
+            profile={recommendations.profile}
+            title="Sản phẩm gợi ý phù hợp với da bạn"
+            subtitle="Dựa trên kết quả phân tích AI — sắp xếp theo mức độ phù hợp"
+          />
+          <div className="analyze-products-more">
+            <Link to="/products" className="analyze-btn analyze-btn--secondary">
+              Xem tất cả sản phẩm →
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

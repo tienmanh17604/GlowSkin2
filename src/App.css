@@ -495,6 +495,10 @@ body {
   box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
 }
 
+.card--clickable {
+  cursor: pointer;
+}
+
 .card-image-wrap {
   height: 180px;
   overflow: hidden;

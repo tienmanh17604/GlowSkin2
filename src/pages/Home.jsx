@@ -5,7 +5,7 @@ import "../App.css";
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "Analysis", to: "/analyze" },
-  { label: "Reviews", href: "#gallery" },
+  { label: "Products", to: "/products" },
   { label: "Community", href: "#community" },
   { label: "Contact", href: "#contact" },
 ];
@@ -43,21 +43,25 @@ const FEATURES = [
     title: "AI Analysis",
     desc: "Phân tích da bằng AI từ hình ảnh.",
     image: img("1616394584738-fc6e612e71b9", 600),
+    to: "/analyze",
   },
   {
     title: "Product Review",
     desc: "Đọc review chân thực từ cộng đồng.",
     image: img("1608571423902-eed4a5ad8108", 600),
+    to: "/products",
   },
   {
     title: "Recommendation",
     desc: "Đề xuất mỹ phẩm phù hợp với da.",
     image: img("1571781926291-c477ebfd024b", 600),
+    to: "/products",
   },
   {
     title: "Routine Builder",
     desc: "Xây dựng routine skincare cá nhân.",
     image: img("1556228720-195a672e8a03", 600),
+    to: "/analyze",
   },
 ];
 
@@ -220,8 +224,12 @@ export default function Home() {
           {FEATURES.map((feature, index) => (
             <div
               key={feature.title}
-              className="card"
+              className="card card--clickable"
               style={{ animationDelay: `${index * 0.12}s` }}
+              onClick={() => navigate(feature.to)}
+              onKeyDown={(e) => e.key === "Enter" && navigate(feature.to)}
+              role="button"
+              tabIndex={0}
             >
               <div className="card-image-wrap">
                 <img src={feature.image} alt={feature.title} className="card-image" />

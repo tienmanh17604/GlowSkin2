@@ -359,7 +359,7 @@
   color: #999;
 }
 
-.analyze-input-form button {
+.analyze-input-form button[type="submit"] {
   padding: 14px 28px;
   background: linear-gradient(135deg, #7c3aed, #a855f7);
   color: white;
@@ -370,11 +370,38 @@
   transition: opacity 0.2s, transform 0.2s;
 }
 
-.analyze-input-form button:hover:not(:disabled) {
+.analyze-products-btn {
+  padding: 14px 16px;
+  background: white;
+  border: 2px solid #8b5cf6;
+  border-radius: 999px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.analyze-products-btn:hover {
+  background: #faf7ff;
+  transform: scale(1.05);
+}
+
+.analyze-products-more {
+  text-align: center;
+  padding: 0 8% 48px;
+  background: #faf7ff;
+}
+
+.analyze-products-more .analyze-btn {
+  display: inline-flex;
+  width: auto;
+}
+
+.analyze-input-form button[type="submit"]:hover:not(:disabled) {
   transform: translateY(-1px);
 }
 
-.analyze-input-form button:disabled {
+.analyze-input-form button[type="submit"]:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
