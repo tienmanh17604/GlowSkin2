@@ -24,9 +24,41 @@ function detectFromText(text, keywordMap) {
     .map(([key]) => key);
 }
 
+function getSectionText(text, sectionNum, nextSectionNum) {
+  if (!text) return "";
+  // Find the current section index, e.g. "1." or "**1."
+  const startRegex = new RegExp(`(?:^|\\n)(?:\\*\\*)?${sectionNum}\\.\\s*`, "i");
+  const startIndex = text.search(startRegex);
+  if (startIndex === -1) return "";
+
+  // The rest of the text starting from that section heading
+  const restText = text.substring(startIndex);
+  
+  // Find where the next section starts, e.g. "2." or "**2."
+  const endRegex = new RegExp(`(?:^|\\n)(?:\\*\\*)?${nextSectionNum}\\.\\s*`, "i");
+  // Search in restText, but offset to avoid matching the starting header itself
+  const headerOffset = restText.search(/\.\s*/i) + 1; // move past the dot
+  const nextMatch = restText.substring(headerOffset).match(endRegex);
+
+  if (nextMatch) {
+    // If next section found, return everything up to its starting index (relative to restText)
+    const relativeEndIndex = restText.substring(headerOffset).search(endRegex) + headerOffset;
+    return restText.substring(0, relativeEndIndex);
+  }
+  return restText;
+}
+
 export function extractSkinProfile(analysisText) {
-  const skinTypes = detectFromText(analysisText, SKIN_KEYWORDS);
-  const concerns = detectFromText(analysisText, CONCERN_KEYWORDS);
+  // Extract Section 1 (Loại da) and Section 2 (Tình trạng da) for precise keyword matching
+  let skinTypeText = getSectionText(analysisText, 1, 2);
+  let concernText = getSectionText(analysisText, 2, 3);
+
+  // Fallback to the whole text if sections are not detected in the expected format
+  if (!skinTypeText) skinTypeText = analysisText;
+  if (!concernText) concernText = analysisText;
+
+  const skinTypes = detectFromText(skinTypeText, SKIN_KEYWORDS);
+  const concerns = detectFromText(concernText, CONCERN_KEYWORDS);
 
   if (skinTypes.length === 0) skinTypes.push("combination");
   if (concerns.length === 0) concerns.push("dehydration");

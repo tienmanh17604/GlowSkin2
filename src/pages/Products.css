@@ -1,6 +1,6 @@
 .products-page {
   min-height: 100svh;
-  background: linear-gradient(180deg, #fff 0%, #faf7ff 100%);
+  background: linear-gradient(180deg, #fff 0%, #faf6f0 100%);
 }
 
 .products-header {
@@ -9,9 +9,9 @@
   justify-content: space-between;
   padding: 0 8%;
   height: 72px;
-  background: rgba(220, 204, 251, 0.8);
+  background: rgba(245, 240, 232, 0.8);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+  border-bottom: 1px solid rgba(195, 156, 115, 0.1);
 }
 
 .products-header-actions {
@@ -24,7 +24,7 @@
   font-size: 14px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(135deg, #a98467, #c39c73);
   padding: 10px 20px;
   border-radius: 999px;
   text-decoration: none;
@@ -33,7 +33,7 @@
 
 .products-analyze-link:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 20px rgba(195, 156, 115, 0.35);
 }
 
 .products-hero {
@@ -47,7 +47,7 @@
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 48px;
   font-weight: 700;
-  color: #7c3aed;
+  color: #8c6239;
   margin-bottom: 16px;
 }
 
@@ -62,8 +62,8 @@
   display: inline-block;
   padding: 14px 28px;
   background: white;
-  color: #7c3aed;
-  border: 2px solid #8b5cf6;
+  color: #a98467;
+  border: 2px solid #a98467;
   border-radius: 999px;
   font-weight: 600;
   text-decoration: none;
@@ -71,7 +71,7 @@
 }
 
 .products-cta:hover {
-  background: #faf7ff;
+  background: #faf6f0;
   transform: translateY(-2px);
 }
 
@@ -95,7 +95,7 @@
 .filter-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #7c3aed;
+  color: #8c6239;
 }
 
 .filter-group select {
@@ -112,14 +112,14 @@
 }
 
 .filter-group select:focus {
-  border-color: #a855f7;
+  border-color: #c39c73;
 }
 
 .filter-clear {
   padding: 12px 20px;
   background: transparent;
-  border: 1px solid rgba(124, 58, 237, 0.3);
-  color: #7c3aed;
+  border: 1px solid rgba(195, 156, 115, 0.3);
+  color: #a98467;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -127,7 +127,7 @@
 }
 
 .filter-clear:hover {
-  background: rgba(124, 58, 237, 0.06);
+  background: rgba(195, 156, 115, 0.06);
 }
 
 @media (max-width: 640px) {

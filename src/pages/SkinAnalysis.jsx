@@ -31,7 +31,7 @@ export default function SkinAnalysis() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
-  const chatEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const productsRef = useRef(null);
   const streamRef = useRef(null);
 
@@ -52,11 +52,16 @@ export default function SkinAnalysis() {
   }, [stopCamera]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
   }, [messages, loading]);
 
   const analysisText = useMemo(() => {
-    const analysis = messages.find((m) => m.role === "assistant" && !m.isError);
+    const analysis = [...messages].reverse().find((m) => m.role === "assistant" && !m.isError);
     return analysis?.content || "";
   }, [messages]);
 
@@ -307,7 +312,7 @@ export default function SkinAnalysis() {
             </div>
           </div>
 
-          <div className="analyze-messages">
+          <div className="analyze-messages" ref={messagesContainerRef}>
             {messages.length === 0 && (
               <div className="analyze-empty">
                 <span>✨</span>
@@ -336,7 +341,6 @@ export default function SkinAnalysis() {
                 </div>
               </div>
             )}
-            <div ref={chatEndRef} />
           </div>
 
           <form className="analyze-input-form" onSubmit={handleSendMessage}>

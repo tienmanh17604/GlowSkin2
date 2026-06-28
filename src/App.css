@@ -29,10 +29,10 @@ body {
 
   padding: 0 8%;
 
-  background: rgba(220, 204, 251, 0.75);
+  background: rgba(245, 240, 232, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+  border-bottom: 1px solid rgba(195, 156, 115, 0.08);
 
   animation: navSlideDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   transition:
@@ -45,8 +45,8 @@ body {
 .navbar--scrolled {
   height: 68px;
   background: rgba(255, 255, 255, 0.88);
-  border-bottom-color: rgba(124, 58, 237, 0.12);
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.1);
+  border-bottom-color: rgba(195, 156, 115, 0.12);
+  box-shadow: 0 8px 32px rgba(195, 156, 115, 0.1);
 }
 
 .logo {
@@ -60,7 +60,7 @@ body {
   letter-spacing: 0.02em;
   text-decoration: none;
 
-  background: linear-gradient(135deg, #6d28d9 0%, #a855f7 50%, #c084fc 100%);
+  background: linear-gradient(135deg, #8c6239 0%, #c39c73 50%, #e3c09b 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -77,7 +77,7 @@ body {
 
 .logo-icon {
   font-size: 18px;
-  -webkit-text-fill-color: #a855f7;
+  -webkit-text-fill-color: #c39c73;
   animation: iconPulse 2.5s ease-in-out infinite;
 }
 
@@ -104,7 +104,7 @@ body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #5b21b6;
+  color: #704f2d;
 
   transition: color 0.3s ease;
 }
@@ -117,7 +117,7 @@ body {
   bottom: 6px;
   height: 2px;
 
-  background: linear-gradient(90deg, #8b5cf6, #c084fc);
+  background: linear-gradient(90deg, #a98467, #e3c09b);
   border-radius: 2px;
 
   transform: scaleX(0);
@@ -126,7 +126,7 @@ body {
 }
 
 .nav-links a:hover {
-  color: #7c3aed;
+  color: #8c6239;
 }
 
 .nav-links a:hover::after {
@@ -143,9 +143,9 @@ body {
   text-decoration: none;
   color: white;
 
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(135deg, #a98467, #c39c73);
   border-radius: 999px;
-  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 4px 20px rgba(195, 156, 115, 0.35);
 
   opacity: 0;
   animation: navLinkFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
@@ -158,8 +158,8 @@ body {
 
 .nav-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.45);
-  background: linear-gradient(135deg, #6d28d9, #9333ea);
+  box-shadow: 0 8px 28px rgba(195, 156, 115, 0.45);
+  background: linear-gradient(135deg, #8c6239, #a98467);
 }
 
 .nav-cta:active {
@@ -247,9 +247,9 @@ body {
   background: linear-gradient(
     135deg,
     #ffffff,
-    #fff8f5,
-    #fde5f1,
-    #eee3ff
+    #faf6f0,
+    #f5efe6,
+    #ebdcd0
   );
 }
 
@@ -260,7 +260,8 @@ body {
 .badge {
   display: inline-block;
   background: white;
-  color: #7c3aed;
+  color: #8c6239;
+  border: 1px solid rgba(195, 156, 115, 0.2);
 
   padding: 10px 18px;
 
@@ -277,7 +278,7 @@ body {
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #7c3aed;
+  color: #8c6239;
 }
 
 .hero-content p {
@@ -297,28 +298,33 @@ body {
 
 .primary-btn {
   border: none;
-
-  background: #8b5cf6;
+  background: #a98467;
   color: white;
-
   padding: 16px 34px;
-
   border-radius: 30px;
-
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(169, 132, 103, 0.3);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.primary-btn:hover {
+  background: #8c6239;
+  transform: translateY(-2px);
 }
 
 .secondary-btn {
-  border: 2px solid #8b5cf6;
-
+  border: 2px solid #a98467;
   background: white;
-  color: #8b5cf6;
-
+  color: #a98467;
   padding: 16px 34px;
-
   border-radius: 30px;
-
   cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.secondary-btn:hover {
+  background: #faf6f0;
+  transform: translateY(-2px);
 }
 
 .hero-gallery {
@@ -336,7 +342,7 @@ body {
   margin: 0 auto;
   border-radius: 40px;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 24px 60px rgba(169, 132, 103, 0.2);
   animation: heroGalleryIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
 
@@ -388,7 +394,7 @@ body {
   width: 28px;
   border-radius: 999px;
   background: white;
-  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 2px 12px rgba(169, 132, 103, 0.45);
 }
 
 .hero-dot:hover {
@@ -401,7 +407,7 @@ body {
   object-fit: cover;
   border-radius: 20px;
   border: 3px solid white;
-  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.18);
+  box-shadow: 0 12px 30px rgba(169, 132, 103, 0.18);
   animation: floatBob 4s ease-in-out infinite;
 }
 
@@ -492,7 +498,7 @@ body {
 
 .card:hover {
   transform: translateY(-12px);
-  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 20px 40px rgba(169, 132, 103, 0.15);
 }
 
 .card--clickable {
@@ -516,7 +522,7 @@ body {
 }
 
 .card h3 {
-  color: #7c3aed;
+  color: #8c6239;
   margin: 20px 24px 10px;
 }
 
@@ -542,7 +548,7 @@ body {
 .gallery {
   padding: 100px 0;
   text-align: center;
-  background: linear-gradient(180deg, #fff 0%, #faf7ff 100%);
+  background: linear-gradient(180deg, #fff 0%, #faf6f0 100%);
   overflow: hidden;
 }
 
@@ -593,7 +599,7 @@ body {
   height: 340px;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 12px 30px rgba(169, 132, 103, 0.12);
 }
 
 .gallery-item img {
@@ -644,7 +650,7 @@ body {
   justify-content: center;
   background: linear-gradient(
     to top,
-    rgba(124, 58, 237, 0.65),
+    rgba(140, 98, 57, 0.65),
     transparent 60%
   );
   opacity: 0;
@@ -681,7 +687,7 @@ body {
 
 .why {
   padding: 100px 8%;
-  background: #faf7ff;
+  background: #faf6f0;
   text-align: center;
 }
 
@@ -713,7 +719,7 @@ body {
 
 .why-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 18px 36px rgba(124, 58, 237, 0.14);
+  box-shadow: 0 18px 36px rgba(169, 132, 103, 0.14);
 }
 
 .why-card-image {
@@ -735,13 +741,13 @@ body {
 .why-card p {
   padding: 24px 30px 30px;
   font-weight: 600;
-  color: #5b21b6;
+  color: #8c6239;
 }
 
 /* FOOTER */
 
 footer {
-  background: #dcccfb;
+  background: #ebdcd0;
   text-align: center;
   padding: 50px;
 }
@@ -750,7 +756,7 @@ footer h3 {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-size: 28px;
   font-weight: 700;
-  color: #7c3aed;
+  color: #8c6239;
   margin-bottom: 10px;
 }
 
