@@ -45,7 +45,7 @@ async function callOpenAI(messages) {
     },
     body: JSON.stringify({
       model: "gemini-2.5-flash",
-      max_tokens: 1200,
+      max_tokens: 4096,
       messages,
     }),
   });
