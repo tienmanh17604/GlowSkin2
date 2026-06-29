@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import CartButton from "../components/CartButton";
+import Logo from "../components/Logo";
 import ProductRecommendations from "../components/ProductRecommendations";
 import {
   analyzeSkinImage,
@@ -213,13 +215,13 @@ export default function SkinAnalysis() {
   return (
     <div className="analyze-page">
       <header className="analyze-header">
-        <Link to="/" className="logo">
-          <span className="logo-icon">✦</span>
-          GlowSkin
-        </Link>
-        <Link to="/" className="analyze-back">
-          ← Về trang chủ
-        </Link>
+        <Logo />
+        <div className="analyze-header-actions">
+          <CartButton />
+          <Link to="/" className="analyze-back">
+            ← Về trang chủ
+          </Link>
+        </div>
       </header>
 
       <div className="analyze-container">

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import CartButton from "../components/CartButton";
+import Logo from "../components/Logo";
 import ProductRecommendations from "../components/ProductRecommendations";
 import {
   filterProducts,
@@ -28,11 +30,9 @@ export default function Products() {
   return (
     <div className="products-page">
       <header className="products-header">
-        <Link to="/" className="logo">
-          <span className="logo-icon">✦</span>
-          GlowSkin
-        </Link>
+        <Logo />
         <div className="products-header-actions">
+          <CartButton />
           <Link to="/analyze" className="products-analyze-link">
             Phân tích da AI →
           </Link>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import { formatPrice, CATEGORIES } from "../data/products";
 import { SKIN_TYPES, CONCERNS } from "../services/recommendProducts";
 import "./ProductRecommendations.css";
@@ -50,6 +52,8 @@ export default function ProductRecommendations({
   });
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderCode, setOrderCode] = useState("");
+  const [addedToast, setAddedToast] = useState(false);
+  const { addToCart } = useCart();
 
   if (!products?.length) return null;
 
@@ -57,6 +61,13 @@ export default function ProductRecommendations({
     setSelectedProduct(product);
     setCheckoutProduct(null);
     setIsSuccess(false);
+  };
+
+  const handleAddToCart = (product, e) => {
+    e?.stopPropagation();
+    addToCart(product);
+    setAddedToast(true);
+    setTimeout(() => setAddedToast(false), 2000);
   };
 
   const handleOpenCheckout = () => {
@@ -148,6 +159,13 @@ export default function ProductRecommendations({
                 <StarRating rating={product.rating} />
                 <span className="product-price">{formatPrice(product.price)}</span>
               </div>
+              <button
+                type="button"
+                className="product-add-cart"
+                onClick={(e) => handleAddToCart(product, e)}
+              >
+                + Giỏ hàng
+              </button>
             </div>
           </article>
         ))}
@@ -272,10 +290,24 @@ export default function ProductRecommendations({
                     ))}
                   </div>
 
-                  <div style={{ marginTop: "16px", marginBottom: "24px" }}>
-                    <button className="checkout-btn checkout-btn--primary" onClick={handleOpenCheckout} style={{ maxWidth: "200px" }}>
+                  <div className="product-modal-actions">
+                    <button
+                      type="button"
+                      className="checkout-btn checkout-btn--primary"
+                      onClick={(e) => handleAddToCart(selectedProduct, e)}
+                    >
+                      Thêm vào giỏ hàng
+                    </button>
+                    <button
+                      type="button"
+                      className="checkout-btn checkout-btn--secondary"
+                      onClick={handleOpenCheckout}
+                    >
                       Thanh toán ngay
                     </button>
+                    <Link to="/cart" className="checkout-btn checkout-btn--outline" onClick={handleCloseAll}>
+                      Xem giỏ hàng
+                    </Link>
                   </div>
 
                   <div className="product-reviews">
@@ -294,6 +326,15 @@ export default function ProductRecommendations({
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {addedToast && (
+        <div className="cart-toast">
+          ✓ Đã thêm vào giỏ hàng
+          <Link to="/cart" onClick={() => setAddedToast(false)}>
+            Xem giỏ hàng →
+          </Link>
         </div>
       )}
     </section>

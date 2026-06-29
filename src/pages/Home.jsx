@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import CartButton from "../components/CartButton";
+import Logo from "../components/Logo";
 import "../App.css";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "Analysis", to: "/analyze" },
   { label: "Products", to: "/products" },
+  { label: "Cart", to: "/cart" },
   { label: "Community", href: "#community" },
   { label: "Contact", href: "#contact" },
 ];
@@ -120,10 +123,7 @@ export default function Home() {
   return (
     <>
       <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
-        <Link to="/" className="logo">
-          <span className="logo-icon">✦</span>
-          GlowSkin
-        </Link>
+        <Logo />
 
         <ul className="nav-links">
           {NAV_LINKS.map((link, index) => (
@@ -137,9 +137,12 @@ export default function Home() {
           ))}
         </ul>
 
-        <Link to="/analyze" className="nav-cta">
-          Get Started
-        </Link>
+        <div className="nav-actions">
+          <CartButton />
+          <Link to="/analyze" className="nav-cta">
+            Get Started
+          </Link>
+        </div>
       </nav>
 
       <section className="hero" id="home">

@@ -53,32 +53,27 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
   text-decoration: none;
-
-  background: linear-gradient(135deg, #8c6239 0%, #c39c73 50%, #e3c09b 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
   animation: logoFadeIn 0.9s ease 0.15s both;
   transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.logo:hover {
-  transform: scale(1.03);
-  animation: logoShimmer 2s ease infinite;
+.logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
-.logo-icon {
-  font-size: 18px;
-  -webkit-text-fill-color: #c39c73;
-  animation: iconPulse 2.5s ease-in-out infinite;
+.logo:hover .logo-img {
+  transform: scale(1.03);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .nav-links {
