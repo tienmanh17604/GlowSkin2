@@ -116,7 +116,7 @@ export default function CartDrawer() {
       // Save state to localStorage to recover after redirect
       localStorage.setItem("glowskin_pending_checkout", JSON.stringify(checkoutPayload));
 
-      const API_URL = "http://localhost:5000/api";
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const endpoint = formData.payment === "momo" 
         ? "/payments/create-momo-url" 
         : "/payments/create-vnpay-url";
