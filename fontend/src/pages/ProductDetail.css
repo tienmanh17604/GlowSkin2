@@ -163,20 +163,23 @@
 }
 
 .detail-brand {
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #8c6239;
-  letter-spacing: 0.08em;
+  color: #a98467;
+  letter-spacing: 0.12em;
   margin-bottom: 8px;
 }
 
 .detail-title {
-  font-size: 28px;
+  font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  font-size: 24px;
   font-weight: 800;
-  color: #333333;
-  line-height: 1.3;
+  color: #2b1b10;
+  line-height: 1.35;
   margin-bottom: 12px;
+  letter-spacing: -0.01em;
 }
 
 .detail-ratings-row {
@@ -220,18 +223,21 @@
 .qty-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 1px solid rgba(140, 98, 57, 0.18);
   border-radius: 999px;
   background: #FDFCFB;
   height: 48px;
+  width: 110px;
   padding: 0 4px;
   flex-shrink: 0;
   box-shadow: inset 0 1px 3px rgba(140, 98, 57, 0.03);
 }
 
 .qty-controls button {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: none;
   background: transparent;
@@ -251,7 +257,7 @@
 }
 
 .qty-controls span {
-  min-width: 36px;
+  min-width: 20px;
   text-align: center;
   font-weight: 700;
   font-size: 15px;
@@ -523,16 +529,19 @@
     grid-template-columns: 1fr;
     gap: 32px;
   }
+
   .detail-images-col {
     position: static;
     flex-direction: column-reverse;
   }
+
   .detail-gallery-thumbs {
     flex-direction: row;
     width: 100%;
     overflow-x: auto;
     max-height: none;
   }
+
   .detail-main-img-wrap {
     height: 400px;
   }

@@ -430,15 +430,15 @@ export default function ProductRecommendations({
                   {selectedProduct.stock > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "24px 0 16px 0" }}>
                       <span style={{ fontSize: "13.5px", fontWeight: "600", color: "#666" }}>Số lượng:</span>
-                      <div className="qty-controls" style={{ border: "1px solid rgba(140, 98, 57, 0.18)", borderRadius: "999px", background: "#FDFCFB", display: "flex", alignItems: "center", height: "46px", padding: "0 4px" }}>
+                      <div className="qty-controls" style={{ border: "1px solid rgba(140, 98, 57, 0.18)", borderRadius: "999px", background: "#FDFCFB", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", height: "46px", width: "110px", padding: "0 4px" }}>
                         <button
                           type="button"
                           onClick={() => setModalQty(Math.max(1, modalQty - 1))}
-                          style={{ border: "none", background: "transparent", fontSize: "16px", cursor: "pointer", width: "36px", height: "36px", borderRadius: "50%", color: "#8c6239", display: "flex", alignItems: "center", justifyContent: "center" }}
+                          style={{ border: "none", background: "transparent", fontSize: "16px", cursor: "pointer", width: "32px", height: "32px", borderRadius: "50%", color: "#8c6239", display: "flex", alignItems: "center", justifyContent: "center" }}
                         >
                           −
                         </button>
-                        <span style={{ fontSize: "15px", fontWeight: "700", minWidth: "32px", textAlign: "center", color: "#4a3c31" }}>{modalQty}</span>
+                        <span style={{ fontSize: "15px", fontWeight: "700", minWidth: "20px", textAlign: "center", color: "#4a3c31" }}>{modalQty}</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -448,7 +448,7 @@ export default function ProductRecommendations({
                             }
                             setModalQty(modalQty + 1);
                           }}
-                          style={{ border: "none", background: "transparent", fontSize: "16px", cursor: "pointer", width: "36px", height: "36px", borderRadius: "50%", color: "#8c6239", display: "flex", alignItems: "center", justifyContent: "center" }}
+                          style={{ border: "none", background: "transparent", fontSize: "16px", cursor: "pointer", width: "32px", height: "32px", borderRadius: "50%", color: "#8c6239", display: "flex", alignItems: "center", justifyContent: "center" }}
                         >
                           +
                         </button>
