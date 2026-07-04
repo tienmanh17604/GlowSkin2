@@ -37,6 +37,7 @@ export default function ProductRecommendations({
   const [orderCode, setOrderCode] = useState("");
   const [activeImage, setActiveImage] = useState("");
   const [zoomStyle, setZoomStyle] = useState({ transformOrigin: "center center", transform: "scale(1)" });
+  const [modalQty, setModalQty] = useState(1);
   
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -96,11 +97,12 @@ export default function ProductRecommendations({
     setIsSuccess(false);
     setActiveImage(product.image);
     setZoomStyle({ transformOrigin: "center center", transform: "scale(1)" });
+    setModalQty(1);
   };
 
-  const handleAddToCart = (product, e) => {
+  const handleAddToCart = (product, qty = 1, e) => {
     e?.stopPropagation();
-    addToCart(product);
+    addToCart(product, qty);
   };
 
   const handleOpenCheckout = () => {
@@ -118,8 +120,8 @@ export default function ProductRecommendations({
       const tempOrderCode = "GS" + Math.floor(100000 + Math.random() * 900000);
       const checkoutPayload = {
         formData,
-        selectedItems: [{ ...checkoutProduct, quantity: 1 }],
-        selectedTotal: checkoutProduct.price,
+        selectedItems: [{ ...checkoutProduct, quantity: modalQty }],
+        selectedTotal: checkoutProduct.price * modalQty,
         tempOrderCode
       };
       // Save state to localStorage to recover after redirect
@@ -129,7 +131,7 @@ export default function ProductRecommendations({
       fetch(`${API_URL}/payments/create-momo-url`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: checkoutProduct.price, orderId: tempOrderCode }),
+        body: JSON.stringify({ amount: checkoutProduct.price * modalQty, orderId: tempOrderCode }),
       })
       .then((res) => {
         if (!res.ok) throw new Error("Thanh toán lỗi");
@@ -147,8 +149,8 @@ export default function ProductRecommendations({
         alert("Lỗi kết nối cổng thanh toán! Vui lòng thử lại.");
       });
     } else {
-      const directItems = [{ ...checkoutProduct, quantity: 1 }];
-      const code = placeOrder(formData, directItems, checkoutProduct.price);
+      const directItems = [{ ...checkoutProduct, quantity: modalQty }];
+      const code = placeOrder(formData, directItems, checkoutProduct.price * modalQty);
       setOrderCode(code);
       setIsSuccess(true);
     }
@@ -158,6 +160,7 @@ export default function ProductRecommendations({
     setSelectedProduct(null);
     setCheckoutProduct(null);
     setIsSuccess(false);
+    setModalQty(1);
     setFormData({ name: "", phone: "", address: "", payment: "cod" });
   };
 
@@ -412,23 +415,42 @@ export default function ProductRecommendations({
                     )}
                   </div>
                   
-                  <h4>Mô tả sản phẩm</h4>
-                  <p className="product-modal-desc">{selectedProduct.description}</p>
-                  
-                  <h4>Thành phần chính</h4>
-                  <div className="product-modal-ingredients">
-                    {selectedProduct.ingredients.map((ing) => (
-                      <span key={ing}>{ing}</span>
-                    ))}
-                  </div>
+                  {selectedProduct.stock > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "24px 0 16px 0" }}>
+                      <span style={{ fontSize: "13.5px", fontWeight: "600", color: "#666" }}>Số lượng:</span>
+                      <div className="qty-controls" style={{ border: "1px solid #ebdcd0", borderRadius: "10px", overflow: "hidden", background: "white", display: "flex", alignItems: "center" }}>
+                        <button
+                          type="button"
+                          onClick={() => setModalQty(Math.max(1, modalQty - 1))}
+                          style={{ border: "none", background: "#faf6f0", fontSize: "18px", cursor: "pointer", width: "36px", height: "36px", color: "#8c6239" }}
+                        >
+                          −
+                        </button>
+                        <span style={{ fontSize: "14px", fontWeight: "600", minWidth: "36px", textAlign: "center" }}>{modalQty}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (modalQty + 1 > selectedProduct.stock) {
+                              alert(`Chỉ còn ${selectedProduct.stock} sản phẩm trong kho!`);
+                              return;
+                            }
+                            setModalQty(modalQty + 1);
+                          }}
+                          style={{ border: "none", background: "#faf6f0", fontSize: "18px", cursor: "pointer", width: "36px", height: "36px", color: "#8c6239" }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
-                  <div className="product-modal-actions">
+                  <div className="product-modal-actions" style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "16px" }}>
                     <button
                       type="button"
                       className="checkout-btn checkout-btn--primary"
-                      onClick={(e) => selectedProduct.stock > 0 && handleAddToCart(selectedProduct, e)}
+                      onClick={(e) => selectedProduct.stock > 0 && handleAddToCart(selectedProduct, modalQty, e)}
                       disabled={selectedProduct.stock === 0}
-                      style={{ opacity: selectedProduct.stock === 0 ? 0.5 : 1, cursor: selectedProduct.stock === 0 ? "not-allowed" : "pointer" }}
+                      style={{ flex: 2, height: "46px", borderRadius: "99px", opacity: selectedProduct.stock === 0 ? 0.5 : 1, cursor: selectedProduct.stock === 0 ? "not-allowed" : "pointer" }}
                     >
                       {selectedProduct.stock === 0 ? "Hết hàng" : "Thêm vào giỏ hàng"}
                     </button>
@@ -437,125 +459,49 @@ export default function ProductRecommendations({
                       className="checkout-btn checkout-btn--secondary"
                       onClick={() => selectedProduct.stock > 0 && handleOpenCheckout()}
                       disabled={selectedProduct.stock === 0}
-                      style={{ opacity: selectedProduct.stock === 0 ? 0.5 : 1, cursor: selectedProduct.stock === 0 ? "not-allowed" : "pointer" }}
+                      style={{ flex: 1.5, height: "46px", borderRadius: "99px", background: "#8c6239", color: "white", opacity: selectedProduct.stock === 0 ? 0.5 : 1, cursor: selectedProduct.stock === 0 ? "not-allowed" : "pointer" }}
                     >
-                      {selectedProduct.stock === 0 ? "Hết hàng" : "Thanh toán ngay"}
+                      {selectedProduct.stock === 0 ? "Hết hàng" : "Mua ngay"}
                     </button>
+                    
                     <button
                       type="button"
-                      className="checkout-btn checkout-btn--outline"
-                      onClick={() => {
-                        handleCloseAll();
-                        setIsCartOpen(true);
+                      onClick={() => toggleWishlist(selectedProduct.id)}
+                      style={{
+                        width: "46px",
+                        height: "46px",
+                        borderRadius: "50%",
+                        border: "1px solid #ebdcd0",
+                        background: wishlist[selectedProduct.id] ? "rgba(255, 77, 79, 0.08)" : "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        color: wishlist[selectedProduct.id] ? "#ff4d4f" : "#666",
+                        transition: "all 0.2s"
                       }}
+                      aria-label="Yêu thích"
                     >
-                      Xem giỏ hàng
+                      <svg viewBox="0 0 24 24" fill={wishlist[selectedProduct.id] ? "#ff4d4f" : "none"} stroke={wishlist[selectedProduct.id] ? "#ff4d4f" : "currentColor"} strokeWidth="2" style={{ width: "20px", height: "20px" }}>
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
                     </button>
                   </div>
 
-                  <div className="product-reviews">
-                    <h4>Đánh giá từ khách hàng ({productReviews.length})</h4>
-                    {productReviews.length === 0 ? (
-                      <p style={{ color: "#888", fontStyle: "italic", fontSize: "14px", margin: "15px 0" }}>
-                        Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu tiên đánh giá!
-                      </p>
-                    ) : (
-                      productReviews.map((review, i) => (
-                        <div key={review._id || i} className="review-item">
-                          <div className="review-header">
-                            <span className="review-user">{review.userName}</span>
-                            <span className="review-rating" style={{ color: "#d97706" }}>
-                              {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                            </span>
-                            <span className="review-date" style={{ marginLeft: "auto", fontSize: "11.5px", color: "#999" }}>
-                              {new Date(review.createdAt).toLocaleDateString("vi-VN")}
-                            </span>
-                          </div>
-                          <p className="review-comment">“{review.comment}”</p>
-                        </div>
-                      ))
-                    )}
-
-                    {/* Review Form */}
-                    <form className="add-review-form" onSubmit={handleReviewSubmit} style={{ marginTop: "25px", paddingTop: "20px", borderTop: "1px dashed #ebdcd0" }}>
-                      <h4 style={{ marginBottom: "15px", fontFamily: "Cormorant Garamond, Georgia, serif", fontSize: "18px", color: "#8c6239" }}>
-                        Viết đánh giá của bạn
-                      </h4>
-                      
-                      <div className="form-group" style={{ marginBottom: "12px" }}>
-                        <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#666" }}>
-                          Chọn số sao:
-                        </label>
-                        <div style={{ display: "flex", gap: "6px" }}>
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <button
-                              key={star}
-                              type="button"
-                              onClick={() => setReviewRating(star)}
-                              style={{
-                                background: "none",
-                                border: "none",
-                                fontSize: "24px",
-                                cursor: "pointer",
-                                color: star <= reviewRating ? "#d97706" : "#ddd",
-                                padding: 0,
-                              }}
-                            >
-                              ★
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="form-group" style={{ marginBottom: "12px" }}>
-                        <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#666" }}>
-                          Họ và tên của bạn
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Ví dụ: Nguyễn Văn A"
-                          value={reviewUser}
-                          onChange={(e) => setReviewUser(e.target.value)}
-                          style={{
-                            width: "100%",
-                            padding: "8px 12px",
-                            border: "1px solid #ebdcd0",
-                            borderRadius: "4px",
-                            fontSize: "14px",
-                          }}
-                        />
-                      </div>
-
-                      <div className="form-group" style={{ marginBottom: "15px" }}>
-                        <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: "600", color: "#666" }}>
-                          Nhận xét về sản phẩm
-                        </label>
-                        <textarea
-                          required
-                          rows={3}
-                          placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này..."
-                          value={reviewComment}
-                          onChange={(e) => setReviewComment(e.target.value)}
-                          style={{
-                            width: "100%",
-                            padding: "8px 12px",
-                            border: "1px solid #ebdcd0",
-                            borderRadius: "4px",
-                            fontSize: "14px",
-                            resize: "vertical",
-                          }}
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="checkout-btn checkout-btn--primary"
-                        style={{ width: "auto", padding: "8px 20px" }}
-                      >
-                        Gửi đánh giá
-                      </button>
-                    </form>
+                  <div className="product-modal-detail-link" style={{ textAlign: "center", marginTop: "24px", paddingTop: "16px", borderTop: "1px solid rgba(0, 0, 0, 0.05)" }}>
+                    <Link 
+                      to={`/products/${selectedProduct.id}`}
+                      onClick={handleCloseAll}
+                      style={{
+                        color: "#8c6239",
+                        textDecoration: "underline",
+                        fontWeight: "600",
+                        fontSize: "14px",
+                        display: "inline-block"
+                      }}
+                    >
+                      Xem chi tiết sản phẩm
+                    </Link>
                   </div>
                 </>
               )}

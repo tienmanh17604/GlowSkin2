@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import SkinAnalysis from "./pages/SkinAnalysis";
 import Products from "./pages/Products";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProductDetail from "./pages/ProductDetail";
 import CartDrawer from "./components/CartDrawer";
 import LoginModal from "./components/LoginModal";
 
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/analyze" element={<SkinAnalysis />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/cart" element={<CartRedirect />} />
           <Route path="/login" element={<LoginRedirect />} />
           <Route path="/admin" element={<AdminDashboard />} />
