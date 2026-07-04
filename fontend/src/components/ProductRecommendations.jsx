@@ -243,12 +243,24 @@ export default function ProductRecommendations({
               )}
             </div>
 
-            <div className="product-card-body centered-body">
+            <div className="product-card-body centered-body" onClick={(e) => e.stopPropagation()}>
               <p className="product-brandcentered" onClick={(e) => handleBrandClick(e, product.brand)}>
                 {product.brand}
               </p>
-              <h3 className="product-namecentered">{product.name}</h3>
-              <p className="product-pricecentered">{formatPrice(product.price)}</p>
+              <h3 
+                className="product-namecentered" 
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/products/${product.id}`)}
+              >
+                {product.name}
+              </h3>
+              <p 
+                className="product-pricecentered" 
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/products/${product.id}`)}
+              >
+                {formatPrice(product.price)}
+              </p>
               <div className="product-ratingcentered">
                 <StarRating rating={product.rating} />
                 <span className="reviews-count">({product.reviews || 0})</span>
