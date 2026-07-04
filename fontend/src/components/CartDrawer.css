@@ -207,14 +207,14 @@
 
 .drawer-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .drawer-item-select {
-  margin-top: 24px;
+  margin-top: 0;
 }
 
 .drawer-item-img {
@@ -230,7 +230,8 @@
 .drawer-item-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 4px;
 }
 
 .drawer-item-details {

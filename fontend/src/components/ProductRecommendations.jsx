@@ -35,7 +35,6 @@ export default function ProductRecommendations({
   });
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderCode, setOrderCode] = useState("");
-  const [addedToast, setAddedToast] = useState(false);
   const [activeImage, setActiveImage] = useState("");
   const [zoomStyle, setZoomStyle] = useState({ transformOrigin: "center center", transform: "scale(1)" });
   
@@ -102,8 +101,6 @@ export default function ProductRecommendations({
   const handleAddToCart = (product, e) => {
     e?.stopPropagation();
     addToCart(product);
-    setAddedToast(true);
-    setTimeout(() => setAddedToast(false), 2000);
   };
 
   const handleOpenCheckout = () => {
@@ -567,21 +564,6 @@ export default function ProductRecommendations({
         </div>
       )}
 
-      {addedToast && (
-        <div className="cart-toast">
-          ✓ Đã thêm vào giỏ hàng
-          <button
-            type="button"
-            className="toast-cart-btn"
-            onClick={() => {
-              setAddedToast(false);
-              setIsCartOpen(true);
-            }}
-          >
-            Xem giỏ hàng →
-          </button>
-        </div>
-      )}
     </section>
   );
 }

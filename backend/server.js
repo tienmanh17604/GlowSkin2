@@ -12,6 +12,7 @@ import User from "./models/User.js";
 import Product from "./models/Product.js";
 import Order from "./models/Order.js";
 import Review from "./models/Review.js";
+import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 
 dotenv.config();
 
@@ -234,6 +235,11 @@ app.post("/api/orders", async (req, res) => {
         await product.save();
       }
     }
+
+    // Gửi thông báo đơn hàng qua Email và Telegram (không chặn phản hồi API)
+    sendOrderNotifications(savedOrder).catch((err) => {
+      console.error("Lỗi khi gửi thông báo đơn hàng:", err);
+    });
     
     res.status(201).json({ success: true, orderId: code, order: savedOrder });
   } catch (error) {
@@ -256,6 +262,11 @@ app.put("/api/orders/:id/status", async (req, res) => {
     if (!updatedOrder) {
       return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
     }
+
+    // Gửi thông báo cập nhật trạng thái đơn hàng qua Telegram (không chặn phản hồi API)
+    sendOrderStatusUpdateNotification(updatedOrder).catch((err) => {
+      console.error("Lỗi khi gửi thông báo cập nhật trạng thái đơn hàng:", err);
+    });
     
     res.json(updatedOrder);
   } catch (error) {
