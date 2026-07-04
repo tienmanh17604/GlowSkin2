@@ -246,7 +246,8 @@ export default function ProductDetail() {
             {/* Buying Block */}
             {product.stock > 0 ? (
               <div className="detail-purchase-block">
-                <div className="detail-actions">
+                <div className="detail-qty-select" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
+                  <span className="qty-label" style={{ fontSize: "14px", fontWeight: "600", color: "#666" }}>Số lượng:</span>
                   <div className="qty-controls">
                     <button type="button" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
                     <span>{qty}</span>
@@ -261,7 +262,9 @@ export default function ProductDetail() {
                       }}
                     >+</button>
                   </div>
+                </div>
 
+                <div className="detail-actions">
                   <button 
                     type="button" 
                     className="detail-btn detail-btn--primary"
