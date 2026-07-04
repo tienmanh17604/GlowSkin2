@@ -959,7 +959,7 @@ async function seedDatabase() {
 
     // Prepare products with calculated rating/reviews
     console.log("Đang tính toán điểm và số lượt đánh giá cho sản phẩm...");
-    const productsToCreate = DEFAULT_PRODUCTS.map((prod) => {
+    const productsToCreate = DEFAULT_PRODUCTS.map((prod, index) => {
       const prodReviews = DEFAULT_REVIEWS.filter((r) => r.productId === prod.id);
       const reviewsCount = prodReviews.length;
       let averageRating = prod.rating;
@@ -973,6 +973,12 @@ async function seedDatabase() {
         ...prod,
         rating: averageRating,
         reviews: finalReviewsCount,
+        images: [
+          prod.image,
+          prod.hoverImage || prod.image,
+          getUnsplashImage((index + 7) % 20, false),
+          getUnsplashImage((index + 12) % 20, false)
+        ]
       };
     });
 

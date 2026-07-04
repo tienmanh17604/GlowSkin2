@@ -36,6 +36,26 @@ export default function ProductRecommendations({
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [addedToast, setAddedToast] = useState(false);
+  const [activeImage, setActiveImage] = useState("");
+  const [zoomStyle, setZoomStyle] = useState({ transformOrigin: "center center", transform: "scale(1)" });
+  
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(1.8)",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle({
+      transformOrigin: "center center",
+      transform: "scale(1)",
+    });
+  };
+
   const { addToCart, setIsCartOpen } = useCart();
   const { placeOrder, reviews, addReview, wishlist, toggleWishlist } = useApp();
 
@@ -75,6 +95,8 @@ export default function ProductRecommendations({
     setSelectedProduct(product);
     setCheckoutProduct(null);
     setIsSuccess(false);
+    setActiveImage(product.image);
+    setZoomStyle({ transformOrigin: "center center", transform: "scale(1)" });
   };
 
   const handleAddToCart = (product, e) => {
@@ -243,8 +265,52 @@ export default function ProductRecommendations({
             <button className="product-modal-close" onClick={handleCloseAll}>×</button>
             
             <div className="product-modal-left">
-              <div className="product-modal-img-wrap">
-                <img src={selectedProduct.image} alt={selectedProduct.name} />
+              {/* Vertical gallery thumbnails list */}
+              <div className="product-modal-gallery">
+                <button className="gallery-arrow gallery-arrow--up" onClick={() => {
+                  const el = document.getElementById("gallery-thumbs-scroll");
+                  if (el) el.scrollTop -= 70;
+                }}>
+                  ▲
+                </button>
+                <div className="gallery-thumbnails-viewport" id="gallery-thumbs-scroll">
+                  {Array.from(new Set([
+                    selectedProduct.image,
+                    selectedProduct.hoverImage,
+                    ...(selectedProduct.images || [])
+                  ])).filter(Boolean).map((imgUrl, idx) => (
+                    <div
+                      key={idx}
+                      className={`gallery-thumb ${activeImage === imgUrl ? "gallery-thumb--active" : ""}`}
+                      onMouseEnter={() => setActiveImage(imgUrl)}
+                      onClick={() => setActiveImage(imgUrl)}
+                    >
+                      <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} />
+                    </div>
+                  ))}
+                </div>
+                <button className="gallery-arrow gallery-arrow--down" onClick={() => {
+                  const el = document.getElementById("gallery-thumbs-scroll");
+                  if (el) el.scrollTop += 70;
+                }}>
+                  ▼
+                </button>
+              </div>
+
+              {/* Main Preview Image Container with Zoom effect */}
+              <div 
+                className="product-modal-img-wrap"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <img 
+                  src={activeImage || selectedProduct.image} 
+                  alt={selectedProduct.name} 
+                  style={{ 
+                    transition: "transform 0.1s ease-out", 
+                    ...zoomStyle 
+                  }} 
+                />
               </div>
             </div>
 

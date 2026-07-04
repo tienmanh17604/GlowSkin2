@@ -50,6 +50,10 @@ const ProductSchema = new mongoose.Schema(
     hoverImage: {
       type: String,
     },
+    images: {
+      type: [String],
+      default: [],
+    },
     description: {
       type: String,
     },

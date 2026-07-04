@@ -340,22 +340,109 @@
 }
 
 .product-modal-left {
-  width: 42%;
-  background: #faf6f0;
-  display: flex;
+  width: 48% !important;
+  background: #ffffff !important;
+  display: flex !important;
+  flex-direction: row !important;
   border-right: 1px solid #ebdcd0;
+  padding: 20px;
+  align-items: center;
+  gap: 16px;
 }
 
-.product-modal-img-wrap {
-  width: 100%;
+/* Vertical Gallery Container */
+.product-modal-gallery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 70px;
+  flex-shrink: 0;
   height: 100%;
+  justify-content: center;
+}
+
+.gallery-arrow {
+  background: none;
+  border: none;
+  font-size: 11px;
+  color: #a98467;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, transform 0.1s;
+}
+
+.gallery-arrow:hover {
+  color: #8c6239;
+  transform: scale(1.15);
+}
+
+.gallery-thumbnails-viewport {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 280px;
+  scrollbar-width: none; /* Hide scrollbar */
+}
+
+.gallery-thumbnails-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-thumb {
+  width: 58px;
+  height: 58px;
+  border: 1.5px solid #ebdcd0;
+  border-radius: 4px;
+  cursor: pointer;
   overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  transition: all 0.2s ease;
+}
+
+.gallery-thumb:hover {
+  border-color: #a98467;
+}
+
+.gallery-thumb--active {
+  border-color: #000000 !important;
+  border-width: 2px !important;
+}
+
+.gallery-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain !important;
+}
+
+/* Main Image Wrapper */
+.product-modal-img-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+  cursor: zoom-in;
+  height: 350px !important;
 }
 
 .product-modal-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain !important; /* Ensure the bottle is displayed fully */
+  transform-origin: center center;
 }
 
 .product-modal-left-body {
@@ -674,16 +761,38 @@
   
   .product-modal-left,
   .product-modal-right {
-    width: 100%;
+    width: 100% !important;
   }
 
   .product-modal-left {
     border-right: none;
     border-bottom: 1px solid #ebdcd0;
+    flex-direction: column !important;
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+
+  .product-modal-gallery {
+    flex-direction: row !important;
+    width: 100% !important;
+    height: auto !important;
+    justify-content: center;
+  }
+
+  .gallery-thumbnails-viewport {
+    flex-direction: row !important;
+    max-height: none !important;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .gallery-arrow {
+    display: none !important;
   }
 
   .product-modal-img-wrap {
-    height: 200px;
+    height: 250px !important;
+    width: 100%;
   }
 }
 
