@@ -177,7 +177,7 @@ export default function Products() {
           ) : (
             <div className="user-nav-profile">
               <span className="user-nav-name">
-                Hi, {currentUser.name.split(" ").pop()}
+                Xin chào, {currentUser.name.split(" ").pop()}
                 <span className={`user-badge user-badge--${currentUser.membership.toLowerCase()}`}>
                   {currentUser.membership}
                 </span>

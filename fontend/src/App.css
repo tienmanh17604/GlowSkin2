@@ -9,9 +9,30 @@ html {
 }
 
 body {
-  background: white;
-  color: #333;
+  background-color: #FAF8F5;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(243, 230, 220, 0.7) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(220, 196, 172, 0.4) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(195, 156, 115, 0.1) 0px, transparent 60%),
+    radial-gradient(at 100% 100%, rgba(243, 230, 220, 0.8) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(220, 196, 172, 0.3) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: #4a3c31;
   font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121318;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(140, 98, 57, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(46, 32, 21, 0.3) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(25, 26, 32, 0.5) 0px, transparent 60%),
+      radial-gradient(at 100% 100%, rgba(140, 98, 57, 0.1) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(46, 32, 21, 0.2) 0px, transparent 50%);
+    color: #ebdcd0;
+  }
 }
 
 /* NAVBAR */

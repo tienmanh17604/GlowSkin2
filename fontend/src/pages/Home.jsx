@@ -7,12 +7,12 @@ import { useCart } from "../context/CartContext";
 import "../App.css";
 
 const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Analysis", to: "/analyze" },
-  { label: "Products", to: "/products" },
-  { label: "Cart", to: "/cart" },
-  { label: "Community", href: "#community" },
-  { label: "Contact", href: "#contact" },
+  { label: "Trang chủ", href: "#home" },
+  { label: "Phân tích da", to: "/analyze" },
+  { label: "Sản phẩm", to: "/products" },
+  { label: "Giỏ hàng", to: "/cart" },
+  { label: "Cộng đồng", href: "#community" },
+  { label: "Liên hệ", href: "#contact" },
 ];
 
 const img = (id, w = 800) =>
@@ -45,25 +45,25 @@ const FLOATING_IMAGES = [
 
 const FEATURES = [
   {
-    title: "AI Analysis",
+    title: "Phân tích Da AI",
     desc: "Phân tích da bằng AI từ hình ảnh.",
     image: img("1616394584738-fc6e612e71b9", 600),
     to: "/analyze",
   },
   {
-    title: "Product Review",
+    title: "Đánh giá Mỹ phẩm",
     desc: "Đọc review chân thực từ cộng đồng.",
     image: img("1608571423902-eed4a5ad8108", 600),
     to: "/products",
   },
   {
-    title: "Recommendation",
+    title: "Gợi ý thông minh",
     desc: "Đề xuất mỹ phẩm phù hợp với da.",
     image: img("1571781926291-c477ebfd024b", 600),
     to: "/products",
   },
   {
-    title: "Routine Builder",
+    title: "Lập Lộ trình Skincare",
     desc: "Xây dựng routine skincare cá nhân.",
     image: img("1556228720-195a672e8a03", 600),
     to: "/analyze",
@@ -84,22 +84,22 @@ const GALLERY_IMAGES = [
 const WHY_ITEMS = [
   {
     emoji: "✨",
-    title: "AI Skin Analysis",
+    title: "Phân tích da AI",
     image: img("1616394584738-fc6e612e71b9", 700),
   },
   {
     emoji: "💖",
-    title: "Personalized Routine",
+    title: "Lộ trình cá nhân hóa",
     image: img("1556228720-195a672e8a03", 700),
   },
   {
     emoji: "🛍",
-    title: "Smart Recommendation",
+    title: "Gợi ý thông minh",
     image: img("1556228578-0d85b1a4d571", 700),
   },
   {
     emoji: "🌎",
-    title: "Beauty Community",
+    title: "Cộng đồng làm đẹp",
     image: img("1522335789203-aabd1fc54bc9", 700),
   },
 ];
@@ -167,7 +167,7 @@ export default function Home() {
           ) : (
             <div className="user-nav-profile">
               <span className="user-nav-name">
-                Hi, {currentUser.name.split(" ").pop()}
+                Xin chào, {currentUser.name.split(" ").pop()}
                 <span className={`user-badge user-badge--${currentUser.membership.toLowerCase()}`}>
                   {currentUser.membership}
                 </span>
@@ -195,12 +195,12 @@ export default function Home() {
 
       <section className="hero" id="home">
         <div className="hero-content">
-          <span className="badge">✨ AI Beauty Platform</span>
+          <span className="badge">✨ Nền tảng Làm đẹp AI</span>
 
           <h1>
-            Discover Your
+            Khám phá
             <br />
-            Perfect Skin
+            Làn da Hoàn mỹ
           </h1>
 
           <p>
@@ -214,7 +214,7 @@ export default function Home() {
               className="primary-btn"
               onClick={() => navigate("/analyze")}
             >
-              Analyze My Skin
+              Phân tích da ngay
             </button>
 
             <button
@@ -224,7 +224,7 @@ export default function Home() {
                 document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              Explore Reviews
+              Xem đánh giá
             </button>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function Home() {
       </section>
 
       <section className="features" id="analysis">
-        <h2>Our Features</h2>
+        <h2>Tính năng nổi bật</h2>
 
         <p className="section-text">
           Công nghệ Beauty AI giúp bạn hiểu làn da của mình
@@ -293,7 +293,7 @@ export default function Home() {
       </section>
 
       <section className="gallery" id="gallery">
-        <h2>Beauty Gallery</h2>
+        <h2>Khoảnh khắc Làm đẹp</h2>
         <p className="section-text">
           Cảm hứng làm đẹp từ cộng đồng GlowSkin
         </p>
@@ -325,7 +325,7 @@ export default function Home() {
       </section>
 
       <section className="why" id="community">
-        <h2>Why GlowSkin?</h2>
+        <h2>Tại sao chọn GlowSkin?</h2>
 
         <div className="why-grid">
           {WHY_ITEMS.map((item, index) => (
