@@ -1,5 +1,8 @@
 import Message from "../models/Message.js";
 
+// Cache to prevent duplicate processing of the same Telegram update ID (useful for race conditions and retries)
+const processedUpdateIds = new Set();
+
 // Helper to escape HTML characters for Telegram HTML parse mode
 function escapeHTML(str) {
   if (!str) return "";
@@ -49,6 +52,19 @@ export async function sendTelegramChatMessage(customerName, phone, text) {
  * Processes a single Telegram message update (used by both Polling and Webhook)
  */
 export async function processTelegramMessageUpdate(update) {
+  const updateId = update.update_id;
+  if (updateId) {
+    if (processedUpdateIds.has(updateId)) {
+      console.log(`Bỏ qua update trùng lặp từ bộ nhớ cache: ${updateId}`);
+      return false;
+    }
+    processedUpdateIds.add(updateId);
+    // Remove from set after 30 seconds to manage memory
+    setTimeout(() => {
+      processedUpdateIds.delete(updateId);
+    }, 30000);
+  }
+
   const tgChatId = process.env.TELEGRAM_CHAT_ID;
   const message = update.message;
   if (!message || !message.text || !message.reply_to_message) return false;
