@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useCart } from "../context/CartContext";
 import "./ChatWidget.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const CHAT_USER_KEY = "glowskin-chat-user";
 
 export default function ChatWidget() {
+  const { isCartOpen } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [chatUser, setChatUser] = useState(() => {
     try {
@@ -147,8 +149,15 @@ export default function ChatWidget() {
     setPhone("");
   };
 
-  // Don't show client chat widget on Admin panel
-  if (window.location.pathname.startsWith("/admin")) {
+  // Close chat when cart is opened
+  useEffect(() => {
+    if (isCartOpen) {
+      setIsOpen(false);
+    }
+  }, [isCartOpen]);
+
+  // Don't show client chat widget on Admin panel or when cart is open
+  if (window.location.pathname.startsWith("/admin") || isCartOpen) {
     return null;
   }
 

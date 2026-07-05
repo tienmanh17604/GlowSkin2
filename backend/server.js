@@ -14,6 +14,7 @@ import Order from "./models/Order.js";
 import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
+import { sendTelegramChatMessage, startTelegramBotPolling } from "./services/telegramBotService.js";
 
 dotenv.config();
 
@@ -544,6 +545,14 @@ app.post("/api/chats", async (req, res) => {
     });
 
     const savedMessage = await newMessage.save();
+
+    // Forward to Telegram if sent by a user (customer)
+    if (sender === "user") {
+      sendTelegramChatMessage(customerName, phone, text).catch((err) =>
+        console.error("Lỗi khi chuyển tiếp tin nhắn đến Telegram:", err)
+      );
+    }
+
     res.status(201).json(savedMessage);
   } catch (error) {
     res.status(400).json({ message: "Không thể gửi tin nhắn", error: error.message });
@@ -559,4 +568,5 @@ app.get("/", (req, res) => {
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  startTelegramBotPolling();
 });

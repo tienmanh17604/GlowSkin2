@@ -46,10 +46,10 @@
 
 /* Chat Card Card */
 .glowskin-chat-card {
-  width: 360px;
-  height: 520px;
+  width: 320px;
+  height: 460px;
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
@@ -71,7 +71,7 @@
 
 /* Chat Header */
 .glowskin-chat-header {
-  padding: 16px 20px;
+  padding: 12px 16px;
   background: linear-gradient(135deg, #e3c09b, #c39c73);
   color: #fff;
   display: flex;
@@ -94,7 +94,7 @@
 }
 
 .glowskin-chat-header-title strong {
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 0.2px;
 }
 
@@ -118,8 +118,8 @@
 .glowskin-chat-quick-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  padding: 12px 16px;
+  gap: 8px;
+  padding: 10px 12px;
   background-color: #faf9f6;
   border-bottom: 1px solid #f1efe9;
 }
@@ -128,10 +128,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 13px;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
   font-weight: 500;
   text-decoration: none;
   border: 1px solid #e5e4e7;
@@ -163,11 +163,11 @@
 
 /* Register Form styles */
 .glowskin-chat-register-form {
-  padding: 24px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   height: 100%;
   overflow-y: auto;
   box-sizing: border-box;
@@ -190,17 +190,17 @@
 }
 
 .glowskin-chat-register-form h3 {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
   margin: 0;
   color: #08060d;
 }
 
 .glowskin-chat-subtitle {
-  font-size: 13px;
+  font-size: 11.5px;
   color: #9ca3af;
   text-align: center;
-  margin: -8px 0 8px 0;
+  margin: -6px 0 4px 0;
   line-height: 1.4;
 }
 
@@ -230,10 +230,10 @@
 }
 
 .glowskin-chat-form-group input {
-  padding: 12px 16px;
+  padding: 10px 12px;
   border: 1px solid #e5e4e7;
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-size: 13px;
   outline: none;
   background-color: #fafafa;
   transition: border-color 0.2s, background-color 0.2s;
@@ -247,15 +247,15 @@
 
 .glowskin-chat-submit-btn {
   width: 100%;
-  padding: 14px;
-  border-radius: 16px;
+  padding: 11px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #e3c09b, #c39c73);
   color: #fff;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 6px;
   box-shadow: 0 4px 12px rgba(195, 156, 115, 0.25);
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -274,11 +274,11 @@
 
 .glowskin-chat-messages-list {
   flex: 1;
-  padding: 16px;
+  padding: 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   background-color: #fcfbfa;
 }
 
@@ -296,9 +296,9 @@
 
 .glowskin-chat-empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 30px 15px;
   color: #9ca3af;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   margin: auto 0;
 }
@@ -309,10 +309,10 @@
 
 /* Message Bubbles */
 .glowskin-chat-message-bubble {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 16px;
-  font-size: 14px;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
   line-height: 1.4;
   position: relative;
   word-break: break-word;
@@ -356,8 +356,8 @@
 .glowskin-chat-send-form {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 6px;
+  padding: 8px 12px;
   border-top: 1px solid #e5e4e7;
   background-color: #fff;
 }
@@ -366,9 +366,9 @@
   background: transparent;
   border: none;
   color: #9ca3af;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 6px;
   border-radius: 6px;
   transition: color 0.2s, background-color 0.2s;
 }
@@ -380,10 +380,10 @@
 
 .glowskin-chat-send-form input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: 1px solid #e5e4e7;
-  border-radius: 20px;
-  font-size: 14px;
+  border-radius: 16px;
+  font-size: 13px;
   outline: none;
   background-color: #fafafa;
   transition: border-color 0.2s;
@@ -398,8 +398,8 @@
   background-color: #c39c73;
   color: #fff;
   border: none;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
