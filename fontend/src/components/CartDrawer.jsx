@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useCart } from "../context/CartContext";
 import { useApp } from "../context/AppContext";
 import { formatPrice } from "../data/products";
@@ -15,7 +15,12 @@ export default function CartDrawer() {
     setIsCartOpen,
   } = useCart();
 
-  const { placeOrder, products, orders } = useApp();
+  const { placeOrder, products, orders, currentUser } = useApp();
+
+  const displayOrders = useMemo(() => {
+    if (!currentUser) return [];
+    return orders.filter(o => o.customerName === currentUser.name);
+  }, [orders, currentUser]);
 
   const [activeTab, setActiveTab] = useState("delivery"); // "delivery" | "orders"
   const [selectedItemIds, setSelectedItemIds] = useState([]);
@@ -138,7 +143,6 @@ export default function CartDrawer() {
         }
       })
       .catch((err) => {
-        console.error("Lỗi:", err);
         alert("Lỗi kết nối cổng thanh toán! Vui lòng thử lại.");
       });
     } else {
@@ -297,12 +301,12 @@ export default function CartDrawer() {
                 className={`drawer-tab-btn ${activeTab === "orders" ? "active" : ""}`}
                 onClick={() => setActiveTab("orders")}
               >
-                Đơn hàng của tôi ({orders.length})
+                Đơn hàng của tôi ({displayOrders.length})
               </button>
             </div>
 
             {activeTab === "orders" ? (
-              orders.length === 0 ? (
+              displayOrders.length === 0 ? (
                 <div className="cart-drawer-empty">
                   <div className="empty-icon">📋</div>
                   <p>Bạn chưa có đơn hàng nào.</p>
@@ -316,7 +320,7 @@ export default function CartDrawer() {
                 </div>
               ) : (
                 <div className="cart-drawer-orders">
-                  {orders.map((order) => (
+                  {displayOrders.map((order) => (
                     <div key={order.id} className="drawer-order-card">
                       <div className="drawer-order-header">
                         <span className="order-id">Mã đơn: #{order.id}</span>

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useApp } from "./AppContext";
 
 const CartContext = createContext(null);
 const STORAGE_KEY = "glowskin-cart";
@@ -15,6 +16,16 @@ function loadCart() {
 export function CartProvider({ children }) {
   const [items, setItems] = useState(loadCart);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { currentUser } = useApp();
+  const [prevUser, setPrevUser] = useState(currentUser);
+
+  // Clear cart upon logging out
+  useEffect(() => {
+    if (prevUser && !currentUser) {
+      setItems([]);
+    }
+    setPrevUser(currentUser);
+  }, [currentUser, prevUser]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
