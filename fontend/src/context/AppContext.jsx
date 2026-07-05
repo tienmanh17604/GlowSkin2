@@ -85,18 +85,6 @@ export function AppProvider({ children }) {
     });
   };
 
-  // Auto-reload the page once per browser session on first visit
-  // to silently solve the backend cold start wake-up lag.
-  useEffect(() => {
-    const hasReloaded = sessionStorage.getItem("glowskin-session-reloaded");
-    if (!hasReloaded) {
-      sessionStorage.setItem("glowskin-session-reloaded", "true");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500); // 1.5 seconds is enough to trigger the wake-up call and reload to fetch again
-    }
-  }, []);
-
   // Fetch initial data from MongoDB API on mount
   useEffect(() => {
     const fetchInitialData = async () => {
