@@ -46,14 +46,83 @@ export async function sendTelegramChatMessage(customerName, phone, text) {
 }
 
 /**
- * Starts polling Telegram updates to listen for admin's replies
+ * Processes a single Telegram message update (used by both Polling and Webhook)
+ */
+export async function processTelegramMessageUpdate(update) {
+  const tgChatId = process.env.TELEGRAM_CHAT_ID;
+  const message = update.message;
+  if (!message || !message.text || !message.reply_to_message) return false;
+
+  // Check if the reply is from the authorized Admin chat ID
+  const chatId = String(message.chat.id);
+  const adminChatId = String(tgChatId);
+  if (chatId !== adminChatId) {
+    console.log(`Bỏ qua tin nhắn từ Chat ID không hợp lệ: ${chatId}`);
+    return false;
+  }
+
+  const replyToText = message.reply_to_message.text || "";
+  
+  // Extract phone number from the original message template
+  const phoneMatch = replyToText.match(/SĐT:\s*([0-9+]+)/);
+  if (!phoneMatch) return false;
+  const customerPhone = phoneMatch[1].trim();
+
+  try {
+    // Find the latest customer message to get customerName
+    const lastMsg = await Message.findOne({ phone: customerPhone }).sort({ createdAt: -1 });
+    const customerName = lastMsg ? lastMsg.customerName : "Khách hàng";
+
+    // Save admin reply message to database
+    const adminMessage = new Message({
+      sender: "admin",
+      customerName,
+      phone: customerPhone,
+      text: message.text,
+      readByAdmin: true,
+    });
+
+    await adminMessage.save();
+    console.log(`Đã lưu tin nhắn phản hồi từ Telegram cho khách hàng ${customerPhone}: "${message.text}"`);
+    return true;
+  } catch (err) {
+    console.error("Lỗi lưu tin nhắn từ Telegram vào Database:", err);
+    return false;
+  }
+}
+
+/**
+ * Registers Webhook URL with Telegram Bot API
+ */
+export async function registerTelegramWebhook(hostUrl) {
+  const tgToken = process.env.TELEGRAM_BOT_TOKEN;
+  if (!tgToken) {
+    throw new Error("TELEGRAM_BOT_TOKEN is not configured.");
+  }
+
+  const webhookUrl = `${hostUrl}/api/telegram-webhook`;
+  const response = await fetch(
+    `https://api.telegram.org/bot${tgToken}/setWebhook?url=${webhookUrl}`
+  );
+  const data = await response.json();
+  if (!response.ok || !data.ok) {
+    console.error("Lỗi đăng ký Webhook Telegram:", data);
+    throw new Error(data.description || "Failed to set Telegram webhook");
+  }
+
+  console.log(`Đăng ký Webhook Telegram thành công: ${webhookUrl}`);
+  return data;
+}
+
+/**
+ * Starts polling Telegram updates to listen for admin's replies (used for local testing)
  */
 export async function startTelegramBotPolling() {
   const tgToken = process.env.TELEGRAM_BOT_TOKEN;
   const tgChatId = process.env.TELEGRAM_CHAT_ID;
 
   if (!tgToken || !tgChatId) {
-    console.warn("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not configured. Telegram chat integration is disabled.");
+    console.warn("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not configured. Telegram chat polling is disabled.");
     return;
   }
 
@@ -75,47 +144,6 @@ export async function startTelegramBotPolling() {
     console.error("Lỗi khởi tạo Telegram offset:", err);
   }
 
-  async function handleTelegramUpdate(update) {
-    const message = update.message;
-    if (!message || !message.text || !message.reply_to_message) return;
-
-    // Check if the reply is from the authorized Admin chat ID
-    const chatId = String(message.chat.id);
-    const adminChatId = String(tgChatId);
-    if (chatId !== adminChatId) {
-      console.log(`Bỏ qua tin nhắn từ Chat ID không hợp lệ: ${chatId}`);
-      return;
-    }
-
-    const replyToText = message.reply_to_message.text || "";
-    
-    // Extract phone number from the original message template
-    // SĐT: 0987654321
-    const phoneMatch = replyToText.match(/SĐT:\s*([0-9+]+)/);
-    if (!phoneMatch) return;
-    const customerPhone = phoneMatch[1].trim();
-
-    try {
-      // Find the latest customer message to get customerName
-      const lastMsg = await Message.findOne({ phone: customerPhone }).sort({ createdAt: -1 });
-      const customerName = lastMsg ? lastMsg.customerName : "Khách hàng";
-
-      // Save admin reply message to database
-      const adminMessage = new Message({
-        sender: "admin",
-        customerName,
-        phone: customerPhone,
-        text: message.text,
-        readByAdmin: true,
-      });
-
-      await adminMessage.save();
-      console.log(`Đã lưu tin nhắn phản hồi từ Telegram cho khách hàng ${customerPhone}: "${message.text}"`);
-    } catch (err) {
-      console.error("Lỗi lưu tin nhắn từ Telegram vào Database:", err);
-    }
-  }
-
   async function poll() {
     try {
       const res = await fetch(
@@ -126,7 +154,7 @@ export async function startTelegramBotPolling() {
         if (data.ok && data.result.length > 0) {
           for (const update of data.result) {
             offset = update.update_id + 1;
-            await handleTelegramUpdate(update);
+            await processTelegramMessageUpdate(update);
           }
         }
       }

@@ -14,7 +14,7 @@ import Order from "./models/Order.js";
 import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
-import { sendTelegramChatMessage, startTelegramBotPolling } from "./services/telegramBotService.js";
+import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 
 dotenv.config();
 
@@ -560,6 +560,44 @@ app.post("/api/chats", async (req, res) => {
 });
 
 
+// POST webhook from Telegram
+app.post("/api/telegram-webhook", async (req, res) => {
+  try {
+    const update = req.body;
+    if (update) {
+      await processTelegramMessageUpdate(update);
+    }
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Lỗi xử lý webhook Telegram:", error);
+    res.sendStatus(500);
+  }
+});
+
+// GET endpoint to set up Telegram webhook automatically
+app.get("/api/telegram-webhook-setup", async (req, res) => {
+  try {
+    const protocol = req.headers["x-forwarded-proto"] || "http";
+    const host = req.headers.host;
+    const hostUrl = `${protocol}://${host}`;
+
+    const result = await registerTelegramWebhook(hostUrl);
+    res.json({
+      success: true,
+      message: "Đăng ký Webhook Telegram thành công!",
+      webhookUrl: `${hostUrl}/api/telegram-webhook`,
+      telegramResponse: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Không thể đăng ký Webhook Telegram",
+      error: error.message,
+    });
+  }
+});
+
+
 // Default root route
 app.get("/", (req, res) => {
   res.send("GlowSkin API is running...");
@@ -568,5 +606,9 @@ app.get("/", (req, res) => {
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  startTelegramBotPolling();
+  if (!process.env.VERCEL) {
+    startTelegramBotPolling();
+  } else {
+    console.log("Môi trường Vercel (Serverless) được phát hiện. Vòng lặp Polling bị vô hiệu hóa.");
+  }
 });
