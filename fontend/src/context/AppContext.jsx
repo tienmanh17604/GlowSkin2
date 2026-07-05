@@ -25,7 +25,11 @@ export function AppProvider({ children }) {
   const [products, setProducts] = useState(() => {
     try {
       const saved = localStorage.getItem(PRODUCTS_KEY);
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.length > 0) return parsed;
+      }
+      return [];
     } catch {
       return [];
     }
@@ -81,19 +85,44 @@ export function AppProvider({ children }) {
     });
   };
 
+  // Auto-reload the page once per browser session on first visit
+  // to silently solve the backend cold start wake-up lag.
+  useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("glowskin-session-reloaded");
+    if (!hasReloaded) {
+      sessionStorage.setItem("glowskin-session-reloaded", "true");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500); // 1.5 seconds is enough to trigger the wake-up call and reload to fetch again
+    }
+  }, []);
+
   // Fetch initial data from MongoDB API on mount
   useEffect(() => {
     const fetchInitialData = async () => {
-      try {
-        const prodRes = await fetch(`${API_URL}/products`);
-        if (prodRes.ok) {
-          const prodData = await prodRes.json();
-          if (prodData) {
-            setProducts(prodData);
+      let success = false;
+      let retries = 0;
+      const maxRetries = 10; // Try up to 10 times (30 seconds total) for server to wake up
+
+      while (!success && retries < maxRetries) {
+        try {
+          const prodRes = await fetch(`${API_URL}/products`);
+          if (prodRes.ok) {
+            const prodData = await prodRes.json();
+            if (prodData && prodData.length > 0) {
+              setProducts(prodData);
+              success = true;
+            }
           }
+        } catch (err) {
+          console.error(`Lỗi tải sản phẩm (Lần thử ${retries + 1}):`, err);
         }
-      } catch (err) {
-        console.error("Lỗi khi tải danh sách sản phẩm từ backend:", err);
+
+        if (!success) {
+          retries++;
+          // Wait 3 seconds before next retry
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+        }
       }
 
       try {
