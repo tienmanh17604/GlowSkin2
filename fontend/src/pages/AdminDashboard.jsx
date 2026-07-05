@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import Logo from "../components/Logo";
@@ -32,6 +32,126 @@ export default function AdminDashboard() {
   
   const addDescRef = useRef(null);
   const editDescRef = useRef(null);
+
+  // States & Effects for Chat support
+  const [chatSessions, setChatSessions] = useState([]);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [sessionMessages, setSessionMessages] = useState([]);
+  const [replyText, setReplyText] = useState("");
+  const [chatSearch, setChatSearch] = useState("");
+
+  const chatMessagesEndRef = useRef(null);
+  const sessionsIntervalRef = useRef(null);
+  const messagesIntervalRef = useRef(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+  const fetchSessions = async () => {
+    try {
+      const res = await fetch(`${API_URL}/chats`);
+      if (res.ok) {
+        const data = await res.json();
+        setChatSessions(data);
+      }
+    } catch (err) {
+      console.error("Lỗi tải danh sách chat:", err);
+    }
+  };
+
+  const fetchSessionMessages = async (phone, markRead = false) => {
+    try {
+      const res = await fetch(`${API_URL}/chats/${phone}${markRead ? "?markRead=true" : ""}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSessionMessages(data);
+      }
+    } catch (err) {
+      console.error("Lỗi tải tin nhắn cuộc hội thoại:", err);
+    }
+  };
+
+  // Poll chat sessions
+  useEffect(() => {
+    if (activeTab === "messages") {
+      fetchSessions();
+      sessionsIntervalRef.current = setInterval(fetchSessions, 5000);
+    } else {
+      if (sessionsIntervalRef.current) {
+        clearInterval(sessionsIntervalRef.current);
+        sessionsIntervalRef.current = null;
+      }
+    }
+    return () => {
+      if (sessionsIntervalRef.current) clearInterval(sessionsIntervalRef.current);
+    };
+  }, [activeTab]);
+
+  // Poll active session messages
+  useEffect(() => {
+    if (activeTab === "messages" && selectedSession) {
+      fetchSessionMessages(selectedSession._id, true);
+      
+      if (messagesIntervalRef.current) clearInterval(messagesIntervalRef.current);
+      
+      messagesIntervalRef.current = setInterval(() => {
+        fetchSessionMessages(selectedSession._id, false);
+      }, 3000);
+    } else {
+      if (messagesIntervalRef.current) {
+        clearInterval(messagesIntervalRef.current);
+        messagesIntervalRef.current = null;
+      }
+    }
+    return () => {
+      if (messagesIntervalRef.current) clearInterval(messagesIntervalRef.current);
+    };
+  }, [activeTab, selectedSession]);
+
+  // Scroll to bottom of chat list
+  useEffect(() => {
+    if (chatMessagesEndRef.current) {
+      chatMessagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [sessionMessages]);
+
+  const handleSendReply = async (e) => {
+    e.preventDefault();
+    if (!replyText.trim() || !selectedSession) return;
+
+    const messageText = replyText.trim();
+    setReplyText("");
+
+    // Optimistic UI update
+    const tempMsg = {
+      _id: "temp_" + Date.now(),
+      sender: "admin",
+      customerName: selectedSession.customerName,
+      phone: selectedSession._id,
+      text: messageText,
+      createdAt: new Date().toISOString()
+    };
+    setSessionMessages((prev) => [...prev, tempMsg]);
+
+    try {
+      const res = await fetch(`${API_URL}/chats`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sender: "admin",
+          customerName: selectedSession.customerName,
+          phone: selectedSession._id,
+          text: messageText
+        })
+      });
+
+      if (res.ok) {
+        fetchSessionMessages(selectedSession._id, false);
+        fetchSessions();
+      }
+    } catch (err) {
+      console.error("Lỗi khi gửi phản hồi admin:", err);
+    }
+  };
 
   const handleInsertTag = (tagType, isEdit) => {
     const target = isEdit ? editingProduct : newProductData;
@@ -307,6 +427,13 @@ export default function AdminDashboard() {
               onClick={() => setActiveTab("reviews")}
             >
               ⭐ Quản lý đánh giá
+            </button>
+            <button
+              type="button"
+              className={`admin-tab-btn ${activeTab === "messages" ? "admin-tab-btn--active" : ""}`}
+              onClick={() => setActiveTab("messages")}
+            >
+              💬 Hỗ trợ Chat
             </button>
           </aside>
 
@@ -725,6 +852,125 @@ export default function AdminDashboard() {
                       )}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "messages" && (
+              <div className="admin-chat-tab">
+                <div className="admin-content-header">
+                  <h2>Quản lý Chat hỗ trợ trực tuyến</h2>
+                </div>
+
+                <div className="admin-chat-grid">
+                  {/* Left Column: Sessions List */}
+                  <div className="admin-chat-sidebar">
+                    <div className="admin-chat-search">
+                      <input
+                        type="text"
+                        placeholder="Tìm kiếm theo Tên hoặc SĐT..."
+                        value={chatSearch}
+                        onChange={(e) => setChatSearch(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="admin-chat-sessions-list">
+                      {chatSessions.filter(s => 
+                        (s.customerName || "").toLowerCase().includes(chatSearch.toLowerCase()) || 
+                        (s._id || "").includes(chatSearch)
+                      ).length === 0 ? (
+                        <div className="admin-chat-no-sessions">Không có cuộc hội thoại nào.</div>
+                      ) : (
+                        chatSessions.filter(s => 
+                          (s.customerName || "").toLowerCase().includes(chatSearch.toLowerCase()) || 
+                          (s._id || "").includes(chatSearch)
+                        ).map((session) => (
+                          <div
+                            key={session._id}
+                            className={`admin-chat-session-item ${
+                              selectedSession?._id === session._id ? "admin-chat-session-item--active" : ""
+                            }`}
+                            onClick={() => setSelectedSession(session)}
+                          >
+                            <div className="session-item-header">
+                              <strong>{session.customerName}</strong>
+                              <span className="session-item-time">
+                                {new Date(session.lastMessageAt).toLocaleTimeString("vi-VN", {
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                                })}
+                              </span>
+                            </div>
+                            <div className="session-item-body">
+                              <span className="session-item-phone">{session._id}</span>
+                              {session.unreadCount > 0 && (
+                                <span className="session-item-unread">{session.unreadCount}</span>
+                              )}
+                            </div>
+                            <div className="session-item-last-msg">
+                              {session.lastMessage}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Chat Box */}
+                  <div className="admin-chat-main">
+                    {selectedSession ? (
+                      <div className="admin-chat-conversation">
+                        <div className="admin-chat-conv-header">
+                          <div>
+                            <h3>{selectedSession.customerName}</h3>
+                            <span>Số điện thoại: <strong>{selectedSession._id}</strong></span>
+                          </div>
+                        </div>
+
+                        <div className="admin-chat-conv-body">
+                          {sessionMessages.map((msg) => (
+                            <div
+                              key={msg._id}
+                              className={`admin-chat-bubble-wrapper ${
+                                msg.sender === "admin" ? "admin-bubble--right" : "admin-bubble--left"
+                              }`}
+                            >
+                              <div className="admin-chat-bubble">
+                                <div className="admin-chat-bubble-text">{msg.text}</div>
+                                <div className="admin-chat-bubble-time">
+                                  {new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          <div ref={chatMessagesEndRef} />
+                        </div>
+
+                        <form onSubmit={handleSendReply} className="admin-chat-conv-footer">
+                          <input
+                            type="text"
+                            placeholder="Nhập nội dung phản hồi..."
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            required
+                          />
+                          <button type="submit" className="btn-primary">
+                            Gửi phản hồi
+                          </button>
+                        </form>
+                      </div>
+                    ) : (
+                      <div className="admin-chat-no-selection">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: "64px", height: "64px", color: "#ccc", marginBottom: "16px" }}>
+                          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+                        </svg>
+                        <p>Chọn một cuộc trò chuyện từ danh sách bên trái để xem chi tiết và phản hồi hỗ trợ.</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

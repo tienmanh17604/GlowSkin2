@@ -12,6 +12,7 @@ import User from "./models/User.js";
 import Product from "./models/Product.js";
 import Order from "./models/Order.js";
 import Review from "./models/Review.js";
+import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 
 dotenv.config();
@@ -473,6 +474,79 @@ app.post("/api/payments/create-momo-url", async (req, res) => {
   } catch (error) {
     console.error("Lỗi khi tạo MoMo URL:", error);
     res.status(500).json({ message: "Không thể tạo liên kết thanh toán MoMo" });
+  }
+});
+
+
+// 6. CHAT SUPPORT ENDPOINTS
+// GET all chat sessions (Admin)
+app.get("/api/chats", async (req, res) => {
+  try {
+    const sessions = await Message.aggregate([
+      { $sort: { createdAt: 1 } },
+      {
+        $group: {
+          _id: "$phone",
+          customerName: { $last: "$customerName" },
+          lastMessage: { $last: "$text" },
+          lastMessageAt: { $last: "$createdAt" },
+          unreadCount: {
+            $sum: {
+              $cond: [
+                { $and: [{ $eq: ["$sender", "user"] }, { $ne: ["$readByAdmin", true] }] },
+                1,
+                0
+              ]
+            }
+          }
+        }
+      },
+      { $sort: { lastMessageAt: -1 } }
+    ]);
+    res.json(sessions);
+  } catch (error) {
+    res.status(500).json({ message: "Không thể lấy danh sách cuộc trò chuyện", error: error.message });
+  }
+});
+
+// GET all messages in a specific chat session
+app.get("/api/chats/:phone", async (req, res) => {
+  try {
+    const { phone } = req.params;
+    const { markRead } = req.query;
+
+    const messages = await Message.find({ phone }).sort({ createdAt: 1 });
+
+    if (markRead === "true") {
+      await Message.updateMany({ phone, sender: "user", readByAdmin: false }, { $set: { readByAdmin: true } });
+    }
+
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ message: "Không thể lấy lịch sử tin nhắn", error: error.message });
+  }
+});
+
+// POST a new message
+app.post("/api/chats", async (req, res) => {
+  try {
+    const { sender, customerName, phone, text } = req.body;
+    if (!sender || !customerName || !phone || !text) {
+      return res.status(400).json({ message: "Vui lòng điền đầy đủ thông tin tin nhắn" });
+    }
+
+    const newMessage = new Message({
+      sender,
+      customerName,
+      phone,
+      text,
+      readByAdmin: sender === "admin"
+    });
+
+    const savedMessage = await newMessage.save();
+    res.status(201).json(savedMessage);
+  } catch (error) {
+    res.status(400).json({ message: "Không thể gửi tin nhắn", error: error.message });
   }
 });
 

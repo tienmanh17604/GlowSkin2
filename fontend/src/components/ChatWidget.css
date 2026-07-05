@@ -1,0 +1,433 @@
+.glowskin-chat-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Floating Chat Badge Button */
+.glowskin-chat-badge-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e3c09b, #c39c73);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(195, 156, 115, 0.4);
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+}
+
+.glowskin-chat-badge-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(195, 156, 115, 0.6);
+}
+
+.glowskin-chat-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.glowskin-online-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #10b981;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+/* Chat Card Card */
+.glowskin-chat-card {
+  width: 360px;
+  height: 520px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(229, 228, 231, 0.5);
+  animation: chatFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes chatFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Chat Header */
+.glowskin-chat-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #e3c09b, #c39c73);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.glowskin-chat-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.glowskin-header-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.glowskin-chat-header-title strong {
+  font-size: 16px;
+  letter-spacing: 0.2px;
+}
+
+.glowskin-chat-close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.glowskin-chat-close-btn:hover {
+  opacity: 1;
+}
+
+/* Quick contact buttons */
+.glowskin-chat-quick-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #faf9f6;
+  border-bottom: 1px solid #f1efe9;
+}
+
+.glowskin-quick-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid #e5e4e7;
+  background-color: #fff;
+  color: #6b6375;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.glowskin-quick-btn:hover {
+  background-color: #f4f3ec;
+  border-color: #c39c73;
+  color: #c39c73;
+}
+
+.quick-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Chat Body */
+.glowskin-chat-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Register Form styles */
+.glowskin-chat-register-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.glowskin-chat-decor-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(195, 156, 115, 0.1);
+  color: #c39c73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glowskin-chat-decor-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.glowskin-chat-register-form h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #08060d;
+}
+
+.glowskin-chat-subtitle {
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+  margin: -8px 0 8px 0;
+  line-height: 1.4;
+}
+
+.glowskin-chat-error-msg {
+  width: 100%;
+  padding: 10px;
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.glowskin-chat-form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.glowskin-chat-form-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b6375;
+  letter-spacing: 0.5px;
+}
+
+.glowskin-chat-form-group input {
+  padding: 12px 16px;
+  border: 1px solid #e5e4e7;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fafafa;
+  transition: border-color 0.2s, background-color 0.2s;
+  color: #08060d;
+}
+
+.glowskin-chat-form-group input:focus {
+  border-color: #c39c73;
+  background-color: #fff;
+}
+
+.glowskin-chat-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e3c09b, #c39c73);
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(195, 156, 115, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.glowskin-chat-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(195, 156, 115, 0.4);
+}
+
+/* Chat Messages Area */
+.glowskin-chat-messages-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.glowskin-chat-messages-list {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #fcfbfa;
+}
+
+/* Custom Scrollbar for messages */
+.glowskin-chat-messages-list::-webkit-scrollbar {
+  width: 4px;
+}
+.glowskin-chat-messages-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.glowskin-chat-messages-list::-webkit-scrollbar-thumb {
+  background: rgba(195, 156, 115, 0.2);
+  border-radius: 2px;
+}
+
+.glowskin-chat-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: auto 0;
+}
+
+.glowskin-chat-empty-state strong {
+  color: #c39c73;
+}
+
+/* Message Bubbles */
+.glowskin-chat-message-bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  word-break: break-word;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.glowskin-message--user {
+  align-self: flex-end;
+  background-color: #c39c73;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.glowskin-message--admin {
+  align-self: flex-start;
+  background-color: #ffffff;
+  color: #08060d;
+  border-bottom-left-radius: 4px;
+  border: 1px solid #e5e4e7;
+}
+
+.glowskin-chat-message-text {
+  margin-bottom: 4px;
+}
+
+.glowskin-chat-message-time {
+  font-size: 9px;
+  opacity: 0.7;
+  text-align: right;
+}
+
+.glowskin-message--admin .glowskin-chat-message-time {
+  color: #9ca3af;
+}
+
+.glowskin-message--user .glowskin-chat-message-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Footer Form */
+.glowskin-chat-send-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e4e7;
+  background-color: #fff;
+}
+
+.glowskin-chat-exit-session {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.glowskin-chat-exit-session:hover {
+  color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.glowskin-chat-send-form input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e5e4e7;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  background-color: #fafafa;
+  transition: border-color 0.2s;
+}
+
+.glowskin-chat-send-form input:focus {
+  border-color: #c39c73;
+  background-color: #fff;
+}
+
+.glowskin-chat-send-btn {
+  background-color: #c39c73;
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.glowskin-chat-send-btn:hover {
+  background-color: #b08a62;
+  transform: scale(1.05);
+}
+
+.glowskin-chat-send-btn svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 480px) {
+  .glowskin-chat-container {
+    bottom: 16px;
+    right: 16px;
+  }
+  .glowskin-chat-card {
+    width: calc(100vw - 32px);
+    height: calc(100vh - 120px);
+    max-height: 520px;
+  }
+}

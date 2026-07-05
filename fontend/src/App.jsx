@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ProductDetail from "./pages/ProductDetail";
 import CartDrawer from "./components/CartDrawer";
 import LoginModal from "./components/LoginModal";
+import ChatWidget from "./components/ChatWidget";
 
 function CartRedirect() {
   const { setIsCartOpen } = useCart();
@@ -41,6 +42,7 @@ export default function App() {
         </Routes>
         <CartDrawer />
         <LoginModal />
+        <ChatWidget />
       </BrowserRouter>
     </CartProvider>
   );
