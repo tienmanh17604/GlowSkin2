@@ -69,6 +69,20 @@ export async function processTelegramMessageUpdate(update) {
   const customerPhone = phoneMatch[1].trim();
 
   try {
+    // Deduplication check to prevent duplicate saves from polling and webhook
+    const timeLimit = new Date(Date.now() - 4000);
+    const duplicate = await Message.findOne({
+      phone: customerPhone,
+      sender: "admin",
+      text: message.text,
+      createdAt: { $gte: timeLimit }
+    });
+
+    if (duplicate) {
+      console.log(`Bỏ qua tin nhắn trùng lặp trong vòng 4 giây cho khách hàng ${customerPhone}`);
+      return false;
+    }
+
     // Find the latest customer message to get customerName
     const lastMsg = await Message.findOne({ phone: customerPhone }).sort({ createdAt: -1 });
     const customerName = lastMsg ? lastMsg.customerName : "Khách hàng";
