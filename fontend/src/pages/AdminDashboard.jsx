@@ -29,6 +29,70 @@ export default function AdminDashboard() {
   const [editingPriceId, setEditingPriceId] = useState(null);
   const [tempPrice, setTempPrice] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
+  
+  const addDescRef = useRef(null);
+  const editDescRef = useRef(null);
+
+  const handleInsertTag = (tagType, isEdit) => {
+    const target = isEdit ? editingProduct : newProductData;
+    const setTarget = isEdit ? setEditingProduct : setNewProductData;
+    const txtArea = isEdit ? editDescRef.current : addDescRef.current;
+    const currentVal = target.description || "";
+    
+    if (txtArea) {
+      const start = txtArea.selectionStart;
+      const end = txtArea.selectionEnd;
+      const selectedText = currentVal.substring(start, end);
+      
+      let tagToInsert = "";
+      if (tagType === "img") {
+        const url = prompt("Nhập URL hình ảnh muốn chèn vào mô tả sản phẩm:");
+        if (!url) return;
+        tagToInsert = `\n<img src="${url}" alt="hình ảnh mô tả" />\n`;
+      } else if (tagType === "h2") {
+        tagToInsert = `<h2>${selectedText || "Tiêu đề mục"}</h2>`;
+      } else if (tagType === "bold") {
+        tagToInsert = `<b>${selectedText || "in đậm"}</b>`;
+      } else if (tagType === "underline") {
+        tagToInsert = `<u>${selectedText || "gạch chân"}</u>`;
+      } else if (tagType === "p") {
+        tagToInsert = `<p>${selectedText || "Nội dung đoạn văn..."}</p>`;
+      } else if (tagType === "bullet") {
+        if (selectedText) {
+          tagToInsert = selectedText.split("\n").map(line => line.startsWith("• ") ? line : `• ${line}`).join("\n");
+        } else {
+          tagToInsert = "• ";
+        }
+      } else if (tagType === "br") {
+        tagToInsert = "<br />\n";
+      }
+
+      const textBefore = currentVal.substring(0, start);
+      const textAfter = currentVal.substring(end, currentVal.length);
+      const newVal = textBefore + tagToInsert + textAfter;
+      setTarget({ ...target, description: newVal });
+      
+      setTimeout(() => {
+        txtArea.focus();
+        const newCursorPos = start + tagToInsert.length;
+        txtArea.setSelectionRange(newCursorPos, newCursorPos);
+      }, 10);
+    } else {
+      let tagToInsert = "";
+      if (tagType === "img") {
+        const url = prompt("Nhập URL hình ảnh:");
+        if (url) tagToInsert = `<img src="${url}" />`;
+      } else if (tagType === "bullet") {
+        tagToInsert = "• ";
+      } else if (tagType === "br") {
+        tagToInsert = "<br />\n";
+      } else {
+        const tag = tagType === "bold" ? "b" : tagType === "underline" ? "u" : tagType === "h2" ? "h2" : "p";
+        tagToInsert = `<${tag}>...</${tag}>`;
+      }
+      setTarget({ ...target, description: currentVal + tagToInsert });
+    }
+  };
 
   const handleEditProductClick = (product) => {
     setEditingProduct({

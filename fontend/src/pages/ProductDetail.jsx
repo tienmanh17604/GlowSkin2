@@ -245,51 +245,62 @@ export default function ProductDetail() {
 
             {/* Buying Block */}
             {product.stock > 0 ? (
-              <div className="detail-purchase-block">
-                <div className="detail-qty-select" style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-                  <span className="qty-label" style={{ fontSize: "14px", fontWeight: "600", color: "#666" }}>Số lượng:</span>
-                  <div className="qty-controls">
-                    <button type="button" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
-                    <span>{qty}</span>
-                    <button 
-                      type="button" 
-                      onClick={() => {
-                        if (qty + 1 > product.stock) {
-                          alert(`Chỉ còn ${product.stock} sản phẩm trong kho!`);
-                          return;
-                        }
-                        setQty(qty + 1);
-                      }}
-                    >+</button>
-                  </div>
+              <div className="detail-actions-row">
+                <div className="detail-qty-selector">
+                  <button 
+                    type="button" 
+                    className="qty-btn"
+                    onClick={() => setQty(Math.max(1, qty - 1))}
+                  >
+                    −
+                  </button>
+                  <span className="qty-val">{qty}</span>
+                  <button 
+                    type="button" 
+                    className="qty-btn"
+                    onClick={() => {
+                      if (qty + 1 > product.stock) {
+                        alert(`Chỉ còn ${product.stock} sản phẩm trong kho!`);
+                        return;
+                      }
+                      setQty(qty + 1);
+                    }}
+                  >
+                    +
+                  </button>
                 </div>
 
-                <div className="detail-actions">
-                  <button 
-                    type="button" 
-                    className="detail-btn detail-btn--primary"
-                    onClick={() => addToCart(product, qty)}
-                  >
-                    Thêm vào giỏ hàng
-                  </button>
-                  <button 
-                    type="button" 
-                    className="detail-btn detail-btn--secondary"
-                    onClick={handleBuyNow}
-                  >
-                    Mua ngay
-                  </button>
-                  <button
-                    type="button"
-                    className={`detail-wishlist-btn ${isWishlisted ? "active" : ""}`}
-                    onClick={() => toggleWishlist(product.id)}
-                    aria-label="Yêu thích"
-                  >
-                    <svg viewBox="0 0 24 24" fill={isWishlisted ? "#ff4d4f" : "none"} stroke={isWishlisted ? "#ff4d4f" : "currentColor"} strokeWidth="2">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                    </svg>
-                  </button>
-                </div>
+                <button 
+                  type="button" 
+                  className="detail-action-btn btn-add-cart"
+                  onClick={() => addToCart(product, qty)}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="btn-cart-icon">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  Thêm vào giỏ hàng
+                </button>
+
+                <button 
+                  type="button" 
+                  className="detail-action-btn btn-buy-now"
+                  onClick={handleBuyNow}
+                >
+                  MUA NGAY
+                </button>
+
+                <button
+                  type="button"
+                  className={`detail-wishlist-circle-btn ${isWishlisted ? "active" : ""}`}
+                  onClick={() => toggleWishlist(product.id)}
+                  aria-label="Yêu thích"
+                >
+                  <svg viewBox="0 0 24 24" fill={isWishlisted ? "#ff4d4f" : "none"} stroke={isWishlisted ? "#ff4d4f" : "currentColor"} strokeWidth="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </button>
               </div>
             ) : (
               <div className="detail-out-of-stock-alert">
@@ -297,123 +308,134 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Tabs content: Description, Ingredients, Reviews */}
-            <div className="detail-tabs">
-              <div className="tabs-header">
-                <button 
-                  type="button" 
-                  className={`tab-btn ${activeTab === "desc" ? "active" : ""}`}
-                  onClick={() => setActiveTab("desc")}
-                >
-                  Mô tả sản phẩm
-                </button>
-                <button 
-                  type="button" 
-                  className={`tab-btn ${activeTab === "ingredients" ? "active" : ""}`}
-                  onClick={() => setActiveTab("ingredients")}
-                >
-                  Thành phần chính
-                </button>
-                <button 
-                  type="button" 
-                  className={`tab-btn ${activeTab === "reviews" ? "active" : ""}`}
-                  onClick={() => setActiveTab("reviews")}
-                >
-                  Đánh giá ({productReviews.length})
-                </button>
+            {/* Trust Policies / Badges */}
+            <div className="detail-trust-policies">
+              <div className="policy-item">
+                <span className="policy-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                </span>
+                <span className="policy-text">Nhận <strong>HSV Point</strong> cho mỗi lần mua</span>
               </div>
+              <div className="policy-item">
+                <span className="policy-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </span>
+                <span className="policy-text">Cam kết <strong>hàng chính hãng</strong></span>
+              </div>
+              <div className="policy-item">
+                <span className="policy-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                </span>
+                <span className="policy-text"><strong>Miễn phí giao hàng</strong> 24h</span>
+              </div>
+              <div className="policy-item">
+                <span className="policy-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                </span>
+                <span className="policy-text">Đổi/trả hàng trong <strong>7 ngày</strong></span>
+              </div>
+            </div>
 
-              <div className="tab-panel">
-                {activeTab === "desc" && (
-                  <p className="tab-desc-content">{product.description}</p>
-                )}
+          </div>
+        </div>
 
-                {activeTab === "ingredients" && (
-                  <div className="tab-ingredients-list">
-                    {product.ingredients && product.ingredients.map((ing) => (
-                      <span key={ing} className="ingredient-badge">{ing}</span>
+        {/* Sequential Content Blocks: Description -> Ingredients -> Reviews */}
+        <div className="detail-sections">
+          
+          {/* Section 1: Description */}
+          <section className="detail-section detail-section--description">
+            <div className="detail-section-left">
+              <h2 className="detail-section-title">Giới thiệu</h2>
+            </div>
+            <div className="detail-section-right">
+              <div 
+                className="tab-desc-content" 
+                dangerouslySetInnerHTML={{ __html: product.description || "" }} 
+              />
+            </div>
+          </section>
+
+          {/* Section 3: Reviews */}
+          <section className="detail-section detail-section--reviews">
+            <div className="detail-section-left">
+              <h2 className="detail-section-title">Đánh giá ({productReviews.length})</h2>
+            </div>
+            <div className="detail-section-right">
+              <div className="tab-reviews-panel">
+                {productReviews.length === 0 ? (
+                  <p className="no-reviews-text">Chưa có đánh giá nào cho sản phẩm này. Hãy viết đánh giá đầu tiên!</p>
+                ) : (
+                  <div className="reviews-list">
+                    {productReviews.map((review, i) => (
+                      <div key={review._id || i} className="review-card">
+                        <div className="review-card-header">
+                          <strong>{review.userName}</strong>
+                          <span className="stars-fill">
+                            {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
+                          </span>
+                          <span className="date-str">
+                            {new Date(review.createdAt).toLocaleDateString("vi-VN")}
+                          </span>
+                        </div>
+                        <p className="review-text">“{review.comment}”</p>
+                      </div>
                     ))}
                   </div>
                 )}
 
-                {activeTab === "reviews" && (
-                  <div className="tab-reviews-panel">
-                    {productReviews.length === 0 ? (
-                      <p className="no-reviews-text">Chưa có đánh giá nào cho sản phẩm này. Hãy viết đánh giá đầu tiên!</p>
-                    ) : (
-                      <div className="reviews-list">
-                        {productReviews.map((review, i) => (
-                          <div key={review._id || i} className="review-card">
-                            <div className="review-card-header">
-                              <strong>{review.userName}</strong>
-                              <span className="stars-fill">
-                                {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                              </span>
-                              <span className="date-str">
-                                {new Date(review.createdAt).toLocaleDateString("vi-VN")}
-                              </span>
-                            </div>
-                            <p className="review-text">“{review.comment}”</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Write review form */}
-                    <form className="detail-review-form" onSubmit={handleReviewSubmit}>
-                      <h3>Viết đánh giá của bạn</h3>
-                      
-                      <div className="form-group-star">
-                        <label>Chọn số sao:</label>
-                        <div className="star-buttons">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <button
-                              key={star}
-                              type="button"
-                              onClick={() => setReviewRating(star)}
-                              style={{ color: star <= reviewRating ? "#d97706" : "#ddd" }}
-                            >
-                              ★
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="form-row-inputs">
-                        <div className="input-group">
-                          <label htmlFor="review-author">Họ và tên của bạn</label>
-                          <input 
-                            id="review-author"
-                            type="text" 
-                            required 
-                            placeholder="Ví dụ: Nguyễn Văn A"
-                            value={reviewUser}
-                            onChange={(e) => setReviewUser(e.target.value)}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="input-group">
-                        <label htmlFor="review-desc">Nhận xét về sản phẩm</label>
-                        <textarea 
-                          id="review-desc"
-                          required 
-                          rows={4} 
-                          placeholder="Chia sẻ trải nghiệm sử dụng thực tế của bạn..."
-                          value={reviewComment}
-                          onChange={(e) => setReviewComment(e.target.value)}
-                        />
-                      </div>
-
-                      <button type="submit" className="detail-btn detail-btn--primary send-review-btn">
-                        Gửi đánh giá
-                      </button>
-                    </form>
+                {/* Write review form */}
+                <form className="detail-review-form" onSubmit={handleReviewSubmit}>
+                  <h3>Viết đánh giá của bạn</h3>
+                  
+                  <div className="form-group-star">
+                    <label>Chọn số sao:</label>
+                    <div className="star-buttons">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setReviewRating(star)}
+                          style={{ color: star <= reviewRating ? "#d97706" : "#ddd" }}
+                        >
+                          ★
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                )}
+
+                  <div className="form-row-inputs">
+                    <div className="input-group">
+                      <label htmlFor="review-author">Họ và tên của bạn</label>
+                      <input 
+                        id="review-author"
+                        type="text" 
+                        required 
+                        placeholder="Ví dụ: Nguyễn Văn A"
+                        value={reviewUser}
+                        onChange={(e) => setReviewUser(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="input-group">
+                    <label htmlFor="review-desc">Nhận xét về sản phẩm</label>
+                    <textarea 
+                      id="review-desc"
+                      required 
+                      rows={4} 
+                      placeholder="Chia sẻ trải nghiệm sử dụng thực tế của bạn..."
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                    />
+                  </div>
+
+                  <button type="submit" className="detail-btn detail-btn--primary send-review-btn">
+                    Gửi đánh giá
+                  </button>
+                </form>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </main>
     </div>

@@ -108,3 +108,23 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Ẩn hoàn toàn thanh cuộn (scrollbar) trên toàn bộ trang web và trang admin */
+/* Vẫn cho phép cuộn bằng chuột/cảm ứng nhưng không hiện thanh cuộn */
+
+/* Dành cho Chrome, Safari, Opera và Edge mới */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+
+/* Dành cho Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Dành cho IE và Edge cũ */
+* {
+  -ms-overflow-style: none;
+}

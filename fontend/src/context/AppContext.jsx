@@ -239,10 +239,11 @@ export function AppProvider({ children }) {
       skinTypes: productData.skinTypes || [],
       concerns: productData.concerns || [],
       ingredients: typeof productData.ingredients === "string" 
-        ? productData.ingredients.split(",").map(i => i.trim()).filter(Boolean)
+        ? productData.ingredients.split("\n").map(i => i.trim()).filter(Boolean)
         : productData.ingredients || [],
       image: productData.image,
-      hoverImage: productData.hoverImage,
+      hoverImage: productData.hoverImage || "",
+      images: productData.images || [],
       description: productData.description,
     };
     

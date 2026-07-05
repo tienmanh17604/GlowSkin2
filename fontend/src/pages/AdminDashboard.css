@@ -665,3 +665,216 @@
   margin-bottom: 30px;
   line-height: 1.6;
 }
+
+/* Gallery Manager */
+.admin-gallery-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.admin-gallery-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-gallery-input-row input {
+  flex: 1;
+}
+
+.admin-gallery-remove-btn {
+  background: #fef2f2;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-gallery-remove-btn:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+.admin-gallery-add-btn {
+  align-self: flex-start;
+  background: #fbfaf8;
+  border: 1px dashed rgba(140, 98, 57, 0.4);
+  color: #8c6239;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.admin-gallery-add-btn:hover {
+  background: rgba(195, 156, 115, 0.08);
+  border-style: solid;
+}
+
+/* Image Previews Section */
+.admin-previews-section {
+  background: #FAF8F5;
+  border: 1px solid rgba(195, 156, 115, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.admin-previews-section > label {
+  font-weight: 700 !important;
+  color: #8c6239 !important;
+  margin-bottom: 10px !important;
+}
+
+.admin-previews-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-preview-item {
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.admin-preview-label {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #888;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.admin-preview-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fbfbfb;
+}
+
+/* Rich Description Editor */
+.admin-rich-desc-group {
+  margin-bottom: 24px !important;
+}
+
+.admin-rich-desc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(195, 156, 115, 0.15);
+  padding-bottom: 8px;
+}
+
+.admin-rich-desc-header label {
+  margin-bottom: 0 !important;
+  font-weight: 700 !important;
+}
+
+.admin-rich-desc-tabs {
+  display: flex;
+  gap: 6px;
+  background: #f3ede2;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.admin-desc-tab-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #704f2d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-desc-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.admin-desc-tab-btn.active {
+  background: white;
+  color: #8c6239;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.admin-rich-desc-editor {
+  border: 1px solid rgba(195, 156, 115, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.admin-editor-toolbar {
+  display: flex;
+  gap: 8px;
+  background: #fbfaf8;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(195, 156, 115, 0.2);
+  flex-wrap: wrap;
+}
+
+.admin-editor-toolbar button {
+  background: white;
+  border: 1px solid rgba(195, 156, 115, 0.3);
+  color: #704f2d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-editor-toolbar button:hover {
+  background: #8c6239;
+  color: white;
+  border-color: #8c6239;
+}
+
+.admin-rich-desc-editor textarea {
+  border: none !important;
+  border-radius: 0 !important;
+  display: block;
+  resize: vertical;
+  min-height: 150px;
+}
+
+.admin-rich-desc-editor textarea:focus {
+  box-shadow: none !important;
+}
+
+.admin-rich-desc-preview {
+  border: 1px solid rgba(195, 156, 115, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  background: #fcfbf9;
+  min-height: 180px;
+  max-height: 350px;
+  overflow-y: auto;
+}
