@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -11,8 +13,8 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'DM Sans', 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Playfair Display', Georgia, serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -24,8 +26,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
+@media (max-width: 1024px) {
+  :root {
     font-size: 16px;
   }
 }
@@ -76,20 +80,28 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
-  @media (max-width: 1024px) {
+}
+
+@media (max-width: 1024px) {
+  h1 {
     font-size: 36px;
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
+}
+
+@media (max-width: 1024px) {
+  h2 {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
@@ -109,22 +121,14 @@ code {
   background: var(--code-bg);
 }
 
-/* Ẩn hoàn toàn thanh cuộn (scrollbar) trên toàn bộ trang web và trang admin */
-/* Vẫn cho phép cuộn bằng chuột/cảm ứng nhưng không hiện thanh cuộn */
-
-/* Dành cho Chrome, Safari, Opera và Edge mới */
+/* Ẩn hoàn toàn thanh cuộn */
 ::-webkit-scrollbar {
   width: 0px;
   height: 0px;
   display: none;
 }
 
-/* Dành cho Firefox */
 * {
   scrollbar-width: none;
-}
-
-/* Dành cho IE và Edge cũ */
-* {
   -ms-overflow-style: none;
 }

@@ -18,31 +18,6 @@ const NAV_LINKS = [
 const img = (id, w = 800) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&q=80&auto=format&fit=crop`;
 
-const HERO_IMAGES = [
-  { src: img("1515377905703-c4788e51af15", 900), alt: "Chăm sóc da tự nhiên" },
-  { src: img("1512496015851-a90fb38ba796", 900), alt: "Làn da rạng rỡ" },
-  { src: img("1556228720-195a672e8a03", 900), alt: "Skincare routine" },
-  { src: img("1598440947619-2c35fc9aa908", 900), alt: "Vẻ đẹp tự nhiên" },
-];
-
-const FLOATING_IMAGES = [
-  {
-    src: img("1556228578-0d85b1a4d571", 400),
-    alt: "Serum skincare",
-    className: "float-img float-img--1",
-  },
-  {
-    src: img("1522335789203-aabd1fc54bc9", 400),
-    alt: "Makeup beauty",
-    className: "float-img float-img--2",
-  },
-  {
-    src: img("1612817288484-6f916006741a", 400),
-    alt: "Mỹ phẩm",
-    className: "float-img float-img--3",
-  },
-];
-
 const FEATURES = [
   {
     title: "Phân tích Da AI",
@@ -109,19 +84,11 @@ export default function Home() {
   const { currentUser, logout, setIsLoginOpen } = useApp();
   const { setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
-  const [activeHero, setActiveHero] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveHero((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 4500);
-    return () => clearInterval(timer);
   }, []);
 
   return (
@@ -130,8 +97,8 @@ export default function Home() {
         <Logo />
 
         <ul className="nav-links">
-          {NAV_LINKS.map((link, index) => (
-            <li key={link.label} style={{ animationDelay: `${0.1 + index * 0.07}s` }}>
+          {NAV_LINKS.map((link) => (
+            <li key={link.label}>
               {link.to ? (
                 link.to === "/cart" ? (
                   <button
@@ -193,76 +160,102 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="hero" id="home">
-        <div className="hero-content">
-          <span className="badge">✨ Nền tảng Làm đẹp AI</span>
+      {/* 1. Nuvé Fullscreen Hero Section */}
+      <section className="nuve-hero" id="home">
+        {/* Fullscreen Video Background layer */}
+        <div className="nuve-video-bg">
+          <video
+            src="/skincare_video.mov"
+            className="nuve-bg-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+          <div className="nuve-video-overlay"></div>
+        </div>
 
-          <h1>
-            Khám phá
-            <br />
-            Làn da Hoàn mỹ
-          </h1>
+        {/* Content Container overlaid on top of video */}
+        <div className="nuve-hero-container">
+          {/* Cột trái */}
+          <div className="nuve-left-col">
+            <div className="nuve-trust-badge">
+              <div className="nuve-avatars">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop" alt="User 1" />
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop" alt="User 2" />
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop" alt="User 3" />
+              </div>
+              <span className="nuve-trust-text">Được tin dùng bởi hơn 10.000+ người</span>
+            </div>
 
-          <p>
-            AI phân tích da, review mỹ phẩm và đề xuất skincare
-            routine cá nhân hóa dành riêng cho từng người dùng.
-          </p>
+            <h1 className="nuve-hero-title">
+              Đánh thức
+              <br />
+              tiềm năng
+              <br />
+              làn da bạn
+            </h1>
 
-          <div className="hero-buttons">
+            <p className="nuve-hero-subtitle">
+              Công nghệ AI quét khuôn mặt và
+              <br />
+              chỉ ra các điểm cần cải thiện
+            </p>
+
             <button
               type="button"
-              className="primary-btn"
+              className="nuve-cta-btn"
               onClick={() => navigate("/analyze")}
             >
               Phân tích da ngay
             </button>
-
-            <button
-              type="button"
-              className="secondary-btn"
-              onClick={() => {
-                document.getElementById("gallery")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Xem đánh giá
-            </button>
           </div>
-        </div>
 
-        <div className="hero-gallery">
-          <div className="hero-carousel">
-            {HERO_IMAGES.map((image, index) => (
-              <img
-                key={image.src}
-                src={image.src}
-                alt={image.alt}
-                className={`hero-slide ${index === activeHero ? "hero-slide--active" : ""}`}
-              />
-            ))}
-            <div className="hero-dots">
-              {HERO_IMAGES.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`hero-dot ${index === activeHero ? "hero-dot--active" : ""}`}
-                  onClick={() => setActiveHero(index)}
-                  aria-label={`Ảnh ${index + 1}`}
-                />
-              ))}
+          {/* Cột phải */}
+          <div className="nuve-right-col">
+            <div className="nuve-stat-item">
+              <div className="nuve-stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+              </div>
+              <div className="nuve-stat-info">
+                <h3>95%</h3>
+                <p>phân tích da chính xác</p>
+              </div>
+            </div>
+
+            <div className="nuve-stat-item">
+              <div className="nuve-stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 12a4 4 0 1 1 8 0 4 4 0 1 1-8 0" />
+                </svg>
+              </div>
+              <div className="nuve-stat-info">
+                <h3>30+</h3>
+                <p>vấn đề da được phân tích</p>
+              </div>
+            </div>
+
+            <div className="nuve-stat-item">
+              <div className="nuve-stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                  <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" />
+                </svg>
+              </div>
+              <div className="nuve-stat-info">
+                <h3>7 ngày</h3>
+                <p>lộ trình cá nhân hóa</p>
+              </div>
             </div>
           </div>
-
-          {FLOATING_IMAGES.map((image) => (
-            <img
-              key={image.src}
-              src={image.src}
-              alt={image.alt}
-              className={image.className}
-            />
-          ))}
         </div>
       </section>
 
+      {/* 2. Features Section (Tính năng nổi bật) */}
       <section className="features" id="analysis">
         <h2>Tính năng nổi bật</h2>
 
@@ -292,6 +285,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 3. Gallery Section (Khoảnh khắc Làm đẹp) */}
       <section className="gallery" id="gallery">
         <h2>Khoảnh khắc Làm đẹp</h2>
         <p className="section-text">
@@ -324,6 +318,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 4. Why Section (Tại sao chọn GlowSkin?) */}
       <section className="why" id="community">
         <h2>Tại sao chọn GlowSkin?</h2>
 
@@ -345,6 +340,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Footer */}
       <footer id="contact">
         <h3>GlowSkin AI</h3>
         <p>EXE101 Startup Project © 2026</p>

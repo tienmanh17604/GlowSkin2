@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { CartProvider, useCart } from "./context/CartContext";
 import { AppProvider, useApp } from "./context/AppContext";
 import Home from "./pages/Home";
@@ -10,6 +10,7 @@ import ProductDetail from "./pages/ProductDetail";
 import CartDrawer from "./components/CartDrawer";
 import LoginModal from "./components/LoginModal";
 import ChatWidget from "./components/ChatWidget";
+import SplashScreen from "./components/SplashScreen";
 
 function CartRedirect() {
   const { setIsCartOpen } = useCart();
@@ -28,8 +29,15 @@ function LoginRedirect() {
 }
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashFinish = useCallback(() => {
+    setShowSplash(false);
+  }, []);
+
   return (
     <CartProvider>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -42,7 +50,7 @@ export default function App() {
         </Routes>
         <CartDrawer />
         <LoginModal />
-        <ChatWidget />
+        {!showSplash && <ChatWidget />}
       </BrowserRouter>
     </CartProvider>
   );

@@ -1,0 +1,248 @@
+/* ===========================
+   SPLASH — Cửa Xếp Kéo 2 Bên
+   Khi đến 100%: màn mờ xuất hiện + 8 tấm mở ra 2 phía
+   =========================== */
+
+/* ===========================
+   NỀN ĐẶC — che homepage trong lúc đếm (không có sọc)
+   Fades out at 100% to reveal the frosted glass columns underneath
+   =========================== */
+.splash-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 9996; /* Phải nằm TRÊN panels (9993) để che hẳn homepage lúc đếm */
+  background: #FAF8F5;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(243, 230, 220, 0.85) 0px, transparent 55%),
+    radial-gradient(at 100% 100%, rgba(220, 196, 172, 0.45) 0px, transparent 50%);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.splash-cover--fade {
+  opacity: 0;
+}
+
+/* ===========================
+   CÁC CỘT KÍNH MỜ (Frosted Glass Columns)
+   8 tấm dọc — 4 kéo trái, 4 kéo phải.
+   Có background bán trong suốt kết hợp backdrop-filter blur để làm màn mờ.
+   =========================== */
+.splash-panels {
+  position: fixed;
+  inset: 0;
+  z-index: 9993; /* Phía dưới cover (9996), phía trên homepage (0) */
+  display: flex;
+  pointer-events: none;
+}
+
+.splash-panel {
+  flex: 1;
+  height: 100%;
+  
+  /* Tạo hiệu ứng MÀN MỜ cực kỳ đậm: Be đục 98% và độ nhòe tối đa 56px */
+  background: rgba(250, 248, 245, 0.98);
+  backdrop-filter: blur(56px);
+  -webkit-backdrop-filter: blur(56px);
+
+  /* Thêm chút viền phân tách mờ nhạt giữa các cột kính mờ để thấy rõ chuyển động */
+  border-right: 1px solid rgba(169, 132, 103, 0.05);
+
+  opacity: 1;
+  /* Chuyển động trượt cực chậm (2.3s) và siêu mượt để tạo cảm giác sang trọng */
+  transition: transform 2.3s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 2.3s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, opacity;
+}
+
+.splash-panel:last-child {
+  border-right: none;
+}
+
+/* Tấm bên TRÁI → kéo sang trái */
+.splash-panel--left {
+  transform: translateX(0);
+}
+.splash-panels--open .splash-panel--left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* Tấm bên PHẢI → kéo sang phải */
+.splash-panel--right {
+  transform: translateX(0);
+}
+.splash-panels--open .splash-panel--right {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* ===========================
+   COUNTER WRAPPER
+   Nổi trên tất cả — fade + scale up khi cửa mở
+   =========================== */
+.splash-counter-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.splash-counter-wrap--fade {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+/* ===========================
+   SKIP BUTTON
+   =========================== */
+.splash-skip {
+  position: fixed;
+  top: 32px;
+  right: 36px;
+  z-index: 10000;
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid rgba(169, 132, 103, 0.25);
+  color: rgba(140, 98, 57, 0.4);
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.splash-skip:hover {
+  color: #8c6239;
+  border-color: rgba(169, 132, 103, 0.55);
+  background: rgba(169, 132, 103, 0.05);
+}
+
+/* ===========================
+   BRAND
+   =========================== */
+.splash-brand {
+  position: fixed;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(140, 98, 57, 0.45);
+  white-space: nowrap;
+  animation: fadeUpCenter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+/* ===========================
+   COUNTER CENTER
+   =========================== */
+.splash-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.splash-counter {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: clamp(120px, 22vw, 240px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #4a3c31;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+}
+
+.splash-counter--pop {
+  animation: counterPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes counterPop {
+  0%   { transform: scale(1); }
+  60%  { transform: scale(1.07); }
+  100% { transform: scale(1.04); }
+}
+
+.splash-percent {
+  font-size: 0.35em;
+  font-weight: 600;
+  color: #a98467;
+  letter-spacing: 0;
+  margin-left: 6px;
+  align-self: flex-start;
+  margin-top: 0.18em;
+}
+
+/* Progress bar */
+.splash-bar {
+  width: min(280px, 55vw);
+  height: 1.5px;
+  background: rgba(169, 132, 103, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.splash-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c39c73, #a98467);
+  border-radius: 999px;
+  transition: width 0.05s linear;
+}
+
+.splash-loading-text {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(140, 98, 57, 0.35);
+}
+
+/* ===========================
+   BOTTOM TAGLINE
+   =========================== */
+.splash-bottom {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(140, 98, 57, 0.22);
+  white-space: nowrap;
+  animation: fadeUpCenter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
+
+/* ===========================
+   KEYFRAMES
+   =========================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUpCenter {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
