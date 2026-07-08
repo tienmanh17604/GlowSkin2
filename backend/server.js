@@ -16,7 +16,7 @@ import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
-import PayOS from "@payos/node";
+import { PayOS } from "@payos/node";
 
 dotenv.config();
 
