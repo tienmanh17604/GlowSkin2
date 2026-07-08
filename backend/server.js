@@ -450,7 +450,7 @@ app.post("/api/payments/create-payos-url", async (req, res) => {
       cancelUrl: `${baseUrl}/products?paymentStatus=payos_cancel&orderCode=${orderId}`,
     };
 
-    const paymentLink = await payos.createPaymentLink(paymentLinkData);
+    const paymentLink = await payos.paymentRequests.create(paymentLinkData);
     res.json({ paymentUrl: paymentLink.checkoutUrl });
   } catch (error) {
     console.error("Lỗi khi tạo PayOS URL:", error);
@@ -461,7 +461,7 @@ app.post("/api/payments/create-payos-url", async (req, res) => {
 // POST PayOS webhook (xác nhận thanh toán thành công)
 app.post("/api/payments/payos-webhook", async (req, res) => {
   try {
-    const webhookData = payos.verifyPaymentWebhookData(req.body);
+    const webhookData = payos.webhooks.verify(req.body);
     console.log("PayOS Webhook:", webhookData);
     res.json({ success: true });
   } catch (error) {
