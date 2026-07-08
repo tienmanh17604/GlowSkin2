@@ -18,14 +18,14 @@ import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessag
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
 import PayOS from "@payos/node";
 
+dotenv.config();
+
 // Khởi tạo PayOS client
 const payos = new PayOS(
   process.env.PAYOS_CLIENT_ID,
   process.env.PAYOS_API_KEY,
   process.env.PAYOS_CHECKSUM_KEY
 );
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
