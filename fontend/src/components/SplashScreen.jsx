@@ -3,7 +3,7 @@ import "./SplashScreen.css";
 
 const PANEL_COUNT = 4; // 2 tấm trái, 2 tấm phải để cột to ra (mỗi bên rộng 25% màn hình)
 
-export default function SplashScreen({ onFinish }) {
+export default function SplashScreen({ onFinish, onVideoStart }) {
   const [count, setCount] = useState(0);
   const [phase, setPhase] = useState("counting"); // counting | done | revealing
 
@@ -40,7 +40,10 @@ export default function SplashScreen({ onFinish }) {
       } else {
         setCount(100);
         setTimeout(() => setPhase("done"), 300);     // 100% pop + màn mờ xuất hiện
-        setTimeout(() => setPhase("revealing"), 800); // gỡ bỏ từng cột ra 2 bên
+        setTimeout(() => {
+          setPhase("revealing");
+          if (onVideoStart) onVideoStart(); // Video starts as panels begin to slide open
+        }, 800);
         setTimeout(() => onFinish(), 4000);
       }
     }
@@ -75,6 +78,7 @@ export default function SplashScreen({ onFinish }) {
           onClick={() => {
             if (animRef.current) cancelAnimationFrame(animRef.current);
             setPhase("revealing");
+            if (onVideoStart) onVideoStart(); // Video starts immediately on skip
             setTimeout(() => onFinish(), 1400);
           }}
         >

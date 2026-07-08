@@ -30,17 +30,27 @@ function LoginRedirect() {
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [videoReady, setVideoReady] = useState(false);
 
   const handleSplashFinish = useCallback(() => {
     setShowSplash(false);
   }, []);
 
+  const handleVideoStart = useCallback(() => {
+    setVideoReady(true);
+  }, []);
+
   return (
     <CartProvider>
-      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
+      {showSplash && (
+        <SplashScreen
+          onFinish={handleSplashFinish}
+          onVideoStart={handleVideoStart}
+        />
+      )}
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home videoReady={videoReady} />} />
           <Route path="/analyze" element={<SkinAnalysis />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetail />} />

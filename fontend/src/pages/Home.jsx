@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CartButton from "../components/CartButton";
 import Logo from "../components/Logo";
@@ -79,17 +79,25 @@ const WHY_ITEMS = [
   },
 ];
 
-export default function Home() {
+export default function Home({ videoReady = false }) {
   const navigate = useNavigate();
   const { currentUser, logout, setIsLoginOpen } = useApp();
   const { setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Play video from the start only after the splash panels have fully slid open
+  useEffect(() => {
+    if (!videoReady || !videoRef.current) return;
+    videoRef.current.currentTime = 0;
+    videoRef.current.play().catch(() => {});
+  }, [videoReady]);
 
   return (
     <>
@@ -165,9 +173,9 @@ export default function Home() {
         {/* Fullscreen Video Background layer */}
         <div className="nuve-video-bg">
           <video
+            ref={videoRef}
             src="/skincare_video.mov"
             className="nuve-bg-video"
-            autoPlay
             loop
             muted
             playsInline
