@@ -15,6 +15,7 @@ import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
+import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
 
 dotenv.config();
 
@@ -594,6 +595,68 @@ app.get("/api/telegram-webhook-setup", async (req, res) => {
       message: "Không thể đăng ký Webhook Telegram",
       error: error.message,
     });
+  }
+});
+
+
+// 7. CLOUDINARY UPLOAD ENDPOINTS
+// POST upload ảnh sản phẩm
+app.post("/api/upload/image", uploadImage.single("image"), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Vui lòng chọn ảnh để upload" });
+    }
+    res.json({
+      success: true,
+      url: req.file.path,         // URL công khai trên Cloudinary
+      publicId: req.file.filename, // Public ID để xóa sau này
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Không thể upload ảnh", error: error.message });
+  }
+});
+
+// POST upload nhiều ảnh sản phẩm (tối đa 5 ảnh)
+app.post("/api/upload/images", uploadImage.array("images", 5), (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "Vui lòng chọn ít nhất 1 ảnh" });
+    }
+    const uploadedFiles = req.files.map((file) => ({
+      url: file.path,
+      publicId: file.filename,
+    }));
+    res.json({ success: true, files: uploadedFiles });
+  } catch (error) {
+    res.status(500).json({ message: "Không thể upload ảnh", error: error.message });
+  }
+});
+
+// POST upload video sản phẩm
+app.post("/api/upload/video", uploadVideo.single("video"), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Vui lòng chọn video để upload" });
+    }
+    res.json({
+      success: true,
+      url: req.file.path,
+      publicId: req.file.filename,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Không thể upload video", error: error.message });
+  }
+});
+
+// DELETE xóa file trên Cloudinary
+app.delete("/api/upload/:publicId", async (req, res) => {
+  try {
+    const { publicId } = req.params;
+    const { resourceType } = req.query; // "image" hoặc "video"
+    const result = await deleteFromCloudinary(publicId, resourceType || "image");
+    res.json({ success: true, result });
+  } catch (error) {
+    res.status(500).json({ message: "Không thể xóa file", error: error.message });
   }
 });
 

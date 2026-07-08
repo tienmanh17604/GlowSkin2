@@ -54,6 +54,14 @@ const ProductSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    video: {
+      type: String, // URL video từ Cloudinary
+      default: null,
+    },
+    videoPublicId: {
+      type: String, // Public ID để xóa video trên Cloudinary
+      default: null,
+    },
     description: {
       type: String,
     },
