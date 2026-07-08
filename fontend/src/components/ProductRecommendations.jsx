@@ -116,7 +116,7 @@ export default function ProductRecommendations({
       return;
     }
     
-    if (formData.payment === "momo") {
+    if (formData.payment === "payos") {
       const tempOrderCode = "GS" + Math.floor(100000 + Math.random() * 900000);
       const checkoutPayload = {
         formData,
@@ -128,7 +128,7 @@ export default function ProductRecommendations({
       localStorage.setItem("glowskin_pending_checkout", JSON.stringify(checkoutPayload));
 
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-      fetch(`${API_URL}/payments/create-momo-url`, {
+      fetch(`${API_URL}/payments/create-payos-url`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: checkoutProduct.price * modalQty, orderId: tempOrderCode }),
@@ -380,7 +380,7 @@ export default function ProductRecommendations({
                       onChange={(e) => setFormData({ ...formData, payment: e.target.value })}
                     >
                       <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                      <option value="momo">Ví điện tử MoMo (Thanh toán trực tuyến)</option>
+                      <option value="payos">PayOS (Thanh toán trực tuyến)</option>
                     </select>
                   </div>
                   <div className="checkout-btns">

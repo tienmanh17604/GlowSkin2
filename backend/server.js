@@ -16,6 +16,14 @@ import Message from "./models/Message.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
+import PayOS from "@payos/node";
+
+// Khởi tạo PayOS client
+const payos = new PayOS(
+  process.env.PAYOS_CLIENT_ID,
+  process.env.PAYOS_API_KEY,
+  process.env.PAYOS_CHECKSUM_KEY
+);
 
 dotenv.config();
 
@@ -204,7 +212,7 @@ app.post("/api/orders", async (req, res) => {
     
     const getPaymentMethodLabel = (method) => {
       if (method === "cod") return "COD";
-      if (method === "momo") return "Ví MoMo";
+      if (method === "payos") return "PayOS";
       if (method === "vnpay") return "Ví VNPay";
       return "Chuyển khoản QR";
     };
@@ -422,60 +430,43 @@ app.post("/api/payments/create-vnpay-url", (req, res) => {
   }
 });
 
-// POST Create MoMo URL
-app.post("/api/payments/create-momo-url", async (req, res) => {
+// POST Create PayOS payment link
+app.post("/api/payments/create-payos-url", async (req, res) => {
   try {
     const { amount, orderId } = req.body;
-    
-    const partnerCode = "MOMOM8PU20260703";
-    const accessKey = "GQIJ9uUNFvEkOxFC";
-    const secretKey = "Cgeu8Z7vjSbTfaLCvqrslxEaTqkkNR45";
-    const redirectUrl = `http://localhost:5173/products?paymentStatus=momo_success&orderCode=${orderId}`;
-    const ipnUrl = "https://glowskin.vn/api/ipn"; // placeholder
-    const requestType = "captureWallet";
-    const extraData = "";
-    const orderInfo = "Thanh toan don hang tai GlowSkin AI";
-    const requestId = orderId;
 
-    // Create raw signature string
-    const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+    // PayOS yêu cầu orderCode là số nguyên
+    const orderCode = parseInt(orderId.replace(/\D/g, "").slice(-9)) || Date.now() % 1000000000;
 
-    const signature = crypto
-      .createHmac("sha256", secretKey)
-      .update(rawSignature)
-      .digest("hex");
+    const protocol = req.headers["x-forwarded-proto"] || "http";
+    const host = req.headers.host;
+    const baseUrl = process.env.FRONTEND_URL || `${protocol}://${host}`;
 
-    const requestBody = {
-      partnerCode,
-      partnerName: "GlowSkin AI",
-      storeId: "GlowSkinStore",
-      requestId,
+    const paymentLinkData = {
+      orderCode,
       amount,
-      orderId,
-      orderInfo,
-      redirectUrl,
-      ipnUrl,
-      lang: "vi",
-      extraData,
-      requestType,
-      signature,
+      description: `GlowSkin ${orderId}`,
+      returnUrl: `${baseUrl}/products?paymentStatus=payos_success&orderCode=${orderId}`,
+      cancelUrl: `${baseUrl}/products?paymentStatus=payos_cancel&orderCode=${orderId}`,
     };
 
-    const momoRes = await fetch("https://payment.momo.vn/v2/gateway/api/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
-
-    const momoData = await momoRes.json();
-    if (momoData.resultCode === 0) {
-      res.json({ paymentUrl: momoData.payUrl });
-    } else {
-      res.status(400).json({ message: momoData.message || "Lỗi tạo link thanh toán MoMo" });
-    }
+    const paymentLink = await payos.createPaymentLink(paymentLinkData);
+    res.json({ paymentUrl: paymentLink.checkoutUrl });
   } catch (error) {
-    console.error("Lỗi khi tạo MoMo URL:", error);
-    res.status(500).json({ message: "Không thể tạo liên kết thanh toán MoMo" });
+    console.error("Lỗi khi tạo PayOS URL:", error);
+    res.status(500).json({ message: "Không thể tạo liên kết thanh toán PayOS", error: error.message });
+  }
+});
+
+// POST PayOS webhook (xác nhận thanh toán thành công)
+app.post("/api/payments/payos-webhook", async (req, res) => {
+  try {
+    const webhookData = payos.verifyPaymentWebhookData(req.body);
+    console.log("PayOS Webhook:", webhookData);
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Lỗi PayOS webhook:", error);
+    res.status(400).json({ success: false });
   }
 });
 

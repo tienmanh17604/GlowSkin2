@@ -110,7 +110,7 @@ export default function CartDrawer() {
       return;
     }
     
-    if (formData.payment === "momo" || formData.payment === "vnpay") {
+    if (formData.payment === "payos" || formData.payment === "vnpay") {
       const tempOrderCode = "GS" + Math.floor(100000 + Math.random() * 900000);
       const checkoutPayload = {
         formData,
@@ -122,8 +122,8 @@ export default function CartDrawer() {
       localStorage.setItem("glowskin_pending_checkout", JSON.stringify(checkoutPayload));
 
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-      const endpoint = formData.payment === "momo" 
-        ? "/payments/create-momo-url" 
+      const endpoint = formData.payment === "payos" 
+        ? "/payments/create-payos-url" 
         : "/payments/create-vnpay-url";
 
       fetch(`${API_URL}${endpoint}`, {
@@ -275,7 +275,7 @@ export default function CartDrawer() {
                   onChange={(e) => setFormData({ ...formData, payment: e.target.value })}
                 >
                   <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                  <option value="momo">Ví điện tử MoMo (Thanh toán trực tuyến)</option>
+                  <option value="payos">PayOS (Thanh toán trực tuyến)</option>
                 </select>
               </div>
 

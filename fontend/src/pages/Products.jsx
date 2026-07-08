@@ -48,7 +48,7 @@ export default function Products() {
         try {
           const { formData, selectedItems, selectedTotal } = JSON.parse(pendingCheckoutStr);
           
-          if (paymentStatus === "vnpay_success" || paymentStatus === "momo_success") {
+          if (paymentStatus === "vnpay_success" || paymentStatus === "payos_success") {
             // Place order with "Đã thanh toán" status
             placeOrder(formData, selectedItems, selectedTotal, "Đã thanh toán");
             // Clear cart

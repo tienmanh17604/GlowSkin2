@@ -362,7 +362,7 @@ export function AppProvider({ children }) {
     const code = "GS" + Math.floor(100000 + Math.random() * 900000);
     const getPaymentMethodLabel = (method) => {
       if (method === "cod") return "COD";
-      if (method === "momo") return "Ví MoMo";
+      if (method === "payos") return "PayOS";
       if (method === "vnpay") return "Ví VNPay";
       return "Chuyển khoản QR";
     };
