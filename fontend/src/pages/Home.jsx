@@ -96,7 +96,7 @@ export default function Home({ videoReady = false }) {
   useEffect(() => {
     if (!videoReady || !videoRef.current) return;
     videoRef.current.currentTime = 0;
-    videoRef.current.play().catch(() => {});
+    videoRef.current.play().catch(() => { });
   }, [videoReady]);
 
   return (
@@ -174,7 +174,7 @@ export default function Home({ videoReady = false }) {
         <div className="nuve-video-bg">
           <video
             ref={videoRef}
-            src="/skincare_video.mov"
+            src="https://res.cloudinary.com/buevamso/video/upload/v1783521218/glowskin/hero/skincare_hero_video.mp4"
             className="nuve-bg-video"
             loop
             muted
