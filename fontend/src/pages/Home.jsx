@@ -4,6 +4,7 @@ import CartButton from "../components/CartButton";
 import Logo from "../components/Logo";
 import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
+import Footer from "../components/Footer";
 import "../App.css";
 
 const NAV_LINKS = [
@@ -515,10 +516,7 @@ export default function Home({ videoReady = false }) {
       </section>
 
       {/* Footer */}
-      <footer id="contact">
-        <h3>GlowSkin AI</h3>
-        <p>EXE101 Startup Project © 2026</p>
-      </footer>
+      <Footer />
     </>
   );
 }

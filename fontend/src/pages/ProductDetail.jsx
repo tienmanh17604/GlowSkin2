@@ -6,6 +6,7 @@ import Logo from "../components/Logo";
 import CartButton from "../components/CartButton";
 import { formatPrice } from "../data/products";
 import { CATEGORIES } from "../services/recommendProducts";
+import Footer from "../components/Footer";
 import "./ProductDetail.css";
 
 function StarRating({ rating }) {
@@ -438,6 +439,7 @@ export default function ProductDetail() {
           </section>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   CONCERNS,
   CATEGORIES,
 } from "../services/recommendProducts";
+import Footer from "../components/Footer";
 import "./Products.css";
 
 export default function Products() {
@@ -435,6 +436,7 @@ export default function Products() {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
