@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import dns from "dns";
+import nodemailer from "nodemailer";
 
 // Force Google DNS to resolve MongoDB Atlas SRV records properly
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -651,6 +652,133 @@ app.delete("/api/upload/:publicId", async (req, res) => {
   }
 });
 
+
+// POST contact form submission
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { fullName, email, phone, subject, message } = req.body;
+    
+    if (!fullName || !email || !subject || !message) {
+      return res.status(400).json({ success: false, message: "Vui lòng nhập đầy đủ các trường bắt buộc (*)" });
+    }
+
+    // 1. Send Telegram Notification
+    const tgToken = process.env.TELEGRAM_BOT_TOKEN;
+    const tgChatId = process.env.TELEGRAM_CHAT_ID;
+    let tgSent = false;
+
+    if (tgToken && tgChatId) {
+      const tgMessage = `✉️ <b>LIÊN HỆ MỚI TỪ KHÁCH HÀNG!</b>\n` +
+        `----------------------------------\n` +
+        `Họ tên: <b>${fullName}</b>\n` +
+        `Email: <code>${email}</code>\n` +
+        `SĐT: <code>${phone || "Không cung cấp"}</code>\n` +
+        `Chủ đề: <b>${subject}</b>\n` +
+        `----------------------------------\n` +
+        `<b>Nội dung tin nhắn:</b>\n` +
+        `<i>${message}</i>`;
+
+      try {
+        const response = await fetch(
+          `https://api.telegram.org/bot${tgToken}/sendMessage`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: tgChatId,
+              text: tgMessage,
+              parse_mode: "HTML",
+            }),
+          }
+        );
+        if (response.ok) {
+          tgSent = true;
+        } else {
+          const errData = await response.json();
+          console.error("Lỗi gửi tin nhắn Telegram từ form liên hệ:", errData);
+        }
+      } catch (err) {
+        console.error("Lỗi kết nối API Telegram trong form liên hệ:", err);
+      }
+    }
+
+    // 2. Send Email via Nodemailer
+    let emailSent = false;
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
+
+    if (emailUser && emailPass) {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: process.env.EMAIL_HOST || "smtp.gmail.com",
+          port: Number(process.env.EMAIL_PORT) || 587,
+          secure: process.env.EMAIL_SECURE === "true" || false,
+          auth: {
+            user: emailUser,
+            pass: emailPass,
+          },
+        });
+
+        const mailOptions = {
+          from: `GlowSkin <${emailUser}>`,
+          to: "tienmanhworkcontact@gmail.com",
+          subject: `[GlowSkin Contact] ${subject}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e4e7; border-radius: 10px;">
+              <h2 style="color: #8c6239; border-bottom: 2px solid #c39c73; padding-bottom: 10px;">Liên hệ mới từ Khách hàng</h2>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold; width: 150px;">Họ và tên:</td>
+                  <td style="padding: 8px 0;">${fullName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Địa chỉ Email:</td>
+                  <td style="padding: 8px 0;"><a href="mailto:${email}">${email}</a></td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Số điện thoại:</td>
+                  <td style="padding: 8px 0;">${phone || "Không cung cấp"}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; font-weight: bold;">Chủ đề:</td>
+                  <td style="padding: 8px 0; font-weight: bold;">${subject}</td>
+                </tr>
+              </table>
+              <hr style="border: 0; border-top: 1px solid #ebdcd0; margin: 20px 0;" />
+              <p style="font-weight: bold; color: #8c6239;">Nội dung tin nhắn:</p>
+              <div style="background-color: #faf8f5; padding: 15px; border-radius: 8px; border-left: 4px solid #c39c73; line-height: 1.6; white-space: pre-line;">
+                ${message}
+              </div>
+              <p style="font-size: 12px; color: #9ca3af; margin-top: 30px; text-align: center;">Thư này được gửi tự động từ form liên hệ của trang web GlowSkin.</p>
+            </div>
+          `,
+        };
+
+        await transporter.sendMail(mailOptions);
+        emailSent = true;
+      } catch (err) {
+        console.error("Lỗi gửi liên hệ qua Email:", err);
+      }
+    } else {
+      console.warn("Chưa cấu hình EMAIL_USER hoặc EMAIL_PASS trong .env. Bỏ qua gửi Email, chỉ gửi qua Telegram.");
+    }
+
+    if (tgSent || emailSent) {
+      res.json({
+        success: true,
+        message: "Gửi liên hệ thành công! Đội ngũ của chúng tôi đã nhận được thông tin và sẽ phản hồi sớm nhất có thể.",
+        details: { telegram: tgSent, email: emailSent }
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Hệ thống gặp sự cố khi xử lý gửi liên hệ. Vui lòng gọi trực tiếp Hotline hoặc gửi Email."
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Lỗi máy chủ", error: error.message });
+  }
+});
 
 // Default root route
 app.get("/", (req, res) => {

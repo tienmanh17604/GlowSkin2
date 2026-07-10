@@ -74,7 +74,7 @@ export default function Footer() {
             <h4>CÔNG TY</h4>
             <ul>
               <li><a href="#about">Về chúng tôi</a></li>
-              <li><a href="#contact">Liên hệ</a></li>
+              <li><Link to="/contact" onClick={scrollToTop}>Liên hệ</Link></li>
             </ul>
           </div>
         </div>

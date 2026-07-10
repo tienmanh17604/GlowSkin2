@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { label: "Sản phẩm", to: "/products" },
   { label: "Giỏ hàng", to: "/cart" },
   { label: "Cộng đồng", href: "#community" },
-  { label: "Liên hệ", href: "#contact" },
+  { label: "Liên hệ", to: "/contact" },
 ];
 
 const img = (id, w = 800) =>
