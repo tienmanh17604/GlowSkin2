@@ -86,10 +86,86 @@ export default function Home({ videoReady = false }) {
   const [scrolled, setScrolled] = useState(false);
   const videoRef = useRef(null);
 
+  // States and Handlers for the 3D rotating carousel
+  const [rotation, setRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [showCursor, setShowCursor] = useState(false);
+  const dragStartX = useRef(0);
+  const startRotation = useRef(0);
+  const targetRotationRef = useRef(0);
+  const animFrameRef = useRef(null);
+
+  // Smooth lerp animation toward target rotation
+  const animateRotation = () => {
+    setRotation(prev => {
+      const diff = targetRotationRef.current - prev;
+      if (Math.abs(diff) < 0.05) return targetRotationRef.current;
+      return prev + diff * 0.08; // smooth lerp factor
+    });
+    animFrameRef.current = requestAnimationFrame(animateRotation);
+  };
+
+  useEffect(() => {
+    animFrameRef.current = requestAnimationFrame(animateRotation);
+    return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Desktop Hover: mouse position directly controls which card faces front
+  const handleFeaturesMouseMove = (e) => {
+    if (!window.matchMedia("(hover: hover)").matches) return;
+    setCursorPos({ x: e.clientX, y: e.clientY });
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const width = rect.width;
+    const percent = (x / width) - 0.5;
+    targetRotationRef.current = -percent * (90 * FEATURES.length);
+  };
+
+  const handleFeaturesMouseEnter = () => {
+    if (window.matchMedia("(hover: hover)").matches) setShowCursor(true);
+  };
+
+  const handleFeaturesMouseLeave = () => {
+    if (!window.matchMedia("(hover: hover)").matches) return;
+    setShowCursor(false);
+    const snapped = Math.round(-targetRotationRef.current / 90) * -90;
+    targetRotationRef.current = snapped;
+  };
+
+  // Mobile Touch Swipe handlers
+  const handleDragStart = (e) => {
+    if (window.matchMedia("(hover: hover)").matches) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    dragStartX.current = clientX;
+    startRotation.current = targetRotationRef.current;
+    setIsDragging(true);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const diff = clientX - dragStartX.current;
+    targetRotationRef.current = startRotation.current + diff * 0.5;
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const snapped = Math.round(-targetRotationRef.current / 90) * -90;
+    targetRotationRef.current = snapped;
+  };
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Always scroll to top when Home mounts (after splash)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   // Play video from the start only after the splash panels have fully slid open
@@ -199,7 +275,7 @@ export default function Home({ videoReady = false }) {
             <h1 className="nuve-hero-title">
               Đánh thức
               <br />
-              tiềm năng
+              <span className="nuve-hero-accent">tiềm năng</span>
               <br />
               làn da bạn
             </h1>
@@ -264,32 +340,122 @@ export default function Home({ videoReady = false }) {
       </section>
 
       {/* 2. Features Section (Tính năng nổi bật) */}
-      <section className="features" id="analysis">
-        <h2>Tính năng nổi bật</h2>
+      <section 
+        className="features" 
+        id="analysis"
+        onMouseMove={handleFeaturesMouseMove}
+        onMouseEnter={handleFeaturesMouseEnter}
+        onMouseLeave={handleFeaturesMouseLeave}
+      >
+        <div className="features-overlay-bg"></div>
+        
+        {/* Custom cursor dot */}
+        <div
+          className={`features-cursor-hint ${showCursor ? "visible" : ""}`}
+          style={{ left: cursorPos.x, top: cursorPos.y }}
+        >
+          ↔
+        </div>
+        
+        <div className="features-content-wrap">
+          <h2 className="features-title-3d">TÍNH NĂNG NỔI BẬT</h2>
 
-        <p className="section-text">
-          Công nghệ Beauty AI giúp bạn hiểu làn da của mình
-          và lựa chọn sản phẩm phù hợp hơn.
-        </p>
+          <p className="features-subtitle-3d">
+            Công nghệ Beauty AI giúp bạn hiểu làn da của mình
+            và lựa chọn sản phẩm phù hợp hơn.
+          </p>
 
-        <div className="card-container">
-          {FEATURES.map((feature, index) => (
-            <div
-              key={feature.title}
-              className="card card--clickable"
-              style={{ animationDelay: `${index * 0.12}s` }}
-              onClick={() => navigate(feature.to)}
-              onKeyDown={(e) => e.key === "Enter" && navigate(feature.to)}
-              role="button"
-              tabIndex={0}
+          <div className="features-carousel-container">
+            <div 
+              className="features-carousel-stage"
+              onMouseDown={handleDragStart}
+              onMouseMove={handleDragMove}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
+              onTouchStart={handleDragStart}
+              onTouchMove={handleDragMove}
+              onTouchEnd={handleDragEnd}
             >
-              <div className="card-image-wrap">
-                <img src={feature.image} alt={feature.title} className="card-image" />
-              </div>
-              <h3>{feature.title}</h3>
-              <p>{feature.desc}</p>
+              {FEATURES.map((feature, index) => {
+                const cardAngle = index * 90;
+                let diffAngle = cardAngle + rotation;
+                
+                // Normalize to [-180, 180]
+                let normalizedDiff = ((diffAngle + 180) % 360);
+                if (normalizedDiff < 0) normalizedDiff += 360;
+                normalizedDiff -= 180;
+
+                const rad = normalizedDiff * Math.PI / 180;
+
+                // Wider X spread (340px), strong Z depth (160px)
+                const x = Math.sin(rad) * 340;
+                const z = Math.cos(rad) * 160;
+
+                // Scale: front card = 1.0, side = 0.82, back = 0.65
+                const cosNorm = (Math.cos(rad) + 1) / 2;
+                const scale = 0.65 + cosNorm * 0.35;
+
+                // rotateY: strong angle on side cards (~55deg), flat on front
+                const rotateY = -normalizedDiff * 0.62;
+
+                // Opacity: front fully visible, sides 75%, back 20%
+                const opacity = 0.20 + cosNorm * 0.80;
+
+                const zIndex = Math.round(z + 200);
+                const isActive = Math.abs(normalizedDiff) < 45;
+
+                return (
+                  <div
+                    key={feature.title}
+                    className={`carousel-3d-card ${isActive ? "is-active" : ""}`}
+                    style={{
+                      transform: `translateX(${x}px) translateZ(${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
+                      zIndex: zIndex,
+                      opacity: opacity,
+                      // No CSS transition — lerp loop handles all smoothness
+                      transition: "box-shadow 0.3s ease",
+                      pointerEvents: isActive ? "auto" : "none",
+                    }}
+                    onClick={() => isActive && navigate(feature.to)}
+                    onKeyDown={(e) => e.key === "Enter" && isActive && navigate(feature.to)}
+                    role="button"
+                    tabIndex={isActive ? 0 : -1}
+                  >
+                    <div className="carousel-card-img-wrap">
+                      <img src={feature.image} alt={feature.title} className="carousel-card-img" />
+                      <div className="carousel-card-img-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="9" />
+                          <path d="M22 22l-4.35-4.35" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="carousel-card-content">
+                      <h3 className="carousel-card-title">{feature.title}</h3>
+                      <p className="carousel-card-desc">{feature.desc}</p>
+                      <div className="carousel-card-footer">
+                        <span className="carousel-card-index">{`0${index + 1}/0${FEATURES.length}`}</span>
+                        <span className="carousel-card-badge">Khám phá</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          </div>
+
+          <div className="features-bottom-action">
+            <button 
+              type="button" 
+              className="features-cta-3d"
+              onClick={() => navigate("/analyze")}
+            >
+              Trải nghiệm ngay
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="cta-arrow">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </section>
 

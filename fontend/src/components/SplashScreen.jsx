@@ -14,15 +14,15 @@ export default function SplashScreen({ onFinish, onVideoStart }) {
     return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
   }
 
-  // Stagger delay 380ms giữa các tấm để tạo nhịp điệu trượt so le cực chậm và rõ ràng
+  // Stagger delay 80ms giữa các tấm để tạo nhịp điệu trượt so le nhanh và mượt mà
   function getPanelDelay(i) {
     const half = PANEL_COUNT / 2;
     if (i < half) {
-      // Trái: i=1 (gần tâm) → 0ms, i=0 (ngoài cùng) → 380ms
-      return (half - 1 - i) * 380;
+      // Trái: i=1 (gần tâm) → 0ms, i=0 (ngoài cùng) → 80ms
+      return (half - 1 - i) * 80;
     } else {
-      // Phải: i=2 (gần tâm) → 0ms, i=3 (ngoài cùng) → 380ms
-      return (i - half) * 380;
+      // Phải: i=2 (gần tâm) → 0ms, i=3 (ngoài cùng) → 80ms
+      return (i - half) * 80;
     }
   }
 
@@ -39,12 +39,12 @@ export default function SplashScreen({ onFinish, onVideoStart }) {
         animRef.current = requestAnimationFrame(animate);
       } else {
         setCount(100);
-        setTimeout(() => setPhase("done"), 300);     // 100% pop + màn mờ xuất hiện
+        setTimeout(() => setPhase("done"), 100);     // 100% pop
         setTimeout(() => {
           setPhase("revealing");
           if (onVideoStart) onVideoStart(); // Video starts as panels begin to slide open
-        }, 800);
-        setTimeout(() => onFinish(), 4000);
+        }, 300);
+        setTimeout(() => onFinish(), 1100); // 300ms delay + 800ms slide transition = 1100ms
       }
     }
 

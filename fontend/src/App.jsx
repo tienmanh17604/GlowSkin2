@@ -33,6 +33,7 @@ export default function App() {
   const [videoReady, setVideoReady] = useState(false);
 
   const handleSplashFinish = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
     setShowSplash(false);
   }, []);
 

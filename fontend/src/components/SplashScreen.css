@@ -50,9 +50,9 @@
   border-right: 1px solid rgba(169, 132, 103, 0.05);
 
   opacity: 1;
-  /* Chuyển động trượt cực chậm (2.3s) và siêu mượt để tạo cảm giác sang trọng */
-  transition: transform 2.3s cubic-bezier(0.25, 1, 0.5, 1),
-              opacity 2.3s cubic-bezier(0.25, 1, 0.5, 1);
+  /* Chuyển động trượt nhanh hơn (0.8s) để không bắt người dùng đợi lâu */
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   will-change: transform, opacity;
 }
 
