@@ -30,11 +30,16 @@ function LoginRedirect() {
 }
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [videoReady, setVideoReady] = useState(false);
+  const [showSplash, setShowSplash] = useState(() => {
+    return !sessionStorage.getItem("hasSeenSplash");
+  });
+  const [videoReady, setVideoReady] = useState(() => {
+    return !!sessionStorage.getItem("hasSeenSplash");
+  });
 
   const handleSplashFinish = useCallback(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
+    sessionStorage.setItem("hasSeenSplash", "true");
     setShowSplash(false);
   }, []);
 
