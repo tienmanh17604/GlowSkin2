@@ -31,6 +31,30 @@ export default function Contact() {
     setSubmitting(true);
     setSubmitStatus(null);
     
+    // 1. Validate Email Format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      setSubmitStatus({
+        type: "error",
+        text: "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại (ví dụ: email@example.com)."
+      });
+      setSubmitting(false);
+      return;
+    }
+
+    // 2. Validate Phone Format (Optional, but if entered it must match VN pattern)
+    if (formData.phone && formData.phone.trim()) {
+      const phoneRegex = /^(0|\+84|84)?(3|5|7|8|9)[0-9]{8}$/;
+      if (!phoneRegex.test(formData.phone.trim())) {
+        setSubmitStatus({
+          type: "error",
+          text: "Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam gồm 10 chữ số (bắt đầu bằng số 0)."
+        });
+        setSubmitting(false);
+        return;
+      }
+    }
+    
     const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
     
     try {
