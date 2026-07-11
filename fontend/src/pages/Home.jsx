@@ -236,14 +236,7 @@ export default function Home({ videoReady = false }) {
         <div className="nuve-hero-container">
           {/* Cột trái */}
           <div className="nuve-left-col">
-            <div className="nuve-trust-badge">
-              <div className="nuve-avatars">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop" alt="User 1" />
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop" alt="User 2" />
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop" alt="User 3" />
-              </div>
-              <span className="nuve-trust-text">Được tin dùng bởi hơn 10.000+ người</span>
-            </div>
+
 
             <h1 className="nuve-hero-title">
               Đánh thức
