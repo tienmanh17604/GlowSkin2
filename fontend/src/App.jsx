@@ -8,6 +8,7 @@ import Products from "./pages/Products";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProductDetail from "./pages/ProductDetail";
 import CartDrawer from "./components/CartDrawer";
+import WishlistDrawer from "./components/WishlistDrawer";
 import LoginModal from "./components/LoginModal";
 import ChatWidget from "./components/ChatWidget";
 import SplashScreen from "./components/SplashScreen";
@@ -69,6 +70,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
         </Routes>
         <CartDrawer />
+        <WishlistDrawer />
         <LoginModal />
         {!showSplash && <ChatWidget />}
       </BrowserRouter>

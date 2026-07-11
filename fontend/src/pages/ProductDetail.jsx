@@ -2,9 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
-import Logo from "../components/Logo";
-import CartButton from "../components/CartButton";
-import UserMenu from "../components/UserMenu";
+import Navbar from "../components/Navbar";
 import { formatPrice } from "../data/products";
 import { CATEGORIES } from "../services/recommendProducts";
 import Footer from "../components/Footer";
@@ -108,10 +106,7 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="product-detail-page not-found-page">
-        <header className="detail-header">
-          <Logo />
-          <Link to="/products" className="detail-back-link">← Quay lại danh sách</Link>
-        </header>
+        <Navbar />
         <div className="not-found-container">
           <h2>Sản phẩm không tồn tại</h2>
           <p>Xin lỗi, chúng tôi không tìm thấy sản phẩm bạn yêu cầu hoặc sản phẩm đã bị xóa.</p>
@@ -137,33 +132,7 @@ export default function ProductDetail() {
 
   return (
     <div className="product-detail-page">
-      {/* Header */}
-      <header className="detail-header">
-        <Logo />
-        <div className="detail-header-actions">
-          <Link to="/products" className="detail-nav-link">Sản phẩm</Link>
-          <Link to="/analyze" className="detail-nav-link detail-nav-link--accent">Phân tích da AI →</Link>
-          <Link to="/" className="detail-nav-link detail-nav-link--muted">← Về trang chủ</Link>
-          
-          <CartButton />
-
-          {!currentUser ? (
-            <button
-              type="button"
-              className="nav-user-login-btn"
-              onClick={() => setIsLoginOpen(true)}
-            >
-              <svg className="nav-icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <span>Đăng nhập</span>
-            </button>
-          ) : (
-            <UserMenu />
-          )}
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main product details container */}
       <main className="detail-container">

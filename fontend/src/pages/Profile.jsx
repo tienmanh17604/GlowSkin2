@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
-import Logo from "../components/Logo";
-import CartButton from "../components/CartButton";
-import UserMenu from "../components/UserMenu";
+import Navbar from "../components/Navbar";
 import "./Profile.css";
 
 export default function Profile() {
@@ -148,39 +146,7 @@ export default function Profile() {
 
   return (
     <div className="profile-page-wrapper">
-      {/* Header section with UserMenu on the far right */}
-      <header className="profile-header">
-        <Logo />
-        <div className="profile-header-actions">
-          <Link to="/products" className="profile-nav-link">
-            Sản phẩm
-          </Link>
-          <Link to="/analyze" className="profile-nav-link profile-nav-link--accent">
-            Phân tích da AI →
-          </Link>
-          <Link to="/" className="profile-nav-link profile-nav-link--muted">
-            ← Về trang chủ
-          </Link>
-
-          <button
-            type="button"
-            className="nav-wishlist-btn"
-            aria-label="Yêu thích"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-            {wishlist && wishlist.length > 0 && (
-              <span className="wishlist-badge">{wishlist.length}</span>
-            )}
-          </button>
-
-          <CartButton />
-
-          {/* UserMenu is the last item on the absolute far right */}
-          <UserMenu />
-        </div>
-      </header>
+      <Navbar />
 
       <main className="profile-main-container">
         <div className="profile-layout-grid">

@@ -66,6 +66,7 @@ export function AppProvider({ children }) {
   });
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   // Global Wishlist/Favorites State
   const [wishlist, setWishlist] = useState(() => {
@@ -83,6 +84,11 @@ export function AppProvider({ children }) {
       localStorage.setItem("glowskin-wishlist", JSON.stringify(updated));
       return updated;
     });
+  };
+
+  const clearWishlist = () => {
+    setWishlist({});
+    localStorage.setItem("glowskin-wishlist", JSON.stringify({}));
   };
 
   // Fetch initial data from MongoDB API on mount
@@ -471,6 +477,8 @@ export function AppProvider({ children }) {
       currentUser,
       isLoginOpen,
       setIsLoginOpen,
+      isWishlistOpen,
+      setIsWishlistOpen,
       login,
       logout,
       register,
@@ -484,9 +492,10 @@ export function AppProvider({ children }) {
       deleteReview,
       wishlist,
       toggleWishlist,
+      clearWishlist,
       updateProfile,
     }),
-    [users, products, orders, reviews, currentUser, isLoginOpen, wishlist]
+    [users, products, orders, reviews, currentUser, isLoginOpen, isWishlistOpen, wishlist]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

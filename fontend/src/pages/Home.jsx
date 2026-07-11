@@ -21,27 +21,43 @@ const img = (id, w = 800) =>
 const FEATURES = [
   {
     title: "Phân tích Da AI",
-    desc: "Phân tích da bằng AI từ hình ảnh.",
+    desc: "Khám phá tình trạng làn da của bạn bằng công nghệ phân tích ảnh AI tiên tiến, giúp đưa ra chẩn đoán chính xác về loại da và các vấn đề cần cải thiện.",
+    shortDesc: "Chẩn đoán & phân tích loại da",
     image: img("1616394584738-fc6e612e71b9", 600),
     to: "/analyze",
+    bg: "#ebdcd0",
+    panel: "#f7f0eb",
+    btnBg: "#8b6e56",
   },
   {
     title: "Đánh giá Mỹ phẩm",
-    desc: "Đọc review chân thực từ cộng đồng.",
+    desc: "Tra cứu cơ sở dữ liệu hàng ngàn sản phẩm, xem đánh giá chi tiết và các trải nghiệm chân thực từ cộng đồng người dùng trước khi quyết định mua sắm.",
+    shortDesc: "Đánh giá chi tiết từ cộng đồng",
     image: img("1608571423902-eed4a5ad8108", 600),
     to: "/products",
+    bg: "#dfcebe",
+    panel: "#eadbc8",
+    btnBg: "#736454",
   },
   {
     title: "Gợi ý thông minh",
-    desc: "Đề xuất mỹ phẩm phù hợp với da.",
+    desc: "Nhận danh sách đề xuất các dòng mỹ phẩm chăm sóc da (skincare) tối ưu nhất, được cá nhân hóa hoàn toàn dựa trên chỉ số da của riêng bạn.",
+    shortDesc: "Đề xuất sản phẩm phù hợp",
     image: img("1571781926291-c477ebfd024b", 600),
     to: "/products",
+    bg: "#c4a484",
+    panel: "#d3b89e",
+    btnBg: "#a07553",
   },
   {
     title: "Lập Lộ trình Skincare",
-    desc: "Xây dựng routine skincare cá nhân.",
+    desc: "Xây dựng routine chăm sóc da khoa học sáng và tối, thiết lập lịch nhắc nhở và theo dõi hành trình thay đổi làn da khỏe đẹp mỗi ngày.",
+    shortDesc: "Lộ trình chăm sóc da khoa học",
     image: img("1556228720-195a672e8a03", 600),
     to: "/analyze",
+    bg: "#e2d4c9",
+    panel: "#eedfd2",
+    btnBg: "#806651",
   },
 ];
 
@@ -86,82 +102,108 @@ export default function Home({ videoReady = false }) {
 
   const videoRef = useRef(null);
 
-  // States and Handlers for the 3D rotating carousel
-  const [rotation, setRotation] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [showCursor, setShowCursor] = useState(false);
-  const dragStartX = useRef(0);
-  const startRotation = useRef(0);
-  const targetRotationRef = useRef(0);
-  const animFrameRef = useRef(null);
+  // Carousel states for interactive 3D layout
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
 
-  // Smooth lerp animation toward target rotation
-  const animateRotation = () => {
-    setRotation(prev => {
-      const diff = targetRotationRef.current - prev;
-      if (Math.abs(diff) < 0.05) return targetRotationRef.current;
-      return prev + diff * 0.08; // smooth lerp factor
+  useEffect(() => {
+    FEATURES.forEach((item) => {
+      const img = new Image();
+      img.src = item.image;
     });
-    animFrameRef.current = requestAnimationFrame(animateRotation);
-  };
-
-  useEffect(() => {
-    animFrameRef.current = requestAnimationFrame(animateRotation);
-    return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Desktop Hover: mouse position directly controls which card faces front
-  const handleFeaturesMouseMove = (e) => {
-    if (!window.matchMedia("(hover: hover)").matches) return;
-    setCursorPos({ x: e.clientX, y: e.clientY });
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const width = rect.width;
-    const percent = (x / width) - 0.5;
-    targetRotationRef.current = -percent * (90 * FEATURES.length);
-  };
-
-  const handleFeaturesMouseEnter = () => {
-    if (window.matchMedia("(hover: hover)").matches) setShowCursor(true);
-  };
-
-  const handleFeaturesMouseLeave = () => {
-    if (!window.matchMedia("(hover: hover)").matches) return;
-    setShowCursor(false);
-    const snapped = Math.round(-targetRotationRef.current / 90) * -90;
-    targetRotationRef.current = snapped;
-  };
-
-  // Mobile Touch Swipe handlers
-  const handleDragStart = (e) => {
-    if (window.matchMedia("(hover: hover)").matches) return;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    dragStartX.current = clientX;
-    startRotation.current = targetRotationRef.current;
-    setIsDragging(true);
-  };
-
-  const handleDragMove = (e) => {
-    if (!isDragging) return;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const diff = clientX - dragStartX.current;
-    targetRotationRef.current = startRotation.current + diff * 0.5;
-  };
-
-  const handleDragEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const snapped = Math.round(-targetRotationRef.current / 90) * -90;
-    targetRotationRef.current = snapped;
-  };
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const resize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
+
+  const navigateCarousel = (direction) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) =>
+      direction === "next" ? (prev + 1) % 4 : (prev + 3) % 4
+    );
+    setTimeout(() => setIsAnimating(false), 650);
+  };
+
+  // Autoplay Effect: cycles through cards every 4 seconds, resetting on activeIndex change
+  useEffect(() => {
+    if (autoplayPaused) return;
+    const timer = setInterval(() => {
+      navigateCarousel("next");
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [autoplayPaused, activeIndex, isAnimating]);
+
+  const centerCard = activeIndex;
+  const leftCard = (activeIndex + 3) % 4;
+  const rightCard = (activeIndex + 1) % 4;
+  const backCard = (activeIndex + 2) % 4;
+
+  const getStyle = (index) => {
+    const easing = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+    const duration = 700;
+    const common = {
+      position: "absolute",
+      width: isMobile ? "150px" : "185px",
+      height: isMobile ? "230px" : "260px",
+      top: "auto",
+      transform: "translateX(-50%) scale(1)",
+      transition: `transform ${duration}ms ${easing}, filter ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, bottom ${duration}ms ${easing}`,
+      willChange: "transform, filter, opacity",
+    };
+
+    // ── ACTIVE: phóng to hẳn, đẩy lên cao ──
+    if (index === centerCard)
+      return {
+        ...common,
+        left: "50%",
+        bottom: isMobile ? "22%" : "28%",
+        transform: `translateX(-50%) scale(${isMobile ? 1.2 : 1.35})`,
+        filter: "blur(0px)",
+        opacity: 1,
+        zIndex: 20,
+      };
+
+    // ── LEFT: bé tí, kéo vào gần hơn ──
+    if (index === leftCard)
+      return {
+        ...common,
+        left: isMobile ? "22%" : "37%",
+        bottom: isMobile ? "28%" : "30%",
+        transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
+        filter: "blur(2px)",
+        opacity: 0.55,
+        zIndex: 10,
+      };
+
+    // ── RIGHT: bé tí, kéo vào gần hơn ──
+    if (index === rightCard)
+      return {
+        ...common,
+        left: isMobile ? "78%" : "63%",
+        bottom: isMobile ? "28%" : "30%",
+        transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
+        filter: "blur(2px)",
+        opacity: 0.55,
+        zIndex: 10,
+      };
+
+    // ── BACK: gần như biến mất ──
+    return {
+      ...common,
+      left: "50%",
+      bottom: isMobile ? "28%" : "30%",
+      transform: `translateX(-50%) scale(${isMobile ? 0.25 : 0.2})`,
+      filter: "blur(12px)",
+      opacity: 0.06,
+      zIndex: 5,
+    };
+  };
 
 
   // Play video from the start only after the splash panels have fully slid open
@@ -272,121 +314,301 @@ export default function Home({ videoReady = false }) {
 
       {/* 2. Features Section (Tính năng nổi bật) */}
       <section 
-        className="features" 
+        className="features-interactive-3d"
         id="analysis"
-        onMouseMove={handleFeaturesMouseMove}
-        onMouseEnter={handleFeaturesMouseEnter}
-        onMouseLeave={handleFeaturesMouseLeave}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100vh",
+          overflow: "hidden",
+          backgroundColor: FEATURES[activeIndex].bg,
+          transition: "background-color 650ms cubic-bezier(0.4, 0, 0.2, 1)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          boxSizing: "border-box",
+        }}
+        onMouseEnter={() => setAutoplayPaused(true)}
+        onMouseLeave={() => setAutoplayPaused(false)}
       >
-        <div className="features-overlay-bg"></div>
-        
-        {/* Custom cursor dot */}
+        {/* Grain overlay */}
         <div
-          className={`features-cursor-hint ${showCursor ? "visible" : ""}`}
-          style={{ left: cursorPos.x, top: cursorPos.y }}
+          className="absolute-grain-overlay"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            pointerEvents: "none",
+            zIndex: 50,
+            opacity: 0.35,
+            backgroundSize: "200px 200px",
+            backgroundRepeat: "repeat",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E")`,
+          }}
+        />
+
+        {/* Ghost Text */}
+        <div
+          className="ghost-text-background"
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: "18%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: 2,
+          }}
         >
-          ↔
+          <span
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontSize: "clamp(80px, 18vw, 280px)",
+              fontWeight: 900,
+              color: "rgba(255, 255, 255, 0.12)",
+              lineHeight: 1,
+              letterSpacing: "-0.02em",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+            }}
+          >
+            BEAUTY AI
+          </span>
         </div>
-        
-        <div className="features-content-wrap">
-          <h2 className="features-title-3d">TÍNH NĂNG NỔI BẬT</h2>
 
-          <p className="features-subtitle-3d">
-            Công nghệ Beauty AI giúp bạn hiểu làn da của mình
-            và lựa chọn sản phẩm phù hợp hơn.
-          </p>
 
-          <div className="features-carousel-container">
-            <div 
-              className="features-carousel-stage"
-              onMouseDown={handleDragStart}
-              onMouseMove={handleDragMove}
-              onMouseUp={handleDragEnd}
-              onMouseLeave={handleDragEnd}
-              onTouchStart={handleDragStart}
-              onTouchMove={handleDragMove}
-              onTouchEnd={handleDragEnd}
-            >
-              {FEATURES.map((feature, index) => {
-                const cardAngle = index * 90;
-                let diffAngle = cardAngle + rotation;
-                
-                // Normalize to [-180, 180]
-                let normalizedDiff = ((diffAngle + 180) % 360);
-                if (normalizedDiff < 0) normalizedDiff += 360;
-                normalizedDiff -= 180;
 
-                const rad = normalizedDiff * Math.PI / 180;
-
-                // Wider X spread (340px), strong Z depth (160px)
-                const x = Math.sin(rad) * 340;
-                const z = Math.cos(rad) * 160;
-
-                // Scale: front card = 1.0, side = 0.82, back = 0.65
-                const cosNorm = (Math.cos(rad) + 1) / 2;
-                const scale = 0.65 + cosNorm * 0.35;
-
-                // rotateY: strong angle on side cards (~55deg), flat on front
-                const rotateY = -normalizedDiff * 0.62;
-
-                // Opacity: front fully visible, sides 75%, back 20%
-                const opacity = 0.20 + cosNorm * 0.80;
-
-                const zIndex = Math.round(z + 200);
-                const isActive = Math.abs(normalizedDiff) < 45;
-
-                return (
-                  <div
-                    key={feature.title}
-                    className={`carousel-3d-card ${isActive ? "is-active" : ""}`}
+        {/* Carousel Stage */}
+        <div
+          className="carousel-stage-wrapper"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 3,
+          }}
+        >
+          {FEATURES.map((item, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <div 
+                key={index} 
+                style={getStyle(index)}
+                className={`carousel-3d-card ${isActive ? "is-active" : ""}`}
+                onClick={() => isActive && navigate(item.to)}
+                onKeyDown={(e) => e.key === "Enter" && isActive && navigate(item.to)}
+                role="button"
+                tabIndex={isActive ? 0 : -1}
+              >
+                <div className="carousel-card-img-wrap" style={{ flexGrow: 1, overflow: "hidden", position: "relative", minHeight: 0 }}>
+                  <img
+                    src={item.image}
+                    draggable={false}
+                    alt={item.title}
                     style={{
-                      transform: `translateX(${x}px) translateZ(${z}px) scale(${scale}) rotateY(${rotateY}deg)`,
-                      zIndex: zIndex,
-                      opacity: opacity,
-                      // No CSS transition — lerp loop handles all smoothness
-                      transition: "box-shadow 0.3s ease",
-                      pointerEvents: isActive ? "auto" : "none",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      userSelect: "none",
+                      pointerEvents: "none",
                     }}
-                    onClick={() => isActive && navigate(feature.to)}
-                    onKeyDown={(e) => e.key === "Enter" && isActive && navigate(feature.to)}
-                    role="button"
-                    tabIndex={isActive ? 0 : -1}
-                  >
-                    <div className="carousel-card-img-wrap">
-                      <img src={feature.image} alt={feature.title} className="carousel-card-img" />
-                      <div className="carousel-card-img-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="12" cy="12" r="9" />
-                          <path d="M22 22l-4.35-4.35" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="carousel-card-content">
-                      <h3 className="carousel-card-title">{feature.title}</h3>
-                      <p className="carousel-card-desc">{feature.desc}</p>
-                      <div className="carousel-card-footer">
-                        <span className="carousel-card-index">{`0${index + 1}/0${FEATURES.length}`}</span>
-                        <span className="carousel-card-badge">Khám phá</span>
-                      </div>
-                    </div>
+                  />
+                  <div className="carousel-card-img-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M22 22l-4.35-4.35" />
+                    </svg>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </div>
+                
+                <div className="carousel-card-content" style={{ padding: "12px 14px", flexShrink: 0, background: "#ffffff", textAlign: "left" }}>
+                  <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "13px", fontWeight: "700", margin: "0 0 3px 0", color: "#121318", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>{item.title}</h3>
+                  <p className="carousel-card-desc" style={{ fontSize: "10px", color: "#777", lineHeight: 1.3, margin: "0 0 8px 0" }}>{item.shortDesc}</p>
+                  <div className="carousel-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "7px" }}>
+                    <span className="carousel-card-index" style={{ fontSize: "10px", color: "#aaa", fontWeight: 600 }}>{`0${index + 1}/04`}</span>
+                    <span className="carousel-card-badge" style={{ fontSize: "10px", color: FEATURES[index].btnBg, fontWeight: 600 }}>Khám phá</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-          <div className="features-bottom-action">
-            <button 
-              type="button" 
-              className="features-cta-3d"
-              onClick={() => navigate("/analyze")}
-            >
-              Trải nghiệm ngay
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="cta-arrow">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
+        {/* ── TOP-LEFT corner: alternating info text ── */}
+        {!isMobile && activeIndex % 2 === 0 && (
+          <div
+            className="features-dynamic-info"
+            key={`tl-${activeIndex}`}
+            style={{
+              position: "absolute",
+              top: "10%",
+              left: "5%",
+              width: "300px",
+              zIndex: 15,
+            }}
+          >
+            <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
+            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "34px", fontWeight: 800, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.02em" }}>
+              {FEATURES[activeIndex].title}
+            </h3>
+            <p style={{ fontSize: "13.5px", lineHeight: 1.7, color: "#555", margin: 0 }}>
+              {FEATURES[activeIndex].desc}
+            </p>
           </div>
+        )}
+
+        {/* ── TOP-RIGHT corner: alternating info text ── */}
+        {!isMobile && activeIndex % 2 !== 0 && (
+          <div
+            className="features-dynamic-info"
+            key={`tr-${activeIndex}`}
+            style={{
+              position: "absolute",
+              top: "10%",
+              right: "5%",
+              width: "300px",
+              zIndex: 15,
+              textAlign: "left",
+            }}
+          >
+            <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
+            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "34px", fontWeight: 800, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.02em" }}>
+              {FEATURES[activeIndex].title}
+            </h3>
+            <p style={{ fontSize: "13.5px", lineHeight: 1.7, color: "#555", margin: 0 }}>
+              {FEATURES[activeIndex].desc}
+            </p>
+          </div>
+        )}
+
+        {/* ── BOTTOM-LEFT corner: slide indicator + short desc ── */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "5%",
+            left: "5%",
+            zIndex: 60,
+            maxWidth: isMobile ? "55%" : "280px",
+          }}
+        >
+          <p style={{ margin: "0 0 5px 0", fontSize: isMobile ? "13px" : "15px", fontWeight: 800, color: FEATURES[activeIndex].btnBg, transition: "color 0.3s ease", fontFamily: "'Playfair Display', Georgia, serif" }}>
+            {`0${activeIndex + 1} / 0${FEATURES.length}`}
+          </p>
+          <p style={{ margin: 0, fontSize: isMobile ? "11px" : "12px", lineHeight: 1.55, color: "#666" }}>
+            {FEATURES[activeIndex].shortDesc}
+          </p>
+        </div>
+
+        {/* ── BOTTOM-CENTER: Navigation buttons ── */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: isMobile ? "10%" : "16%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "14px",
+            zIndex: 60,
+          }}
+        >
+          <button
+            onClick={() => navigateCarousel("prev")}
+            style={{
+              width: "46px",
+              height: "46px",
+              color: "white",
+              background: FEATURES[activeIndex].btnBg,
+              border: "none",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button
+            onClick={() => navigateCarousel("next")}
+            style={{
+              width: "46px",
+              height: "46px",
+              color: "white",
+              background: FEATURES[activeIndex].btnBg,
+              border: "none",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        {/* ── BOTTOM-RIGHT corner: CTA button ── */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: "5%",
+            right: "5%",
+            zIndex: 60,
+          }}
+        >
+          <Link
+            to={FEATURES[activeIndex].to}
+            style={{
+              background: FEATURES[activeIndex].btnBg,
+              color: "white",
+              padding: isMobile ? "11px 22px" : "13px 30px",
+              borderRadius: "30px",
+              fontWeight: 700,
+              textDecoration: "none",
+              fontSize: isMobile ? "13px" : "14px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: "0 8px 22px rgba(0,0,0,0.15)",
+              transition: "all 0.3s ease",
+              fontFamily: "'Inter', sans-serif",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.22)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 8px 22px rgba(0,0,0,0.15)";
+            }}
+          >
+            Khám phá ngay
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </Link>
         </div>
       </section>
 
