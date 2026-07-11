@@ -1202,12 +1202,14 @@ footer h3 {
 
 /* Elegant Navbar Transparent-to-Glass Transition */
 .navbar {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   box-shadow: none;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   padding: 0 10% !important;
-  height: 60px !important;
+  height: 50px !important;
   /* Narrower vertical height */
   z-index: 100;
 }
@@ -1219,7 +1221,7 @@ footer h3 {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
   padding: 0 10% !important;
-  height: 52px !important;
+  height: 44px !important;
 }
 
 /* Muted/faded text tone for navigation links */
@@ -1278,8 +1280,9 @@ footer h3 {
 /* Wishlist button black tone border and color */
 .navbar .nav-wishlist-btn {
   color: #1a1a18 !important;
-  border-color: rgba(26, 26, 24, 0.18) !important;
-  background: #ffffff !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
   width: 38px !important;
   height: 38px !important;
 }
@@ -1365,7 +1368,7 @@ footer h3 {
   background: #ffffff;
   padding: 0 8%;
   overflow: hidden;
-  margin-top: -44px;
+  margin-top: -35px;
   /* Pull hero up to close gap between navbar and video */
 }
 
