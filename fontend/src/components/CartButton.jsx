@@ -11,10 +11,9 @@ export default function CartButton({ className = "" }) {
       onClick={() => setIsCartOpen(true)}
       aria-label="Giỏ hàng"
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 10h20" />
-        <path d="M4 10l2 9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l2-9" />
-        <path d="M6 10a6 6 0 0 1 12 0" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="6" width="18" height="15" rx="2" />
+        <path d="M16 10a4 4 0 0 1-8 0V6a4 4 0 0 1 8 0v4z" />
       </svg>
       {totalItems > 0 && (
         <span className="cart-btn__badge">{totalItems > 99 ? "99+" : totalItems}</span>

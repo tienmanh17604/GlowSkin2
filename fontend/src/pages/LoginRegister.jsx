@@ -62,23 +62,7 @@ export default function LoginRegister() {
   };
 
 
-  const quickFill = (role) => {
-    if (role === "admin") {
-      setFormData({
-        name: "",
-        email: "admin@glowskin.com",
-        password: "admin123",
-      });
-      setActiveTab("login");
-    } else {
-      setFormData({
-        name: "",
-        email: "user@glowskin.com",
-        password: "user123",
-      });
-      setActiveTab("login");
-    }
-  };
+
 
   return (
     <div className="login-page">
@@ -174,28 +158,7 @@ export default function LoginRegister() {
             </div>
           </form>
 
-          {/* Quick Demo Credentials Helper */}
-          <div className="login-quick-demo">
-            <h3>Đăng nhập nhanh để test thử:</h3>
-            <div className="login-quick-grid">
-              <button
-                type="button"
-                className="login-quick-btn"
-                onClick={() => quickFill("admin")}
-              >
-                <strong>Tài khoản Admin</strong>
-                Role: Administrator
-              </button>
-              <button
-                type="button"
-                className="login-quick-btn"
-                onClick={() => quickFill("user")}
-              >
-                <strong>Tài khoản Khách</strong>
-                Role: Member (Free)
-              </button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

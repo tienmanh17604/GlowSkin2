@@ -12,6 +12,7 @@ import LoginModal from "./components/LoginModal";
 import ChatWidget from "./components/ChatWidget";
 import SplashScreen from "./components/SplashScreen";
 import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
 
 function CartRedirect() {
   const { setIsCartOpen } = useCart();
@@ -65,6 +66,7 @@ export default function App() {
           <Route path="/login" element={<LoginRedirect />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <CartDrawer />
         <LoginModal />

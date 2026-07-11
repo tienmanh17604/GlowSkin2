@@ -169,6 +169,34 @@ app.post("/api/users/register", async (req, res) => {
   }
 });
 
+// PUT update user profile info
+app.put("/api/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone, addresses } = req.body;
+    
+    const updateFields = {};
+    if (name !== undefined) updateFields.name = name;
+    if (email !== undefined) updateFields.email = email;
+    if (phone !== undefined) updateFields.phone = phone;
+    if (addresses !== undefined) updateFields.addresses = addresses;
+    
+    const updatedUser = await User.findOneAndUpdate(
+      { id: id },
+      { $set: updateFields },
+      { new: true }
+    );
+    
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+    }
+    
+    res.json({ success: true, user: updatedUser });
+  } catch (error) {
+    res.status(400).json({ success: false, message: "Không thể cập nhật hồ sơ", error: error.message });
+  }
+});
+
 // PUT update user membership
 app.put("/api/users/:id/membership", async (req, res) => {
   try {
@@ -455,6 +483,32 @@ app.post("/api/payments/create-payos-url", async (req, res) => {
     res.json({ paymentUrl: paymentLink.checkoutUrl });
   } catch (error) {
     console.error("Lỗi khi tạo PayOS URL:", error);
+    res.status(500).json({ message: "Không thể tạo liên kết thanh toán PayOS", error: error.message });
+  }
+});
+
+// POST PayOS URL for membership upgrade
+app.post("/api/payments/create-membership-payos-url", async (req, res) => {
+  try {
+    const { amount, userId, membership } = req.body;
+    const orderCode = Date.now() % 1000000000;
+    
+    const protocol = req.headers["x-forwarded-proto"] || "http";
+    const host = req.headers.host;
+    const baseUrl = process.env.FRONTEND_URL || `${protocol}://${host}`;
+    
+    const paymentLinkData = {
+      orderCode,
+      amount,
+      description: `GlowSkin Upgrade ${membership}`,
+      returnUrl: `${baseUrl}/analyze?paymentStatus=success&membership=${membership}&userId=${userId}`,
+      cancelUrl: `${baseUrl}/analyze?paymentStatus=cancel&userId=${userId}`,
+    };
+    
+    const paymentLink = await payos.paymentRequests.create(paymentLinkData);
+    res.json({ paymentUrl: paymentLink.checkoutUrl });
+  } catch (error) {
+    console.error("Lỗi khi tạo PayOS URL nâng cấp hội viên:", error);
     res.status(500).json({ message: "Không thể tạo liên kết thanh toán PayOS", error: error.message });
   }
 });

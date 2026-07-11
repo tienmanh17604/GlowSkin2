@@ -32,6 +32,10 @@ const UserSchema = new mongoose.Schema(
       enum: ["Free", "VIP"],
       default: "Free",
     },
+    addresses: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );

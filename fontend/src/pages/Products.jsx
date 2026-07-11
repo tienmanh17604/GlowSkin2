@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import CartButton from "../components/CartButton";
-import Logo from "../components/Logo";
+import Navbar from "../components/Navbar";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
@@ -15,7 +14,7 @@ import Footer from "../components/Footer";
 import "./Products.css";
 
 export default function Products() {
-  const { products, currentUser, logout, setIsLoginOpen, wishlist, placeOrder } = useApp();
+  const { products, currentUser, setIsLoginOpen, wishlist, placeOrder } = useApp();
   const { clearCart } = useCart();
   const [searchParams, setSearchParams] = useSearchParams();
   const [skinType, setSkinType] = useState("");
@@ -153,66 +152,7 @@ export default function Products() {
 
   return (
     <div className="products-page">
-      <header className="products-header">
-        <Logo />
-        <div className="products-header-actions">
-          <Link to="/analyze" className="products-analyze-link">
-            Phân tích da AI →
-          </Link>
-          <Link to="/" className="analyze-back">
-            ← Về trang chủ
-          </Link>
-
-          {!currentUser ? (
-            <button
-              type="button"
-              className="nav-user-login-btn"
-              onClick={() => setIsLoginOpen(true)}
-            >
-              <svg className="nav-icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <span>Đăng nhập</span>
-            </button>
-          ) : (
-            <div className="user-nav-profile">
-              <span className="user-nav-name">
-                Xin chào, {currentUser.name.split(" ").pop()}
-                <span className={`user-badge user-badge--${currentUser.membership.toLowerCase()}`}>
-                  {currentUser.membership}
-                </span>
-              </span>
-              {currentUser.role === "admin" && (
-                <Link to="/admin" className="nav-admin-link">
-                  ⚙️ Quản lý
-                </Link>
-              )}
-              <button type="button" className="nav-logout-btn" onClick={logout}>
-                Đăng xuất
-              </button>
-            </div>
-          )}
-
-          <button
-            type="button"
-            className={`nav-wishlist-btn ${showFavoritesOnly ? "nav-wishlist-btn--active" : ""}`}
-            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-            aria-label="Yêu thích"
-          >
-            <svg viewBox="0 0 24 24" fill={showFavoritesOnly ? "#ff4d4f" : "none"} stroke={showFavoritesOnly ? "#ff4d4f" : "currentColor"} strokeWidth="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-            {Object.values(wishlist || {}).filter(Boolean).length > 0 && (
-              <span className="wishlist-badge">
-                {Object.values(wishlist || {}).filter(Boolean).length}
-              </span>
-            )}
-          </button>
-
-          <CartButton />
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero section */}
       <div className="products-hero">

@@ -74,23 +74,7 @@ export default function LoginModal() {
     }
   };
 
-  const quickFill = (role) => {
-    if (role === "admin") {
-      setFormData({
-        name: "",
-        email: "admin@glowskin.com",
-        password: "admin123",
-      });
-      setActiveTab("login");
-    } else {
-      setFormData({
-        name: "",
-        email: "user@glowskin.com",
-        password: "user123",
-      });
-      setActiveTab("login");
-    }
-  };
+
 
   return (
     <div className="login-modal-overlay" onClick={() => setIsLoginOpen(false)}>
@@ -187,28 +171,7 @@ export default function LoginModal() {
           </div>
         </form>
 
-        {/* Quick Demo Credentials Helper */}
-        <div className="login-modal-quick-demo">
-          <h3>Đăng nhập nhanh để test:</h3>
-          <div className="login-modal-quick-grid">
-            <button
-              type="button"
-              className="login-modal-quick-btn"
-              onClick={() => quickFill("admin")}
-            >
-              <strong>Admin</strong>
-              admin@glowskin.com
-            </button>
-            <button
-              type="button"
-              className="login-modal-quick-btn"
-              onClick={() => quickFill("user")}
-            >
-              <strong>Khách</strong>
-              user@glowskin.com
-            </button>
-          </div>
-        </div>
+
       </div>
     </div>
   );

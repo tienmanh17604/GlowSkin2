@@ -4,6 +4,7 @@ import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
 import Logo from "../components/Logo";
 import CartButton from "../components/CartButton";
+import UserMenu from "../components/UserMenu";
 import { formatPrice } from "../data/products";
 import { CATEGORIES } from "../services/recommendProducts";
 import Footer from "../components/Footer";
@@ -144,6 +145,8 @@ export default function ProductDetail() {
           <Link to="/analyze" className="detail-nav-link detail-nav-link--accent">Phân tích da AI →</Link>
           <Link to="/" className="detail-nav-link detail-nav-link--muted">← Về trang chủ</Link>
           
+          <CartButton />
+
           {!currentUser ? (
             <button
               type="button"
@@ -157,21 +160,8 @@ export default function ProductDetail() {
               <span>Đăng nhập</span>
             </button>
           ) : (
-            <div className="user-nav-profile">
-              <span className="user-nav-name">
-                Xin chào, {currentUser.name.split(" ").pop()}
-                <span className={`user-badge user-badge--${currentUser.membership.toLowerCase()}`}>
-                  {currentUser.membership}
-                </span>
-              </span>
-              {currentUser.role === "admin" && (
-                <Link to="/admin" className="nav-admin-link">⚙️ Quản lý</Link>
-              )}
-              <button type="button" className="nav-logout-btn" onClick={logout}>Đăng xuất</button>
-            </div>
+            <UserMenu />
           )}
-
-          <CartButton />
         </div>
       </header>
 

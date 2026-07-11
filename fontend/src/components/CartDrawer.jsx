@@ -35,6 +35,26 @@ export default function CartDrawer() {
     payment: "cod",
   });
 
+  const [selectedAddressType, setSelectedAddressType] = useState("");
+
+  // Prefill details and address selection when entering checkout
+  useEffect(() => {
+    if (isCheckingOut && currentUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: currentUser.name || prev.name,
+        phone: currentUser.phone || prev.phone,
+      }));
+
+      if (currentUser.addresses && currentUser.addresses.length > 0) {
+        setSelectedAddressType(currentUser.addresses[0]);
+        setFormData((prev) => ({ ...prev, address: currentUser.addresses[0] }));
+      } else {
+        setSelectedAddressType("new");
+      }
+    }
+  }, [isCheckingOut, currentUser]);
+
   // Online Payment Simulation States
   const [isPayingOnline, setIsPayingOnline] = useState(false);
   const [payTimer, setPayTimer] = useState(300);
@@ -257,14 +277,59 @@ export default function CartDrawer() {
 
               <div className="drawer-form-group">
                 <label htmlFor="drawer-address">Địa chỉ nhận hàng</label>
-                <input
-                  id="drawer-address"
-                  type="text"
-                  required
-                  placeholder="Số nhà, tên đường, quận, tỉnh/thành"
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                />
+                {currentUser && currentUser.addresses && currentUser.addresses.length > 0 ? (
+                  <div className="checkout-address-selector-container">
+                    <select
+                      id="drawer-address-select"
+                      value={selectedAddressType}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSelectedAddressType(val);
+                        if (val === "new") {
+                          setFormData((prev) => ({ ...prev, address: "" }));
+                        } else {
+                          setFormData((prev) => ({ ...prev, address: val }));
+                        }
+                      }}
+                      style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "1px solid #e1deda",
+                        width: "100%",
+                        fontSize: "13.5px",
+                        fontFamily: "inherit",
+                        marginBottom: selectedAddressType === "new" ? "8px" : "0"
+                      }}
+                    >
+                      {currentUser.addresses.map((addr, index) => (
+                        <option key={index} value={addr}>
+                          {addr}
+                        </option>
+                      ))}
+                      <option value="new">-- Nhập địa chỉ mới --</option>
+                    </select>
+                    {selectedAddressType === "new" && (
+                      <input
+                        id="drawer-address"
+                        type="text"
+                        required
+                        placeholder="Số nhà, tên đường, quận, tỉnh/thành"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        style={{ marginTop: "8px" }}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    id="drawer-address"
+                    type="text"
+                    required
+                    placeholder="Số nhà, tên đường, quận, tỉnh/thành"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  />
+                )}
               </div>
 
               <div className="drawer-form-group">

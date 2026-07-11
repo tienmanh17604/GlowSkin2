@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useApp } from "../context/AppContext";
@@ -57,7 +57,26 @@ export default function ProductRecommendations({
   };
 
   const { addToCart, setIsCartOpen } = useCart();
-  const { placeOrder, reviews, addReview, wishlist, toggleWishlist } = useApp();
+  const { placeOrder, reviews, addReview, wishlist, toggleWishlist, currentUser } = useApp();
+  const [selectedAddressType, setSelectedAddressType] = useState("");
+
+  // Sync selectedAddressType when opening checkout
+  useEffect(() => {
+    if (checkoutProduct && currentUser) {
+      setFormData((prev) => ({
+        ...prev,
+        name: currentUser.name || prev.name,
+        phone: currentUser.phone || prev.phone,
+      }));
+
+      if (currentUser.addresses && currentUser.addresses.length > 0) {
+        setSelectedAddressType(currentUser.addresses[0]);
+        setFormData((prev) => ({ ...prev, address: currentUser.addresses[0] }));
+      } else {
+        setSelectedAddressType("new");
+      }
+    }
+  }, [checkoutProduct, currentUser]);
 
   const handleBrandClick = (e, brandName) => {
     e.stopPropagation();
@@ -365,13 +384,57 @@ export default function ProductRecommendations({
                   </div>
                   <div className="form-group">
                     <label>Địa chỉ nhận hàng</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Số nhà, tên đường, quận/huyện, tỉnh/thành"
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    />
+                    {currentUser && currentUser.addresses && currentUser.addresses.length > 0 ? (
+                      <div className="checkout-address-selector-container">
+                        <select
+                          id="recommendation-address-select"
+                          value={selectedAddressType}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setSelectedAddressType(val);
+                            if (val === "new") {
+                              setFormData((prev) => ({ ...prev, address: "" }));
+                            } else {
+                              setFormData((prev) => ({ ...prev, address: val }));
+                            }
+                          }}
+                          style={{
+                            padding: "10px",
+                            borderRadius: "8px",
+                            border: "1px solid #ebdcd0",
+                            width: "100%",
+                            fontSize: "13.5px",
+                            fontFamily: "inherit",
+                            marginBottom: selectedAddressType === "new" ? "8px" : "0"
+                          }}
+                        >
+                          {currentUser.addresses.map((addr, index) => (
+                            <option key={index} value={addr}>
+                              {addr}
+                            </option>
+                          ))}
+                          <option value="new">-- Nhập địa chỉ mới --</option>
+                        </select>
+                        {selectedAddressType === "new" && (
+                          <input
+                            type="text"
+                            required
+                            placeholder="Số nhà, tên đường, quận/huyện, tỉnh/thành"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            style={{ marginTop: "8px" }}
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        required
+                        placeholder="Số nhà, tên đường, quận/huyện, tỉnh/thành"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      />
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Phương thức thanh toán</label>

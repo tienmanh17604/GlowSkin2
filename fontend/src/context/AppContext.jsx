@@ -189,16 +189,8 @@ export function AppProvider({ children }) {
       }
       return { success: false, message: data.message || "Email hoặc mật khẩu không chính xác!" };
     } catch (err) {
-      console.error("Lỗi đăng nhập backend, đang kiểm tra local:", err);
-      // Fallback to local state if backend is down
-      const user = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-      );
-      if (user) {
-        setCurrentUser(user);
-        return { success: true, user };
-      }
-      return { success: false, message: "Email hoặc mật khẩu không chính xác!" };
+      console.error("Lỗi đăng nhập backend:", err);
+      return { success: false, message: "Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại kết nối mạng của bạn!" };
     }
   };
 
@@ -221,25 +213,31 @@ export function AppProvider({ children }) {
       }
       return { success: false, message: data.message || "Email này đã được đăng ký!" };
     } catch (err) {
-      console.error("Lỗi đăng ký backend, đang lưu local:", err);
-      // Fallback to local state
-      const exists = users.some(
-        (u) => u.email.toLowerCase() === email.toLowerCase()
-      );
-      if (exists) {
-        return { success: false, message: "Email này đã được đăng ký!" };
+      console.error("Lỗi đăng ký backend:", err);
+      return { success: false, message: "Không thể kết nối đến máy chủ. Vui lòng kiểm tra lại kết nối mạng của bạn!" };
+    }
+  };
+
+  const updateProfile = async (id, name, email, phone, addresses) => {
+    try {
+      const res = await fetch(`${API_URL}/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, addresses }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCurrentUser(data.user);
+        setUsers((prev) => prev.map((u) => (u.id === id ? data.user : u)));
+        return { success: true, user: data.user };
       }
-      const newUser = {
-        id: "u_" + Date.now(),
-        name,
-        email,
-        password,
-        role: "user",
-        membership: "Free",
-      };
-      setUsers((prev) => [...prev, newUser]);
-      setCurrentUser(newUser);
-      return { success: true, user: newUser };
+      return { success: false, message: data.message || "Lỗi khi cập nhật thông tin!" };
+    } catch (err) {
+      console.error("Lỗi cập nhật hồ sơ:", err);
+      const updated = { ...currentUser, name, email, phone, addresses };
+      setCurrentUser(updated);
+      setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
+      return { success: true, user: updated };
     }
   };
 
@@ -486,6 +484,7 @@ export function AppProvider({ children }) {
       deleteReview,
       wishlist,
       toggleWishlist,
+      updateProfile,
     }),
     [users, products, orders, reviews, currentUser, isLoginOpen, wishlist]
   );
