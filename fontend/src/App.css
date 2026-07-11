@@ -6,6 +6,30 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;                       /* Firefox: thanh mỏng */
+  scrollbar-color: #c0b8b0 transparent;        /* Firefox: thumb | track */
+}
+
+/* Chrome / Safari / Edge */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0b8b0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a09890;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
 }
 
 body {
@@ -692,10 +716,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Active card: larger shadow and cursor */
+/* Active card: larger shadow */
 .carousel-3d-card.is-active {
   box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
-  cursor: pointer;
+  cursor: default;
 }
 
 
@@ -1484,23 +1508,22 @@ footer h3 {
 .nuve-hero-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 68px;
-  font-weight: 600;
+  font-weight: 800;
   color: var(--text-h, #1a1a18);
-  line-height: 1.20;
-  letter-spacing: -0.01em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   margin-bottom: 24px;
 }
 
 .nuve-hero-accent {
   font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--accent, #c39c73);
-  background: linear-gradient(90deg, var(--accent, #c39c73) 0%, #b58250 100%);
+  background: linear-gradient(90deg, #c39c73 0%, #a0703e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-
 }
 
 /* Subtitle styling */
@@ -1576,20 +1599,23 @@ footer h3 {
 
 .nuve-stat-info h3 {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
+  font-style: italic;
   color: var(--text-h, #1a1a18);
   margin: 0;
-  line-height: 1.1;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 .nuve-stat-info p {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11px;
+  font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+  font-size: 11.5px;
   color: var(--text, #6b6375);
-  margin: 4px 0 0 0;
+  margin: 5px 0 0 0;
   line-height: 1.4;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 /* Responsive Adjustments for Nuvé Fullscreen Layout */

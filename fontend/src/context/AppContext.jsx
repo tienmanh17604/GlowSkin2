@@ -68,10 +68,14 @@ export function AppProvider({ children }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
-  // Global Wishlist/Favorites State
+  // Global Wishlist/Favorites State — scoped per user
   const [wishlist, setWishlist] = useState(() => {
     try {
-      const saved = localStorage.getItem("glowskin-wishlist");
+      const session = localStorage.getItem(USER_SESSION_KEY);
+      const user = session ? JSON.parse(session) : null;
+      if (!user) return {};
+      const key = `glowskin-wishlist-${user._id || user.id}`;
+      const saved = localStorage.getItem(key);
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -79,16 +83,21 @@ export function AppProvider({ children }) {
   });
 
   const toggleWishlist = (productId) => {
+    if (!currentUser) return; // Phải đăng nhập mới lưu được
+    const key = `glowskin-wishlist-${currentUser._id || currentUser.id}`;
     setWishlist((prev) => {
       const updated = { ...prev, [productId]: !prev[productId] };
-      localStorage.setItem("glowskin-wishlist", JSON.stringify(updated));
+      localStorage.setItem(key, JSON.stringify(updated));
       return updated;
     });
   };
 
   const clearWishlist = () => {
     setWishlist({});
-    localStorage.setItem("glowskin-wishlist", JSON.stringify({}));
+    if (currentUser) {
+      const key = `glowskin-wishlist-${currentUser._id || currentUser.id}`;
+      localStorage.removeItem(key);
+    }
   };
 
   // Fetch initial data from MongoDB API on mount
@@ -191,6 +200,15 @@ export function AppProvider({ children }) {
       const data = await res.json();
       if (data.success) {
         setCurrentUser(data.user);
+        // Load wishlist của user vừa đăng nhập
+        const userId = data.user._id || data.user.id;
+        const key = `glowskin-wishlist-${userId}`;
+        try {
+          const saved = localStorage.getItem(key);
+          setWishlist(saved ? JSON.parse(saved) : {});
+        } catch {
+          setWishlist({});
+        }
         return { success: true, user: data.user };
       }
       return { success: false, message: data.message || "Email hoặc mật khẩu không chính xác!" };
@@ -202,6 +220,7 @@ export function AppProvider({ children }) {
 
   const logout = () => {
     setCurrentUser(null);
+    setWishlist({}); // Xóa wishlist khỏi state khi đăng xuất
   };
 
   const register = async (name, email, password) => {

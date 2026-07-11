@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useApp } from "../context/AppContext";
@@ -95,7 +95,185 @@ const WHY_ITEMS = [
   },
 ];
 
+// ── Draggable Vertical Slider Component ──────────────────────────────────────
+function VerticalSlider({ count, activeIndex, onChange, color }) {
+  const TRACK_H = 160; // px height of track
+  const thumbRef = useRef(null);
+  const trackRef = useRef(null);
+  const dragging = useRef(false);
+
+  const indexToY = useCallback(
+    (idx) => (idx / (count - 1)) * TRACK_H,
+    [count]
+  );
+
+  const yToIndex = useCallback(
+    (y) => Math.round(Math.max(0, Math.min(count - 1, (y / TRACK_H) * (count - 1)))),
+    [count]
+  );
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    dragging.current = true;
+
+    const onMove = (ev) => {
+      if (!dragging.current) return;
+      const rect = trackRef.current.getBoundingClientRect();
+      const rawY = ev.clientY - rect.top;
+      onChange(yToIndex(rawY));
+    };
+
+    const onUp = () => {
+      dragging.current = false;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  };
+
+  const handleTrackClick = (e) => {
+    const rect = trackRef.current.getBoundingClientRect();
+    const rawY = e.clientY - rect.top;
+    onChange(yToIndex(rawY));
+  };
+
+  const thumbY = indexToY(activeIndex);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        right: "2.5%",
+        top: "50%",
+        transform: "translateY(-50%)",
+        zIndex: 60,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "0",
+        userSelect: "none",
+      }}
+    >
+      {/* Counter top */}
+      <span
+        style={{
+          fontSize: "11px",
+          fontWeight: 700,
+          color: color,
+          fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
+          transition: "color 0.3s ease",
+          marginBottom: "10px",
+          letterSpacing: "0.04em",
+        }}
+      >
+        {String(activeIndex + 1).padStart(2, "0")}
+      </span>
+
+      {/* Draggable track */}
+      <div
+        ref={trackRef}
+        onClick={handleTrackClick}
+        style={{
+          width: "28px",
+          height: `${TRACK_H}px`,
+          position: "relative",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {/* Rail line */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: 0,
+            transform: "translateX(-50%)",
+            width: "2px",
+            height: "100%",
+            background: "rgba(180,160,140,0.2)",
+            borderRadius: "2px",
+          }}
+        />
+        {/* Filled rail */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: 0,
+            transform: "translateX(-50%)",
+            width: "2px",
+            borderRadius: "2px",
+            height: `${thumbY}px`,
+            background: color,
+            transition: "height 0.5s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease",
+          }}
+        />
+
+        {/* Draggable thumb */}
+        <div
+          ref={thumbRef}
+          onMouseDown={handleMouseDown}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: `${thumbY}px`,
+            transform: "translate(-50%, -50%)",
+            width: "18px",
+            height: "18px",
+            borderRadius: "50%",
+            background: "white",
+            border: `3px solid ${color}`,
+            boxShadow: `0 0 0 4px ${color}33, 0 4px 12px rgba(0,0,0,0.2)`,
+            cursor: "grab",
+            transition: "top 0.5s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s ease, box-shadow 0.3s ease",
+            zIndex: 2,
+          }}
+        />
+
+        {/* Slide snap markers */}
+        {Array.from({ length: count }).map((_, i) => (
+          <div
+            key={i}
+            onClick={(e) => { e.stopPropagation(); onChange(i); }}
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: `${indexToY(i)}px`,
+              transform: "translate(-50%, -50%)",
+              width: i === activeIndex ? "6px" : "4px",
+              height: i === activeIndex ? "6px" : "4px",
+              borderRadius: "50%",
+              background: i <= activeIndex ? color : "rgba(180,160,140,0.35)",
+              transition: "all 0.4s ease",
+              cursor: "pointer",
+              zIndex: 3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Counter bottom */}
+      <span
+        style={{
+          fontSize: "11px",
+          fontWeight: 500,
+          color: "rgba(100,80,60,0.45)",
+          fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
+          marginTop: "10px",
+          letterSpacing: "0.04em",
+        }}
+      >
+        {String(count).padStart(2, "0")}
+      </span>
+    </div>
+  );
+}
+
 export default function Home({ videoReady = false }) {
+
   const navigate = useNavigate();
   const { currentUser, setIsLoginOpen } = useApp();
   const { setIsCartOpen } = useCart();
@@ -106,7 +284,9 @@ export default function Home({ videoReady = false }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-  const [autoplayPaused, setAutoplayPaused] = useState(false);
+
+  // Dùng ref để track isAnimating mà không trigger re-render interval
+  const isAnimatingRef = useRef(false);
 
   useEffect(() => {
     FEATURES.forEach((item) => {
@@ -122,22 +302,36 @@ export default function Home({ videoReady = false }) {
   }, []);
 
   const navigateCarousel = (direction) => {
-    if (isAnimating) return;
+    if (isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
     setIsAnimating(true);
     setActiveIndex((prev) =>
       direction === "next" ? (prev + 1) % 4 : (prev + 3) % 4
     );
-    setTimeout(() => setIsAnimating(false), 650);
+    setTimeout(() => {
+      isAnimatingRef.current = false;
+      setIsAnimating(false);
+    }, 650);
   };
 
-  // Autoplay Effect: cycles through cards every 4 seconds, resetting on activeIndex change
+  // Autoplay: xoay ngẫu nhiên mọi 2 giây — KHÔNG THỂ DỪNG
   useEffect(() => {
-    if (autoplayPaused) return;
     const timer = setInterval(() => {
-      navigateCarousel("next");
-    }, 4000);
+      if (isAnimatingRef.current) return;
+      isAnimatingRef.current = true;
+      setIsAnimating(true);
+      setActiveIndex((prev) => {
+        let next;
+        do { next = Math.floor(Math.random() * 4); } while (next === prev);
+        return next;
+      });
+      setTimeout(() => {
+        isAnimatingRef.current = false;
+        setIsAnimating(false);
+      }, 650);
+    }, 2000);
     return () => clearInterval(timer);
-  }, [autoplayPaused, activeIndex, isAnimating]);
+  }, []); // [] = tạo 1 lần, không bao giờ bị reset hay dừng
 
   const centerCard = activeIndex;
   const leftCard = (activeIndex + 3) % 4;
@@ -162,7 +356,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: "50%",
-        bottom: isMobile ? "22%" : "28%",
+        bottom: isMobile ? "22%" : "35%",
         transform: `translateX(-50%) scale(${isMobile ? 1.2 : 1.35})`,
         filter: "blur(0px)",
         opacity: 1,
@@ -174,7 +368,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: isMobile ? "22%" : "37%",
-        bottom: isMobile ? "28%" : "30%",
+        bottom: isMobile ? "28%" : "37%",
         transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
         filter: "blur(2px)",
         opacity: 0.55,
@@ -186,7 +380,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: isMobile ? "78%" : "63%",
-        bottom: isMobile ? "28%" : "30%",
+        bottom: isMobile ? "28%" : "37%",
         transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
         filter: "blur(2px)",
         opacity: 0.55,
@@ -197,7 +391,7 @@ export default function Home({ videoReady = false }) {
     return {
       ...common,
       left: "50%",
-      bottom: isMobile ? "28%" : "30%",
+      bottom: isMobile ? "28%" : "37%",
       transform: `translateX(-50%) scale(${isMobile ? 0.25 : 0.2})`,
       filter: "blur(12px)",
       opacity: 0.06,
@@ -360,20 +554,29 @@ export default function Home({ videoReady = false }) {
         >
           <span
             style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: "clamp(80px, 18vw, 280px)",
+              fontFamily: "'Plus Jakarta Sans', 'Inter', 'Montserrat', sans-serif",
+              fontSize: "clamp(80px, 16vw, 250px)",
               fontWeight: 900,
               color: "rgba(255, 255, 255, 0.12)",
               lineHeight: 1,
-              letterSpacing: "-0.02em",
+              letterSpacing: "-0.04em",
               textTransform: "uppercase",
               whiteSpace: "nowrap",
             }}
           >
-            BEAUTY AI
+            GLOWSKIN
           </span>
         </div>
 
+        {/* ── RIGHT SIDE: Draggable vertical slider ── */}
+        {!isMobile && (
+          <VerticalSlider
+            count={FEATURES.length}
+            activeIndex={activeIndex}
+            onChange={setActiveIndex}
+            color={FEATURES[activeIndex].btnBg}
+          />
+        )}
 
 
         {/* Carousel Stage */}
@@ -422,7 +625,7 @@ export default function Home({ videoReady = false }) {
                 </div>
                 
                 <div className="carousel-card-content" style={{ padding: "12px 14px", flexShrink: 0, background: "#ffffff", textAlign: "left" }}>
-                  <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "13px", fontWeight: "700", margin: "0 0 3px 0", color: "#121318", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>{item.title}</h3>
+                  <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, fontStyle: "italic", margin: "0 0 3px 0", color: "#121318", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>{item.title}</h3>
                   <p className="carousel-card-desc" style={{ fontSize: "10px", color: "#777", lineHeight: 1.3, margin: "0 0 8px 0" }}>{item.shortDesc}</p>
                   <div className="carousel-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "7px" }}>
                     <span className="carousel-card-index" style={{ fontSize: "10px", color: "#aaa", fontWeight: 600 }}>{`0${index + 1}/04`}</span>
@@ -434,48 +637,48 @@ export default function Home({ videoReady = false }) {
           })}
         </div>
 
-        {/* ── TOP-LEFT corner: alternating info text ── */}
+        {/* ── TOP-LEFT corner: dynamic info text ── */}
         {!isMobile && activeIndex % 2 === 0 && (
           <div
             className="features-dynamic-info"
             key={`tl-${activeIndex}`}
             style={{
               position: "absolute",
-              top: "10%",
+              top: "15%",
               left: "5%",
-              width: "300px",
+              width: "320px",
               zIndex: 15,
             }}
           >
             <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
-            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "34px", fontWeight: 800, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.02em" }}>
+            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "38px", fontWeight: 700, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.01em" }}>
               {FEATURES[activeIndex].title}
             </h3>
-            <p style={{ fontSize: "13.5px", lineHeight: 1.7, color: "#555", margin: 0 }}>
+            <p style={{ fontSize: "14px", lineHeight: 1.65, color: "#555", margin: 0, fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif" }}>
               {FEATURES[activeIndex].desc}
             </p>
           </div>
         )}
 
-        {/* ── TOP-RIGHT corner: alternating info text ── */}
+        {/* ── TOP-RIGHT corner: dynamic info text ── */}
         {!isMobile && activeIndex % 2 !== 0 && (
           <div
             className="features-dynamic-info"
             key={`tr-${activeIndex}`}
             style={{
               position: "absolute",
-              top: "10%",
+              top: "15%",
               right: "5%",
-              width: "300px",
+              width: "320px",
               zIndex: 15,
               textAlign: "left",
             }}
           >
             <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
-            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "34px", fontWeight: 800, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.02em" }}>
+            <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "38px", fontWeight: 700, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.01em" }}>
               {FEATURES[activeIndex].title}
             </h3>
-            <p style={{ fontSize: "13.5px", lineHeight: 1.7, color: "#555", margin: 0 }}>
+            <p style={{ fontSize: "14px", lineHeight: 1.65, color: "#555", margin: 0, fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif" }}>
               {FEATURES[activeIndex].desc}
             </p>
           </div>
@@ -485,25 +688,26 @@ export default function Home({ videoReady = false }) {
         <div
           style={{
             position: "absolute",
-            bottom: "5%",
+            bottom: "8%",
             left: "5%",
             zIndex: 60,
             maxWidth: isMobile ? "55%" : "280px",
+            textAlign: "left",
           }}
         >
-          <p style={{ margin: "0 0 5px 0", fontSize: isMobile ? "13px" : "15px", fontWeight: 800, color: FEATURES[activeIndex].btnBg, transition: "color 0.3s ease", fontFamily: "'Playfair Display', Georgia, serif" }}>
+          <p style={{ margin: "0 0 5px 0", fontSize: isMobile ? "13px" : "15px", fontWeight: 800, color: FEATURES[activeIndex].btnBg, transition: "color 0.3s ease", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>
             {`0${activeIndex + 1} / 0${FEATURES.length}`}
           </p>
-          <p style={{ margin: 0, fontSize: isMobile ? "11px" : "12px", lineHeight: 1.55, color: "#666" }}>
+          <p style={{ margin: 0, fontSize: isMobile ? "11px" : "12px", lineHeight: 1.55, color: "#666", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>
             {FEATURES[activeIndex].shortDesc}
           </p>
         </div>
 
-        {/* ── BOTTOM-CENTER: Navigation buttons ── */}
+        {/* ── BOTTOM-CENTER: Navigation buttons — same row as CTA ── */}
         <div
           style={{
             position: "absolute",
-            bottom: isMobile ? "10%" : "16%",
+            bottom: isMobile ? "10%" : "8%",
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
@@ -565,7 +769,7 @@ export default function Home({ videoReady = false }) {
         <div
           style={{
             position: "absolute",
-            bottom: "5%",
+            bottom: "8%",
             right: "5%",
             zIndex: 60,
           }}
@@ -585,7 +789,7 @@ export default function Home({ videoReady = false }) {
               gap: "8px",
               boxShadow: "0 8px 22px rgba(0,0,0,0.15)",
               transition: "all 0.3s ease",
-              fontFamily: "'Inter', sans-serif",
+              fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "scale(1.05)";
