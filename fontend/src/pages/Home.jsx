@@ -23,7 +23,7 @@ const FEATURES = [
     title: "Phân tích Da AI",
     desc: "Khám phá tình trạng làn da của bạn bằng công nghệ phân tích ảnh AI tiên tiến, giúp đưa ra chẩn đoán chính xác về loại da và các vấn đề cần cải thiện.",
     shortDesc: "Chẩn đoán & phân tích loại da",
-    image: img("1616394584738-fc6e612e71b9", 600),
+    image: "https://res.cloudinary.com/buevamso/image/upload/v1783830695/glowskin/showcase/card_phan_tich_da.jpg",
     to: "/analyze",
     bg: "#ebdcd0",
     panel: "#f7f0eb",
@@ -33,7 +33,7 @@ const FEATURES = [
     title: "Đánh giá Mỹ phẩm",
     desc: "Tra cứu cơ sở dữ liệu hàng ngàn sản phẩm, xem đánh giá chi tiết và các trải nghiệm chân thực từ cộng đồng người dùng trước khi quyết định mua sắm.",
     shortDesc: "Đánh giá chi tiết từ cộng đồng",
-    image: img("1608571423902-eed4a5ad8108", 600),
+    image: "https://res.cloudinary.com/buevamso/image/upload/v1783830696/glowskin/showcase/card_danh_gia_my_pham.jpg",
     to: "/products",
     bg: "#dfcebe",
     panel: "#eadbc8",
@@ -43,7 +43,7 @@ const FEATURES = [
     title: "Gợi ý thông minh",
     desc: "Nhận danh sách đề xuất các dòng mỹ phẩm chăm sóc da (skincare) tối ưu nhất, được cá nhân hóa hoàn toàn dựa trên chỉ số da của riêng bạn.",
     shortDesc: "Đề xuất sản phẩm phù hợp",
-    image: img("1571781926291-c477ebfd024b", 600),
+    image: "https://res.cloudinary.com/buevamso/image/upload/v1783830697/glowskin/showcase/card_goi_y_thong_minh.jpg",
     to: "/products",
     bg: "#c4a484",
     panel: "#d3b89e",
@@ -53,7 +53,7 @@ const FEATURES = [
     title: "Lập Lộ trình Skincare",
     desc: "Xây dựng routine chăm sóc da khoa học sáng và tối, thiết lập lịch nhắc nhở và theo dõi hành trình thay đổi làn da khỏe đẹp mỗi ngày.",
     shortDesc: "Lộ trình chăm sóc da khoa học",
-    image: img("1556228720-195a672e8a03", 600),
+    image: "https://res.cloudinary.com/buevamso/image/upload/v1783830698/glowskin/showcase/card_lo_trinh_skincare.jpg",
     to: "/analyze",
     bg: "#e2d4c9",
     panel: "#eedfd2",
@@ -272,6 +272,7 @@ function VerticalSlider({ count, activeIndex, onChange, color }) {
   );
 }
 
+
 export default function Home({ videoReady = false }) {
 
   const navigate = useNavigate();
@@ -279,10 +280,24 @@ export default function Home({ videoReady = false }) {
   const { setIsCartOpen } = useCart();
 
   const videoRef = useRef(null);
+  const page1Ref = useRef(null);
+  const page2Ref = useRef(null);
+  const featuresRef = useRef(null);
+  const howItWorksRef = useRef(null);
+  const testimonialsRef = useRef(null);
+  const pricingRef = useRef(null);
+  const finalCtaRef = useRef(null);
 
   // Carousel states for interactive 3D layout
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [page1InView, setPage1InView] = useState(false);
+  const [page2InView, setPage2InView] = useState(false);
+  const [featuresInView, setFeaturesInView] = useState(false);
+  const [howItWorksInView, setHowItWorksInView] = useState(false);
+  const [testimonialsInView, setTestimonialsInView] = useState(false);
+  const [pricingInView, setPricingInView] = useState(false);
+  const [finalCtaInView, setFinalCtaInView] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
   const handleMainVideoTimeUpdate = (e) => {
@@ -300,6 +315,20 @@ export default function Home({ videoReady = false }) {
     }
   };
 
+  const renderWords = (text, startDelay, isBold = false) => {
+    return text.split(" ").map((word, index) => (
+      <span
+        key={index}
+        className={`word-span ${isBold ? "text-highlight" : ""}`}
+        style={{
+          animationDelay: `${startDelay + index * 0.08}s`
+        }}
+      >
+        {word}
+      </span>
+    ));
+  };
+
   // Dùng ref để track isAnimating mà không trigger re-render interval
   const isAnimatingRef = useRef(false);
 
@@ -314,6 +343,83 @@ export default function Home({ videoReady = false }) {
     const resize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setPage1InView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (page1Ref.current) observer.observe(page1Ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setPage2InView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (page2Ref.current) observer.observe(page2Ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setFeaturesInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (featuresRef.current) observer.observe(featuresRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHowItWorksInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (howItWorksRef.current) observer.observe(howItWorksRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setTestimonialsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (testimonialsRef.current) observer.observe(testimonialsRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setPricingInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (pricingRef.current) observer.observe(pricingRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setFinalCtaInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    if (finalCtaRef.current) observer.observe(finalCtaRef.current);
+    return () => observer.disconnect();
   }, []);
 
   const navigateCarousel = (direction) => {
@@ -514,9 +620,9 @@ export default function Home({ videoReady = false }) {
         </div>
       </section>
 
-      {/* 2. Features Section (Tính năng nổi bật) */}
       <section
-        className="features-interactive-3d"
+        ref={featuresRef}
+        className={`features-interactive-3d ${featuresInView ? "in-view" : ""}`}
         id="analysis"
         style={{
           position: "relative",
@@ -618,33 +724,42 @@ export default function Home({ videoReady = false }) {
                 role="button"
                 tabIndex={isActive ? 0 : -1}
               >
-                <div className="carousel-card-img-wrap" style={{ flexGrow: 1, overflow: "hidden", position: "relative", minHeight: 0 }}>
-                  <img
-                    src={item.image}
-                    draggable={false}
-                    alt={item.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      userSelect: "none",
-                      pointerEvents: "none",
-                    }}
-                  />
-                  <div className="carousel-card-img-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M22 22l-4.35-4.35" />
-                    </svg>
+                <div style={{
+                  animation: featuresInView ? `cardFastFadeUp 0.35s cubic-bezier(0.2, 1, 0.2, 1) ${index * 0.08}s forwards` : "none",
+                  opacity: featuresInView ? 0 : 0,
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "hidden",
+                  borderRadius: "22px"
+                }}>
+                  <div className="carousel-card-img-wrap">
+                    <img
+                      src={item.image}
+                      draggable={false}
+                      alt={item.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        userSelect: "none",
+                        pointerEvents: "none",
+                      }}
+                    />
                   </div>
-                </div>
 
-                <div className="carousel-card-content" style={{ padding: "12px 14px", flexShrink: 0, background: "#ffffff", textAlign: "left" }}>
-                  <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, fontStyle: "italic", margin: "0 0 3px 0", color: "#121318", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>{item.title}</h3>
-                  <p className="carousel-card-desc" style={{ fontSize: "10px", color: "#777", lineHeight: 1.3, margin: "0 0 8px 0" }}>{item.shortDesc}</p>
-                  <div className="carousel-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "7px" }}>
-                    <span className="carousel-card-index" style={{ fontSize: "10px", color: "#aaa", fontWeight: 600 }}>{`0${index + 1}/04`}</span>
-                    <span className="carousel-card-badge" style={{ fontSize: "10px", color: FEATURES[index].btnBg, fontWeight: 600 }}>Khám phá</span>
+                  <div className="carousel-card-content" style={{ padding: "8px 16px 14px 16px", flexShrink: 0, background: "#ffffff", textAlign: "left", display: "flex", flexDirection: "column", flexGrow: 1, minHeight: 0 }}>
+                    <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, margin: "0 0 6px 0", color: "#121318", fontFamily: "'Plus Jakarta Sans', sans-serif", lineHeight: 1.3 }}>
+                      <span style={{ background: `${item.bg}d5`, padding: "3px 8px", borderRadius: "4px", color: item.btnBg, display: "inline-block" }}>
+                        {item.title}
+                      </span>
+                    </h3>
+                    <p className="carousel-card-desc" style={{ fontSize: "10px", color: "#555555", lineHeight: 1.4, margin: "0 0 8px 0", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{item.shortDesc}</p>
+                    <div className="carousel-card-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: "8px", marginTop: "auto" }}>
+                      <span className="carousel-card-index" style={{ fontSize: "10.5px", color: "#888888", fontWeight: 600, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{`0${index + 1}/04`}</span>
+                      <span className="carousel-card-badge" style={{ fontSize: "9.5px", color: "#555555", fontWeight: 600, border: "1px solid #bbbbbb", borderRadius: "99px", padding: "3px 12px", background: "transparent", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Khám phá</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -667,10 +782,10 @@ export default function Home({ videoReady = false }) {
           >
             <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
             <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "38px", fontWeight: 700, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.01em" }}>
-              {FEATURES[activeIndex].title}
+              {renderWords(FEATURES[activeIndex].title, 0.1)}
             </h3>
             <p style={{ fontSize: "14px", lineHeight: 1.65, color: "#555", margin: 0, fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif" }}>
-              {FEATURES[activeIndex].desc}
+              {renderWords(FEATURES[activeIndex].desc, 0.3)}
             </p>
           </div>
         )}
@@ -691,10 +806,10 @@ export default function Home({ videoReady = false }) {
           >
             <div style={{ width: "50px", height: "4px", backgroundColor: FEATURES[activeIndex].btnBg, marginBottom: "18px", borderRadius: "2px", transition: "background-color 0.3s ease" }} />
             <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "38px", fontWeight: 700, fontStyle: "italic", lineHeight: 1.15, margin: "0 0 14px 0", color: "#1a1008", letterSpacing: "-0.01em" }}>
-              {FEATURES[activeIndex].title}
+              {renderWords(FEATURES[activeIndex].title, 0.1)}
             </h3>
             <p style={{ fontSize: "14px", lineHeight: 1.65, color: "#555", margin: 0, fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif" }}>
-              {FEATURES[activeIndex].desc}
+              {renderWords(FEATURES[activeIndex].desc, 0.3)}
             </p>
           </div>
         )}
@@ -714,7 +829,7 @@ export default function Home({ videoReady = false }) {
             {`0${activeIndex + 1} / 0${FEATURES.length}`}
           </p>
           <p style={{ margin: 0, fontSize: isMobile ? "11px" : "12px", lineHeight: 1.55, color: "#666", fontFamily: "'Plus Jakarta Sans', 'Inter', sans-serif" }}>
-            {FEATURES[activeIndex].shortDesc}
+            {renderWords(FEATURES[activeIndex].shortDesc, 0.45)}
           </p>
         </div>
 
@@ -824,8 +939,11 @@ export default function Home({ videoReady = false }) {
         </div>
       </section>
 
-      {/* 3. How It Works Section */}
-      <section className="glowskin-premium-section glowskin-how-it-works" id="how-it-works">
+      <section
+        ref={howItWorksRef}
+        className={`glowskin-premium-section glowskin-how-it-works ${howItWorksInView ? "in-view" : ""}`}
+        id="how-it-works"
+      >
         <div className="section-header">
           <span className="section-label">Lộ trình</span>
           <h2 className="section-title">Cách Hoạt Động</h2>
@@ -833,7 +951,7 @@ export default function Home({ videoReady = false }) {
         </div>
 
         <div className="how-it-works-steps">
-          <div className="step-card">
+          <div className="step-card step-card--selfie">
             <div className="step-num">01</div>
             <h3>Upload Selfie</h3>
             <p>Chụp hoặc tải lên một bức ảnh cận cảnh khuôn mặt của bạn dưới ánh sáng tự nhiên.</p>
@@ -842,7 +960,7 @@ export default function Home({ videoReady = false }) {
           <div className="step-connector">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </div>
-          <div className="step-card">
+          <div className="step-card step-card--ai">
             <div className="step-num">02</div>
             <h3>Phân Tích AI</h3>
             <p>Thuật toán học máy quét hơn 30 chỉ số và vấn đề da trong vài giây.</p>
@@ -851,7 +969,7 @@ export default function Home({ videoReady = false }) {
           <div className="step-connector">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </div>
-          <div className="step-card">
+          <div className="step-card step-card--recs">
             <div className="step-num">03</div>
             <h3>Nhận Khuyến Nghị</h3>
             <p>Nhận báo cáo phân tích chi tiết về loại da và đề xuất các thành phần phù hợp.</p>
@@ -860,7 +978,7 @@ export default function Home({ videoReady = false }) {
           <div className="step-connector">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </div>
-          <div className="step-card">
+          <div className="step-card step-card--routine">
             <div className="step-num">04</div>
             <h3>Lộ Trình Hàng Ngày</h3>
             <p>Theo dõi thói quen chăm sóc da sáng và tối được tối ưu hóa cho riêng bạn.</p>
@@ -870,7 +988,7 @@ export default function Home({ videoReady = false }) {
       </section>
 
       {/* 4. Showcase Section (AI Skincare and Nuvé Info Pages) */}
-      <section id="page1" className="page">
+      <section id="page1" ref={page1Ref} className={`page ${page1InView ? "in-view" : ""}`}>
         <div className="left-half">
           <div className="floating-media float-vid1">
             <video src="https://res.cloudinary.com/buevamso/video/upload/v1783824450/glowskin/showcase/float_vid1.mov" autoPlay loop muted playsInline />
@@ -879,13 +997,16 @@ export default function Home({ videoReady = false }) {
             <video src="https://res.cloudinary.com/buevamso/video/upload/v1783824460/glowskin/showcase/float_vid2.mp4" autoPlay loop muted playsInline />
           </div>
           <div className="floating-media float-img1">
-            <img src="/Midjourney_  Close-up of face, dropper with liquid near nose, skincare product_.jpg" alt="Skincare Image 1" />
+            <img src="/Midjourney_  Close-up of face, dropper with liquid near nose, skincare product_.jpg" alt="Hình ảnh chăm sóc da 1" />
           </div>
           <div className="floating-media float-img2">
-            <img src="/IG_ @loverska_officiel.jpg" alt="Skincare Image 2" />
+            <img src="/IG_ @loverska_officiel.jpg" alt="Hình ảnh chăm sóc da 2" />
           </div>
           <div className="floating-media float-img3">
-            <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&q=80&auto=format&fit=crop" alt="Skincare Image 3" />
+            <img src="/A simple skincare pack.jpg" alt="Hình ảnh chăm sóc da 3" />
+          </div>
+          <div className="floating-media float-img4">
+            <img src="https://res.cloudinary.com/buevamso/image/upload/v1783830706/glowskin/showcase/float_img4.jpg" alt="Hình ảnh chăm sóc da 4" />
           </div>
 
           {/* Khung chứa video chính */}
@@ -901,13 +1022,13 @@ export default function Home({ videoReady = false }) {
             />
 
             <div className="vid-tag tag-sleep animate">
-              <span className="dot"></span>SLEEP WELL
+              <span className="dot"></span>NGỦ NGON
             </div>
             <div className="vid-tag tag-hydrate animate">
-              <span className="dot"></span>HYDRATE
+              <span className="dot"></span>CẤP ẨM
             </div>
             <div className="vid-tag tag-stress animate">
-              <span className="dot"></span>LESS STRESS
+              <span className="dot"></span>GIẢM CĂNG THẲNG
             </div>
           </div>
         </div>
@@ -916,47 +1037,54 @@ export default function Home({ videoReady = false }) {
         <div className="right-half">
           <div className="grid-bg"></div>
           <div className="aura-blob"></div>
-          <div className="decorative-ring">
-            <div className="dashed-circle"></div>
-            <div className="ring-text">AI<br />SCAN</div>
-          </div>
           <div className="content-container">
             <div className="text-block text-top">
-              <h2><span>AI</span> Skincare</h2>
-              <p>AI doesn't promise perfection - it observes, learns, and adapts. Every scan interprets the natural passage of your skin's time, highlighting areas for thoughtful care and balance.</p>
+              <h2><span className="word-span" style={{ animationDelay: '0.1s' }}><span>Chăm Sóc Da</span></span> <span className="word-span" style={{ animationDelay: '0.18s' }}>AI</span></h2>
+              <p>
+                {renderWords("AI không hứa hẹn sự hoàn hảo — nó quan sát, học hỏi và thích ứng.", 0.26)}<br />
+                {renderWords("Mỗi lần quét phân tích sự thay đổi tự nhiên của làn da theo thời gian,", 0.98)}<br />
+                {renderWords("nổi bật các vùng da cần được chăm sóc chu đáo và cân bằng.", 1.78)}
+              </p>
             </div>
             <div className="scanner-container">
               <div className="scanner-line"></div>
             </div>
             <div className="text-block text-bottom">
-              <h2>Mindful <span>Beauty</span></h2>
-              <p>Meaning: we can't stop aging, but we can guide it with awareness, insight, and gentle personalization.</p>
+              <h2><span className="word-span" style={{ animationDelay: '2.9s' }}>Vẻ Đẹp</span> <span className="word-span" style={{ animationDelay: '2.98s' }}><span>Tỉnh Thức</span></span></h2>
+              <p>
+                {renderWords("Ý nghĩa: chúng ta không thể dừng lão hóa, nhưng có thể điều hướng bằng", 3.06)}<br />
+                {renderWords("sự nhận thức, thấu hiểu và cá nhân hóa nhẹ nhàng.", 4.02)}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="page2" className="page">
-        <div className="floating-tag tag-beautiful"><span className="tag-icon purple">✿</span> Beautiful</div>
-        <div className="floating-tag tag-healthy"><span className="tag-icon pink">♥</span> Healthy</div>
-        <div className="floating-tag tag-confident"><span className="tag-icon green">★</span> Confident</div>
-        <div className="floating-tag tag-glowing"><span className="tag-icon blue">✦</span> Glowing</div>
-        <div className="floating-tag tag-happy"><span className="tag-icon orange">😊</span> Happy</div>
+      <section id="page2" ref={page2Ref} className={`page ${page2InView ? "in-view" : ""}`}>
+        <div className="floating-tag tag-beautiful"><span className="tag-icon purple">✿</span> Rạng Rỡ</div>
+        <div className="floating-tag tag-healthy"><span className="tag-icon pink">♥</span> Khỏe Mạnh</div>
+        <div className="floating-tag tag-confident"><span className="tag-icon green">★</span> Tự Tin</div>
+        <div className="floating-tag tag-glowing"><span className="tag-icon blue">✦</span> Căng Bóng</div>
+        <div className="floating-tag tag-happy"><span className="tag-icon orange">😊</span> Hạnh Phúc</div>
         <div className="center-text-block">
           <h1>
-            GlowSkin helps you understand and<br />
-            care for your skin like never before.<br />
-            Get insights and tips backed by AI<br />
-            and real science <strong className="text-highlight">for your healthiest,<br />
-            happiest skin</strong>
+            {renderWords("GlowSkin giúp bạn thấu hiểu và", 0.2)}<br />
+            {renderWords("chăm sóc làn da hơn bao giờ hết.", 0.68)}<br />
+            {renderWords("Nhận phân tích chuyên sâu cùng lời khuyên từ AI", 1.24)}<br />
+            {renderWords("và khoa học thực tiễn", 1.8)}
+            {renderWords("cho làn da khỏe mạnh nhất,", 2.04, true)}<br />
+            {renderWords("và rạng rỡ nhất", 2.28, true)}
           </h1>
         </div>
       </section>
 
 
 
-      {/* 6. Testimonials Section */}
-      <section className="glowskin-premium-section glowskin-testimonials" id="testimonials">
+      <section
+        ref={testimonialsRef}
+        className={`glowskin-premium-section glowskin-testimonials ${testimonialsInView ? "in-view" : ""}`}
+        id="testimonials"
+      >
         <div className="section-header">
           <span className="section-label">Đánh giá</span>
           <h2 className="section-title">Khách Hàng Nói Gì</h2>
@@ -969,7 +1097,7 @@ export default function Home({ videoReady = false }) {
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
               <div className="test-user">
-                <div className="user-avatar text-avatar">MH</div>
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Minh Hằng" />
                 <div className="user-meta">
                   <strong>Minh Hằng</strong>
                   <span>Hà Nội</span>
@@ -980,7 +1108,7 @@ export default function Home({ videoReady = false }) {
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Tôi rất ấn tượng với mục Đánh giá Mỹ phẩm. Trước khi mua sản phẩm nào tôi cũng vào tra thành phần và xem cộng đồng review, đỡ lãng phí tiền mua những món không hợp da."</p>
               <div className="test-user">
-                <div className="user-avatar text-avatar">TL</div>
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80" alt="Thùy Linh" />
                 <div className="user-meta">
                   <strong>Thùy Linh</strong>
                   <span>TP. Hồ Chí Minh</span>
@@ -991,7 +1119,7 @@ export default function Home({ videoReady = false }) {
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Lộ trình skincare khoa học, có thông báo nhắc nhở sáng tối cực tiện lợi. Giao diện app siêu đẹp, mượt mà và tạo cảm giác rất cao cấp khi sử dụng."</p>
               <div className="test-user">
-                <div className="user-avatar text-avatar">DK</div>
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80" alt="Đăng Khoa" />
                 <div className="user-meta">
                   <strong>Đăng Khoa</strong>
                   <span>Đà Nẵng</span>
@@ -1002,7 +1130,7 @@ export default function Home({ videoReady = false }) {
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
               <div className="test-user">
-                <div className="user-avatar text-avatar">MH</div>
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Minh Hằng" />
                 <div className="user-meta">
                   <strong>Minh Hằng</strong>
                   <span>Hà Nội</span>
@@ -1013,8 +1141,11 @@ export default function Home({ videoReady = false }) {
         </div>
       </section>
 
-      {/* 7. Pricing Section */}
-      <section className="glowskin-premium-section glowskin-pricing" id="pricing">
+      <section
+        ref={pricingRef}
+        className={`glowskin-premium-section glowskin-pricing ${pricingInView ? "in-view" : ""}`}
+        id="pricing"
+      >
         <div className="section-header">
           <span className="section-label">Bảng giá</span>
           <h2 className="section-title">Gói Dịch Vụ</h2>
@@ -1066,8 +1197,10 @@ export default function Home({ videoReady = false }) {
         </div>
       </section>
 
-      {/* 8. Final CTA Section */}
-      <section className="glowskin-final-cta">
+      <section
+        ref={finalCtaRef}
+        className={`glowskin-final-cta ${finalCtaInView ? "in-view" : ""}`}
+      >
         <div className="cta-blobs">
           <div className="blob blob-1"></div>
           <div className="blob blob-2"></div>

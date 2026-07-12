@@ -113,7 +113,7 @@ export default function SkinAnalysis() {
     }
     setLoading(true);
     try {
-      const amount = level === "VIP" ? 299000 : 150000;
+      const amount = (level === "VIP" || level === "Premium") ? 99000 : 249000;
       const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       
       const res = await fetch(`${API_URL}/payments/create-membership-payos-url`, {
@@ -122,7 +122,7 @@ export default function SkinAnalysis() {
         body: JSON.stringify({
           amount,
           userId: currentUser.id,
-          membership: level === "VIP" ? "VIP" : "VIP",
+          membership: "VIP",
         }),
       });
       
@@ -533,81 +533,55 @@ export default function SkinAnalysis() {
             </p>
 
             <div className="pricing-cards-grid-row">
-              {/* Gói Cơ Bản */}
+              {/* Gói Free */}
               <div className="pricing-card">
-                <div className="pricing-card-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                    <polyline points="2 17 12 22 22 17" />
-                    <polyline points="2 12 12 17 22 12" />
-                  </svg>
-                </div>
-                <h3>Gói Cơ Bản (Basic)</h3>
-                <p className="pricing-card-desc">Kiểm tra da định kỳ cơ bản hàng tháng.</p>
-                <div className="pricing-card-price">
-                  <strong>150.000 đ</strong>
-                  <span>/ tháng</span>
-                </div>
-                <ul className="pricing-features-list">
-                  <li>✓ Phân tích 3 chỉ số da cơ bản</li>
-                  <li>✓ Gợi ý routine skincare cơ bản</li>
-                  <li>✓ Tối đa 2 lượt quét da / tháng</li>
-                  <li>✓ Lưu lịch sử quét 30 ngày</li>
+                <span className="plan-badge">Cơ bản</span>
+                <h3 className="plan-name">Free</h3>
+                <div className="plan-price"><span className="price-val">0đ</span><span className="price-period">/ vĩnh viễn</span></div>
+                <p className="plan-desc">Trải nghiệm các tính năng phân tích da và quản lý routine cơ bản.</p>
+                <ul className="plan-features">
+                  <li>✓ Quét ảnh da mặt AI cơ bản</li>
+                  <li>✓ Nhận báo cáo phân tích tổng quan</li>
+                  <li>✓ Thiết lập lộ trình skincare cơ bản</li>
                 </ul>
-                <button type="button" className="pricing-buy-btn" onClick={() => handleUpgrade("Basic")}>
-                  MUA NGAY
+                <button type="button" className="plan-btn" onClick={() => setShowPaywall(false)}>
+                  Bắt đầu ngay
                 </button>
               </div>
 
               {/* Gói Premium */}
-              <div className="pricing-card pricing-card--featured">
-                <div className="pricing-featured-badge">ĐƯỢC KHUYÊN DÙNG</div>
-                <div className="pricing-card-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                  </svg>
-                </div>
-                <h3>Gói Premium (VIP)</h3>
-                <p className="pricing-card-desc">Lựa chọn tốt nhất để cải thiện da chuyên sâu.</p>
-                <div className="pricing-card-price">
-                  <strong>299.000 đ</strong>
-                  <span>/ tháng</span>
-                </div>
-                <ul className="pricing-features-list">
-                  <li>✓ Phân tích sâu 10 chỉ số da AI</li>
-                  <li>✓ Gợi ý routine skincare chuẩn 100%</li>
-                  <li>✓ Không giới hạn số lượt quét da</li>
-                  <li>✓ Kết nối Bác sĩ Da Liễu trực tuyến</li>
-                  <li>✓ Biểu đồ theo dõi lịch sử trọn đời</li>
-                  <li>✓ Ưu đãi giảm 5% khi mua mỹ phẩm</li>
+              <div className="pricing-card pricing-card--featured premium-card">
+                <div className="premium-tag">Khuyên dùng</div>
+                <span className="plan-badge">Nâng cao</span>
+                <h3 className="plan-name">Premium</h3>
+                <div className="plan-price"><span className="price-val">99.000đ</span><span className="price-period">/ tháng</span></div>
+                <p className="plan-desc">Phân tích sâu hơn, gợi ý sản phẩm chi tiết & mở khóa routine nâng cao.</p>
+                <ul className="plan-features">
+                  <li>✓ Quét da AI chuyên sâu</li>
+                  <li>✓ Gợi ý thành phần mỹ phẩm chi tiết</li>
+                  <li>✓ Không giới hạn số lần phân tích</li>
+                  <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
                 </ul>
-                <button type="button" className="pricing-buy-btn" onClick={() => handleUpgrade("VIP")}>
-                  MUA NGAY
+                <button type="button" className="plan-btn featured" onClick={() => handleUpgrade("Premium")}>
+                  Nâng cấp Premium
                 </button>
               </div>
 
-              {/* Gói Spa */}
+              {/* Gói Professional */}
               <div className="pricing-card">
-                <div className="pricing-card-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                  </svg>
-                </div>
-                <h3>Spa / Doanh Nghiệp</h3>
-                <p className="pricing-card-desc">Tích hợp AI cho các spa và clinic thẩm mỹ.</p>
-                <div className="pricing-card-price">
-                  <strong>Liên Thế</strong>
-                </div>
-                <ul className="pricing-features-list">
-                  <li>✓ Tích hợp API quét da AI riêng</li>
-                  <li>✓ Tùy biến giao diện (White-label)</li>
-                  <li>✓ Khắc logo thương hiệu trên báo cáo</li>
-                  <li>✓ Thống kê phân tích tệp khách hàng</li>
-                  <li>✓ Hỗ trợ kỹ thuật ưu tiên 24/7</li>
+                <span className="plan-badge">Chuyên nghiệp</span>
+                <h3 className="plan-name">Professional</h3>
+                <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ tháng</span></div>
+                <p className="plan-desc">Phù hợp cho các chuyên gia da liễu hoặc spa chăm sóc khách hàng.</p>
+                <ul className="plan-features">
+                  <li>✓ Đầy đủ tính năng gói Premium</li>
+                  <li>✓ Báo cáo phân tích chuẩn y khoa PDF</li>
+                  <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
+                  <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
                 </ul>
-                <Link to="/contact" className="pricing-buy-btn pricing-buy-btn--contact">
-                  NHẬN BÁO GIÁ
-                </Link>
+                <button type="button" className="plan-btn" onClick={() => handleUpgrade("Professional")}>
+                  Đăng ký ngay
+                </button>
               </div>
             </div>
           </div>
