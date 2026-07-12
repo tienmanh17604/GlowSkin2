@@ -285,6 +285,21 @@ export default function Home({ videoReady = false }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
+  const handleMainVideoTimeUpdate = (e) => {
+    const video = e.currentTarget;
+    if (video.currentTime < 0.2) {
+      const parent = video.parentNode;
+      if (parent) {
+        const tags = parent.querySelectorAll(".vid-tag");
+        tags.forEach((tag) => {
+          tag.classList.remove("animate");
+          void tag.offsetWidth;
+          tag.classList.add("animate");
+        });
+      }
+    }
+  };
+
   // Dùng ref để track isAnimating mà không trigger re-render interval
   const isAnimatingRef = useRef(false);
 
@@ -314,7 +329,7 @@ export default function Home({ videoReady = false }) {
     }, 650);
   };
 
-  // Autoplay: xoay ngẫu nhiên mọi 2 giây — KHÔNG THỂ DỪNG
+  // Autoplay: xoay ngẫu nhiên mọi 3 giây — KHÔNG THỂ DỪNG
   useEffect(() => {
     const timer = setInterval(() => {
       if (isAnimatingRef.current) return;
@@ -329,7 +344,7 @@ export default function Home({ videoReady = false }) {
         isAnimatingRef.current = false;
         setIsAnimating(false);
       }, 650);
-    }, 2000);
+    }, 3000);
     return () => clearInterval(timer);
   }, []); // [] = tạo 1 lần, không bao giờ bị reset hay dừng
 
@@ -356,7 +371,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: "50%",
-        bottom: isMobile ? "22%" : "35%",
+        bottom: isMobile ? "26%" : "36%",
         transform: `translateX(-50%) scale(${isMobile ? 1.2 : 1.35})`,
         filter: "blur(0px)",
         opacity: 1,
@@ -368,7 +383,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: isMobile ? "22%" : "37%",
-        bottom: isMobile ? "28%" : "37%",
+        bottom: isMobile ? "28%" : "30%",
         transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
         filter: "blur(2px)",
         opacity: 0.55,
@@ -380,7 +395,7 @@ export default function Home({ videoReady = false }) {
       return {
         ...common,
         left: isMobile ? "78%" : "63%",
-        bottom: isMobile ? "28%" : "37%",
+        bottom: isMobile ? "28%" : "30%",
         transform: `translateX(-50%) scale(${isMobile ? 0.45 : 0.38})`,
         filter: "blur(2px)",
         opacity: 0.55,
@@ -391,7 +406,7 @@ export default function Home({ videoReady = false }) {
     return {
       ...common,
       left: "50%",
-      bottom: isMobile ? "28%" : "37%",
+      bottom: isMobile ? "28%" : "30%",
       transform: `translateX(-50%) scale(${isMobile ? 0.25 : 0.2})`,
       filter: "blur(12px)",
       opacity: 0.06,
@@ -500,7 +515,7 @@ export default function Home({ videoReady = false }) {
       </section>
 
       {/* 2. Features Section (Tính năng nổi bật) */}
-      <section 
+      <section
         className="features-interactive-3d"
         id="analysis"
         style={{
@@ -515,8 +530,6 @@ export default function Home({ videoReady = false }) {
           justifyContent: "center",
           boxSizing: "border-box",
         }}
-        onMouseEnter={() => setAutoplayPaused(true)}
-        onMouseLeave={() => setAutoplayPaused(false)}
       >
         {/* Grain overlay */}
         <div
@@ -543,7 +556,7 @@ export default function Home({ videoReady = false }) {
             position: "absolute",
             left: 0,
             right: 0,
-            top: "18%",
+            top: "15%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -555,13 +568,15 @@ export default function Home({ videoReady = false }) {
           <span
             style={{
               fontFamily: "'Plus Jakarta Sans', 'Inter', 'Montserrat', sans-serif",
-              fontSize: "clamp(80px, 16vw, 250px)",
+              fontSize: "clamp(80px, 16vw, 260px)",
               fontWeight: 900,
-              color: "rgba(255, 255, 255, 0.12)",
+              color: "rgba(255, 255, 255, 0.65)",
               lineHeight: 1,
-              letterSpacing: "-0.04em",
+              letterSpacing: "-0.05em",
               textTransform: "uppercase",
               whiteSpace: "nowrap",
+              textShadow: `0 15px 35px ${FEATURES[activeIndex].btnBg}33, 0 5px 15px ${FEATURES[activeIndex].btnBg}22`,
+              transition: "all 650ms cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           >
             GLOWSKIN
@@ -594,8 +609,8 @@ export default function Home({ videoReady = false }) {
           {FEATURES.map((item, index) => {
             const isActive = index === activeIndex;
             return (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 style={getStyle(index)}
                 className={`carousel-3d-card ${isActive ? "is-active" : ""}`}
                 onClick={() => isActive && navigate(item.to)}
@@ -623,7 +638,7 @@ export default function Home({ videoReady = false }) {
                     </svg>
                   </div>
                 </div>
-                
+
                 <div className="carousel-card-content" style={{ padding: "12px 14px", flexShrink: 0, background: "#ffffff", textAlign: "left" }}>
                   <h3 className="carousel-card-title" style={{ fontSize: isMobile ? "12px" : "14px", fontWeight: 700, fontStyle: "italic", margin: "0 0 3px 0", color: "#121318", fontFamily: "'Playfair Display', Georgia, serif", lineHeight: 1.2 }}>{item.title}</h3>
                   <p className="carousel-card-desc" style={{ fontSize: "10px", color: "#777", lineHeight: 1.3, margin: "0 0 8px 0" }}>{item.shortDesc}</p>
@@ -644,7 +659,7 @@ export default function Home({ videoReady = false }) {
             key={`tl-${activeIndex}`}
             style={{
               position: "absolute",
-              top: "15%",
+              top: "12%",
               left: "5%",
               width: "320px",
               zIndex: 15,
@@ -667,7 +682,7 @@ export default function Home({ videoReady = false }) {
             key={`tr-${activeIndex}`}
             style={{
               position: "absolute",
-              top: "15%",
+              top: "12%",
               right: "5%",
               width: "320px",
               zIndex: 15,
@@ -688,7 +703,7 @@ export default function Home({ videoReady = false }) {
         <div
           style={{
             position: "absolute",
-            bottom: "8%",
+            bottom: isMobile ? "8%" : "10%",
             left: "5%",
             zIndex: 60,
             maxWidth: isMobile ? "55%" : "280px",
@@ -707,7 +722,7 @@ export default function Home({ videoReady = false }) {
         <div
           style={{
             position: "absolute",
-            bottom: isMobile ? "10%" : "8%",
+            bottom: isMobile ? "8%" : "10%",
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
@@ -720,8 +735,8 @@ export default function Home({ videoReady = false }) {
             style={{
               width: "46px",
               height: "46px",
-              color: "white",
-              background: FEATURES[activeIndex].btnBg,
+              color: FEATURES[activeIndex].btnBg,
+              background: "rgba(255, 255, 255, 0.9)",
               border: "none",
               borderRadius: "50%",
               display: "flex",
@@ -744,8 +759,8 @@ export default function Home({ videoReady = false }) {
             style={{
               width: "46px",
               height: "46px",
-              color: "white",
-              background: FEATURES[activeIndex].btnBg,
+              color: FEATURES[activeIndex].btnBg,
+              background: "rgba(255, 255, 255, 0.9)",
               border: "none",
               borderRadius: "50%",
               display: "flex",
@@ -769,8 +784,8 @@ export default function Home({ videoReady = false }) {
         <div
           style={{
             position: "absolute",
-            bottom: "8%",
-            right: "5%",
+            bottom: isMobile ? "8%" : "10%",
+            right: isMobile ? "5%" : "9%",
             zIndex: 60,
           }}
         >
@@ -809,58 +824,264 @@ export default function Home({ videoReady = false }) {
         </div>
       </section>
 
-      {/* 3. Gallery Section (Khoảnh khắc Làm đẹp) */}
-      <section className="gallery" id="gallery">
-        <h2>Khoảnh khắc Làm đẹp</h2>
-        <p className="section-text">
-          Cảm hứng làm đẹp từ cộng đồng GlowSkin
-        </p>
-
-        <div className="gallery-track-wrap">
-          <div className="gallery-track">
-            {[...GALLERY_IMAGES, ...GALLERY_IMAGES].map((src, index) => (
-              <div key={`${src}-${index}`} className="gallery-item">
-                <img src={src} alt={`Gallery ${(index % GALLERY_IMAGES.length) + 1}`} />
-              </div>
-            ))}
-          </div>
+      {/* 3. How It Works Section */}
+      <section className="glowskin-premium-section glowskin-how-it-works" id="how-it-works">
+        <div className="section-header">
+          <span className="section-label">Lộ trình</span>
+          <h2 className="section-title">Cách Hoạt Động</h2>
+          <p className="section-subtitle">Chỉ với 4 bước đơn giản để thấu hiểu làn da bạn cùng công nghệ AI tiên tiến.</p>
         </div>
 
-        <div className="gallery-grid">
-          {GALLERY_IMAGES.slice(0, 6).map((src, index) => (
-            <div
-              key={src}
-              className="gallery-grid-item"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <img src={src} alt={`Inspiration ${index + 1}`} />
-              <div className="gallery-overlay">
-                <span>GlowSkin ✦</span>
-              </div>
-            </div>
-          ))}
+        <div className="how-it-works-steps">
+          <div className="step-card">
+            <div className="step-num">01</div>
+            <h3>Upload Selfie</h3>
+            <p>Chụp hoặc tải lên một bức ảnh cận cảnh khuôn mặt của bạn dưới ánh sáng tự nhiên.</p>
+            <div className="step-icon">📸</div>
+          </div>
+          <div className="step-connector">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </div>
+          <div className="step-card">
+            <div className="step-num">02</div>
+            <h3>Phân Tích AI</h3>
+            <p>Thuật toán học máy quét hơn 30 chỉ số và vấn đề da trong vài giây.</p>
+            <div className="step-icon">⚡</div>
+          </div>
+          <div className="step-connector">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </div>
+          <div className="step-card">
+            <div className="step-num">03</div>
+            <h3>Nhận Khuyến Nghị</h3>
+            <p>Nhận báo cáo phân tích chi tiết về loại da và đề xuất các thành phần phù hợp.</p>
+            <div className="step-icon">🔬</div>
+          </div>
+          <div className="step-connector">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </div>
+          <div className="step-card">
+            <div className="step-num">04</div>
+            <h3>Lộ Trình Hàng Ngày</h3>
+            <p>Theo dõi thói quen chăm sóc da sáng và tối được tối ưu hóa cho riêng bạn.</p>
+            <div className="step-icon">🌿</div>
+          </div>
         </div>
       </section>
 
-      {/* 4. Why Section (Tại sao chọn GlowSkin?) */}
-      <section className="why" id="community">
-        <h2>Tại sao chọn GlowSkin?</h2>
+      {/* 4. Showcase Section (AI Skincare and Nuvé Info Pages) */}
+      <section id="page1" className="page">
+        <div className="left-half">
+          <div className="floating-media float-vid1">
+            <video src="https://res.cloudinary.com/buevamso/video/upload/v1783824450/glowskin/showcase/float_vid1.mov" autoPlay loop muted playsInline />
+          </div>
+          <div className="floating-media float-vid2">
+            <video src="https://res.cloudinary.com/buevamso/video/upload/v1783824460/glowskin/showcase/float_vid2.mp4" autoPlay loop muted playsInline />
+          </div>
+          <div className="floating-media float-img1">
+            <img src="/Midjourney_  Close-up of face, dropper with liquid near nose, skincare product_.jpg" alt="Skincare Image 1" />
+          </div>
+          <div className="floating-media float-img2">
+            <img src="/IG_ @loverska_officiel.jpg" alt="Skincare Image 2" />
+          </div>
+          <div className="floating-media float-img3">
+            <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&q=80&auto=format&fit=crop" alt="Skincare Image 3" />
+          </div>
 
-        <div className="why-grid">
-          {WHY_ITEMS.map((item, index) => (
-            <div
-              key={item.title}
-              className="why-card"
-              style={{ animationDelay: `${index * 0.15}s` }}
-            >
-              <div className="why-card-image">
-                <img src={item.image} alt={item.title} />
-              </div>
-              <p>
-                {item.emoji} {item.title}
-              </p>
+          {/* Khung chứa video chính */}
+          <div className="video-frame">
+            <video
+              id="mainVideo"
+              src="https://res.cloudinary.com/buevamso/video/upload/v1783824448/glowskin/showcase/main_scan_video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              onTimeUpdate={handleMainVideoTimeUpdate}
+            />
+
+            <div className="vid-tag tag-sleep animate">
+              <span className="dot"></span>SLEEP WELL
             </div>
-          ))}
+            <div className="vid-tag tag-hydrate animate">
+              <span className="dot"></span>HYDRATE
+            </div>
+            <div className="vid-tag tag-stress animate">
+              <span className="dot"></span>LESS STRESS
+            </div>
+          </div>
+        </div>
+
+        {/* NỬA PHẢI */}
+        <div className="right-half">
+          <div className="grid-bg"></div>
+          <div className="aura-blob"></div>
+          <div className="decorative-ring">
+            <div className="dashed-circle"></div>
+            <div className="ring-text">AI<br />SCAN</div>
+          </div>
+          <div className="content-container">
+            <div className="text-block text-top">
+              <h2><span>AI</span> Skincare</h2>
+              <p>AI doesn't promise perfection - it observes, learns, and adapts. Every scan interprets the natural passage of your skin's time, highlighting areas for thoughtful care and balance.</p>
+            </div>
+            <div className="scanner-container">
+              <div className="scanner-line"></div>
+            </div>
+            <div className="text-block text-bottom">
+              <h2>Mindful <span>Beauty</span></h2>
+              <p>Meaning: we can't stop aging, but we can guide it with awareness, insight, and gentle personalization.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page2" className="page">
+        <div className="floating-tag tag-beautiful"><span className="tag-icon purple">✿</span> Beautiful</div>
+        <div className="floating-tag tag-healthy"><span className="tag-icon pink">♥</span> Healthy</div>
+        <div className="floating-tag tag-confident"><span className="tag-icon green">★</span> Confident</div>
+        <div className="floating-tag tag-glowing"><span className="tag-icon blue">✦</span> Glowing</div>
+        <div className="floating-tag tag-happy"><span className="tag-icon orange">😊</span> Happy</div>
+        <div className="center-text-block">
+          <h1>
+            GlowSkin helps you understand and<br />
+            care for your skin like never before.<br />
+            Get insights and tips backed by AI<br />
+            and real science <strong className="text-highlight">for your healthiest,<br />
+            happiest skin</strong>
+          </h1>
+        </div>
+      </section>
+
+
+
+      {/* 6. Testimonials Section */}
+      <section className="glowskin-premium-section glowskin-testimonials" id="testimonials">
+        <div className="section-header">
+          <span className="section-label">Đánh giá</span>
+          <h2 className="section-title">Khách Hàng Nói Gì</h2>
+          <p className="section-subtitle">Lắng nghe những chia sẻ chân thực từ hàng ngàn người dùng đã thay đổi làn da cùng GlowSkin.</p>
+        </div>
+
+        <div className="testimonials-carousel-wrapper">
+          <div className="testimonials-track">
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
+              <div className="test-user">
+                <div className="user-avatar text-avatar">MH</div>
+                <div className="user-meta">
+                  <strong>Minh Hằng</strong>
+                  <span>Hà Nội</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tôi rất ấn tượng với mục Đánh giá Mỹ phẩm. Trước khi mua sản phẩm nào tôi cũng vào tra thành phần và xem cộng đồng review, đỡ lãng phí tiền mua những món không hợp da."</p>
+              <div className="test-user">
+                <div className="user-avatar text-avatar">TL</div>
+                <div className="user-meta">
+                  <strong>Thùy Linh</strong>
+                  <span>TP. Hồ Chí Minh</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Lộ trình skincare khoa học, có thông báo nhắc nhở sáng tối cực tiện lợi. Giao diện app siêu đẹp, mượt mà và tạo cảm giác rất cao cấp khi sử dụng."</p>
+              <div className="test-user">
+                <div className="user-avatar text-avatar">DK</div>
+                <div className="user-meta">
+                  <strong>Đăng Khoa</strong>
+                  <span>Đà Nẵng</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
+              <div className="test-user">
+                <div className="user-avatar text-avatar">MH</div>
+                <div className="user-meta">
+                  <strong>Minh Hằng</strong>
+                  <span>Hà Nội</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Pricing Section */}
+      <section className="glowskin-premium-section glowskin-pricing" id="pricing">
+        <div className="section-header">
+          <span className="section-label">Bảng giá</span>
+          <h2 className="section-title">Gói Dịch Vụ</h2>
+          <p className="section-subtitle">Chọn lộ trình chăm sóc da phù hợp nhất với nhu cầu cải thiện làn da của bạn.</p>
+        </div>
+
+        <div className="pricing-grid">
+          <div className="pricing-card">
+            <span className="plan-badge">Cơ bản</span>
+            <h3 className="plan-name">Free</h3>
+            <div className="plan-price"><span className="price-val">0đ</span><span className="price-period">/ vĩnh viễn</span></div>
+            <p className="plan-desc">Trải nghiệm các tính năng phân tích da và quản lý routine cơ bản.</p>
+            <ul className="plan-features">
+              <li>✓ Quét ảnh da mặt AI cơ bản</li>
+              <li>✓ Nhận báo cáo phân tích tổng quan</li>
+              <li>✓ Thiết lập lộ trình skincare cơ bản</li>
+            </ul>
+            <button className="plan-btn" onClick={() => navigate("/analyze")}>Bắt đầu ngay</button>
+          </div>
+
+          <div className="pricing-card premium-card">
+            <div className="premium-tag">Khuyên dùng</div>
+            <span className="plan-badge">Nâng cao</span>
+            <h3 className="plan-name">Premium</h3>
+            <div className="plan-price"><span className="price-val">99.000đ</span><span className="price-period">/ tháng</span></div>
+            <p className="plan-desc">Phân tích sâu hơn, gợi ý sản phẩm chi tiết & mở khóa routine nâng cao.</p>
+            <ul className="plan-features">
+              <li>✓ Quét da AI chuyên sâu</li>
+              <li>✓ Gợi ý thành phần mỹ phẩm chi tiết</li>
+              <li>✓ Không giới hạn số lần phân tích</li>
+              <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
+            </ul>
+            <button className="plan-btn featured" onClick={() => navigate("/analyze")}>Nâng cấp Premium</button>
+          </div>
+
+          <div className="pricing-card">
+            <span className="plan-badge">Chuyên nghiệp</span>
+            <h3 className="plan-name">Professional</h3>
+            <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ tháng</span></div>
+            <p className="plan-desc">Phù hợp cho các chuyên gia da liễu hoặc spa chăm sóc khách hàng.</p>
+            <ul className="plan-features">
+              <li>✓ Đầy đủ tính năng gói Premium</li>
+              <li>✓ Báo cáo phân tích chuẩn y khoa PDF</li>
+              <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
+              <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
+            </ul>
+            <button className="plan-btn" onClick={() => navigate("/analyze")}>Đăng ký ngay</button>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. Final CTA Section */}
+      <section className="glowskin-final-cta">
+        <div className="cta-blobs">
+          <div className="blob blob-1"></div>
+          <div className="blob blob-2"></div>
+        </div>
+        <div className="cta-content">
+          <h2>Sẵn Sàng Đánh Thức<br />Tiềm Năng Làn Da Bạn?</h2>
+          <p>Tham gia cùng hơn 100,000+ người dùng thông thái đã sở hữu làn da khỏe đẹp vượt trội cùng GlowSkin.</p>
+          <button className="cta-gradient-btn" onClick={() => navigate("/analyze")}>
+            Khám phá làn da ngay
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
         </div>
       </section>
 

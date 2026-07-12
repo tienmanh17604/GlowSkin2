@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skincare - Premium Centered Layout</title>
+    <style>
+        /* ================= THIẾT LẬP CƠ BẢN ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .page {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            position: relative;
+        }
+
+        /* ================= TRANG 1 ================= */
+        .left-half {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8f6fc 0%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Khung chứa video chính */
+        .video-frame {
+            position: relative;
+            width: 80%;
+            max-width: 420px; 
+            height: 78vh;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 45px;
+            box-shadow: 0 40px 80px rgba(123, 66, 246, 0.08), 0 15px 30px rgba(0, 0, 0, 0.04);
+            transition: transform 0.5s ease;
+            z-index: 5;
+        }
+
+        .video-frame:hover {
+            transform: scale(1.01);
+        }
+
+        .video-frame video {
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Nhãn chữ nằm TRONG video */
+        .vid-tag {
+            position: absolute;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            background: transparent;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* Class kích hoạt animation (sẽ được JS xóa đi thêm lại liên tục khi video reset) */
+        .vid-tag.animate {
+            animation: fadeInTag 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .vid-tag .dot { 
+            width: 10px; 
+            height: 10px; 
+            background-color: #ffffff; 
+            border-radius: 50%; 
+            box-shadow: 0 0 12px #ffffff, 0 0 4px rgba(0,0,0,0.3); 
+        }
+
+        /* Tọa độ hiển thị trong video */
+        .tag-sleep   { top: 22%; right: 25%; }
+        .tag-sleep.animate { animation-delay: 1s; }
+
+        .tag-hydrate { bottom: 45%; left: 20%; }
+        .tag-hydrate.animate { animation-delay: 2s; }
+
+        .tag-stress  { bottom: 20%; right: 25%; }
+        .tag-stress.animate { animation-delay: 3s; }
+
+        @keyframes fadeInTag { 
+            from { opacity: 0; transform: scale(0.8) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); } 
+        }
+
+        /* ================= 3 ẢNH & 2 VIDEO THU NHỎ BAY LƠ LỬNG ================= */
+        .floating-media {
+            position: absolute;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+            border: 3px solid #fff;
+            background: #fff;
+            pointer-events: auto;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), z-index 0.3s ease;
+            z-index: 7;
+        }
+
+        .floating-media:hover {
+            transform: scale(1.15) !important;
+            z-index: 15;
+            box-shadow: 0 20px 40px rgba(123, 66, 246, 0.2);
+        }
+
+        .floating-media img, 
+        .floating-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .float-vid1 { width: 95px; height: 130px; top: 8%; left: 12%; animation: floatCloser1 6.5s ease-in-out infinite alternate; }
+        .float-vid2 { width: 90px; height: 120px; bottom: 12%; right: 10%; animation: floatCloser2 7.5s ease-in-out infinite alternate; }
+        .float-img1 { width: 80px; height: 110px; top: 40%; left: 8%; animation: floatCloser3 5.5s ease-in-out infinite alternate; }
+        .float-img2 { width: 95px; height: 95px; top: 14%; right: 12%; border-radius: 50%; animation: floatCloser4 8.5s ease-in-out infinite alternate; }
+        .float-img2 img { border-radius: 50%; }
+        .float-img3 { width: 85px; height: 115px; bottom: 16%; left: 14%; animation: floatCloser5 6s ease-in-out infinite alternate; }
+
+        @keyframes floatCloser1 { 0% { transform: translate(0, 0) rotate(-4deg); } 100% { transform: translate(15px, 12px) rotate(1deg); } }
+        @keyframes floatCloser2 { 0% { transform: translate(0, 0) rotate(5deg); } 100% { transform: translate(-12px, -15px) rotate(-1deg); } }
+        @keyframes floatCloser3 { 0% { transform: translate(0, 0) rotate(-2deg); } 100% { transform: translate(18px, -5px) rotate(3deg); } }
+        @keyframes floatCloser4 { 0% { transform: translate(0, 0) rotate(0deg); } 100% { transform: translate(-15px, 15px) rotate(-6deg); } }
+        @keyframes floatCloser5 { 0% { transform: translate(0, 0) rotate(3deg); } 100% { transform: translate(10px, -18px) rotate(-3deg); } }
+
+        /* NỬA PHẢI: KHÔNG GIAN AI - CHỮ CĂN GIỮA */
+        .right-half {
+            width: 50%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 5%;
+        }
+
+        .grid-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(#d5d5d5 1px, transparent 1px); background-size: 40px 40px; opacity: 0.4; z-index: 1; }
+        .aura-blob { position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, rgba(147, 85, 253, 0.15) 0%, rgba(255,255,255,0) 60%); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); filter: blur(50px); z-index: 2; animation: floatAura 8s infinite alternate ease-in-out; pointer-events: none; }
+        @keyframes floatAura { 0% { transform: translate(-50%, -40%) scale(0.9); opacity: 0.8; } 100% { transform: translate(-40%, -60%) scale(1.1); opacity: 1; } }
+
+        .decorative-ring { position: absolute; top: 15%; right: 15%; width: 120px; height: 120px; z-index: 5; display: flex; justify-content: center; align-items: center; opacity: 0; animation: fadeInRing 2s ease forwards; animation-delay: 2s; }
+        .dashed-circle { position: absolute; width: 100%; height: 100%; border: 2px dashed rgba(123, 66, 246, 0.4); border-radius: 50%; animation: spin 15s linear infinite; }
+        .ring-text { font-size: 0.7rem; font-weight: 700; color: #7b42f6; text-align: center; letter-spacing: 1px; line-height: 1.2; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInRing { to { opacity: 1; transform: scale(1); } from { opacity: 0; transform: scale(0.8); } }
+
+        .content-container { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; max-width: 460px; }
+        .text-block { text-align: center; }
+        .text-block h2 { font-size: 2.2rem; color: #111; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; text-transform: capitalize; }
+        .text-block h2 span { background: linear-gradient(135deg, #7b42f6, #c576f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .text-block p { font-size: 1.1rem; color: #555; line-height: 1.8; font-weight: 400; }
+        .text-top { opacity: 0; filter: blur(10px); animation: focusIn 1.2s ease forwards; }
+
+        .scanner-container { height: 100px; width: 2px; position: relative; margin: 35px 0; background: rgba(0, 0, 0, 0.05); border-radius: 2px; }
+        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: linear-gradient(to bottom, transparent, #7b42f6, #a77bf3); border-radius: 2px; animation: scanDown 2s ease-in-out forwards; animation-delay: 1.2s; }
+        .scanner-line::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 8px; height: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 15px 3px #7b42f6; }
+        .text-bottom { opacity: 0; filter: blur(10px); animation: focusIn 1.2s ease forwards; animation-delay: 3s; }
+
+        @keyframes focusIn { from { opacity: 0; filter: blur(10px); transform: translateY(20px); } to { opacity: 1; filter: blur(0px); transform: translateY(0); } }
+        @keyframes scanDown { from { height: 0%; } to { height: 100%; } }
+
+        /* ================= TRANG 2 ================= */
+        #page2 { justify-content: center; align-items: center; background-color: #ffffff; overflow: hidden; border-top: 1px solid #f0f0f0; }
+        .center-text-block { text-align: center; max-width: 900px; z-index: 10; padding: 0 20px; }
+        .center-text-block h1 { font-size: 3.5rem; color: #b3b3b3; line-height: 1.2; font-weight: 500; letter-spacing: -1px; }
+
+        .floating-tag { position: absolute; display: flex; align-items: center; gap: 6px; padding: 8px 18px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 30px; font-size: 1rem; font-weight: 600; color: #333; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); z-index: 20; animation: float 5s ease-in-out infinite; }
+        .tag-beautiful { top: 15%; left: 30%; animation-delay: 0s; }
+        .tag-healthy   { top: 10%; right: 25%; animation-delay: 1.5s; }
+        .tag-confident { top: 45%; left: 10%; animation-delay: 0.7s; }
+        .tag-glowing   { bottom: 15%; left: 45%; animation-delay: 2s; }
+        .tag-happy     { bottom: 10%; right: 20%; animation-delay: 1.2s; }
+        @keyframes float { 0% { transform: translate(0px, 0px) rotate(0deg); } 33% { transform: translate(5px, -15px) rotate(2deg); } 66% { transform: translate(-5px, 10px) rotate(-1deg); } 100% { transform: translate(0px, 0px) rotate(0deg); } }
+
+        @media (max-width: 768px) {
+            .page { flex-direction: column; height: auto; min-height: 100vh; }
+            .left-half { width: 100%; height: 75vh; padding: 20px; overflow: hidden; }
+            .video-frame { width: 95%; max-width: 330px; height: 90%; }
+            .floating-media { display: none; }
+            .right-half { width: 100%; height: auto; padding: 60px 20px; }
+            .aura-blob { width: 300px; height: 300px; }
+            .decorative-ring { top: 20px; right: 20px; width: 80px; height: 80px; }
+            .center-text-block h1 { font-size: 2rem; }
+            .floating-tag { font-size: 0.8rem; padding: 6px 12px; }
+            .vid-tag { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= TRANG 1 ================= -->
+    <section id="page1" class="page">
+        <div class="left-half">
+            
+            <div class="floating-media float-vid1"><video src="video_thumb1.mp4" autoplay loop muted playsinline></video></div>
+            <div class="floating-media float-vid2"><video src="video_thumb2.mp4" autoplay loop muted playsinline></video></div>
+            <div class="floating-media float-img1"><img src="image_thumb1.jpg" alt="Skincare Image 1"></div>
+            <div class="floating-media float-img2"><img src="image_thumb2.jpg" alt="Skincare Image 2"></div>
+            <div class="floating-media float-img3"><img src="image_thumb3.jpg" alt="Skincare Image 3"></div>
+
+            <!-- Khung chứa video chính -->
+            <div class="video-frame">
+                <!-- Đã gán id="mainVideo" để JavaScript điều khiển -->
+                <video id="mainVideo" src="5e4d90d4815e8a9dfe57a74765813f7b_720w.mp4" autoplay loop muted playsinline></video>
+                
+                <!-- Các thẻ chữ ban đầu có class animate để chạy ngay khi tải trang -->
+                <div class="vid-tag tag-sleep animate"><span class="dot"></span>SLEEP WELL</div>
+                <div class="vid-tag tag-hydrate animate"><span class="dot"></span>HYDRATE</div>
+                <div class="vid-tag tag-stress animate"><span class="dot"></span>LESS STRESS</div>
+            </div>
+
+        </div>
+
+        <!-- NỬA PHẢI -->
+        <div class="right-half">
+            <div class="grid-bg"></div>
+            <div class="aura-blob"></div>
+            <div class="decorative-ring"><div class="dashed-circle"></div><div class="ring-text">AI<br>SCAN</div></div>
+            <div class="content-container">
+                <div class="text-block text-top">
+                    <h2><span>AI</span> Skincare</h2>
+                    <p>AI doesn't promise perfection - it observes, learns, and adapts. Every scan interprets the natural passage of your skin's time, highlighting areas for thoughtful care and balance.</p>
+                </div>
+                <div class="scanner-container"><div class="scanner-line"></div></div>
+                <div class="text-block text-bottom">
+                    <h2>Mindful <span>Beauty</span></h2>
+                    <p>Meaning: we can't stop aging, but we can guide it with awareness, insight, and gentle personalization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TRANG 2 ================= -->
+    <section id="page2" class="page">
+        <div class="floating-tag tag-beautiful">🌸 Beautiful</div>
+        <div class="floating-tag tag-healthy">💗 Healthy</div>
+        <div class="floating-tag tag-confident">⭐ Confident</div>
+        <div class="floating-tag tag-glowing">✨ Glowing</div>
+        <div class="floating-tag tag-happy">😊 Happy</div>
+        <div class="center-text-block">
+            <h1>Nuvé helps you understand and<br>care for your skin like never before.<br>Get insights and tips backed by AI<br>and real science for your healthiest,<br>happiest skin</h1>
+        </div>
+    </section>
+
+    <!-- ================= JAVASCRIPT ĐỒNG BỘ CHỮ CHẠY LẠI THEO VIDEO ================= -->
+    <script>
+        const video = document.getElementById('mainVideo');
+        const tags = document.querySelectorAll('.vid-tag');
+
+        // Lắng nghe sự kiện mỗi khi video đổi tiến trình thời gian
+        video.addEventListener('timeupdate', function() {
+            // Khi video chuẩn bị lặp lại (thời gian hiện tại nhỏ hơn 0.2 giây đầu tiên)
+            if (video.currentTime < 0.2) {
+                tags.forEach(tag => {
+                    // Xóa class 'animate' để hủy animation cũ
+                    tag.classList.remove('animate');
+                    
+                    // Kỹ thuật "trigger reflow" buộc trình duyệt cập nhật lại DOM ngay lập tức
+                    void tag.offsetWidth; 
+                    
+                    // Thêm lại class 'animate' để kích hoạt hiệu ứng chạy từ đầu
+                    tag.classList.add('animate');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
