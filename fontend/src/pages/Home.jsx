@@ -997,13 +997,13 @@ export default function Home({ videoReady = false }) {
             <video src="https://res.cloudinary.com/buevamso/video/upload/v1783824460/glowskin/showcase/float_vid2.mp4" autoPlay loop muted playsInline />
           </div>
           <div className="floating-media float-img1">
-            <img src="/Midjourney_  Close-up of face, dropper with liquid near nose, skincare product_.jpg" alt="Hình ảnh chăm sóc da 1" />
+            <img src="https://res.cloudinary.com/buevamso/image/upload/v1783845211/glowskin/showcase/float_img1.jpg" alt="Hình ảnh chăm sóc da 1" />
           </div>
           <div className="floating-media float-img2">
-            <img src="/IG_ @loverska_officiel.jpg" alt="Hình ảnh chăm sóc da 2" />
+            <img src="https://res.cloudinary.com/buevamso/image/upload/v1783845211/glowskin/showcase/float_img2.jpg" alt="Hình ảnh chăm sóc da 2" />
           </div>
           <div className="floating-media float-img3">
-            <img src="/A simple skincare pack.jpg" alt="Hình ảnh chăm sóc da 3" />
+            <img src="https://res.cloudinary.com/buevamso/image/upload/v1783845213/glowskin/showcase/float_img3.jpg" alt="Hình ảnh chăm sóc da 3" />
           </div>
           <div className="floating-media float-img4">
             <img src="https://res.cloudinary.com/buevamso/image/upload/v1783830706/glowskin/showcase/float_img4.jpg" alt="Hình ảnh chăm sóc da 4" />
