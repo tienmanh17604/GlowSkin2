@@ -3197,7 +3197,7 @@ footer h3 {
 .testimonials-track {
   display: flex;
   gap: 30px;
-  animation: marqueeScroll 18s linear infinite; /* Speeded up from 25s to 18s */
+  animation: marqueeScroll 38s linear infinite; /* Adjusted to 38s for gentle, smooth reading speed */
   width: max-content;
 }
 

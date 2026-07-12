@@ -1093,6 +1093,7 @@ export default function Home({ videoReady = false }) {
 
         <div className="testimonials-carousel-wrapper">
           <div className="testimonials-track">
+            {/* --- LẦN 1 --- */}
             <div className="testimonial-card">
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
@@ -1128,12 +1129,102 @@ export default function Home({ videoReady = false }) {
             </div>
             <div className="testimonial-card">
               <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Trước đây da tôi rất nhạy cảm, dễ lên mụn và dùng gì cũng kích ứng. Từ ngày theo lộ trình cá nhân hóa của AI GlowSkin, da đã khỏe lên rất nhiều và giảm mụn đến 80%."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80" alt="Lan Anh" />
+                <div className="user-meta">
+                  <strong>Lan Anh</strong>
+                  <span>Hải Phòng</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tôi là nam giới nên trước đây ít khi để ý chăm sóc da. Nhờ có GlowSkin hướng dẫn từng bước đơn giản, tôi đã tự thiết lập được thói quen và da đỡ sạm đen hơn hẳn."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80" alt="Hoàng Nam" />
+                <div className="user-meta">
+                  <strong>Hoàng Nam</strong>
+                  <span>Cần Thơ</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tính năng phân tích độ ẩm và chấm điểm da hàng ngày giúp tôi theo dõi tiến trình cải thiện da rất trực quan. Một ứng dụng tuyệt vời cho bất kỳ ai muốn chăm sóc da nghiêm túc."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80" alt="Phương Trinh" />
+                <div className="user-meta">
+                  <strong>Phương Trinh</strong>
+                  <span>Nha Trang</span>
+                </div>
+              </div>
+            </div>
+
+            {/* --- LẦN 2 (DUPLICATE ĐỂ CHẠY LIÊN TỤC KHÔNG ĐỨT QUÃNG) --- */}
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
               <p className="test-quote">"Nhờ có phân tích da AI của GlowSkin, tôi mới phát hiện ra da mình bị thiếu nước trầm trọng chứ không phải da dầu thông thường. Routine mới giúp da tôi căng bóng rõ rệt sau 2 tuần!"</p>
               <div className="test-user">
                 <img className="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Minh Hằng" />
                 <div className="user-meta">
                   <strong>Minh Hằng</strong>
                   <span>Hà Nội</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tôi rất ấn tượng với mục Đánh giá Mỹ phẩm. Trước khi mua sản phẩm nào tôi cũng vào tra thành phần và xem cộng đồng review, đỡ lãng phí tiền mua những món không hợp da."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80" alt="Thùy Linh" />
+                <div className="user-meta">
+                  <strong>Thùy Linh</strong>
+                  <span>TP. Hồ Chí Minh</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Lộ trình skincare khoa học, có thông báo nhắc nhở sáng tối cực tiện lợi. Giao diện app siêu đẹp, mượt mà và tạo cảm giác rất cao cấp khi sử dụng."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80" alt="Đăng Khoa" />
+                <div className="user-meta">
+                  <strong>Đăng Khoa</strong>
+                  <span>Đà Nẵng</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Trước đây da tôi rất nhạy cảm, dễ lên mụn và dùng gì cũng kích ứng. Từ ngày theo lộ trình cá nhân hóa của AI GlowSkin, da đã khỏe lên rất nhiều và giảm mụn đến 80%."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80" alt="Lan Anh" />
+                <div className="user-meta">
+                  <strong>Lan Anh</strong>
+                  <span>Hải Phòng</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tôi là nam giới nên trước đây ít khi để ý chăm sóc da. Nhờ có GlowSkin hướng dẫn từng bước đơn giản, tôi đã tự thiết lập được thói quen và da đỡ sạm đen hơn hẳn."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80" alt="Hoàng Nam" />
+                <div className="user-meta">
+                  <strong>Hoàng Nam</strong>
+                  <span>Cần Thơ</span>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-card">
+              <div className="test-rating">⭐⭐⭐⭐⭐</div>
+              <p className="test-quote">"Tính năng phân tích độ ẩm và chấm điểm da hàng ngày giúp tôi theo dõi tiến trình cải thiện da rất trực quan. Một ứng dụng tuyệt vời cho bất kỳ ai muốn chăm sóc da nghiêm túc."</p>
+              <div className="test-user">
+                <img className="user-avatar" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80" alt="Phương Trinh" />
+                <div className="user-meta">
+                  <strong>Phương Trinh</strong>
+                  <span>Nha Trang</span>
                 </div>
               </div>
             </div>
