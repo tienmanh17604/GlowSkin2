@@ -14,15 +14,15 @@ export default function SplashScreen({ onFinish, onVideoStart }) {
     return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
   }
 
-  // Stagger delay 80ms giữa các tấm để tạo nhịp điệu trượt so le nhanh và mượt mà
+  // Stagger delay 150ms giữa các tấm để tạo nhịp điệu trượt so le chậm rãi và sang trọng
   function getPanelDelay(i) {
     const half = PANEL_COUNT / 2;
     if (i < half) {
-      // Trái: i=1 (gần tâm) → 0ms, i=0 (ngoài cùng) → 80ms
-      return (half - 1 - i) * 80;
+      // Trái: i=1 (gần tâm) → 0ms, i=0 (ngoài cùng) → 150ms
+      return (half - 1 - i) * 150;
     } else {
-      // Phải: i=2 (gần tâm) → 0ms, i=3 (ngoài cùng) → 80ms
-      return (i - half) * 80;
+      // Phải: i=2 (gần tâm) → 0ms, i=3 (ngoài cùng) → 150ms
+      return (i - half) * 150;
     }
   }
 
@@ -44,7 +44,7 @@ export default function SplashScreen({ onFinish, onVideoStart }) {
           setPhase("revealing");
           if (onVideoStart) onVideoStart(); // Video starts as panels begin to slide open
         }, 300);
-        setTimeout(() => onFinish(), 1100); // 300ms delay + 800ms slide transition = 1100ms
+        setTimeout(() => onFinish(), 2300); // 300ms delay + 150ms max stagger + 1800ms slide transition = 2250ms (rounded to 2300ms)
       }
     }
 
@@ -79,7 +79,7 @@ export default function SplashScreen({ onFinish, onVideoStart }) {
             if (animRef.current) cancelAnimationFrame(animRef.current);
             setPhase("revealing");
             if (onVideoStart) onVideoStart(); // Video starts immediately on skip
-            setTimeout(() => onFinish(), 1400);
+            setTimeout(() => onFinish(), 2100); // 150ms max stagger + 1800ms transition = 1950ms (rounded to 2100ms)
           }}
         >
           Skip

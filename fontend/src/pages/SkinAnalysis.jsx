@@ -40,6 +40,55 @@ function formatMessage(text) {
   });
 }
 
+function parseAnalysis(text) {
+  const sections = {
+    overview: "",
+    routine: "",
+    ingredients: "",
+    warning: ""
+  };
+  
+  if (!text) return sections;
+  
+  const overviewIndex = text.indexOf("===OVERVIEW===");
+  const routineIndex = text.indexOf("===ROUTINE===");
+  const ingredientsIndex = text.indexOf("===INGREDIENTS===");
+  const warningIndex = text.indexOf("===WARNING===");
+  
+  if (overviewIndex !== -1) {
+    const start = overviewIndex + "===OVERVIEW===".length;
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length));
+    sections.overview = text.slice(start, end).trim();
+  } else {
+    // Fallback if ===OVERVIEW=== tag is missing, take everything up to the next tag
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length));
+    sections.overview = text.slice(0, end).trim();
+  }
+  
+  if (routineIndex !== -1) {
+    const start = routineIndex + "===ROUTINE===".length;
+    const end = ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length);
+    sections.routine = text.slice(start, end).trim();
+  }
+  
+  if (ingredientsIndex !== -1) {
+    const start = ingredientsIndex + "===INGREDIENTS===".length;
+    const end = warningIndex !== -1 ? warningIndex : text.length;
+    sections.ingredients = text.slice(start, end).trim();
+  }
+  
+  if (warningIndex !== -1) {
+    const start = warningIndex + "===WARNING===".length;
+    sections.warning = text.slice(start).trim();
+  }
+  
+  if (!sections.overview) {
+    sections.overview = text;
+  }
+  
+  return sections;
+}
+
 export default function SkinAnalysis() {
   const { products, currentUser, logout, setIsLoginOpen, updateUserMembership } = useApp();
   const videoRef = useRef(null);
@@ -57,6 +106,8 @@ export default function SkinAnalysis() {
   const [loading, setLoading] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentAnalysisSections, setCurrentAnalysisSections] = useState(null);
+  const [flowStep, setFlowStep] = useState(null); // null | "routine_prompt" | "ingredients_prompt" | "warning_prompt" | "completed"
 
   // Sync scanCount and showPaywall state on mount and currentUser changes
   useEffect(() => {
@@ -161,9 +212,12 @@ export default function SkinAnalysis() {
   }, [messages, loading]);
 
   const analysisText = useMemo(() => {
+    if (currentAnalysisSections) {
+      return `${currentAnalysisSections.overview} ${currentAnalysisSections.routine} ${currentAnalysisSections.ingredients} ${currentAnalysisSections.warning}`;
+    }
     const analysis = [...messages].reverse().find((m) => m.role === "assistant" && !m.isError);
     return analysis?.content || "";
-  }, [messages]);
+  }, [messages, currentAnalysisSections]);
 
   const recommendations = useMemo(() => {
     if (!analysisText) return null;
@@ -267,13 +321,17 @@ export default function SkinAnalysis() {
 
     try {
       const skinAnalysis = await analyzeSkinImage(dataUrl);
+      const parsed = parseAnalysis(skinAnalysis.content);
+      setCurrentAnalysisSections(parsed);
+
       const botMsg = {
         id: Date.now() + 1,
         role: "assistant",
-        content: skinAnalysis.content,
+        content: parsed.overview + "\n\n**Bạn có muốn gợi ý Routine với tình trạng da bạn không?**",
         isDemo: skinAnalysis.isDemo,
       };
       setMessages((prev) => [...prev, botMsg]);
+      setFlowStep("routine_prompt");
       
       // Increment and save scan count on successful analysis
       localStorage.setItem("scanCount_" + currentUser.id, String(scans + 1));
@@ -292,11 +350,134 @@ export default function SkinAnalysis() {
     }
   };
 
+  const handleInteractiveResponse = useCallback((responseType) => {
+    if (!currentAnalysisSections) return;
+    
+    const userText = responseType === "yes" ? "Có" : "Không";
+    const userMsg = {
+      id: Date.now(),
+      role: "user",
+      content: userText,
+    };
+    
+    setMessages((prev) => [...prev, userMsg]);
+    setLoading(true);
+    
+    setTimeout(() => {
+      setLoading(false);
+      
+      if (flowStep === "routine_prompt") {
+        if (responseType === "yes") {
+          const content = (currentAnalysisSections.routine || "Hiện tại không tìm thấy Routine gợi ý cụ thể.") + 
+            "\n\n**Bạn có muốn tôi đưa ra những Thành phần nên dùng và nên tránh với tình trạng da bạn không?**";
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content,
+            }
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content: "Vâng, tôi hiểu.\n\n**Bạn có muốn tôi đưa ra những Thành phần nên dùng và nên tránh với tình trạng da bạn không?**",
+            }
+          ]);
+        }
+        setFlowStep("ingredients_prompt");
+      }
+      
+      else if (flowStep === "ingredients_prompt") {
+        if (responseType === "yes") {
+          const content = (currentAnalysisSections.ingredients || "Hiện tại không tìm thấy thành phần gợi ý cụ thể.") + 
+            "\n\n**Bạn có muốn tôi đưa ra những thành phần dễ gây kích ứng với da bạn không?**";
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content,
+            }
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content: "Vâng, tôi hiểu.\n\n**Bạn có muốn tôi đưa ra những thành phần dễ gây kích ứng với da bạn không?**",
+            }
+          ]);
+        }
+        setFlowStep("warning_prompt");
+      }
+      
+      else if (flowStep === "warning_prompt") {
+        if (responseType === "yes") {
+          const content = (currentAnalysisSections.warning || "Không phát hiện thành phần đặc biệt nhạy cảm nào đối với da bạn.") + 
+            "\n\nChúc bạn có một làn da thật khỏe đẹp! Bạn có câu hỏi nào khác cần tôi giải đáp không?";
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content,
+            }
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: Date.now() + 1,
+              role: "assistant",
+              content: "Vâng, tôi hiểu. Chúc bạn có một làn da thật khỏe đẹp! Bạn có câu hỏi nào khác cần tôi giải đáp không?",
+            }
+          ]);
+        }
+        setFlowStep("completed");
+      }
+    }, 800);
+  }, [currentAnalysisSections, flowStep]);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
     const userText = input.trim();
+
+    // Intercept user's yes/no text input if in active flow step
+    if (flowStep && flowStep !== "completed") {
+      const cleanText = userText.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, "").trim();
+      const isYes = ["có", "co", "yes", "y", "đúng", "dung", "đồng ý", "dong y", "ok", "được", "duc"].includes(cleanText);
+      const isNo = ["không", "khong", "no", "n", "chưa", "chua", "hủy", "huy"].includes(cleanText);
+      
+      if (isYes) {
+        setInput("");
+        handleInteractiveResponse("yes");
+        return;
+      } else if (isNo) {
+        setInput("");
+        handleInteractiveResponse("no");
+        return;
+      }
+    }
+
+    // Force Login Check for custom follow-up questions
+    if (!currentUser) {
+      setIsLoginOpen(true);
+      return;
+    }
+
+    // Block custom follow-up questions for Free membership users and show Paywall
+    if (currentUser.membership === "Free") {
+      setShowPaywall(true);
+      return;
+    }
+
     const userMsg = {
       id: Date.now(),
       role: "user",
@@ -342,6 +523,8 @@ export default function SkinAnalysis() {
     setMessages([]);
     setInput("");
     setCameraError("");
+    setFlowStep(null);
+    setCurrentAnalysisSections(null);
   };
 
   const hasAnalysis = Boolean(recommendations?.products.length);
@@ -477,6 +660,25 @@ export default function SkinAnalysis() {
               </div>
             )}
           </div>
+
+          {flowStep && flowStep !== "completed" && !loading && (
+            <div className="analyze-quick-replies">
+              <button
+                type="button"
+                className="quick-reply-btn quick-reply-btn--yes"
+                onClick={() => handleInteractiveResponse("yes")}
+              >
+                Có
+              </button>
+              <button
+                type="button"
+                className="quick-reply-btn quick-reply-btn--no"
+                onClick={() => handleInteractiveResponse("no")}
+              >
+                Không
+              </button>
+            </div>
+          )}
 
           <form className="analyze-input-form" onSubmit={handleSendMessage}>
             {hasAnalysis && (

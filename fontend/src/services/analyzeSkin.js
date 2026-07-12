@@ -1,35 +1,53 @@
 const SYSTEM_PROMPT = `Bạn là chuyên gia skincare AI của GlowSkin. Nhiệm vụ: phân tích da mặt từ ảnh người dùng gửi.
 
-Trả lời bằng tiếng Việt, thân thiện và chuyên nghiệp. Cấu trúc phân tích:
+Trả lời bằng tiếng Việt, thân thiện và chuyên nghiệp.
+Bạn PHẢI trình bày kết quả phân tích theo đúng cấu trúc và sử dụng các thẻ phân chia chính xác như sau:
+
+===OVERVIEW===
+## Kết quả phân tích da mặt ✨
 1. **Loại da** (dầu/khô/hỗn hợp/nhạy cảm/bình thường)
 2. **Tình trạng da** (mụn, thâm, lỗ chân lông, nếp nhăn, mất nước...)
 3. **Điểm mạnh** của làn da
+
+===ROUTINE===
 4. **Routine gợi ý** (sáng/tối, từng bước cụ thể)
+
+===INGREDIENTS===
 5. **Thành phần nên dùng** và nên tránh
-6. **Lưu ý** — đây chỉ là tham khảo, không thay thế bác sĩ da liễu.
 
-Nếu ảnh không rõ khuôn mặt, hãy nhẹ nhàng yêu cầu ảnh rõ hơn.`;
+===WARNING===
+6. **Thành phần dễ gây kích ứng** đối với làn da này (nếu có) và lý do tại sao nên tránh
 
-const DEMO_ANALYSIS = `## Kết quả phân tích da mặt ✨
+Chú ý: Giữ nguyên các thẻ ===OVERVIEW===, ===ROUTINE===, ===INGREDIENTS===, và ===WARNING=== viết hoa chính xác. Nếu ảnh không rõ khuôn mặt, hãy nhẹ nhàng yêu cầu ảnh rõ hơn.`;
 
-**Loại da:** Da hỗn hợp — vùng chữ T hơi dầu, hai bên má bình thường.
+const DEMO_ANALYSIS = `===OVERVIEW===
+## Kết quả phân tích da mặt ✨
 
-**Tình trạng da:**
+**1. Loại da:** Da hỗn hợp — vùng chữ T hơi dầu, hai bên má bình thường.
+
+**2. Tình trạng da:**
 - Lỗ chân lông hơi to ở vùng mũi và trán
 - Một vài đốm thâm nhẹ sau mụn
 - Da có dấu hiệu thiếu ẩm ở vùng má
 
-**Điểm mạnh:** Nền da tương đối đều màu, ít viêm đỏ.
+**3. Điểm mạnh:** Nền da tương đối đều màu, ít viêm đỏ.
 
+===ROUTINE===
 **Routine gợi ý:**
 - *Sáng:* Sữa rửa mặt dịu nhẹ → Toner cân bằng → Serum Vitamin C → Kem dưỡng ẩm → Kem chống nắng SPF 50
 - *Tối:* Tẩy trang → Sữa rửa mặt → Toner → Serum Niacinamide/BHA (3x/tuần) → Kem dưỡng phục hồi
 
+===INGREDIENTS===
 **Thành phần nên dùng:** Niacinamide, Hyaluronic Acid, Vitamin C, Ceramide
 
 **Nên tránh:** Rượu cồn cao, hương liệu mạnh nếu da nhạy cảm
 
-**Lưu ý:** Đây là phân tích demo (chưa kết nối API). Thêm \`VITE_GEMINI_API_KEY\` vào file \`.env\` để dùng AI thật.`;
+===WARNING===
+**Các thành phần dễ gây kích ứng với làn da của bạn:**
+- **Cồn khô (Alcohol Denat / Ethanol):** Dễ làm mất đi lớp màng bảo vệ tự nhiên, khiến hai bên má bị khô rát.
+- **Hương liệu nhân tạo (Fragrance):** Có thể làm tăng nguy cơ kích ứng cho các nốt mụn sẵn có.
+- **Dầu khoáng (Mineral Oil):** Rất dễ gây bít tắc thêm vùng lỗ chân lông to ở cánh mũi và trán.
+- **Chất hoạt động bề mặt mạnh (SLS/SLES):** Gây cảm giác khô căng sau khi rửa mặt.`;
 
 function hasApiKey() {
   return Boolean(import.meta.env.VITE_GEMINI_API_KEY);
