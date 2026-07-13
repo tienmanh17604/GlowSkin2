@@ -467,9 +467,8 @@ app.post("/api/payments/create-payos-url", async (req, res) => {
     // PayOS yêu cầu orderCode là số nguyên
     const orderCode = parseInt(orderId.replace(/\D/g, "").slice(-9)) || Date.now() % 1000000000;
 
-    const protocol = req.headers["x-forwarded-proto"] || "http";
-    const host = req.headers.host;
-    const baseUrl = process.env.FRONTEND_URL || `${protocol}://${host}`;
+    const origin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer).origin : null);
+    const baseUrl = process.env.FRONTEND_URL || origin || "http://localhost:5173";
 
     const paymentLinkData = {
       orderCode,
@@ -493,9 +492,8 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
     const { amount, userId, membership } = req.body;
     const orderCode = Date.now() % 1000000000;
     
-    const protocol = req.headers["x-forwarded-proto"] || "http";
-    const host = req.headers.host;
-    const baseUrl = process.env.FRONTEND_URL || `${protocol}://${host}`;
+    const origin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer).origin : null);
+    const baseUrl = process.env.FRONTEND_URL || origin || "http://localhost:5173";
     
     const paymentLinkData = {
       orderCode,

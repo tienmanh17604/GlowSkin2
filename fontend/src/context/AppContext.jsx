@@ -340,17 +340,12 @@ export function AppProvider({ children }) {
   const updateUserMembership = async (userId, newMembership) => {
     // Optimistic UI update
     setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id === userId) {
-          const updated = { ...u, membership: newMembership };
-          if (currentUser && currentUser.id === userId) {
-            setCurrentUser(updated);
-          }
-          return updated;
-        }
-        return u;
-      })
+      prev.map((u) => (u.id === userId ? { ...u, membership: newMembership } : u))
     );
+
+    if (currentUser && currentUser.id === userId) {
+      setCurrentUser((prev) => (prev ? { ...prev, membership: newMembership } : null));
+    }
 
     try {
       await fetch(`${API_URL}/users/${userId}/membership`, {
