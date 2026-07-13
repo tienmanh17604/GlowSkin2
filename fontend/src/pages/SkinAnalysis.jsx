@@ -150,7 +150,6 @@ export default function SkinAnalysis() {
       setSearchParams(searchParams);
       setShowPaywall(false);
     } else if (paymentStatus === "cancel") {
-      alert("Bạn đã hủy thanh toán gói hội viên. Bạn có thể thử lại bất cứ lúc nào!");
       searchParams.delete("paymentStatus");
       searchParams.delete("userId");
       setSearchParams(searchParams);
