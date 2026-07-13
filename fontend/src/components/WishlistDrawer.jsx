@@ -1,9 +1,11 @@
 import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { formatPrice } from "../data/products";
 import "./WishlistDrawer.css";
 
 export default function WishlistDrawer() {
+  const navigate = useNavigate();
   const {
     products,
     wishlist,
@@ -82,7 +84,14 @@ export default function WishlistDrawer() {
           ) : (
             <div className="wishlist-items-list">
               {wishlistedProducts.map((product) => (
-                <div key={product.id} className="wishlist-item-card">
+                <div
+                  key={product.id}
+                  className="wishlist-item-card"
+                  onClick={() => {
+                    navigate(`/products/${product.id}`);
+                    setIsWishlistOpen(false);
+                  }}
+                >
                   <div className="wishlist-item-img-wrapper">
                     <img
                       src={product.image}
@@ -99,7 +108,10 @@ export default function WishlistDrawer() {
                       <button
                         type="button"
                         className="wishlist-item-remove-btn"
-                        onClick={() => toggleWishlist(product.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(product.id);
+                        }}
                       >
                         Xoá
                       </button>
