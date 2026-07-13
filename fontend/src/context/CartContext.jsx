@@ -1,67 +1,125 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useMemo, useState, useCallback } from "react";
 import { useApp } from "./AppContext";
 
 const CartContext = createContext(null);
-const STORAGE_KEY = "glowskin-cart";
-
-function loadCart() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  } catch {
-    return [];
-  }
-}
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(loadCart);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const { currentUser } = useApp();
-  const [prevUser, setPrevUser] = useState(currentUser);
+  const currentUserId = currentUser ? (currentUser._id || currentUser.id) : null;
 
-  // Clear cart upon logging out
-  useEffect(() => {
-    if (prevUser && !currentUser) {
-      setItems([]);
+  // Track the user ID that the items state currently belongs to
+  const [cartUserId, setCartUserId] = useState(currentUserId);
+  const [items, setItems] = useState(() => {
+    try {
+      const session = localStorage.getItem("glowskin-currentuser");
+      const user = session ? JSON.parse(session) : null;
+      const key = user
+        ? `glowskin-cart-${user._id || user.id}`
+        : "glowskin-cart-guest";
+      const saved = localStorage.getItem(key);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
-    setPrevUser(currentUser);
-  }, [currentUser, prevUser]);
+  });
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const addToCart = (product, quantity = 1) => {
+  // Adjust state during render when the current user changes (login/logout/switch)
+  if (currentUserId !== cartUserId) {
+    setCartUserId(currentUserId);
+
+    let loadedCart = [];
+    if (currentUserId) {
+      // User logged in!
+      const userKey = `glowskin-cart-${currentUserId}`;
+      try {
+        const saved = localStorage.getItem(userKey);
+        loadedCart = saved ? JSON.parse(saved) : [];
+      } catch (err) {
+        console.error("Lỗi đọc giỏ hàng user:", err);
+      }
+
+      // Merge current items (which are guest items) into user's cart
+      const mergedCart = [...loadedCart];
+      items.forEach((guestItem) => {
+        const existingIndex = mergedCart.findIndex((item) => item.id === guestItem.id);
+        if (existingIndex > -1) {
+          mergedCart[existingIndex].quantity += guestItem.quantity;
+        } else {
+          mergedCart.push(guestItem);
+        }
+      });
+
+      loadedCart = mergedCart;
+      localStorage.setItem(userKey, JSON.stringify(loadedCart));
+      localStorage.removeItem("glowskin-cart-guest");
+    } else {
+      // User logged out! Clear items and guest cart
+      loadedCart = [];
+      localStorage.removeItem("glowskin-cart-guest");
+    }
+
+    setItems(loadedCart);
+  }
+
+  const addToCart = useCallback((product, quantity = 1) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
+      let updated;
       if (existing) {
-        return prev.map((item) =>
+        updated = prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
+      } else {
+        updated = [...prev, { ...product, quantity }];
       }
-      return [...prev, { ...product, quantity }];
+      const key = currentUser
+        ? `glowskin-cart-${currentUser._id || currentUser.id}`
+        : "glowskin-cart-guest";
+      localStorage.setItem(key, JSON.stringify(updated));
+      return updated;
     });
-  };
+  }, [currentUser]);
 
-  const removeFromCart = (productId) => {
-    setItems((prev) => prev.filter((item) => item.id !== productId));
-  };
+  const removeFromCart = useCallback((productId) => {
+    setItems((prev) => {
+      const updated = prev.filter((item) => item.id !== productId);
+      const key = currentUser
+        ? `glowskin-cart-${currentUser._id || currentUser.id}`
+        : "glowskin-cart-guest";
+      localStorage.setItem(key, JSON.stringify(updated));
+      return updated;
+    });
+  }, [currentUser]);
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = useCallback((productId, quantity) => {
     if (quantity < 1) {
       removeFromCart(productId);
       return;
     }
-    setItems((prev) =>
-      prev.map((item) =>
+    setItems((prev) => {
+      const updated = prev.map((item) =>
         item.id === productId ? { ...item, quantity } : item
-      )
-    );
-  };
+      );
+      const key = currentUser
+        ? `glowskin-cart-${currentUser._id || currentUser.id}`
+        : "glowskin-cart-guest";
+      localStorage.setItem(key, JSON.stringify(updated));
+      return updated;
+    });
+  }, [currentUser, removeFromCart]);
 
-  const clearCart = () => setItems([]);
+  const clearCart = useCallback(() => {
+    setItems([]);
+    const key = currentUser
+      ? `glowskin-cart-${currentUser._id || currentUser.id}`
+      : "glowskin-cart-guest";
+    localStorage.removeItem(key);
+  }, [currentUser]);
 
   const totalItems = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
@@ -85,7 +143,7 @@ export function CartProvider({ children }) {
       isCartOpen,
       setIsCartOpen,
     }),
-    [items, totalItems, totalPrice, isCartOpen]
+    [items, totalItems, totalPrice, isCartOpen, addToCart, removeFromCart, updateQuantity, clearCart, setIsCartOpen]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
