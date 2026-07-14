@@ -157,10 +157,6 @@ export default function Products() {
       {/* Hero section */}
       <div className="products-hero">
         <h1>Gợi ý sản phẩm skincare</h1>
-        <p>
-          Khám phá mỹ phẩm phù hợp theo loại da và tình trạng da.
-          Phân tích da bằng AI để nhận gợi ý cá nhân hóa chính xác hơn.
-        </p>
         <Link to="/analyze" className="products-cta">
           ✨ Phân tích da để gợi ý riêng cho bạn
         </Link>
