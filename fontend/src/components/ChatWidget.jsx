@@ -166,9 +166,8 @@ export default function ChatWidget() {
       {/* Floating Chat Button */}
       {!isOpen && (
         <button className="glowskin-chat-badge-btn" onClick={() => setIsOpen(true)} aria-label="Mở chat hỗ trợ">
-          <svg viewBox="0 0 24 24" className="glowskin-chat-icon" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
-          </svg>
+          <div className="glowskin-chat-bubble">Cần tớ giúp gì không? ✨</div>
+          <img src="/skincare_mascot.png" alt="Chat Mascot" className="glowskin-chat-mascot-icon" />
           <span className="glowskin-online-dot"></span>
         </button>
       )}

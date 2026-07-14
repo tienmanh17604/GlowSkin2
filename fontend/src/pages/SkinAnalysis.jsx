@@ -793,12 +793,6 @@ export default function SkinAnalysis() {
           </div>
         </div>
       )}
-
-      {/* Cute Floating Skincare Mascot helper */}
-      <div className="skincare-mascot-container">
-        <div className="skincare-mascot-bubble">Cần tớ giúp gì không? ✨</div>
-        <img src="/skincare_mascot.png" alt="Skincare Mascot" className="skincare-mascot-img" />
-      </div>
     </div>
   );
 }
