@@ -538,7 +538,7 @@ export default function Home({ videoReady = false }) {
         <div className="nuve-video-bg">
           <video
             ref={videoRef}
-            src="https://res.cloudinary.com/buevamso/video/upload/v1783521218/glowskin/hero/skincare_hero_video.mp4"
+            src="https://res.cloudinary.com/buevamso/video/upload/v1784033125/glowskin/hero/new_skincare_hero_video.mp4"
             className="nuve-bg-video"
             loop
             muted
