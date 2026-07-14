@@ -532,6 +532,11 @@ export default function SkinAnalysis() {
     <div className="analyze-page">
       <Navbar />
 
+      {/* Premium Background Blobs */}
+      <div className="analyze-bg-blob blob-1"></div>
+      <div className="analyze-bg-blob blob-2"></div>
+      <div className="analyze-bg-blob blob-3"></div>
+
       <div className="analyze-container">
         <aside className="analyze-upload">
               <h1>Phân tích da mặt AI</h1>
@@ -788,6 +793,12 @@ export default function SkinAnalysis() {
           </div>
         </div>
       )}
+
+      {/* Cute Floating Skincare Mascot helper */}
+      <div className="skincare-mascot-container">
+        <div className="skincare-mascot-bubble">Cần tớ giúp gì không? ✨</div>
+        <img src="/skincare_mascot.png" alt="Skincare Mascot" className="skincare-mascot-img" />
+      </div>
     </div>
   );
 }
