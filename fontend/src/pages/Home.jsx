@@ -20,7 +20,7 @@ const img = (id, w = 800) =>
 
 const FEATURES = [
   {
-    title: "Phân tích Da AI",
+    title: "Phân tích da với AI",
     desc: "Khám phá tình trạng làn da của bạn bằng công nghệ phân tích ảnh AI tiên tiến, giúp đưa ra chẩn đoán chính xác về loại da và các vấn đề cần cải thiện.",
     shortDesc: "Chẩn đoán & phân tích loại da",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830695/glowskin/showcase/card_phan_tich_da.jpg",
@@ -50,7 +50,7 @@ const FEATURES = [
     btnBg: "#a07553",
   },
   {
-    title: "Lập Lộ trình Skincare",
+    title: "Lập lộ trình Skincare ",
     desc: "Xây dựng routine chăm sóc da khoa học sáng và tối, thiết lập lịch nhắc nhở và theo dõi hành trình thay đổi làn da khỏe đẹp mỗi ngày.",
     shortDesc: "Lộ trình chăm sóc da khoa học",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830698/glowskin/showcase/card_lo_trinh_skincare.jpg",
@@ -538,7 +538,7 @@ export default function Home({ videoReady = false }) {
             <p className="nuve-hero-subtitle">
               Công nghệ AI quét khuôn mặt và
               <br />
-              chỉ ra các điểm cần cải thiện
+              chỉ ra các khuyết điểm cần cải thiện
             </p>
 
             <button
@@ -547,13 +547,13 @@ export default function Home({ videoReady = false }) {
               onClick={() => navigate("/analyze")}
             >
               <span>Phân tích da ngay</span>
-              <svg 
-                className="nuve-cta-icon" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2.5" 
-                strokeLinecap="round" 
+              <svg
+                className="nuve-cta-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               >
                 <path d="M5 12h14M12 5l7 7-7 7" />
