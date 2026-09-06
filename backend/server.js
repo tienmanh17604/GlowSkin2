@@ -252,6 +252,39 @@ app.delete("/api/users/:id", async (req, res) => {
   }
 });
 
+// PUT Update user latest scan
+app.put("/api/users/:id/latest-scan", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { latestScan } = req.body;
+    const user = await User.findOneAndUpdate(
+      { $or: [{ id }, { _id: id }] },
+      { latestScan },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+    }
+    res.json({ success: true, latestScan: user.latestScan });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Lỗi cập nhật scan da", error: error.message });
+  }
+});
+
+// GET user latest scan
+app.get("/api/users/:id/latest-scan", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ $or: [{ id }, { _id: id }] });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+    }
+    res.json({ success: true, latestScan: user.latestScan || null });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Lỗi lấy scan da", error: error.message });
+  }
+});
+
 
 
 

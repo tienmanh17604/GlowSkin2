@@ -209,19 +209,37 @@ export function AppProvider({ children }) {
     localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
   }, [reviews]);
 
+  // Sync scan & wishlist state when currentUser changes
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem(USER_SESSION_KEY, JSON.stringify(currentUser));
       const userId = currentUser._id || currentUser.id;
 
-      // Load user-specific scan
-      try {
-        const scanKey = `glowskin-latest-scan-${userId}`;
-        const savedScan = localStorage.getItem(scanKey);
-        setLatestScan(savedScan ? JSON.parse(savedScan) : null);
-      } catch {
-        setLatestScan(null);
-      }
+      // Fetch user-specific scan from MongoDB server, fallback to local storage
+      const fetchUserScan = async () => {
+        try {
+          const res = await fetch(`${API_URL}/users/${userId}/latest-scan`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.latestScan) {
+              setLatestScan(data.latestScan);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn("Lỗi fetch scan từ server:", e);
+        }
+
+        try {
+          const scanKey = `glowskin-latest-scan-${userId}`;
+          const savedScan = localStorage.getItem(scanKey);
+          setLatestScan(savedScan ? JSON.parse(savedScan) : null);
+        } catch {
+          setLatestScan(null);
+        }
+      };
+
+      fetchUserScan();
 
       // Load user-specific wishlist
       try {

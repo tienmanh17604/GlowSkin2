@@ -36,6 +36,10 @@ const UserSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    latestScan: {
+      type: Object,
+      default: null,
+    },
   },
   { timestamps: true }
 );
