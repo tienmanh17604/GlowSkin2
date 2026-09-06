@@ -8,7 +8,7 @@ import "../App.css";
 
 const NAV_LINKS = [
   { label: "Trang chủ", href: "#home" },
-  { label: "Phân tích da", to: "/analyze" },
+  { label: "Phân tích da", to: "/your-skin" },
   { label: "Liên hệ", to: "/contact" },
 ];
 
@@ -21,7 +21,7 @@ const FEATURES = [
     desc: "Khám phá tình trạng làn da của bạn bằng công nghệ phân tích ảnh AI tiên tiến, giúp đưa ra chẩn đoán chính xác về loại da và các vấn đề cần cải thiện.",
     shortDesc: "Chẩn đoán & phân tích loại da",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830695/glowskin/showcase/card_phan_tich_da.jpg",
-    to: "/analyze",
+    to: "/your-skin",
     bg: "#ebdcd0",
     panel: "#f7f0eb",
     btnBg: "#8b6e56",
@@ -31,7 +31,7 @@ const FEATURES = [
     desc: "Tra cứu các chỉ số da chi tiết và các phân tích chuyên sâu khoa học trước khi đưa ra quyết định chăm sóc da hàng ngày.",
     shortDesc: "Báo cáo phân tích chuẩn xác",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830696/glowskin/showcase/card_danh_gia_my_pham.jpg",
-    to: "/analyze",
+    to: "/your-skin",
     bg: "#dfcebe",
     panel: "#eadbc8",
     btnBg: "#736454",
@@ -41,7 +41,7 @@ const FEATURES = [
     desc: "Nhận danh sách đề xuất lộ trình chăm sóc da (skincare) tối ưu nhất, được cá nhân hóa hoàn toàn dựa trên chỉ số da của riêng bạn.",
     shortDesc: "Đề xuất lộ trình phù hợp",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830697/glowskin/showcase/card_goi_y_thong_minh.jpg",
-    to: "/analyze",
+    to: "/your-skin",
     bg: "#c4a484",
     panel: "#d3b89e",
     btnBg: "#a07553",
@@ -51,7 +51,7 @@ const FEATURES = [
     desc: "Xây dựng routine chăm sóc da khoa học sáng và tối, thiết lập lịch nhắc nhở và theo dõi hành trình thay đổi làn da khỏe đẹp mỗi ngày.",
     shortDesc: "Lộ trình chăm sóc da khoa học",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830698/glowskin/showcase/card_lo_trinh_skincare.jpg",
-    to: "/analyze",
+    to: "/your-skin",
     bg: "#e2d4c9",
     panel: "#eedfd2",
     btnBg: "#806651",
@@ -541,7 +541,7 @@ export default function Home({ videoReady = false }) {
             <button
               type="button"
               className="nuve-cta-btn"
-              onClick={() => navigate("/analyze")}
+              onClick={() => navigate("/your-skin")}
             >
               <span>Phân tích da ngay</span>
               <svg
@@ -1034,7 +1034,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Nhận báo cáo phân tích tổng quan</li>
               <li>✓ Thiết lập lộ trình skincare cơ bản</li>
             </ul>
-            <button className="plan-btn" onClick={() => navigate("/analyze")}>Bắt đầu ngay</button>
+            <button className="plan-btn" onClick={() => navigate("/your-skin")}>Bắt đầu ngay</button>
           </div>
 
           <div className="pricing-card premium-card">
@@ -1049,7 +1049,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Không giới hạn số lần phân tích</li>
               <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
             </ul>
-            <button className="plan-btn featured" onClick={() => navigate("/analyze")}>Nâng cấp Premium</button>
+            <button className="plan-btn featured" onClick={() => navigate("/your-skin")}>Nâng cấp Premium</button>
           </div>
 
           <div className="pricing-card">
@@ -1063,7 +1063,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
               <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
             </ul>
-            <button className="plan-btn" onClick={() => navigate("/analyze")}>Đăng ký ngay</button>
+            <button className="plan-btn" onClick={() => navigate("/your-skin")}>Đăng ký ngay</button>
           </div>
         </div>
       </section>
@@ -1079,7 +1079,7 @@ export default function Home({ videoReady = false }) {
         <div className="cta-content">
           <h2>Sẵn Sàng Đánh Thức<br />Tiềm Năng Làn Da Bạn?</h2>
           <p>Tham gia cùng hơn 100,000+ người dùng thông thái đã sở hữu làn da khỏe đẹp vượt trội cùng GlowSkin.</p>
-          <button className="cta-gradient-btn" onClick={() => navigate("/analyze")}>
+          <button className="cta-gradient-btn" onClick={() => navigate("/your-skin")}>
             Khám phá làn da ngay
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>

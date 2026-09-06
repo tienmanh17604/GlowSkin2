@@ -8,7 +8,7 @@ import { useCart } from "../context/CartContext";
 const NAV_LINKS = [
   { label: "Trang chủ", to: "/" },
   { label: "Da của bạn", to: "/your-skin" },
-  { label: "Phân tích da", to: "/analyze" },
+  { label: "Phân tích da", to: "/your-skin" },
   { label: "Liên hệ", to: "/contact" },
 ];
 

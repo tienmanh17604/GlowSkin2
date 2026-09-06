@@ -1,24 +1,32 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const SYSTEM_PROMPT = `Bạn là chuyên gia skincare AI của GlowSkin. Nhiệm vụ: phân tích da mặt từ ảnh người dùng gửi và tư vấn dựa trên Hướng dẫn Chẩn đoán & Điều trị các bệnh Da liễu của Bộ Y Tế (Quyết định 4416/QĐ-BYT).
+const SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Da liễu AI của GlowSkin. Nhiệm vụ: Phân tích chi tiết từng góc da mặt từ ảnh người dùng gửi và đưa ra chẩn đoán Y khoa chuẩn xác dựa trên 360 Hướng dẫn Y Khoa & Quyết định 4416/QĐ-BYT Bộ Y Tế.
 
-Trả lời bằng tiếng Việt, thân thiện và chuyên nghiệp.
-Bạn PHẢI trình bày kết quả phân tích theo đúng cấu trúc và sử dụng các thẻ phân chia chính xác như sau:
+QUY TẮC PHÂN TÍCH Y KHOA VÀ NHẬN DIỆN KHUÔN MẶT QUAN TRỌNG:
+
+1. NHẬN DIỆN GÓC CHỤP & VÙNG KHUÔN MẶT CÓ TRONG ẢNH (NGUYÊN TẮC BẮT BUỘC):
+   - Hãy quan sát thật kỹ bức ảnh người dùng tải lên.
+   - NẾU ẢNH BỊ CẮT XÉN (ví dụ chỉ thấy nửa trên khuôn mặt: Trán, Lông mày, Mắt, Má mà KHÔNG THẤY Môi, Cằm hay Hàm), bạn CHỈ ĐƯỢC TRẢ VỀ CÁC VÙNG CÓ TRONG ẢNH trong mảng "zones".
+   - TUYỆT ĐỐI KHÔNG ĐƯỢC BỊA ĐẶT HOẶC TRẢ VỀ VÙNG MÔI, VÙNG CẰM, VÙNG HÀM NẾU TRONG ẢNH KHÔNG CÓ NHỮNG VÙNG NÀY.
+
+2. NỘI DUNG CHẨN ĐOÁN CHI TIẾT CHUẨN Y KHOA (KHÔNG VIẾT CHUNG CHUNG):
+   - Với mỗi vùng xuất hiện trong ảnh, hãy viết chẩn đoán Y khoa cụ thể, nêu rõ đặc điểm tổn thương quan sát được (ví dụ: "Sẩn đỏ vi mụn 1-2mm rải rác, bít tắc tuyến bã nhờn", "Dấu hiệu thâm sau viêm PIH kèm tăng sắc tố mờ", "Bề mặt da thiếu ẩm gây vảy sừng nhẹ").
+   - Căn cứ trực tiếp vào các điều khoản Hướng dẫn Da liễu Bộ Y Tế (QĐ 4416/QĐ-BYT) và tư vấn hoạt chất điều trị chuẩn y khoa (Niacinamide, BHA, Azelaic Acid, Tretinoin, Vitamin C, Ceramide...).
 
 ===OVERVIEW===
-## Kết quả phân tích da mặt ✨
-1. **Loại da** (dầu/khô/hỗn hợp/nhạy cảm/bình thường)
-2. **Tình trạng da** (mụn, thâm, lỗ chân lông, nếp nhăn, mất nước...) CĂN CỨ VÀO QUYẾT ĐỊNH 4416/QĐ-BYT BỘ Y TẾ.
-3. **Điểm mạnh** của làn da
+## Báo cáo Phân tích Da Y Khoa ✨
+1. **Loại da:** (Dầu / Khô / Hỗn hợp / Nhạy cảm / Bình thường)
+2. **Chẩn đoán y khoa chuyên sâu:** (Căn cứ Quyết định 4416/QĐ-BYT Bộ Y Tế)
+3. **Đánh giá điểm mạnh và hàng rào bảo vệ da**
 
 ===ROUTINE===
-4. **Routine gợi ý** (sáng/tối, từng bước cụ thể)
+4. **Lộ trình Routine khuyến nghị chuẩn Bộ Y Tế** (Sáng & Tối từng bước)
 
 ===INGREDIENTS===
-5. **Thành phần nên dùng** và nên tránh
+5. **Hoạt chất Y khoa nên dùng & Thành phần nên tránh**
 
 ===WARNING===
-6. **Thành phần dễ gây kích ứng** đối với làn da này (nếu có) và lý do tại sao nên tránh
+6. **Lưu ý kích ứng & Thành phần chống chỉ định**
 
 ===JSON_DATA===
 {
@@ -26,15 +34,30 @@ Bạn PHẢI trình bày kết quả phân tích theo đúng cấu trúc và s�
   "scoreLabel": "Phân tích Y Khoa & AI Vision",
   "medicalReference": "Quyết định 4416/QĐ-BYT Bộ Y Tế",
   "summary": [
-    { "title": "Phân tích AI Vision", "en": "(AI Vision Diagnosis)", "desc": "Nhận diện tình trạng thực tế từ ảnh người dùng." }
+    { "title": "Chẩn đoán y khoa AI Vision", "en": "(AI Medical Diagnosis)", "desc": "Đối chiếu 360 bài Y khoa Bộ Y Tế" }
   ],
   "zones": [
-    { "id": "forehead", "title": "Vùng Trán", "condition": "Chẩn đoán cụ thể từ ảnh...", "detail": "Mô tả chi tiết từ ảnh..." },
-    { "id": "eyebrow", "title": "Vùng Lông Mày", "condition": "Chẩn đoán cụ thể...", "detail": "Mô tả chi tiết..." },
-    { "id": "upper_cheek", "title": "Vùng Má", "condition": "Chẩn đoán cụ thể...", "detail": "Mô tả chi tiết..." },
-    { "id": "chin", "title": "Vùng Cằm", "condition": "Chẩn đoán cụ thể...", "detail": "Mô tả chi tiết..." },
-    { "id": "mouth", "title": "Vùng Môi", "condition": "Chẩn đoán cụ thể...", "detail": "Mô tả chi tiết..." },
-    { "id": "jaw", "title": "Vùng Hàm", "condition": "Chẩn đoán cụ thể...", "detail": "Mô tả chi tiết..." }
+    { 
+      "id": "forehead", 
+      "title": "Vùng Trán", 
+      "condition": "Mụn sẩn đỏ 1-2mm & bít tắc tuyến bã nhờn", 
+      "detail": "Quan sát kỹ ảnh thấy bề mặt vùng trán xuất hiện mụn ẩn dạng sẩn nhỏ, lỗ chân lông bít tắc nhẹ. Căn cứ bài Trứng cá QĐ 4416/QĐ-BYT, khuyến nghị dùng BHA 2% làm sạch sâu.", 
+      "status": "yellow" 
+    },
+    { 
+      "id": "eyebrow", 
+      "title": "Vùng Lông Mày", 
+      "condition": "Nền da ổn định, ít tổn thương", 
+      "detail": "Cấu trúc da vùng chân mày khỏe mạnh, màng lipid bảo vệ tốt, không phát hiện ổ viêm.", 
+      "status": "green" 
+    },
+    { 
+      "id": "upper_cheek", 
+      "title": "Vùng Má", 
+      "condition": "Thâm mụn sau viêm (PIH) & lỗ chân lông hơi giãn", 
+      "detail": "Dấu hiệu tăng sắc tố sau viêm mụn. Khuyến nghị phối hợp Niacinamide 5% + Vitamin C để mờ thâm sáng da.", 
+      "status": "yellow" 
+    }
   ]
 }
 
@@ -92,6 +115,64 @@ function hasApiKey() {
   return Boolean(import.meta.env.VITE_GEMINI_API_KEY);
 }
 
+export function parseAnalysisResponse(text) {
+  const sections = {
+    overview: "",
+    routine: "",
+    ingredients: "",
+    warning: "",
+    jsonData: null,
+  };
+  
+  if (!text) return sections;
+
+  let mainText = text;
+  const jsonIndex = text.indexOf("===JSON_DATA===");
+  if (jsonIndex !== -1) {
+    mainText = text.slice(0, jsonIndex).trim();
+    const jsonStr = text.slice(jsonIndex + "===JSON_DATA===".length).trim();
+    try {
+      const cleanJson = jsonStr.replace(/^```json\s*/, "").replace(/^```\s*/, "").replace(/\s*```$/, "").trim();
+      sections.jsonData = JSON.parse(cleanJson);
+    } catch (e) {
+      console.warn("Không thể parse JSON_DATA từ Gemini AI:", e);
+    }
+  }
+  
+  const overviewIndex = mainText.indexOf("===OVERVIEW===");
+  const routineIndex = mainText.indexOf("===ROUTINE===");
+  const ingredientsIndex = mainText.indexOf("===INGREDIENTS===");
+  const warningIndex = mainText.indexOf("===WARNING===");
+  
+  if (overviewIndex !== -1) {
+    const start = overviewIndex + "===OVERVIEW===".length;
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length));
+    sections.overview = mainText.slice(start, end).trim();
+  } else {
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length));
+    sections.overview = mainText.slice(0, end).trim();
+  }
+  
+  if (routineIndex !== -1) {
+    const start = routineIndex + "===ROUTINE===".length;
+    const end = ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length);
+    sections.routine = mainText.slice(start, end).trim();
+  }
+  
+  if (ingredientsIndex !== -1) {
+    const start = ingredientsIndex + "===INGREDIENTS===".length;
+    const end = warningIndex !== -1 ? warningIndex : mainText.length;
+    sections.ingredients = mainText.slice(start, end).trim();
+  }
+
+  if (warningIndex !== -1) {
+    const start = warningIndex + "===WARNING===".length;
+    sections.warning = mainText.slice(start).trim();
+  }
+
+  return sections;
+}
+
 async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão hóa") {
   try {
     const queries = ["mụn trứng cá viêm mủ ẩn", "sắc tố thâm mụn nám tàn nhang", "lão hóa nếp nhăn căng bóng"];
@@ -132,28 +213,55 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
   return "";
 }
 
+const CANDIDATE_MODELS = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-flash-latest",
+  "gemini-2.5-flash"
+];
+
 async function callOpenAI(messages) {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/v1/chat/completions", {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: "gemini-2.5-flash",
-      max_tokens: 4096,
-      messages,
-    }),
-  });
+  let lastErrorMessage = "";
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.error?.message || `API lỗi (${response.status})`);
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 4096,
+          messages,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.choices && data.choices[0]?.message?.content) {
+          return data.choices[0].message.content;
+        }
+      }
+
+      const errorData = await response.json().catch(() => ({}));
+      const msg = errorData.error?.message || response.statusText;
+      console.warn(`[Gemini API] Model ${model} returned status ${response.status}:`, msg);
+
+      if (response.status === 429) {
+        lastErrorMessage = "Tài khoản Gemini API tạm thời hết hạn ngạch miễn phí trong ngày (Lỗi 429 Rate Limit/Quota). Vui lòng thử lại sau ít phút.";
+      } else {
+        lastErrorMessage = msg || `API lỗi (${response.status})`;
+      }
+    } catch (err) {
+      console.warn(`[Gemini API] Failed to call model ${model}:`, err.message);
+      lastErrorMessage = err.message;
+    }
   }
 
-  const data = await response.json();
-  return data.choices[0].message.content;
+  throw new Error(lastErrorMessage || "Không thể kết nối đến Gemini AI.");
 }
 
 function buildVisionMessages(chatHistory, imageDataUrl, medicalContext = "") {
@@ -195,6 +303,31 @@ function buildVisionMessages(chatHistory, imageDataUrl, medicalContext = "") {
   return apiMessages;
 }
 
+export function cleanAiText(text) {
+  if (!text) return "";
+  let clean = text;
+  
+  // Cut off ===JSON_DATA=== and any JSON block
+  const jsonIdx = clean.indexOf("===JSON_DATA===");
+  if (jsonIdx !== -1) {
+    clean = clean.slice(0, jsonIdx);
+  }
+  
+  // Remove any raw JSON objects or code blocks
+  clean = clean.replace(/```json[\s\S]*?```/g, "");
+  clean = clean.replace(/```[\s\S]*?```/g, "");
+  clean = clean.replace(/\{[\s\S]*?"zones"[\s\S]*?\}/g, "");
+  clean = clean.replace(/===(OVERVIEW|ROUTINE|INGREDIENTS|WARNING|JSON_DATA)===/g, "");
+  
+  return clean.trim();
+}
+
+const CHAT_SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Skincare AI của GlowSkin. Nhiệm vụ: Giải đáp thắc mắc và tư vấn chuyên sâu về làn da cho người dùng dựa trên 360 Hướng dẫn Y Khoa & Quyết định 4416/QĐ-BYT Bộ Y Tế.
+
+- Trả lời bằng tiếng Việt tự nhiên, thân thiện, rõ ràng và mạch lạc.
+- Trình bày dạng Markdown đẹp mắt (dùng **in đậm**, gạch đầu dòng ngắn gọn).
+- TUYỆT ĐỐI KHÔNG BAO GỒM BẤT KỲ CẤU TRÚC LẬP TRÌNH HOẶC CHUỖI JSON (như ===JSON_DATA=== hay { "zones": ... }) TRONG CÂU TRẢ LỜI.`;
+
 export async function analyzeSkinImage(imageDataUrl) {
   if (!hasApiKey()) {
     await new Promise((r) => setTimeout(r, 1800));
@@ -219,9 +352,25 @@ export async function sendFollowUp(chatHistory) {
 
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === "user")?.content || "";
   const medicalContext = await fetchMedicalContext(lastUserMsg);
-  const messages = buildVisionMessages(chatHistory, null, medicalContext);
-  const content = await callOpenAI(messages);
-  return { content, isDemo: false };
+
+  const apiMessages = [
+    { role: "system", content: CHAT_SYSTEM_PROMPT + (medicalContext ? `\n\nCĂN CỨ TÀI LIỆU Y KHOA BỘ Y TẾ:\n${medicalContext}` : "") }
+  ];
+
+  for (const msg of chatHistory) {
+    if (msg.role === "user") {
+      apiMessages.push({ role: "user", content: msg.content || "" });
+    } else if (msg.role === "assistant") {
+      const cleanMsg = cleanAiText(msg.content);
+      if (cleanMsg) {
+        apiMessages.push({ role: "assistant", content: cleanMsg });
+      }
+    }
+  }
+
+  const rawContent = await callOpenAI(apiMessages);
+  const cleanContent = cleanAiText(rawContent);
+  return { content: cleanContent, isDemo: false };
 }
 
 export function isUsingDemoMode() {

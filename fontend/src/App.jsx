@@ -62,7 +62,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home videoReady={videoReady} />} />
           <Route path="/your-skin" element={<YourSkin />} />
-          <Route path="/analyze" element={<SkinAnalysis />} />
+          <Route path="/analyze" element={<Navigate to="/your-skin" replace />} />
           <Route path="/products" element={<Navigate to="/" replace />} />
           <Route path="/products/:productId" element={<Navigate to="/" replace />} />
           <Route path="/cart" element={<Navigate to="/" replace />} />
