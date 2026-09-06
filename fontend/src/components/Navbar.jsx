@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
-import CartButton from "./CartButton";
 import UserMenu from "./UserMenu";
 import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
 
 const NAV_LINKS = [
   { label: "Trang chủ", to: "/" },
+  { label: "Da của bạn", to: "/your-skin" },
   { label: "Phân tích da", to: "/analyze" },
-  { label: "Sản phẩm", to: "/products" },
-  { label: "Giỏ hàng", isCart: true },
-  { label: "Cộng đồng", href: "#community" },
   { label: "Liên hệ", to: "/contact" },
 ];
 
@@ -76,8 +73,6 @@ export default function Navbar() {
             <span className="wishlist-badge">{wishlistCount}</span>
           )}
         </button>
-
-        <CartButton />
 
         {!currentUser ? (
           <button

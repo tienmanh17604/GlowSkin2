@@ -2477,11 +2477,11 @@ footer h3 {
 }
 
 .vid-tag .dot {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   background-color: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 0 12px #ffffff, 0 0 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.9), 0 0 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Tọa độ hiển thị trong video */
@@ -2519,7 +2519,7 @@ footer h3 {
   }
 
   to {
-    opacity: 1;
+    opacity: 0.82;
     transform: scale(1) translateY(0);
   }
 }
@@ -2788,7 +2788,7 @@ footer h3 {
 }
 
 .scanner-container {
-  height: 150px;
+  height: 230px;
   width: 2px;
   position: relative;
   margin: 35px 0;
@@ -2897,8 +2897,43 @@ footer h3 {
   animation: wordFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+#page2.in-view .word-span.text-highlight {
+  animation: boldWordFadeIn 4.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @keyframes wordFadeIn {
   to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes boldWordFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  /* First fade-in complete at 0.6s (around 14%) */
+  14% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Stay visible until 3.12s (74%) */
+  74% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Fade out / reset complete at 3.38s (80%) */
+  80% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  /* Second fade-in complete at 3.98s (94%) */
+  94% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }

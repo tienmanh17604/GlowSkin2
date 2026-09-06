@@ -1,0 +1,617 @@
+/* YourSkin.css - Metallic Gold Luxury Theme ("Vàng Ánh Kim") */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap');
+
+.your-skin-gold-page {
+  min-height: 100vh;
+  background-color: #faf8f5;
+  background-image: 
+    radial-gradient(circle at 50% 45%, rgba(243, 229, 171, 0.32) 0%, rgba(255, 253, 249, 1) 60%),
+    radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(184, 134, 11, 0.08) 0%, transparent 40%);
+  color: #1a1a18;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+}
+
+.gold-skin-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 40px 20px 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 90vh;
+}
+
+/* HEADER TITLE BANNER */
+.gold-header-banner {
+  text-align: center;
+  margin-bottom: 25px;
+  max-width: 750px;
+  animation: goldFadeDown 0.8s ease forwards;
+}
+
+.gold-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(252, 246, 186, 0.4));
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 30px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #856404;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.15);
+}
+
+.gold-page-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 38px;
+  font-weight: 800;
+  color: #2c2206;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #bf953f 0%, #d4af37 30%, #aa771c 70%, #856404 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.gold-page-subtitle {
+  font-size: 14.5px;
+  color: #6b5938;
+  font-weight: 500;
+}
+
+/* MAIN STAGE CONTAINER */
+.gold-boxes-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1150px;
+  height: 840px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* METALLIC GOLD DASHED CIRCULAR RING */
+.gold-dashed-circle-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 860px;
+  height: 820px;
+  border-radius: 50%;
+  border: 2.5px dashed #d4af37;
+  pointer-events: none;
+  z-index: 1;
+  box-shadow: 
+    inset 0 0 60px rgba(212, 175, 55, 0.12),
+    0 0 35px rgba(212, 175, 55, 0.18);
+  animation: goldPulse 4s ease-in-out infinite alternate;
+}
+
+.gold-inner-glow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 580px;
+  height: 580px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* CENTERED CLEAN FACE PHOTO CARD WITH LUXURY METALLIC GOLD BORDER */
+.gold-center-face-card {
+  position: relative;
+  width: 370px;
+  height: 470px;
+  border-radius: 28px;
+  padding: 4px;
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+  box-shadow: 
+    0 20px 55px rgba(184, 134, 11, 0.28),
+    0 6px 20px rgba(212, 175, 55, 0.2);
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gold-floating-bob {
+  animation: goldFloatBob 4s ease-in-out infinite;
+}
+
+@keyframes goldFloatBob {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-16px) scale(1.01);
+  }
+}
+
+.gold-center-face-card:hover {
+  box-shadow: 
+    0 24px 65px rgba(184, 134, 11, 0.35),
+    0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+.gold-face-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  display: block;
+}
+
+/* ==========================================================================
+   METALLIC GOLD DESCRIPTION CARDS (ARRANGED AROUND CIRCLE)
+   ========================================================================== */
+
+.gold-desc-card-box {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  background: #ffffff;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 12px 14px;
+  background-image: 
+    linear-gradient(#ffffff, #ffffff), 
+    linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #b38728 70%, #aa771c 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 10px 28px rgba(184, 134, 11, 0.16);
+  z-index: 6;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gold-desc-card-box:hover,
+.gold-desc-card-box.gold-card-highlight {
+  transform: translate(-50%, -50%) scale(1.08);
+  background-image: 
+    linear-gradient(#ffffff, #fffdf8), 
+    linear-gradient(135deg, #d4af37 0%, #ffffff 40%, #d4af37 100%);
+  box-shadow: 
+    0 16px 40px rgba(212, 175, 55, 0.35),
+    0 0 20px rgba(252, 246, 186, 0.6);
+  z-index: 15;
+}
+
+.gold-card-top-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.gold-card-mini-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid #d4af37;
+  box-shadow: 0 3px 8px rgba(212, 175, 55, 0.25);
+}
+
+.gold-card-title-text {
+  font-size: 13px;
+  font-weight: 800;
+  color: #856404;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.gold-card-cond-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e1b18;
+  line-height: 1.35;
+}
+
+@keyframes goldPulse {
+  0% {
+    box-shadow: 
+      inset 0 0 50px rgba(212, 175, 55, 0.1),
+      0 0 25px rgba(212, 175, 55, 0.12);
+  }
+  100% {
+    box-shadow: 
+      inset 0 0 75px rgba(212, 175, 55, 0.22),
+      0 0 45px rgba(212, 175, 55, 0.28);
+  }
+}
+
+@keyframes goldFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 960px) {
+  .gold-boxes-stage {
+    height: auto;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .gold-dashed-circle-ring,
+  .gold-inner-glow-ring {
+    display: none;
+  }
+
+  .gold-center-face-card {
+    width: 320px;
+    height: 400px;
+  }
+
+  .gold-desc-card-box {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 90%;
+    max-width: 340px;
+    margin: 8px 0;
+  }
+
+  .gold-desc-card-box:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* ACTION BUTTONS */
+.gold-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.gold-action-btn.primary {
+  background: linear-gradient(135deg, #bf953f 0%, #d4af37 50%, #aa771c 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+  border: none;
+}
+
+.gold-action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+.gold-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #856404;
+  border: 1.5px solid #d4af37;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
+}
+
+.gold-action-btn.secondary:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  border-color: #aa771c;
+}
+
+/* MODAL OVERLAY */
+.gold-zone-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 12, 5, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: goldFadeIn 0.25s ease forwards;
+}
+
+.gold-zone-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 24px;
+  border: 2px solid #d4af37;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.gold-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: #856404;
+  cursor: pointer;
+}
+
+.gold-modal-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #2c2206;
+  margin-bottom: 12px;
+}
+
+.gold-modal-cond {
+  font-size: 15px;
+  color: #856404;
+  margin-bottom: 12px;
+}
+
+.gold-modal-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4a422d;
+  background: #fffdf5;
+  border-left: 3px solid #d4af37;
+  padding: 12px 14px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 20px;
+}
+
+/* AI DOCTOR INTERACTIVE CHAT MODAL */
+.gold-ai-chat-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  height: 640px;
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 0;
+  border: 2px solid #d4af37;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: goldScaleUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes goldScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.gold-ai-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #fffdf5 0%, #fef9e7 100%);
+  border-bottom: 1.5px solid rgba(212, 175, 55, 0.3);
+}
+
+.gold-ai-doctor-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #bf953f, #d4af37);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  flex-shrink: 0;
+}
+
+.gold-ai-chat-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #2c2206;
+  margin: 0;
+}
+
+.gold-ai-chat-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #856404;
+}
+
+.gold-ai-chat-messages {
+  flex: 1;
+  padding: 18px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #faf8f5;
+}
+
+.gold-chat-msg-row {
+  display: flex;
+  gap: 10px;
+  max-width: 85%;
+}
+
+.gold-chat-msg-row.user {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.gold-chat-msg-row.assistant {
+  align-self: flex-start;
+}
+
+.gold-msg-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fcf6ba;
+  border: 1px solid #d4af37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.gold-msg-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.gold-msg-bubble.user {
+  background: linear-gradient(135deg, #bf953f 0%, #d4af37 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
+
+.gold-msg-bubble.assistant {
+  background: #ffffff;
+  color: #2c2206;
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.gold-typing-bubble {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #856404;
+  font-weight: 600;
+}
+
+.gold-typing-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.gold-typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: #d4af37;
+  border-radius: 50%;
+  animation: goldDotPulse 1.2s infinite ease-in-out;
+}
+
+.gold-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.gold-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes goldDotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+
+.gold-quick-prompts-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  overflow-x: auto;
+}
+
+.gold-prompt-chip {
+  white-space: nowrap;
+  padding: 6px 14px;
+  background: #fffdf5;
+  border: 1px solid #d4af37;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #856404;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gold-prompt-chip:hover {
+  background: linear-gradient(135deg, #bf953f, #d4af37);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.gold-ai-chat-input-form {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-top: 1.5px solid rgba(212, 175, 55, 0.3);
+}
+
+.gold-ai-chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 25px;
+  border: 1.5px solid #d4af37;
+  font-size: 13.5px;
+  outline: none;
+  background: #fffdf9;
+  color: #2c2206;
+}
+
+.gold-ai-chat-input:focus {
+  border-color: #aa771c;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+.gold-ai-chat-send-btn {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #bf953f 0%, #d4af37 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.gold-ai-chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gold-ai-chat-send-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.45);
+}
+
+
+

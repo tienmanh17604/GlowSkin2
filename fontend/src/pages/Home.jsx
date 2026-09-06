@@ -9,9 +9,6 @@ import "../App.css";
 const NAV_LINKS = [
   { label: "Trang chủ", href: "#home" },
   { label: "Phân tích da", to: "/analyze" },
-  { label: "Sản phẩm", to: "/products" },
-  { label: "Giỏ hàng", to: "/cart" },
-  { label: "Cộng đồng", href: "#community" },
   { label: "Liên hệ", to: "/contact" },
 ];
 
@@ -30,21 +27,21 @@ const FEATURES = [
     btnBg: "#8b6e56",
   },
   {
-    title: "Đánh giá Mỹ phẩm",
-    desc: "Tra cứu cơ sở dữ liệu hàng ngàn sản phẩm, xem đánh giá chi tiết và các trải nghiệm chân thực từ cộng đồng người dùng trước khi quyết định mua sắm.",
-    shortDesc: "Đánh giá chi tiết từ cộng đồng",
+    title: "Chẩn đoán chuyên sâu",
+    desc: "Tra cứu các chỉ số da chi tiết và các phân tích chuyên sâu khoa học trước khi đưa ra quyết định chăm sóc da hàng ngày.",
+    shortDesc: "Báo cáo phân tích chuẩn xác",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830696/glowskin/showcase/card_danh_gia_my_pham.jpg",
-    to: "/products",
+    to: "/analyze",
     bg: "#dfcebe",
     panel: "#eadbc8",
     btnBg: "#736454",
   },
   {
     title: "Gợi ý thông minh",
-    desc: "Nhận danh sách đề xuất các dòng mỹ phẩm chăm sóc da (skincare) tối ưu nhất, được cá nhân hóa hoàn toàn dựa trên chỉ số da của riêng bạn.",
-    shortDesc: "Đề xuất sản phẩm phù hợp",
+    desc: "Nhận danh sách đề xuất lộ trình chăm sóc da (skincare) tối ưu nhất, được cá nhân hóa hoàn toàn dựa trên chỉ số da của riêng bạn.",
+    shortDesc: "Đề xuất lộ trình phù hợp",
     image: "https://res.cloudinary.com/buevamso/image/upload/v1783830697/glowskin/showcase/card_goi_y_thong_minh.jpg",
-    to: "/products",
+    to: "/analyze",
     bg: "#c4a484",
     panel: "#d3b89e",
     btnBg: "#a07553",
@@ -89,8 +86,8 @@ const WHY_ITEMS = [
     image: img("1556228578-0d85b1a4d571", 700),
   },
   {
-    emoji: "🌎",
-    title: "Cộng đồng làm đẹp",
+    emoji: "🌿",
+    title: "Chăm sóc an toàn",
     image: img("1522335789203-aabd1fc54bc9", 700),
   },
 ];

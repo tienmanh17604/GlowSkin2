@@ -46,12 +46,10 @@ export default function Footer() {
 
         <div className="footer-links-grid">
           <div className="footer-links-col">
-            <h4>SẢN PHẨM</h4>
+            <h4>TÍNH NĂNG</h4>
             <ul>
               <li><Link to="/analyze" onClick={scrollToTop}>Phân tích da AI</Link></li>
               <li><Link to="/analyze" onClick={scrollToTop}>Routine cá nhân</Link></li>
-              <li><Link to="/products" onClick={scrollToTop}>Mỹ phẩm phù hợp</Link></li>
-              <li><Link to="/products" onClick={scrollToTop}>Đánh giá routine</Link></li>
             </ul>
           </div>
           <div className="footer-links-col">

@@ -14,6 +14,7 @@ import ChatWidget from "./components/ChatWidget";
 import SplashScreen from "./components/SplashScreen";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
+import YourSkin from "./pages/YourSkin";
 
 function CartRedirect() {
   const { setIsCartOpen } = useCart();
@@ -60,16 +61,16 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home videoReady={videoReady} />} />
+          <Route path="/your-skin" element={<YourSkin />} />
           <Route path="/analyze" element={<SkinAnalysis />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:productId" element={<ProductDetail />} />
-          <Route path="/cart" element={<CartRedirect />} />
+          <Route path="/products" element={<Navigate to="/" replace />} />
+          <Route path="/products/:productId" element={<Navigate to="/" replace />} />
+          <Route path="/cart" element={<Navigate to="/" replace />} />
           <Route path="/login" element={<LoginRedirect />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
-        <CartDrawer />
         <WishlistDrawer />
         <LoginModal />
         {!showSplash && <ChatWidget />}

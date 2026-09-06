@@ -19,16 +19,18 @@ export default function AdminDashboard() {
     updateProduct,
     deleteProduct,
     updateUserMembership,
+    deleteUser,
     updateOrderStatus,
     deleteReview,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState("overview"); // "overview" | "products" | "members" | "orders" | "reviews"
+  const [activeTab, setActiveTab] = useState("members"); // "members" | "messages"
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [editingPriceId, setEditingPriceId] = useState(null);
   const [tempPrice, setTempPrice] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
+  const [confirmDeleteUserId, setConfirmDeleteUserId] = useState(null);
   
   const addDescRef = useRef(null);
   const editDescRef = useRef(null);
@@ -395,38 +397,10 @@ export default function AdminDashboard() {
           <aside className="admin-sidebar">
             <button
               type="button"
-              className={`admin-tab-btn ${activeTab === "overview" ? "admin-tab-btn--active" : ""}`}
-              onClick={() => setActiveTab("overview")}
-            >
-              📊 Tổng quan hệ thống
-            </button>
-            <button
-              type="button"
-              className={`admin-tab-btn ${activeTab === "products" ? "admin-tab-btn--active" : ""}`}
-              onClick={() => setActiveTab("products")}
-            >
-              📦 Sản phẩm & Kho hàng
-            </button>
-            <button
-              type="button"
               className={`admin-tab-btn ${activeTab === "members" ? "admin-tab-btn--active" : ""}`}
               onClick={() => setActiveTab("members")}
             >
               👥 Khách hàng & Hội viên
-            </button>
-            <button
-              type="button"
-              className={`admin-tab-btn ${activeTab === "orders" ? "admin-tab-btn--active" : ""}`}
-              onClick={() => setActiveTab("orders")}
-            >
-              🛒 Quản lý đơn hàng {stats.pendingOrders > 0 && <span style={{ background: "#dc2626", color: "white", borderRadius: "50%", padding: "2px 6px", fontSize: "11px", fontWeight: "700" }}>{stats.pendingOrders}</span>}
-            </button>
-            <button
-              type="button"
-              className={`admin-tab-btn ${activeTab === "reviews" ? "admin-tab-btn--active" : ""}`}
-              onClick={() => setActiveTab("reviews")}
-            >
-              ⭐ Quản lý đánh giá
             </button>
             <button
               type="button"
@@ -656,6 +630,7 @@ export default function AdminDashboard() {
                         <th>Vai trò</th>
                         <th>Cấp độ membership</th>
                         <th>Nâng cấp / Thay đổi</th>
+                        <th>Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -663,9 +638,10 @@ export default function AdminDashboard() {
                         let badgeClass = "user-badge--free";
                         if (u.membership === "Premium") badgeClass = "user-badge--premium";
                         if (u.membership === "VIP") badgeClass = "user-badge--vip";
+                        const isSelf = currentUser && (currentUser.id === u.id || currentUser._id === u._id);
 
                         return (
-                          <tr key={u.id}>
+                          <tr key={u.id || u._id}>
                             <td style={{ fontWeight: "700" }}>{u.name}</td>
                             <td>{u.email}</td>
                             <td>
@@ -686,12 +662,70 @@ export default function AdminDashboard() {
                               <select
                                 className="membership-select"
                                 value={u.membership}
-                                onChange={(e) => updateUserMembership(u.id, e.target.value)}
+                                onChange={(e) => updateUserMembership(u.id || u._id, e.target.value)}
                               >
                                 <option value="Free">Free Member</option>
                                 <option value="Premium">Premium Member</option>
                                 <option value="VIP">VIP Member</option>
                               </select>
+                            </td>
+                            <td>
+                              {!isSelf ? (
+                                confirmDeleteUserId === (u._id || u.id) ? (
+                                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <button
+                                      type="button"
+                                      onClick={async () => {
+                                        const targetUserId = u._id || u.id;
+                                        const res = await deleteUser(targetUserId);
+                                        setConfirmDeleteUserId(null);
+                                        if (res && !res.success) {
+                                          alert(res.message);
+                                        }
+                                      }}
+                                      style={{
+                                        background: "#dc2626",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        padding: "5px 10px",
+                                        fontSize: "12px",
+                                        fontWeight: "700",
+                                        cursor: "pointer"
+                                      }}
+                                    >
+                                      ⚠️ Xác nhận
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setConfirmDeleteUserId(null)}
+                                      style={{
+                                        background: "#6b7280",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        padding: "5px 8px",
+                                        fontSize: "12px",
+                                        cursor: "pointer"
+                                      }}
+                                    >
+                                      Hủy
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="btn-icon btn-icon--delete"
+                                    title="Xóa tài khoản khách hàng"
+                                    onClick={() => setConfirmDeleteUserId(u._id || u.id)}
+                                    style={{ padding: "6px 12px", fontSize: "12.5px" }}
+                                  >
+                                    🗑️ Xóa
+                                  </button>
+                                )
+                              ) : (
+                                <span style={{ fontSize: "12px", color: "#999", fontStyle: "italic" }}>(Tài khoản của bạn)</span>
+                              )}
                             </td>
                           </tr>
                         );

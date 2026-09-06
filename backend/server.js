@@ -5,6 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import dns from "dns";
 import nodemailer from "nodemailer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Force Google DNS to resolve MongoDB Atlas SRV records properly
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -14,6 +20,7 @@ import Product from "./models/Product.js";
 import Order from "./models/Order.js";
 import Review from "./models/Review.js";
 import Message from "./models/Message.js";
+import MedicalGuideline from "./models/MedicalGuideline.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
@@ -218,6 +225,34 @@ app.put("/api/users/:id/membership", async (req, res) => {
     res.status(400).json({ message: "Không thể cập nhật thành viên", error: error.message });
   }
 });
+
+// DELETE user permanently from MongoDB Database
+app.delete("/api/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cleanId = decodeURIComponent(id).trim();
+    console.log("--> BACKEND DELETE API: Yêu cầu xóa vĩnh viễn user khỏi database ID/Email =", cleanId);
+
+    let query = { $or: [{ id: cleanId }, { email: cleanId.toLowerCase() }] };
+    if (mongoose.Types.ObjectId.isValid(cleanId)) {
+      query = { $or: [{ id: cleanId }, { _id: cleanId }, { email: cleanId.toLowerCase() }] };
+    }
+
+    const deletedUser = await User.findOneAndDelete(query);
+    if (!deletedUser) {
+      console.log("--> BACKEND DELETE API: Không tìm thấy user với ID/Email =", cleanId);
+      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng trong cơ sở dữ liệu MongoDB" });
+    }
+
+    console.log("--> BACKEND DELETE API: XÓA THÀNH CÔNG USER KHỎI MONGODB DATABASE:", deletedUser.email);
+    res.json({ success: true, message: `Đã xóa vĩnh viễn người dùng ${deletedUser.name} (${deletedUser.email}) khỏi database`, user: deletedUser });
+  } catch (error) {
+    console.error("Lỗi khi xóa người dùng khỏi backend database:", error);
+    res.status(400).json({ success: false, message: "Không thể xóa người dùng trong database", error: error.message });
+  }
+});
+
+
 
 
 // 3. ORDERS ENDPOINTS
@@ -829,6 +864,108 @@ app.post("/api/contact", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ success: false, message: "Lỗi máy chủ", error: error.message });
+  }
+});
+
+// Load local medical guidelines dataset as fallback
+const medicalGuidelinesPath = path.join(__dirname, "data/medical_guidelines.json");
+function loadLocalMedicalGuidelines() {
+  try {
+    if (fs.existsSync(medicalGuidelinesPath)) {
+      return JSON.parse(fs.readFileSync(medicalGuidelinesPath, "utf-8"));
+    }
+  } catch (e) {
+    console.error("Lỗi nạp medical_guidelines.json:", e);
+  }
+  return [];
+}
+
+let localMedicalGuidelines = loadLocalMedicalGuidelines();
+console.log(`--> Đã nạp ${localMedicalGuidelines.length} bài hướng dẫn Y Khoa & AI Skincare vào bộ nhớ dự phòng.`);
+
+// POST Search Medical Guidelines by disease/keyword/category via MongoDB Atlas
+app.post("/api/medical/search", async (req, res) => {
+  try {
+    const { query, category } = req.body;
+    
+    // 1. Try querying MongoDB Atlas first
+    let mongoResults = [];
+    try {
+      const filter = {};
+      if (category) {
+        filter.categories = { $regex: category, $options: "i" };
+      }
+      
+      if (query && query.trim()) {
+        const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
+        const regexArr = terms.map(t => new RegExp(t, "i"));
+        
+        filter.$or = [
+          { title: { $in: regexArr } },
+          { content: { $in: regexArr } },
+          { keywords: { $in: regexArr } }
+        ];
+      }
+
+      mongoResults = await MedicalGuideline.find(filter).limit(5).lean();
+    } catch (dbErr) {
+      console.warn("MongoDB search fallback to local JSON:", dbErr.message);
+    }
+
+    if (mongoResults && mongoResults.length > 0) {
+      return res.json({
+        success: true,
+        source: "MongoDB Atlas",
+        count: mongoResults.length,
+        results: mongoResults.map(r => ({
+          id: r.guidelineId || r._id,
+          source: r.source,
+          title: r.title,
+          categories: r.categories,
+          content: r.content,
+          keywords: r.keywords
+        }))
+      });
+    }
+
+    // 2. Fallback to local JSON dataset
+    localMedicalGuidelines = loadLocalMedicalGuidelines();
+    let filteredList = localMedicalGuidelines;
+    if (category) {
+      filteredList = localMedicalGuidelines.filter(item => 
+        item.categories && item.categories.some(c => c.toLowerCase().includes(category.toLowerCase()))
+      );
+      if (filteredList.length === 0) filteredList = localMedicalGuidelines;
+    }
+
+    if (!query) {
+      return res.json({ success: true, source: "Local JSON", results: filteredList.slice(0, 4) });
+    }
+
+    const searchTerms = query.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+    const scored = filteredList.map(item => {
+      let score = 0;
+      const titleLower = (item.title || "").toLowerCase();
+      const contentLower = (item.content || "").toLowerCase();
+
+      for (const term of searchTerms) {
+        if (titleLower.includes(term)) score += 6;
+        if (contentLower.includes(term)) score += 1;
+      }
+      return { ...item, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+    const results = scored.slice(0, 4);
+    res.json({ 
+      success: true, 
+      source: "Local JSON",
+      count: results.length,
+      results: results.length ? results : filteredList.slice(0, 4) 
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Lỗi tìm kiếm tài liệu Y tế", error: err.message });
   }
 });
 

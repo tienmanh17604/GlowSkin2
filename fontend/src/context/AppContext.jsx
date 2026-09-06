@@ -92,6 +92,25 @@ export function AppProvider({ children }) {
     });
   };
 
+  // Latest Skin Analysis Scan state
+  const [latestScan, setLatestScan] = useState(() => {
+    try {
+      const saved = localStorage.getItem("glowskin-latest-scan");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const saveLatestScan = (scanData) => {
+    setLatestScan(scanData);
+    try {
+      localStorage.setItem("glowskin-latest-scan", JSON.stringify(scanData));
+    } catch (e) {
+      console.error("Lỗi lưu scan:", e);
+    }
+  };
+
   const clearWishlist = () => {
     setWishlist({});
     if (currentUser) {
@@ -482,6 +501,42 @@ export function AppProvider({ children }) {
     }
   };
 
+  const deleteUser = async (userId) => {
+    if (!userId) {
+      return { success: false, message: "ID người dùng không hợp lệ" };
+    }
+
+    const adminId = currentUser ? (currentUser._id || currentUser.id) : null;
+    if (adminId && String(adminId) === String(userId)) {
+      return { success: false, message: "Không thể tự xóa tài khoản Admin đang đăng nhập!" };
+    }
+
+    // Optimistic UI update for state and localStorage fallback
+    setUsers((prev) => {
+      const updated = prev.filter((u) => String(u._id || u.id) !== String(userId) && String(u.id) !== String(userId));
+      try {
+        localStorage.setItem(USERS_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error("Lỗi cập nhật localStorage:", e);
+      }
+      return updated;
+    });
+
+    try {
+      const res = await fetch(`${API_URL}/users/${encodeURIComponent(userId)}`, {
+        method: "DELETE",
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        return { success: true, message: data.message || "Đã xóa người dùng khỏi cơ sở dữ liệu MongoDB" };
+      }
+      return { success: false, message: data.message || "Không thể xóa tài khoản khỏi cơ sở dữ liệu MongoDB" };
+    } catch (err) {
+      console.error("Lỗi khi xóa người dùng ở backend:", err);
+      return { success: true, message: "Đã xóa khỏi danh sách địa phương" };
+    }
+  };
+
   const value = useMemo(
     () => ({
       users,
@@ -500,6 +555,7 @@ export function AppProvider({ children }) {
       updateProduct,
       deleteProduct,
       updateUserMembership,
+      deleteUser,
       updateOrderStatus,
       placeOrder,
       addReview,
@@ -508,8 +564,10 @@ export function AppProvider({ children }) {
       toggleWishlist,
       clearWishlist,
       updateProfile,
+      latestScan,
+      saveLatestScan,
     }),
-    [users, products, orders, reviews, currentUser, isLoginOpen, isWishlistOpen, wishlist]
+    [users, products, orders, reviews, currentUser, isLoginOpen, isWishlistOpen, wishlist, latestScan]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

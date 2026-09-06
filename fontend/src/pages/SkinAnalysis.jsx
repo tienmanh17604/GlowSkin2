@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ProductRecommendations from "../components/ProductRecommendations";
 import {
@@ -45,52 +45,67 @@ function parseAnalysis(text) {
     overview: "",
     routine: "",
     ingredients: "",
-    warning: ""
+    warning: "",
+    jsonData: null
   };
   
   if (!text) return sections;
+
+  let mainText = text;
+  const jsonIndex = text.indexOf("===JSON_DATA===");
+  if (jsonIndex !== -1) {
+    mainText = text.slice(0, jsonIndex).trim();
+    const jsonStr = text.slice(jsonIndex + "===JSON_DATA===".length).trim();
+    try {
+      const cleanJson = jsonStr.replace(/^```json\s*/, "").replace(/^```\s*/, "").replace(/\s*```$/, "").trim();
+      sections.jsonData = JSON.parse(cleanJson);
+    } catch (e) {
+      console.warn("Không thể parse JSON_DATA từ Gemini AI:", e);
+    }
+  }
   
-  const overviewIndex = text.indexOf("===OVERVIEW===");
-  const routineIndex = text.indexOf("===ROUTINE===");
-  const ingredientsIndex = text.indexOf("===INGREDIENTS===");
-  const warningIndex = text.indexOf("===WARNING===");
+  const overviewIndex = mainText.indexOf("===OVERVIEW===");
+  const routineIndex = mainText.indexOf("===ROUTINE===");
+  const ingredientsIndex = mainText.indexOf("===INGREDIENTS===");
+  const warningIndex = mainText.indexOf("===WARNING===");
   
   if (overviewIndex !== -1) {
     const start = overviewIndex + "===OVERVIEW===".length;
-    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length));
-    sections.overview = text.slice(start, end).trim();
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length));
+    sections.overview = mainText.slice(start, end).trim();
   } else {
     // Fallback if ===OVERVIEW=== tag is missing, take everything up to the next tag
-    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length));
-    sections.overview = text.slice(0, end).trim();
+    const end = routineIndex !== -1 ? routineIndex : (ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length));
+    sections.overview = mainText.slice(0, end).trim();
   }
   
   if (routineIndex !== -1) {
     const start = routineIndex + "===ROUTINE===".length;
-    const end = ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : text.length);
-    sections.routine = text.slice(start, end).trim();
+    const end = ingredientsIndex !== -1 ? ingredientsIndex : (warningIndex !== -1 ? warningIndex : mainText.length);
+    sections.routine = mainText.slice(start, end).trim();
   }
   
   if (ingredientsIndex !== -1) {
     const start = ingredientsIndex + "===INGREDIENTS===".length;
-    const end = warningIndex !== -1 ? warningIndex : text.length;
-    sections.ingredients = text.slice(start, end).trim();
+    const end = warningIndex !== -1 ? warningIndex : mainText.length;
+    sections.ingredients = mainText.slice(start, end).trim();
   }
   
   if (warningIndex !== -1) {
     const start = warningIndex + "===WARNING===".length;
-    sections.warning = text.slice(start).trim();
+    sections.warning = mainText.slice(start).trim();
   }
   
   if (!sections.overview) {
-    sections.overview = text;
+    sections.overview = mainText;
   }
   
   return sections;
 }
 
 export default function SkinAnalysis() {
-  const { products, currentUser, logout, setIsLoginOpen, updateUserMembership } = useApp();
+  const { products, currentUser, logout, setIsLoginOpen, updateUserMembership, saveLatestScan } = useApp();
+  const navigate = useNavigate();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -323,10 +338,39 @@ export default function SkinAnalysis() {
       const parsed = parseAnalysis(skinAnalysis.content);
       setCurrentAnalysisSections(parsed);
 
+      // Save formatted diagnostic scan data for the "Da của bạn" page from AI Vision + Bộ Y Tế JSON
+      const jsonRes = parsed.jsonData || {};
+      const defaultZones = [
+        { id: "forehead", title: "Vùng Trán", condition: "Mụn viêm & Thâm dai dẳng", detail: "Nhận diện lỗ chân lông bít tắc theo QĐ 4416/QĐ-BYT.", angle: -90 },
+        { id: "eyebrow", title: "Vùng Lông Mày", condition: "Cần cải thiện nhẹ", detail: "Nền da tương đối ổn định.", angle: -30 },
+        { id: "upper_cheek", title: "Vùng Má", condition: "Mụn đầu đen & Thâm mụn", detail: "Dấu hiệu thâm sau viêm (PIH).", angle: 30 },
+        { id: "chin", title: "Vùng Cằm", condition: "Mụn ẩn & Bã nhờn", detail: "Cần làm sạch sâu và dùng BHA.", angle: 90 },
+        { id: "mouth", title: "Vùng Môi", condition: "Khô nhẹ xung quanh", detail: "Cần duy trì độ ẩm.", angle: 150 },
+        { id: "jaw", title: "Vùng Hàm", condition: "Bình thường", detail: "Không phát hiện ổ viêm lớn.", angle: 210 }
+      ];
+
+      const newScanData = {
+        id: "scan-" + Date.now(),
+        date: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) + ", " + new Date().toLocaleDateString("vi-VN"),
+        score: jsonRes.score || 72,
+        scoreLabel: jsonRes.scoreLabel || "Phân tích Y Khoa & AI Vision",
+        medicalReference: jsonRes.medicalReference || "Quyết định 4416/QĐ-BYT Bộ Y Tế",
+        image: dataUrl,
+        summary: jsonRes.summary || [
+          { title: "Phân tích AI Vision", en: "(AI Vision Diagnosis)", desc: "Nhận diện tình trạng từ ảnh khuôn mặt thực tế." }
+        ],
+        severity: jsonRes.severity || {
+          recommendation: "Cần điều trị tích cực và bảo vệ da theo Hướng dẫn Bộ Y Tế."
+        },
+        zones: (jsonRes.zones && jsonRes.zones.length) ? jsonRes.zones : defaultZones,
+      };
+      
+      saveLatestScan(newScanData);
+
       const botMsg = {
         id: Date.now() + 1,
         role: "assistant",
-        content: parsed.overview + "\n\n**Bạn có muốn gợi ý Routine với tình trạng da bạn không?**",
+        content: "🎉 Đã phân tích xong! Báo cáo chi tiết của bạn đã được cập nhật tại mục **Da của bạn**.\n\n" + parsed.overview + "\n\n**Bạn có muốn gợi ý Routine với tình trạng da bạn không?**",
         isDemo: skinAnalysis.isDemo,
       };
       setMessages((prev) => [...prev, botMsg]);
@@ -334,6 +378,9 @@ export default function SkinAnalysis() {
       
       // Increment and save scan count on successful analysis
       localStorage.setItem("scanCount_" + currentUser.id, String(scans + 1));
+
+      // Navigate to /your-skin to view the futuristic diagnostic HUD
+      navigate("/your-skin");
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -709,21 +756,7 @@ export default function SkinAnalysis() {
         </main>
       </div>
 
-      {hasAnalysis && (
-        <div ref={productsRef} className="skin-analysis-recs">
-          <ProductRecommendations
-            products={recommendations.products}
-            profile={recommendations.profile}
-            title="Sản phẩm gợi ý phù hợp với da bạn"
-            subtitle="Dựa trên kết quả phân tích AI — sắp xếp theo mức độ phù hợp"
-          />
-          <div className="analyze-products-more">
-            <Link to="/products" className="analyze-btn analyze-btn--secondary">
-              Xem tất cả sản phẩm →
-            </Link>
-          </div>
-        </div>
-      )}
+
 
       {/* 3 Options Pricing Paywall Modal Overlay */}
       {showPaywall && (
