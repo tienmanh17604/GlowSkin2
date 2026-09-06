@@ -88,7 +88,7 @@ function formatChatMessage(text) {
 }
 
 export default function YourSkin() {
-  const { latestScan } = useApp();
+  const { latestScan, currentUser, setIsLoginOpen } = useApp();
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);
 
@@ -100,10 +100,10 @@ export default function YourSkin() {
   const [chatLoading, setChatLoading] = useState(false);
   const chatScrollRef = useRef(null);
 
-  const scan = latestScan || DEFAULT_DEMO_SCAN;
-  const displayImage = scan.image || DEFAULT_DEMO_SCAN.image;
+  const scan = latestScan;
+  const displayImage = scan?.image;
 
-  const rawZones = scan.zones && scan.zones.length ? scan.zones : DEFAULT_DEMO_SCAN.zones;
+  const rawZones = scan?.zones && scan.zones.length ? scan.zones : [];
   const zones = rawZones.filter((z) => z.id !== "lower_cheek");
 
   // Orbital placement radius matching circular layout around face image
@@ -182,61 +182,91 @@ export default function YourSkin() {
             Báo Cáo Phân Tích Làn Da <span className="gold-text-gradient">Chuyên Sâu</span>
           </h1>
           <p className="gold-page-subtitle">
-            Hệ thống định vị đa vùng chuẩn Y Khoa &amp; Công nghệ AI Gemini Vision | {scan.date || "Vừa cập nhật"}
+            Hệ thống định vị đa vùng chuẩn Y Khoa &amp; Công nghệ AI Gemini Vision {scan ? `| ${scan.date || "Vừa cập nhật"}` : ""}
           </p>
 
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "16px" }}>
-            <button className="gold-action-btn primary" onClick={() => handleOpenAiDoctor(zones[0])}>
-              💬 Chat Trực Tiếp Với Bác Sĩ AI (360 Bài Y Khoa)
+          {scan && (
+            <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "16px" }}>
+              <button className="gold-action-btn primary" onClick={() => handleOpenAiDoctor(zones[0])}>
+                💬 Chat Trực Tiếp Với Bác Sĩ AI (360 Bài Y Khoa)
+              </button>
+              <Link to="/analyze" className="gold-action-btn secondary">
+                📸 Chụp / Phân Tích Ảnh Mới
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {!currentUser ? (
+          <div className="gold-no-scan-box">
+            <div className="gold-badge">🔒 BẢO MẬT DỮ LIỆU Y KHOA CAO CẤP</div>
+            <h2 className="gold-page-title" style={{ fontSize: "28px", marginTop: "10px" }}>
+              Vui lòng đăng nhập để xem Báo cáo Da của bạn
+            </h2>
+            <p className="gold-page-subtitle" style={{ maxWidth: "560px", margin: "10px auto 24px" }}>
+              Hệ thống định vị đa vùng chuẩn Y khoa lưu trữ và bảo mật riêng dữ liệu phân tích da mặt cho từng tài khoản người dùng.
+            </p>
+            <button className="gold-action-btn primary" onClick={() => setIsLoginOpen(true)}>
+              🔑 Đăng nhập / Đăng ký tài khoản ngay
             </button>
-            <Link to="/analyze" className="gold-action-btn secondary">
-              📸 Chụp / Phân Tích Ảnh Mới
+          </div>
+        ) : !scan ? (
+          <div className="gold-no-scan-box">
+            <div className="gold-badge">✨ CHƯA CÓ BÁO CÁO PHÂN TÍCH DA</div>
+            <h2 className="gold-page-title" style={{ fontSize: "28px", marginTop: "10px" }}>
+              Chào {currentUser.name}! Bạn chưa có kết quả phân tích da mặt nào.
+            </h2>
+            <p className="gold-page-subtitle" style={{ maxWidth: "580px", margin: "10px auto 24px" }}>
+              Tải ảnh khuôn mặt hoặc mở camera để Công nghệ AI Vision &amp; 360 Bài Y Khoa Bộ Y Tế phân tích chi tiết tình trạng da của riêng bạn.
+            </p>
+            <Link to="/analyze" className="gold-action-btn primary" style={{ textDecoration: "none" }}>
+              📸 Phân tích da mặt bằng AI ngay
             </Link>
           </div>
-        </div>
+        ) : (
+          <div className="gold-boxes-stage">
+            {/* METALLIC GOLD CIRCULAR RINGS */}
+            <div className="gold-dashed-circle-ring" />
+            <div className="gold-inner-glow-ring" />
 
-        <div className="gold-boxes-stage">
-          {/* METALLIC GOLD CIRCULAR RINGS */}
-          <div className="gold-dashed-circle-ring" />
-          <div className="gold-inner-glow-ring" />
+            {/* CENTERED CLEAN CUSTOMER FACE PHOTO WITH FLOATING ANIMATION */}
+            <div className="gold-center-face-card gold-floating-bob">
+              <img
+                src={displayImage}
+                alt="Ảnh mặt khách hàng"
+                className="gold-face-img"
+              />
+            </div>
 
-          {/* CENTERED CLEAN CUSTOMER FACE PHOTO WITH FLOATING ANIMATION */}
-          <div className="gold-center-face-card gold-floating-bob">
-            <img
-              src={displayImage}
-              alt="Ảnh mặt khách hàng"
-              className="gold-face-img"
-            />
-          </div>
+            {/* DESCRIPTION RECTANGULAR CARDS ARRANGED AROUND CIRCLE */}
+            {zones.map((zone, idx) => {
+              const angle = zone.angle !== undefined ? zone.angle : -90 + (idx * 360) / zones.length;
+              const rad = (angle * Math.PI) / 180;
+              const cardLeft = 50 + orbitRadiusX * Math.cos(rad);
+              const cardTop = 50 + orbitRadiusY * Math.sin(rad);
+              const isActive = activeZoneId === zone.id || selectedZone?.id === zone.id;
 
-          {/* DESCRIPTION RECTANGULAR CARDS ARRANGED AROUND CIRCLE */}
-          {zones.map((zone, idx) => {
-            const angle = zone.angle !== undefined ? zone.angle : -90 + (idx * 360) / zones.length;
-            const rad = (angle * Math.PI) / 180;
-            const cardLeft = 50 + orbitRadiusX * Math.cos(rad);
-            const cardTop = 50 + orbitRadiusY * Math.sin(rad);
-            const isActive = activeZoneId === zone.id || selectedZone?.id === zone.id;
-
-            return (
-              <div
-                key={zone.id}
-                className={`gold-desc-card-box ${isActive ? "gold-card-highlight" : ""}`}
-                style={{ left: `${cardLeft}%`, top: `${cardTop}%` }}
-                onMouseEnter={() => setActiveZoneId(zone.id)}
-                onMouseLeave={() => setActiveZoneId(null)}
-                onClick={() => setSelectedZone(zone)}
-              >
-                <div className="gold-card-top-row">
-                  {zone.thumb && (
-                    <img src={zone.thumb} alt={zone.title} className="gold-card-mini-thumb" />
-                  )}
-                  <div className="gold-card-title-text">{zone.title}</div>
+              return (
+                <div
+                  key={zone.id}
+                  className={`gold-desc-card-box ${isActive ? "gold-card-highlight" : ""}`}
+                  style={{ left: `${cardLeft}%`, top: `${cardTop}%` }}
+                  onMouseEnter={() => setActiveZoneId(zone.id)}
+                  onMouseLeave={() => setActiveZoneId(null)}
+                  onClick={() => setSelectedZone(zone)}
+                >
+                  <div className="gold-card-top-row">
+                    {zone.thumb && (
+                      <img src={zone.thumb} alt={zone.title} className="gold-card-mini-thumb" />
+                    )}
+                    <div className="gold-card-title-text">{zone.title}</div>
+                  </div>
+                  <div className="gold-card-cond-text">{zone.condition}</div>
                 </div>
-                <div className="gold-card-cond-text">{zone.condition}</div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* MODAL 1: ZONE DIAGNOSIS DETAIL OVERLAY */}
         {selectedZone && (

@@ -613,5 +613,31 @@
   box-shadow: 0 6px 16px rgba(212, 175, 55, 0.45);
 }
 
+/* NO SCAN / GUEST USER BOX */
+.gold-no-scan-box {
+  width: 100%;
+  max-width: 650px;
+  margin: 40px auto 60px;
+  padding: 40px 30px;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 2px solid #d4af37;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(184, 134, 11, 0.15);
+  animation: goldFadeUp 0.4s ease forwards;
+}
+
+@keyframes goldFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
 

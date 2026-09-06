@@ -92,10 +92,15 @@ export function AppProvider({ children }) {
     });
   };
 
-  // Latest Skin Analysis Scan state
+  // Latest Skin Analysis Scan state — scoped per user account
   const [latestScan, setLatestScan] = useState(() => {
     try {
-      const saved = localStorage.getItem("glowskin-latest-scan");
+      const session = localStorage.getItem(USER_SESSION_KEY);
+      const user = session ? JSON.parse(session) : null;
+      if (!user) return null;
+      const userId = user._id || user.id;
+      const key = `glowskin-latest-scan-${userId}`;
+      const saved = localStorage.getItem(key);
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -104,10 +109,14 @@ export function AppProvider({ children }) {
 
   const saveLatestScan = (scanData) => {
     setLatestScan(scanData);
-    try {
-      localStorage.setItem("glowskin-latest-scan", JSON.stringify(scanData));
-    } catch (e) {
-      console.error("Lỗi lưu scan:", e);
+    if (currentUser) {
+      const userId = currentUser._id || currentUser.id;
+      const key = `glowskin-latest-scan-${userId}`;
+      try {
+        localStorage.setItem(key, JSON.stringify(scanData));
+      } catch (e) {
+        console.error("Lỗi lưu scan:", e);
+      }
     }
   };
 
@@ -203,8 +212,29 @@ export function AppProvider({ children }) {
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem(USER_SESSION_KEY, JSON.stringify(currentUser));
+      const userId = currentUser._id || currentUser.id;
+
+      // Load user-specific scan
+      try {
+        const scanKey = `glowskin-latest-scan-${userId}`;
+        const savedScan = localStorage.getItem(scanKey);
+        setLatestScan(savedScan ? JSON.parse(savedScan) : null);
+      } catch {
+        setLatestScan(null);
+      }
+
+      // Load user-specific wishlist
+      try {
+        const wishKey = `glowskin-wishlist-${userId}`;
+        const savedWish = localStorage.getItem(wishKey);
+        setWishlist(savedWish ? JSON.parse(savedWish) : {});
+      } catch {
+        setWishlist({});
+      }
     } else {
       localStorage.removeItem(USER_SESSION_KEY);
+      setLatestScan(null);
+      setWishlist({});
     }
   }, [currentUser]);
 
@@ -219,15 +249,25 @@ export function AppProvider({ children }) {
       const data = await res.json();
       if (data.success) {
         setCurrentUser(data.user);
-        // Load wishlist của user vừa đăng nhập
         const userId = data.user._id || data.user.id;
-        const key = `glowskin-wishlist-${userId}`;
+        
+        // Load user scan & wishlist
         try {
-          const saved = localStorage.getItem(key);
-          setWishlist(saved ? JSON.parse(saved) : {});
+          const scanKey = `glowskin-latest-scan-${userId}`;
+          const savedScan = localStorage.getItem(scanKey);
+          setLatestScan(savedScan ? JSON.parse(savedScan) : null);
+        } catch {
+          setLatestScan(null);
+        }
+
+        try {
+          const wishKey = `glowskin-wishlist-${userId}`;
+          const savedWish = localStorage.getItem(wishKey);
+          setWishlist(savedWish ? JSON.parse(savedWish) : {});
         } catch {
           setWishlist({});
         }
+
         return { success: true, user: data.user };
       }
       return { success: false, message: data.message || "Email hoặc mật khẩu không chính xác!" };
@@ -239,7 +279,9 @@ export function AppProvider({ children }) {
 
   const logout = () => {
     setCurrentUser(null);
-    setWishlist({}); // Xóa wishlist khỏi state khi đăng xuất
+    setLatestScan(null);
+    setWishlist({});
+    localStorage.removeItem(USER_SESSION_KEY);
   };
 
   const register = async (name, email, password) => {
