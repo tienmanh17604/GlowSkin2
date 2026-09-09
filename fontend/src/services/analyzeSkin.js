@@ -322,11 +322,25 @@ export function cleanAiText(text) {
   return clean.trim();
 }
 
-const CHAT_SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Skincare AI của GlowSkin. Nhiệm vụ: Giải đáp thắc mắc và tư vấn chuyên sâu về làn da cho người dùng dựa trên 360 Hướng dẫn Y Khoa & Quyết định 4416/QĐ-BYT Bộ Y Tế.
+const CHAT_SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Skincare AI của GlowSkin. Nhiệm vụ: Giải đáp thắc mắc, phân tích hình ảnh mỹ phẩm/tuýp thuốc/bảng thành phần và tư vấn chuyên sâu về làn da cho người dùng dựa trên 360 Hướng dẫn Y Khoa & Quyết định 4416/QĐ-BYT Bộ Y Tế.
 
-- Trả lời bằng tiếng Việt tự nhiên, thân thiện, rõ ràng và mạch lạc.
+QUY TẮC QUÉT HÌNH ẢNH SẢN PHẨM & ĐỌC HOẠT CHẤT (KHI CÓ ẢNH ĐÍNH KÈM):
+1. NHẬN DIỆN VÀ ĐỌC HOẠT CHẤT TRÊN BAO BÌ/TUÝP THUỐC:
+   - Hãy sử dụng AI Vision quan sát kỹ hình ảnh nhãn hiệu, tuýp cream/gel, bao bì hoặc bảng thành phần (ingredients) trong ảnh người dùng gửi.
+   - Đọc chính xác tên sản phẩm và các hoạt chất active chính xuất hiện trong ảnh (ví dụ: Klenzit MS / Klenzit-C / Derma Forte / Megaduo / Differin / BHA / Niacinamide / Benzoyl Peroxide / Azelaic Acid / Hydroquinone / Tretinoin / Adapalene / Retinol...).
+
+2. ĐỐI CHIẾU VỚI NỀN DỮ LIỆU Y KHOA (QĐ 4416/QĐ-BYT):
+   - Nêu rõ công dụng tác dụng y khoa của các hoạt chất vừa nhận diện được.
+   - Đánh giá xem sản phẩm/hoạt chất này CÓ PHÙ HỢP với tình trạng da người dùng (mụn ẩn, mụn viêm, thâm mụn PIH, da dầu/khô/nhạy cảm...) theo hướng dẫn chuẩn Bộ Y Tế hay không.
+
+3. KHUYẾN NGHỊ VÀ HƯỚNG DẪN SỬ DỤNG CHI TIẾT:
+   - Xác nhận rõ ràng: "Sản phẩm trong ảnh của bạn là **[Tên sản phẩm/Hoạt chất]**".
+   - Cho biết CÓ NÊN DÙNG KHÔNG và lý do y khoa.
+   - Hướng dẫn cách dùng: Tần suất (số lần/tuần), thứ tự thoa trong Routine, và các lưu ý chống chỉ định/kích ứng nếu có.
+
+- Trả lời bằng tiếng Việt tự nhiên, chuyên nghiệp, rõ ràng và mạch lạc.
 - Trình bày dạng Markdown đẹp mắt (dùng **in đậm**, gạch đầu dòng ngắn gọn).
-- TUYỆT ĐỐI KHÔNG BAO GỒM BẤT KỲ CẤU TRÚC LẬP TRÌNH HOẶC CHUỖI JSON (như ===JSON_DATA=== hay { "zones": ... }) TRONG CÂU TRẢ LỜI.`;
+- TUYỆT ĐỐI KHÔNG BAO GỒM BẤT KỲ CẤU TRÚC LẬP TRÌNH HOẶC CHUỖI JSON TRONG CÂU TRẢ LỜI.`;
 
 export async function analyzeSkinImage(imageDataUrl) {
   if (!hasApiKey()) {
@@ -359,7 +373,24 @@ export async function sendFollowUp(chatHistory) {
 
   for (const msg of chatHistory) {
     if (msg.role === "user") {
-      apiMessages.push({ role: "user", content: msg.content || "" });
+      const imgList = msg.images || (msg.image ? [msg.image] : []);
+      if (imgList.length > 0) {
+        const contentParts = [
+          {
+            type: "text",
+            text: msg.content || "Hãy đọc thông tin sản phẩm, hoạt chất trong các ảnh đính kèm và phân tích xem tôi có nên dùng không."
+          }
+        ];
+        for (const imgSrc of imgList) {
+          contentParts.push({
+            type: "image_url",
+            image_url: { url: imgSrc }
+          });
+        }
+        apiMessages.push({ role: "user", content: contentParts });
+      } else {
+        apiMessages.push({ role: "user", content: msg.content || "" });
+      }
     } else if (msg.role === "assistant") {
       const cleanMsg = cleanAiText(msg.content);
       if (cleanMsg) {

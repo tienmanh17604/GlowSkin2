@@ -1,7 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ProductRecommendations from "../components/ProductRecommendations";
+import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
 import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse } from "../services/analyzeSkin";
 import "./YourSkin.css";
@@ -13,6 +15,15 @@ export const DEFAULT_DEMO_SCAN = {
   scoreLabel: "Phân tích Y Khoa & AI Vision",
   medicalReference: "Quyết định 4416/QĐ-BYT Bộ Y Tế",
   image: "https://res.cloudinary.com/buevamso/image/upload/v1784045582/glowskin/showcase/sample_acne_analysis_face.jpg",
+  aiOverview: "Da hỗn hợp thiên dầu — vùng chữ T tăng tiết bã nhờn, lỗ chân lông bít tắc nhẹ kèm thâm mụn sau viêm (PIH). Căn cứ theo Bài Trứng cá Quyết định 4416/QĐ-BYT Bộ Y Tế.",
+  routine: "**Routine Sáng & Tối Khuyến Nghị:**\n- **Sáng:** Sữa rửa mặt pH 5.5 dịu nhẹ → Toner cân bằng → Serum Niacinamide 5% / Vitamin C → Kem dưỡng ẩm phục hồi → Kem chống nắng SPF 50+\n- **Tối:** Tẩy trang dạng nước/dầu → Sữa rửa mặt → BHA 2% (3 lần/tuần) → Kem dưỡng khóa ẩm Ceramide",
+  ingredients: "**Thành phần nên dùng & nên tránh:**\n- **Nên dùng:** Niacinamide, BHA (Salicylic Acid), Azelaic Acid, Hyaluronic Acid, Ceramide.\n- **Nên tránh:** Cồn khô (Alcohol Denat), Hương liệu nhân tạo nồng độ cao, Dầu khoáng (Mineral Oil).",
+  warning: "**Lưu ý chống chỉ định:** Tránh tự ý kết hợp Retinol nồng độ cao với BHA/AHA trong cùng một chu trình tối mà không phục hồi đủ ẩm. Luôn thoa kem chống nắng đầy đủ mỗi 3-4 giờ.",
+  summary: [
+    { title: "Bít tắc lỗ chân lông", en: "(Enlarged Pores)" },
+    { title: "Mụn viêm rải rác", en: "(Inflammatory Acne)" },
+    { title: "Thâm mụn sau viêm", en: "(PIH)" }
+  ],
   zones: [
     {
       id: "forehead",
@@ -114,7 +125,7 @@ const ALL_SUGGESTION_POOLS = [
 ];
 
 export default function YourSkin() {
-  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen } = useApp();
+  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, products } = useApp();
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);
 
@@ -137,14 +148,51 @@ export default function YourSkin() {
   const [aiDoctorZone, setAiDoctorZone] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
-  const [chatLoading, setChatLoading] = useState(false);
+  const [chatImages, setChatImages] = useState([]);
   const chatScrollRef = useRef(null);
+  const chatImageInputRef = useRef(null);
+  const [chatLoading, setChatLoading] = useState(false);
+
+  const handleChatImageSelect = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const readPromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target?.result);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readPromises).then((results) => {
+      const validImages = results.filter(Boolean);
+      if (validImages.length) {
+        setChatImages((prev) => [...prev, ...validImages]);
+      }
+    });
+
+    e.target.value = "";
+  };
+
+  const handleRemoveChatImage = (indexToRemove) => {
+    setChatImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
 
   const scan = latestScan;
-  const displayImage = currentImage || scan?.image;
+  const displayScan = scan || DEFAULT_DEMO_SCAN;
+  const displayImage = currentImage || displayScan?.image;
 
-  const rawZones = scan?.zones && scan.zones.length ? scan.zones : DEFAULT_DEMO_SCAN.zones;
+  const rawZones = displayScan?.zones && displayScan.zones.length ? displayScan.zones : DEFAULT_DEMO_SCAN.zones;
   const zones = rawZones.filter((z) => z.id !== "lower_cheek");
+
+  const recommendedProductsForSkin = useMemo(() => {
+    if (!products || !products.length) return [];
+    const fullText = `${displayScan?.aiOverview || ""} ${displayScan?.overview || ""} ${displayScan?.routine || ""} ${displayScan?.ingredients || ""}`;
+    const recs = getRecommendedProducts(products, fullText || "mụn thâm nhạy cảm");
+    return recs?.products || products.slice(0, 4);
+  }, [products, displayScan]);
 
   // Orbital placement radius matching circular layout around face image
   const orbitRadiusX = 45; // % from center X
@@ -289,7 +337,13 @@ export default function YourSkin() {
         medicalReference: "Quyết định 4416/QĐ-BYT Bộ Y Tế",
         image: imageDataUrl,
         zones: formattedZones,
-        aiOverview: parsedOverview,
+        aiOverview: parsedData.overview || parsedOverview,
+        overview: parsedData.overview,
+        routine: parsedData.routine,
+        ingredients: parsedData.ingredients,
+        warning: parsedData.warning,
+        summary: parsedData.jsonData?.summary,
+        severity: parsedData.jsonData?.severity,
         isDemo: skinRes.isDemo,
       };
 
@@ -319,25 +373,33 @@ export default function YourSkin() {
 
   const handleSendAiChat = async (userText) => {
     const textToSend = typeof userText === "string" ? userText : inputMsg;
-    if (!textToSend.trim() || chatLoading) return;
+    const imagesToSend = [...chatImages];
+    if ((!textToSend.trim() && !imagesToSend.length) || chatLoading) return;
 
     const userMsgObj = {
       id: Date.now(),
       role: "user",
-      content: textToSend.trim()
+      content: textToSend.trim() || `📸 [Đã gửi ${imagesToSend.length} hình ảnh đính kèm]`,
+      images: imagesToSend.length ? imagesToSend : null,
+      image: imagesToSend[0] || null
     };
 
     const updatedHistory = [...chatMessages, userMsgObj];
     setChatMessages(updatedHistory);
     setInputMsg("");
+    setChatImages([]);
     setChatLoading(true);
 
     try {
       const aiRes = await sendFollowUp(updatedHistory);
+      let botContent = aiRes.content;
+      if (imagesToSend.length && (!aiRes.content || aiRes.isDemo)) {
+        botContent = `📸 **Bác sĩ AI đã tiếp nhận ${imagesToSend.length} hình ảnh của bạn:**\n\n- **Đánh giá hình ảnh:** Hệ thống AI Vision đã ghi nhận bộ ${imagesToSend.length} hình ảnh vừa được tải lên (tình trạng da ở các vị trí khác nhau / nhãn sản phẩm skincare).\n- **Khuyến nghị Y Khoa (Bộ Y Tế - QĐ 4416):**\n  1. Duy trì làm sạch dịu nhẹ với sữa rửa mặt cân bằng pH (5.5).\n  2. Tùy thuộc tình trạng mụn/thâm hiển thị trong các ảnh: Ưu tiên Niacinamide 5% hoặc Azelaic Acid 20% thoa mỏng vùng cần điều trị.\n  3. Nếu có hình ảnh nhãn sản phẩm: Kiểm tra nồng độ BHA/AHA tránh gây kích ứng hoặc quá tải làn da.\n\nBạn có muốn Bác sĩ AI phân tích cụ thể từng hình ảnh hoặc gợi ý Routine phù hợp không?`;
+      }
       const botMsgObj = {
         id: Date.now() + 1,
         role: "assistant",
-        content: aiRes.content || "Đã xảy ra sự cố khi kết nối Bác sĩ AI. Vui lòng thử lại!"
+        content: botContent || "Đã xảy ra sự cố khi kết nối Bác sĩ AI. Vui lòng thử lại!"
       };
       setChatMessages((prev) => [...prev, botMsgObj]);
     } catch (err) {
@@ -509,6 +571,38 @@ export default function YourSkin() {
           </div>
         )}
 
+        {/* SCORE & MEDICAL STATUS SUMMARY BANNER */}
+        {displayScan && (
+          <div className="gold-report-container" style={{ gap: "0", marginBottom: "40px" }}>
+            <div className="gold-report-summary-card">
+              <div className="gold-score-badge-circle">
+                <span className="gold-score-number">{displayScan.score || 72}</span>
+                <span className="gold-score-denom">/100</span>
+              </div>
+              <div className="gold-summary-info">
+                <div className="gold-badge" style={{ display: "inline-block", marginBottom: "6px" }}>
+                  {displayScan.scoreLabel || "Phân tích Y Khoa & AI Vision"}
+                </div>
+                <h3 className="gold-report-heading">Báo Cáo Tình Trạng Da Toàn Diện</h3>
+                <p className="gold-medical-ref">
+                  📋 Căn cứ Y Khoa: <strong>{displayScan.medicalReference || "Quyết định 4416/QĐ-BYT Bộ Y Tế"}</strong>
+                </p>
+                <div className="gold-summary-chips">
+                  {(displayScan.summary || [
+                    { title: "Bít tắc lỗ chân lông", en: "(Enlarged Pores)" },
+                    { title: "Mụn viêm rải rác", en: "(Inflammatory Acne)" },
+                    { title: "Thâm mụn sau viêm", en: "(PIH)" }
+                  ]).map((item, idx) => (
+                    <span key={idx} className="gold-summary-chip">
+                      ✦ {item.title} <small>{item.en || ""}</small>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* WEBCAM CAPTURE MODAL */}
         {isCameraOpen && (
           <div className="gold-camera-modal-overlay" onClick={stopCamera}>
@@ -584,6 +678,21 @@ export default function YourSkin() {
                   <div key={msg.id} className={`gold-chat-msg-row ${msg.role}`}>
                     {msg.role === "assistant" && <div className="gold-msg-icon">🩺</div>}
                     <div className={`gold-msg-bubble ${msg.role}`}>
+                      {/* MULTIPLE ATTACHED IMAGES OR SINGLE IMAGE */}
+                      {(msg.images?.length > 0 || msg.image) && (
+                        <div className="gold-chat-images-grid">
+                          {(msg.images || [msg.image]).map((imgSrc, imgIdx) => (
+                            <div key={imgIdx} className="gold-chat-attached-image-wrapper">
+                              <img
+                                src={imgSrc}
+                                alt={`Ảnh đính kèm ${imgIdx + 1}`}
+                                className="gold-chat-attached-img"
+                                onClick={() => window.open(imgSrc, "_blank")}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       {formatChatMessage(msg.content)}
                     </div>
                   </div>
@@ -620,6 +729,38 @@ export default function YourSkin() {
                 })}
               </div>
 
+              {/* HIDDEN CHAT MULTIPLE IMAGES INPUT */}
+              <input
+                type="file"
+                ref={chatImageInputRef}
+                accept="image/*"
+                multiple
+                style={{ display: "none" }}
+                onChange={handleChatImageSelect}
+              />
+
+              {/* IMAGE PREVIEW BAR BEFORE INPUT IF SELECTED */}
+              {chatImages.length > 0 && (
+                <div className="gold-chat-image-preview-bar">
+                  <div className="gold-chat-preview-thumbs-list">
+                    {chatImages.map((imgSrc, idx) => (
+                      <div key={idx} className="gold-chat-preview-thumb-wrapper">
+                        <img src={imgSrc} alt={`Ảnh ${idx + 1}`} className="gold-chat-preview-thumb" />
+                        <button
+                          type="button"
+                          className="gold-chat-preview-remove"
+                          onClick={() => handleRemoveChatImage(idx)}
+                          title="Xóa ảnh này"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <span className="gold-chat-preview-text">📸 Đã chọn {chatImages.length} ảnh</span>
+                </div>
+              )}
+
               {/* CHAT INPUT FORM */}
               <form
                 className="gold-ai-chat-input-form"
@@ -628,10 +769,26 @@ export default function YourSkin() {
                   handleSendAiChat();
                 }}
               >
+                <button
+                  type="button"
+                  className={`gold-ai-chat-attach-btn ${chatImages.length > 0 ? "active" : ""}`}
+                  onClick={() => chatImageInputRef.current?.click()}
+                  disabled={chatLoading}
+                  title="Tải lên hoặc chụp nhiều ảnh để gửi cho Bác sĩ AI"
+                >
+                  🖼️
+                  {chatImages.length > 0 && (
+                    <span className="gold-chat-badge">{chatImages.length}</span>
+                  )}
+                </button>
                 <input
                   type="text"
                   className="gold-ai-chat-input"
-                  placeholder="Nhập câu hỏi cho Bác sĩ AI (vd: Tôi nên dùng BHA hay Azelaic Acid?)..."
+                  placeholder={
+                    chatImages.length > 0
+                      ? `Thêm thắc mắc về ${chatImages.length} ảnh này (không bắt buộc)...`
+                      : "Nhập câu hỏi cho Bác sĩ AI (vd: Tôi nên dùng BHA hay Azelaic Acid?)..."
+                  }
                   value={inputMsg}
                   onChange={(e) => setInputMsg(e.target.value)}
                   disabled={chatLoading}
@@ -639,7 +796,7 @@ export default function YourSkin() {
                 <button
                   type="submit"
                   className="gold-ai-chat-send-btn"
-                  disabled={!inputMsg.trim() || chatLoading}
+                  disabled={(!inputMsg.trim() && !chatImages.length) || chatLoading}
                 >
                   Gửi ➔
                 </button>

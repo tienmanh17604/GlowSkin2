@@ -430,12 +430,125 @@
   }
 }
 
+.analyze-attach-btn {
+  position: relative;
+  padding: 12px 14px;
+  background: white;
+  border: 1.5px solid #c39c73;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.analyze-attach-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #a98467;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+}
+
+.analyze-attach-btn:hover:not(:disabled) {
+  background: #faf4ed;
+  transform: scale(1.05);
+}
+
+.analyze-attach-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.analyze-chat-image-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #fdfaf6;
+  border-top: 1px dashed #c39c73;
+  font-size: 13px;
+  color: #8c6239;
+}
+
+.analyze-preview-thumbs-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px;
+  max-width: 70%;
+}
+
+.analyze-preview-thumb-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: visible;
+  border: 1px solid #c39c73;
+  flex-shrink: 0;
+}
+
+.analyze-preview-thumb-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
+.analyze-msg-images-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  max-width: 320px;
+}
+
+.analyze-msg-images-grid .analyze-msg-image {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0;
+}
+
+.analyze-preview-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  border: 1px solid white;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .analyze-input-form {
   display: flex;
   gap: 10px;
   padding: 16px 20px;
   border-top: 1px solid #f0f0f0;
   background: #fafafa;
+  align-items: center;
 }
 
 .analyze-input-form input {

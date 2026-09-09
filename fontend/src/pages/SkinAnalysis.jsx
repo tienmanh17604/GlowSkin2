@@ -119,7 +119,36 @@ export default function SkinAnalysis() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [chatImages, setChatImages] = useState([]);
+  const chatImageInputRef = useRef(null);
   const [showPaywall, setShowPaywall] = useState(false);
+
+  const handleChatImageSelect = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const readPromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target?.result);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(readPromises).then((results) => {
+      const validImages = results.filter(Boolean);
+      if (validImages.length) {
+        setChatImages((prev) => [...prev, ...validImages]);
+      }
+    });
+
+    e.target.value = "";
+  };
+
+  const handleRemoveChatImage = (indexToRemove) => {
+    setChatImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentAnalysisSections, setCurrentAnalysisSections] = useState(null);
   const [flowStep, setFlowStep] = useState(null); // null | "routine_prompt" | "ingredients_prompt" | "warning_prompt" | "completed"
@@ -356,6 +385,10 @@ export default function SkinAnalysis() {
         scoreLabel: jsonRes.scoreLabel || "Phân tích Y Khoa & AI Vision",
         medicalReference: jsonRes.medicalReference || "Quyết định 4416/QĐ-BYT Bộ Y Tế",
         image: dataUrl,
+        aiOverview: parsed.overview,
+        routine: parsed.routine,
+        ingredients: parsed.ingredients,
+        warning: parsed.warning,
         summary: jsonRes.summary || [
           { title: "Phân tích AI Vision", en: "(AI Vision Diagnosis)", desc: "Nhận diện tình trạng từ ảnh khuôn mặt thực tế." }
         ],
@@ -370,7 +403,7 @@ export default function SkinAnalysis() {
       const botMsg = {
         id: Date.now() + 1,
         role: "assistant",
-        content: "🎉 Đã phân tích xong! Báo cáo chi tiết của bạn đã được cập nhật tại mục **Da của bạn**.\n\n" + parsed.overview + "\n\n**Bạn có muốn gợi ý Routine với tình trạng da bạn không?**",
+        content: "🎉 **Đã phân tích da hoàn tất!** Báo cáo đầy đủ đã sẵn sàng.\n\n" + parsed.overview + "\n\n👉 **[Bấm vào đây để xem Bản đồ Định vị Đa vùng HUD tại Da của bạn ➔](/your-skin)**\n\n**Bạn có muốn tôi gợi ý Routine với tình trạng da bạn không?**",
         isDemo: skinAnalysis.isDemo,
       };
       setMessages((prev) => [...prev, botMsg]);
@@ -378,9 +411,6 @@ export default function SkinAnalysis() {
       
       // Increment and save scan count on successful analysis
       localStorage.setItem("scanCount_" + currentUser.id, String(scans + 1));
-
-      // Navigate to /your-skin to view the futuristic diagnostic HUD
-      navigate("/your-skin");
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -491,12 +521,12 @@ export default function SkinAnalysis() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!input.trim() || loading) return;
-
     const userText = input.trim();
+    const imagesToSend = [...chatImages];
+    if ((!userText && !imagesToSend.length) || loading) return;
 
     // Intercept user's yes/no text input if in active flow step
-    if (flowStep && flowStep !== "completed") {
+    if (flowStep && flowStep !== "completed" && userText) {
       const cleanText = userText.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, "").trim();
       const isYes = ["có", "co", "yes", "y", "đúng", "dung", "đồng ý", "dong y", "ok", "được", "duc"].includes(cleanText);
       const isNo = ["không", "khong", "no", "n", "chưa", "chua", "hủy", "huy"].includes(cleanText);
@@ -527,10 +557,13 @@ export default function SkinAnalysis() {
     const userMsg = {
       id: Date.now(),
       role: "user",
-      content: userText,
+      content: userText || `📸 [Đã gửi ${imagesToSend.length} hình ảnh đính kèm]`,
+      images: imagesToSend.length ? imagesToSend : null,
+      image: imagesToSend[0] || null,
     };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    setChatImages([]);
     setLoading(true);
 
     try {
@@ -538,6 +571,7 @@ export default function SkinAnalysis() {
         role: m.role,
         content: m.content,
         image: m.image || null,
+        images: m.images || null
       }));
       const reply = await sendFollowUp(history);
       const botMsg = {
@@ -691,8 +725,18 @@ export default function SkinAnalysis() {
 
             {messages.map((msg) => (
               <div key={msg.id} className={`analyze-msg analyze-msg--${msg.role}`}>
-                {msg.image && (
-                  <img src={msg.image} alt="Ảnh gửi" className="analyze-msg-image" />
+                {(msg.images?.length > 0 || msg.image) && (
+                  <div className="analyze-msg-images-grid">
+                    {(msg.images || [msg.image]).map((imgSrc, imgIdx) => (
+                      <img
+                        key={imgIdx}
+                        src={imgSrc}
+                        alt={`Ảnh gửi ${imgIdx + 1}`}
+                        className="analyze-msg-image"
+                        onClick={() => window.open(imgSrc, "_blank")}
+                      />
+                    ))}
+                  </div>
                 )}
                 <div className={`analyze-msg-bubble ${msg.isError ? "analyze-msg-bubble--error" : ""}`}>
                   {formatMessage(msg.content)}
@@ -731,7 +775,51 @@ export default function SkinAnalysis() {
             </div>
           )}
 
+          {/* HIDDEN CHAT MULTIPLE IMAGES INPUT */}
+          <input
+            type="file"
+            ref={chatImageInputRef}
+            accept="image/*"
+            multiple
+            style={{ display: "none" }}
+            onChange={handleChatImageSelect}
+          />
+
+          {chatImages.length > 0 && (
+            <div className="analyze-chat-image-preview">
+              <div className="analyze-preview-thumbs-list">
+                {chatImages.map((imgSrc, idx) => (
+                  <div key={idx} className="analyze-preview-thumb-wrapper">
+                    <img src={imgSrc} alt={`Ảnh ${idx + 1}`} />
+                    <button
+                      type="button"
+                      className="analyze-preview-remove"
+                      onClick={() => handleRemoveChatImage(idx)}
+                      title="Xóa ảnh này"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <span>📸 Đã chọn {chatImages.length} ảnh</span>
+            </div>
+          )}
+
           <form className="analyze-input-form" onSubmit={handleSendMessage}>
+            <button
+              type="button"
+              className="analyze-attach-btn"
+              onClick={() => chatImageInputRef.current?.click()}
+              disabled={loading || messages.length === 0}
+              title="Gửi nhiều hình ảnh da/sản phẩm"
+            >
+              🖼️
+              {chatImages.length > 0 && (
+                <span className="analyze-attach-badge">{chatImages.length}</span>
+              )}
+            </button>
+
             {hasAnalysis && (
               <button
                 type="button"
@@ -744,12 +832,12 @@ export default function SkinAnalysis() {
             )}
             <input
               type="text"
-              placeholder="Hỏi thêm về da, routine, sản phẩm..."
+              placeholder={chatImages.length > 0 ? `Thêm ghi chú về ${chatImages.length} ảnh này...` : "Hỏi thêm về da, routine, sản phẩm..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={loading || messages.length === 0}
             />
-            <button type="submit" disabled={loading || !input.trim() || messages.length === 0}>
+            <button type="submit" disabled={loading || (!input.trim() && !chatImages.length) || messages.length === 0}>
               Gửi
             </button>
           </form>

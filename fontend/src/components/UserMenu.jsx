@@ -92,6 +92,26 @@ export default function UserMenu() {
               type="button"
               className="user-menu-item"
               onClick={() => {
+                navigate("/your-skin");
+                setIsOpen(false);
+              }}
+            >
+              <div className="user-menu-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 8V6a2 2 0 0 1 2-2h2M4 16v2a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </div>
+              <div className="user-menu-item-text">
+                <strong>Báo cáo Da của bạn</strong>
+                <span>Xem chẩn đoán AI & phác đồ chăm sóc da cá nhân</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="user-menu-item"
+              onClick={() => {
                 navigate("/profile?tab=orders");
                 setIsOpen(false);
               }}

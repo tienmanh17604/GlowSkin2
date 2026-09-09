@@ -107,7 +107,7 @@ export function AppProvider({ children }) {
     }
   });
 
-  const saveLatestScan = (scanData) => {
+  const saveLatestScan = async (scanData) => {
     setLatestScan(scanData);
     if (currentUser) {
       const userId = currentUser._id || currentUser.id;
@@ -115,7 +115,18 @@ export function AppProvider({ children }) {
       try {
         localStorage.setItem(key, JSON.stringify(scanData));
       } catch (e) {
-        console.error("Lỗi lưu scan:", e);
+        console.error("Lỗi lưu scan local:", e);
+      }
+
+      // Sync scan data with backend MongoDB API
+      try {
+        await fetch(`${API_URL}/users/${userId}/latest-scan`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ latestScan: scanData }),
+        });
+      } catch (e) {
+        console.warn("Lỗi lưu scan lên backend server:", e);
       }
     }
   };
