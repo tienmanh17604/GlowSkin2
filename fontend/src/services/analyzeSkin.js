@@ -173,39 +173,92 @@ export function parseAnalysisResponse(text) {
   return sections;
 }
 
+let cachedMedicalContext = null;
+
+export function compressImageIfNeeded(dataUrl, maxWidth = 1024, quality = 0.85) {
+  return new Promise((resolve) => {
+    if (!dataUrl || typeof dataUrl !== "string" || !dataUrl.startsWith("data:image")) {
+      return resolve(dataUrl);
+    }
+
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = () => {
+      if (img.width <= maxWidth && img.height <= maxWidth) {
+        return resolve(dataUrl);
+      }
+
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxWidth) {
+          width = Math.round((width * maxWidth) / height);
+          height = maxWidth;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
 async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão hóa") {
+  if (cachedMedicalContext) return cachedMedicalContext;
+
   try {
     const queries = ["mụn trứng cá viêm mủ ẩn", "sắc tố thâm mụn nám tàn nhang", "lão hóa nếp nhăn căng bóng"];
     if (query && !queries.includes(query)) {
       queries.unshift(query);
     }
 
+    // Tối ưu: Gửi song song các request bằng Promise.all thay vì gọi nối tiếp
+    const responses = await Promise.all(
+      queries.slice(0, 3).map((q) =>
+        fetch(`${API_URL}/medical/search`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: q }),
+        })
+          .then((res) => (res.ok ? res.json() : { results: [] }))
+          .catch(() => ({ results: [] }))
+      )
+    );
+
     const fetchedItems = [];
-    for (const q of queries.slice(0, 3)) {
-      const res = await fetch(`${API_URL}/medical/search`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.results && data.results.length) {
-          fetchedItems.push(...data.results);
-        }
+    for (const data of responses) {
+      if (data.results && data.results.length) {
+        fetchedItems.push(...data.results);
       }
     }
 
     // Deduplicate by ID or title
     const uniqueMap = new Map();
     for (const item of fetchedItems) {
-      if (!uniqueMap.has(item.id)) {
-        uniqueMap.set(item.id, item);
+      const key = item.id || item.title;
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, item);
       }
     }
 
     const uniqueResults = Array.from(uniqueMap.values()).slice(0, 5);
     if (uniqueResults.length) {
-      return uniqueResults.map(r => `--- [Nguồn: ${r.source || 'Bộ Y Tế / DATA AI'}] ${r.title} ---\n${r.content}`).join("\n\n");
+      cachedMedicalContext = uniqueResults
+        .map((r) => `--- [Nguồn: ${r.source || "Bộ Y Tế / DATA AI"}] ${r.title} ---\n${r.content}`)
+        .join("\n\n");
+      return cachedMedicalContext;
     }
   } catch (err) {
     console.warn("Không thể tải tài liệu Y tế từ backend:", err);
@@ -344,12 +397,13 @@ QUY TẮC QUÉT HÌNH ẢNH SẢN PHẨM & ĐỌC HOẠT CHẤT (KHI CÓ ẢNH �
 
 export async function analyzeSkinImage(imageDataUrl) {
   if (!hasApiKey()) {
-    await new Promise((r) => setTimeout(r, 1800));
+    await new Promise((r) => setTimeout(r, 600));
     return { content: DEMO_ANALYSIS, isDemo: true };
   }
 
+  const optimizedImageDataUrl = await compressImageIfNeeded(imageDataUrl);
   const medicalContext = await fetchMedicalContext("mụn trứng cá viêm da");
-  const messages = buildVisionMessages([], imageDataUrl, medicalContext);
+  const messages = buildVisionMessages([], optimizedImageDataUrl, medicalContext);
   const content = await callOpenAI(messages);
   return { content, isDemo: false };
 }
