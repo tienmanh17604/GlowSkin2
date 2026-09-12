@@ -1,0 +1,815 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "title": "Hướng dẫn chẩn đoán và điều trị các bệnh da liễu",
+    "publisher": "Bộ Y tế",
+    "year": 2023,
+    "source_file": "dermatology_guideline.pdf"
+  },
+  "purpose": "Knowledge base derived from the supplied guideline for a skincare/skin-image analysis website. It is not a diagnostic engine and many conditions require history, examination, dermoscopy, laboratory tests or biopsy.",
+  "skin_types": [
+    {
+      "id": "normal",
+      "name_vi": "Da thường",
+      "source_support": "not explicitly classified in the supplied guideline",
+      "note": "Use only as a cosmetic/skin-condition category, not as a disease diagnosis."
+    },
+    {
+      "id": "oily",
+      "name_vi": "Da dầu",
+      "source_support": "not explicitly classified in the supplied guideline"
+    },
+    {
+      "id": "dry",
+      "name_vi": "Da khô",
+      "source_support": "not explicitly classified in the supplied guideline"
+    },
+    {
+      "id": "combination",
+      "name_vi": "Da hỗn hợp",
+      "source_support": "not explicitly classified in the supplied guideline"
+    },
+    {
+      "id": "sensitive",
+      "name_vi": "Da nhạy cảm",
+      "source_support": "not explicitly classified in the supplied guideline"
+    }
+  ],
+  "lesion_features_for_vision": [
+    "dát",
+    "ban đỏ",
+    "sẩn",
+    "mụn mủ",
+    "mụn nước",
+    "bọng nước",
+    "nốt",
+    "cục",
+    "nang",
+    "mảng",
+    "vảy",
+    "vảy tiết",
+    "trợt",
+    "loét",
+    "nứt nẻ",
+    "dày sừng",
+    "thâm nhiễm",
+    "tăng sắc tố",
+    "giảm sắc tố",
+    "rụng tóc",
+    "sẹo"
+  ],
+  "chapters": [
+    {
+      "category_vi": "Bệnh da nhiễm khuẩn",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Chốc",
+          "name_source": "BỆNH CHỐC",
+          "english_alias": "Impetigo",
+          "source_page": 9,
+          "clinical_visual_features": "- Chốc được phân thành 2 nhóm chính: Chốc không có bọng nước và chốc bọng nước + Chốc không có bọng nước: tổn thương ban đầu là các sẩn đỏ, tiến triển thành mụn nước nhỏ hóa mủ nhanh hoặc mụn mủ nhỏ, nhanh chóng dập vỡ đóng vảy tiết màu vàng mật ong, nền đỏ ướt. Tổn thương thường xuất hiện quanh các hốc tự nhiên (mắt, mũi, miệng…) và các chi, có xu hướng lan nên thường có nhiều tổn thương, có thể liên kết với nhau thành mảng lớn. + Chốc bọng nước: tổn thương ban đầu là bọng nước nông, nhăn nheo, chứa dịch vàng trong. Khi dập vỡ để lại viền vảy xung quanh dát đỏ ướt nhưng không có vảy tiết, sau đó chuyển sang màu nâu bóng hoặc màu da. Tổn thương thường xuất hiện ở mặt, chi, thân mình, nách và xung quanh vùng hậu môn của trẻ sơ sinh. - Chốc loét: ban đầu là chốc thông thường, nếu không được điều trị bọng nước lan rộng, sau khi vỡ để lại vết loét sâu xuống trung bì với dấu hiệu “đục lỗ” (“punched- out” trên phủ vảy tiết màu vàng xám bẩn, bờ rắn, gờ cao, màu tím, hay gặp ở chi dưới. Nếu không điều trị, loét có thể rộng trên 2-3cm, tổn thương lâu lành, để lại sẹo xấu. - Tổn thương phối hợp khác như: viêm bờ mi, chốc mép hoặc viêm cầu thận nhất là ở trẻ em nhưng tiên lượng lành tính. - Trường hợp nặng có thể kèm theo sốt, nổi hạch bạch huyết vùng, tiêu chảy, mệt :42 mỏi, kém ăn. :30 - Tiến triển: các bọng nước lành sau 1-2 tuần, nhưng bệnh có thể dai dẳng do tự lây 02 truyền, vệ sinh kém. Bệnh có thể tiến triển thành viêm mô bào, viêm bạch mạch, viêm 2/2 mủ hạch bạch huyết, nhiễm khuẩn huyết, viêm phổi do tụ cầu nếu không được điều 6/1 trị gì. _0 nh Di",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Nhọt, Áp Xe Da",
+          "name_source": "NHỌT, ÁP XE DA",
+          "english_alias": "Furuncle, Cutaneous abscess",
+          "source_page": 13,
+          "clinical_visual_features": ":30 - Nhọt: tổn thương ban đầu là sẩn nhỏ, màu đỏ, sưng nề, chắc, tấy đỏ ở nang lông. 3 16 Sau đó, tổn thương lan rộng hóa mủ tạo thành ổ áp xe, ở giữa hình thành ngòi mủ. 2/2 Thường đau nhức, nhất là khi nhọt khu trú ở mũi, vành tai. Vị trí thường gặp là ở đầu, 6/1 mặt, cổ, lưng, mông và chân, tay. Số lượng tổn thương có thể một hoặc nhiều, kèm _0 nh theo các triệu chứng toàn thân như sốt, mệt mỏi, hội chứng nhiễm trùng. Di - Nhọt cụm còn gọi là nhọt bầy hay hậu bối gồm một số nhọt xếp thành đám. Bệnh inh TB thường gặp ở những người suy dinh dưỡng, giảm miễn dịch hoặc mắc các bệnh mạn SY tính như tiểu đường, hen phế quản, lao phổi. hu - Áp xe da thường có biểu hiện sưng, nóng, đỏ, đau. Kich thước thay đổi thường từ nt Va 1-3cm, đôi khi có thể rất lớn. Ban đầu phản ứng viêm đỏ cương tụ nên rất cứng, sau vt_ đó, các ổ mủ hình thành, lớp da bên trên trở nên mỏng hơn và sờ cảm giác mềm hơn, h_ din có thể tự vỡ và chảy mủ. Có thể có sưng hạch vùng, sốt. inh",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Nang Lông",
+          "name_source": "VIÊM NANG LÔNG",
+          "english_alias": "Folliculitis",
+          "source_page": 17,
+          "clinical_visual_features": ":30 - Tổn thương là những sẩn nhỏ ở nang lông, trên có vảy tiết, không đau, sau vài 02 ngày tiến triển, tổn thương có thể khỏi không để lại sẹo. 2/2 6/1 - Vị trí ở bất kỳ vùng da nào của cơ thể, trừ ở lòng bàn tay bàn chân, thường _0 nh gặp nhất là ở đầu, mặt, cổ, lưng, mặt ngoài cánh tay, đùi, sinh dục, cẳng tay và cẳng Di inh chân.... TB - Số lượng tổn thương nhiều hay ít tùy theo từng trường hợp. Hầu hết các trường SY hợp chỉ có một vài tổn thương đơn độc và dễ dàng bỏ qua. Một số người bệnh có hu nt nhiều tổn thương, tái phát nhiều lần làm ảnh hưởng đến sức khỏe và chất lượng cuộc Va sống. vt_ h_",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Hội Chứng Bong Vảy Da Do Tụ Cầu",
+          "name_source": "HỘI CHỨNG BONG VẢY DA DO TỤ CẦU",
+          "english_alias": "Staphylococcal Scalded Skin Syndrome",
+          "source_page": 21,
+          "clinical_visual_features": "Có 2 hình thái lâm sàng: thể khu trú và thể lan tỏa - Thể khu trú: + Không có dấu hiệu toàn thân, vùng da xung quanh tổn thương bình thường. + Ban đỏ dạng tinh hồng nhiệt, mềm, tập trung chủ yếu ở các nếp gấp (vùng quanh rốn hoặc vùng hăm kẽ, vùng đáy chậu, tầng sinh môn ở trẻ sơ sinh) nhưng không tiến triển thành bọng nước. - Thể lan tỏa: + Thường xảy ra sau một nhiễm trùng ở bất kì vị trí nào như viêm mũi họng, viêm tai giữa, viêm kết mạc, viêm rốn. Một số trường hợp hiếm gặp, xảy ra sau viêm phổi do tụ cầu, viêm màng trong tim, áp xe vú sau sinh, viêm khớp… + Toàn thân: trẻ mệt mỏi, bú kém, kích thích, sốt. + Ban đỏ, mịn dạng tinh hồng nhiệt lan tỏa ở các hốc tự nhiên hoặc các nếp gấp. Sau :42 24 - 48 giờ hình thành các bọng nước, tạo thành các nếp nhăn trên da làm da trông :30 thô sần và ráp, sờ như tờ giấy nhám. Sau đó tiến triển thành bọng nước mềm, nông, 3 16 nhẽo, ranh giới không rõ và liên kết với nhau thành mảng rộng, dễ vỡ khi va chạm và 2/2 thường vô khuẩn (dấu hiệu Nikolsky dương tính). Các bọng nước sau khi trợt để lộ 6/1 nền da đỏ ẩm ướt, vảy bong ra mỏng, cuộn lại như giấy cuốn thuốc lá và rất đau. _0 nh + Tổn thương niêm mạc ít gặp, đây là đặc điểm quan trọng chẩn đoán phân biệt SSSS Di inh với dị ứng thuốc thể nặng. TB - Bệnh thường đáp ứng tốt với điều trị và thường khỏi hoàn toàn sau 5-7 ngày mà SY hu không để lại sẹo. Trường hợp nặng có thể gây tử vong, nhất là ở trẻ suy dinh dưỡng, nt người suy thận hay suy giảm miễn dịch do các biến chứng nặng như nhiễm khuẩn Va vt_ huyết, viêm phổi… h_ din",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Lao Da",
+          "name_source": "BỆNH LAO DA",
+          "english_alias": "Cutaneous tuberculosis",
+          "source_page": 25,
+          "clinical_visual_features": "Di inh Bệnh lao da được chia thành hai nhóm chính: lao da thực sự và ban lao. TB SY - Lao da thực sự (True cutaneous tuberculosis): tổn thương da là biểu hiện trực tiếp hu của nhiễm trùng tại vị trí tổn thương da. Có thể xác định vi khuẩn Mycobacteria bằng nt các xét nghiệm như nhuộm soi, nuôi cấy. Việc phát hiện vi khuẩn có thể khó khăn Va vt_ hơn ở các bệnh có tổn thương ít vi khuẩn. h_ din - Các ban lao (Tuberculid) là kết quả của các phản ứng miễn dịch qua đường máu với inh các thành phần kháng nguyên của M.tuberculosis. Phản ứng thường xảy ra ở những t_b sy người có miễn dịch tốt. 2.1.1. Lao da thực sự (True cutaneous tuberculosis) - Săng lao (Tuberculous chancre): còn được gọi là lao sơ nhiễm, đây là một tổn thương hiếm gặp, xảy ra sau khi Mycobacteria xâm nhập trực tiếp qua một vết thương ở những bệnh nhân chưa có đáp ứng miễn dịch. Sau khi nhiễm 2 – 4 tuần, tại vị trí xâm nhập xuất hiện sẩn màu đỏ nâu, có thể hình thành vết loét không đau, bờ nham nhở. Có thể xuất hiện hạch vùng hoặc không. Nếu không được điều trị, bệnh có thể tiến triển thành lao tầng, lupus lao, lao lan tỏa, hoặc tự khỏi để lại sẹo. - Lao sùi (Tuberculosis verrucosa cutis): các tổn thương xuất hiện ở những vùng bị chấn thương và các vùng tiếp xúc với vi khuẩn. Vị trí thường gặp nhất ở tay, đầu gối, mắt cá chân và mông. Tổn thương ban đầu là sẩn màu đỏ nhạt, cứng, ấn kính không xẹp, các sẩn lớn dần, giữa tổn thương dày sừng, sau đó sùi lên nứt nẻ, có thể có mủ, xung quanh có vùng thâm nhiễm màu tím thẫm, trên có vảy da lẫn vảy tiết, ngoài cùng có một vùng xung huyết màu đỏ. Tiến triển lâu năm, tổn thương lan ra xung quanh và để lại sẹo. - Lupus lao (Lupus vulgaris): là một trong những loại CTB phổ biến nhất, hay gặp ở vùng đầu, cổ, chi dưới. Tổn thương là các mảng thâm nhiễm màu nâu đỏ, bề mặt có vảy, tiến triển chậm, lành giữa để lại sẹo co kéo. Thông thường chỉ có 1 tổn thương duy nhất, đôi khi lâm sàng giống dạng nấm sporotrichosis nên dễ bị chẩn đoán nhầm. - Lao kê (Acute miliary cutaneous tuberculosis): Bệnh thường xảy ra ở những bệnh nhân suy giảm miễn dịch (như đồng nhiễm HIV) và có lao lan tỏa. Vị trí thường gặp ở tay chân, thân mình. Tổn thương là các sẩn, mụn mủ, xuất huyết, có thể có hoặc không có trung tâm hoại tử hoặc lõm giữa. - Gôm lao (Metastatic tuberculous abscess): Hay còn gọi là áp xe lao. Bệnh là kết quả :42 của sự lan truyền trực khuẩn theo đường máu từ ổ bệnh tiên phát trong trường hợp :30 miễn dịch kém. Tổn thương là các cục, lúc đầu nhỏ, chắc dưới da, sau đó trở nên 3 16 mềm, áp xe hóa. Da phía trên có thể vỡ tạo thành vết loét không đều. Tiên lượng xấu. 2/2 - Loét lao ở lỗ tự nhiên (Orificial tuberculosis): bệnh thường gặp ở người trưởng 6/1 _0 thành suy giảm miễn dịch, mắc bệnh lao nội tạng đang tiến triển. Vị trí hay gặp ở nh miệng (khẩu cái cứng, lưỡi, môi), ngoài ra có thể gặp ở hậu môn, sinh dục. Tổn Di inh thương ban đầu là các cục nhỏ màu đỏ phù nề, nhanh chóng vỡ để lại các vết loét, TB đau, thường không lành tự nhiên. Thường thấy các ổ lao khác trong cơ thể (như lao SY phổi). hu nt - Lao tầng (Scrofuloderma): vị trí hay gặp ở cổ, ngoài ra có thể gặp ở bẹn, thân mình, Va vt_ hàm dưới, nách, tay. Tổn thương là các u nhỏ màu đỏ dưới da, không đau, sau đó vỡ h_ hình thành các vết loét giới hạn không rõ ràng với mô hạt ở đáy. Nhiều lỗ rò có thể din inh liên kết với nhau tạo thành các đường hầm dưới da. Tổn thương có thể tiến triển lành, t_b sẹo co kéo tạo nên khối dính không đều, xơ cứng mạnh. sy 2.1.2. Ban lao (Tuberc",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Phong",
+          "name_source": "BỆNH PHONG",
+          "english_alias": "Leprosy",
+          "source_page": 33,
+          "clinical_visual_features": "2.1.1. Tổn thương da Tổn thương da trong bệnh phong rất đa dạng, phong phú tuỳ theo thể bệnh. Các tổn thương sau đây thường hay gặp nhất: :42 - Dát (Macule): gặp trong phong thể bất định (I: Indeterminate). Dát có thể có mầu :30 trắng, thâm hoặc hồng, số lượng ít, kích thước khoảng 2 đến 3 cm đường kính, đặc 02 biệt có rối loạn cảm giác nhẹ tại tổn thương. 2/2 6/1 - Mảng thâm nhiễm (Infiltration plaque): hay gặp trong phong thể trung gian, có thể _0 khu trú hay lan tỏa, ranh giới không rõ ràng với da lành. nh Di - Củ (Tuberculoid): gặp trong phong thể củ (T: Tuberculoid). Tổn thương chắc, nổi inh TB cao hơn mặt da, có màu hồng hay đỏ thẫm, kích thước từ một đến vài milimet. Các SY củ tập trung thành mảng gọi là mảng củ. Mảng củ giới hạn rõ với vùng da lành, trung hu tâm lõm hoặc lên sẹo. Bề mặt thường khô ráp, có thể có vảy da, lông rụng, rối loạn nt Va cảm giác rất rõ tại tổn thương. vt_ h_ - U phong, nốt, cục (Leproma, nodule, papule): gặp trong phong thể u (L: Leproma), din số lượng tổn thương nhiều, lan tỏa, đối xứng, ranh giới không rõ với da lành, thâm inh t_b nhiễm sâu, bề mặt thường bóng, màu hồng, mất cảm giác. sy 2.1.2. Tổn thương thần kinh ngoại biên - Viêm dây thần kinh ngoại biên: là biểu hiện rất thường gặp trong bệnh phong. Tuỳ từng thể mà viêm thần kinh ngoại biên có biểu hiện khác nhau. Các dây thần kinh viêm to và đau và để lại hậu quả trầm trọng nếu không được xử lý kịp thời. Trong phong thể củ, dây thần kinh bị viêm to, chắc và không đều. Ngược lại, trong phong thể u, nhiều dây thần kinh bị viêm to đều và mềm. Các dây thần kinh hay bị viêm là: dây thần kinh cổ nông, dây thần kinh trụ, dây thần kinh hông khoeo ngoài, dây thần kinh giữa... Viêm dây thần kinh có thể đơn độc hoặc nhiều dây thần kinh tổn thương cùng một lúc, đặc biệt là trong cơn phản ứng. - Rối loạn cảm giác: giảm hoặc mất cảm giác nông bao gồm cảm giác đau, nóng lạnh và xúc giác. Những vị trí thường gặp: vùng da có tổn thương, giác mạc, lòng bàn tay, lòng bàn chân. Một số trường hợp rối loạn cảm giác có thể gặp ở vùng da lành. - Rối loạn vận động: yếu, liệt và teo các cơ khi có tổn thương các dây thần kinh. Tuỳ từng dây thần kinh bị tổn thương mà có biểu hiện các hình thái tàn tật khác nhau. Ở mặt, tổn thương nhánh chi phối cho cơ vòng mi của dây thần kinh số VII gây ra hiện tượng “mắt thỏ”. Ở chi trên tổn thương dây thần kinh trụ gây ra bàn tay “vuốt trụ”, tổn thương dây thần kinh giữa gây ra “bàn tay khỉ”. Ở chi dưới, tổn thương dây thần kinh hông khoeo ngoài gây ra hiện tượng “chân cất cần”. 2.1.3. Rối loạn bài tiết - Giảm hoặc mất khả năng bài tiết mồ hôi làm cho da khô, nứt nẻ. - Tăng tiết chất bã làm cho da bóng. 2.1.4. Rối loạn dinh dưỡng - Loét ổ gà. :42 - Rụng lông mày thường ở 1/3 ngoài. :30 - Dày sừng ở lòng bàn tay bàn chân, teo da. 02 2/2 - Xốp xương và tiêu xương. 6/1 _0 2.1.5. Các tổn thương khác nh Di - Viêm mũi, viêm họng, viêm thanh quản. inh TB - Viêm kết mạc, giác mạc, mống mắt vv... SY - Viêm xương và tiêu xương. hu nt Va - Viêm tinh hoàn. vt_ h_ - Chứng vú to ở nam giới. din inh - Một số các cơ quan như gan, lách, hạch có thể tìm thấy trực khuẩn phong nhưng t_b không có tổn thương. sy 2.1.6. Tàn tật do bệnh phong Tàn tật trong bệnh phong có thể xuất hiện trước, trong hoặc sau điều trị. a. Tàn tật tiên phát Tàn tật tiên phát (primary deformity) là những tàn tật trực tiếp do trực khuẩn phong gây nên từ hậu quả của viêm dây thần kinh ngoại biên. Có ba loại tàn tật tiên phát hay gặp nhất gồm: giảm/mất tiết mồ hôi, mất cả",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Phản Ứng Phong",
+          "name_source": "PHẢN ỨNG PHONG",
+          "english_alias": "Leprosy reactions",
+          "source_page": 44,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Phản Ứng Phong Loại 1",
+          "name_source": "PHẢN ỨNG PHONG LOẠI 1",
+          "english_alias": null,
+          "source_page": 45,
+          "clinical_visual_features": "2.1.1. Phong thể trung gian củ (BT - borderline tuberculoid ) Trong thể trung gian củ, sự chênh lệch giữa CMI và M. leprae ít nên tỷ lệ xuất hiện phản ứng RR thấp và mức độ phản ứng nhẹ, hậu quả ít trầm trọng hơn. - Tổn thương da: + Thường xảy ra ở bờ tổn thương với các triệu chứng đỏ, sưng nề, thâm nhiễm. Có thể gặp toàn bộ tổn thương phù nề, sưng lên nhanh chóng. + Một vài tổn thương vỡ và loét trong những trường hợp phản ứng nặng. + Không phải tất cả các tổn thương da cũ đều có biểu hiện phản ứng đảo ngược và thường không xuất hiện tổn thương mới. Khi lui bệnh, tổn thương xẹp xuống và bong vảy. - Tổn thương thần kinh: + Các dây thần kinh thường bị ảnh hưởng là dây thần kinh trụ, thần kinh giữa, :42 thần kinh quay, thần kinh mác chung, thần kinh chày sau và thần kinh mặt. :30 + Một hoặc nhiều dây thần kinh ngoại biên bị tổn thương có biểu hiện: sưng to, 3 16 nhạy cảm, đau, mất chức năng vận động hoặc cảm giác. 2/2 • Tổn thương thần kinh nhẹ: bệnh nhân chỉ thấy dấm dứt và rát bỏng ở vùng 6/1 da do dây thần kinh đó chi phối. Sờ nắn có cảm giác đau nhẹ, nhạy cảm. nh _0 • Tổn thương thần kinh nặng: bệnh nhân thấy đau nhức nhiều ở các vùng da Di inh do các dây thần kinh bị viêm đó chi phối. Các dây thần kinh này tăng nhạy cảm nhiều TB khi chạm vào hoặc sờ nắn. SY - Toàn trạng: bệnh nhân mệt mỏi, khó chịu kèm theo sốt. hu nt 2.1.2. Phong thể trung gian (BB - borderline borderline) Va Thể này có sự cân bằng giữa CMI và M. Leprae, phản ứng có thể xảy ra rất vt_ h_ mạnh nếu có sự thay đổi của một trong hai yếu tố này. din - Tổn thương da: tổn thương da đột ngột tấy đỏ, sưng nề, trung tâm lõm. Trường inh t_b hợp nặng có thể loét, phù mặt, bàn tay, bàn chân, có thể xuất hiện tổn thương mới. sy - Tổn thương thần kinh: nhiều dây thần kinh tổn thương sưng to, nhạy cảm, đau nhức, có thể gây liệt nhanh và mất chức năng vận động, cảm giác, đau. - Toàn trạng: sốt cao, mệt mỏi, khó chịu, chán ăn. 2.1.3. Phong thể trung gian u (BL - borderline lepromatous) Sự chênh lệch giữa CMI và M. leprae ít. Vì vậy, tỷ lệ xuất hiện cơn phản ứng trong phong thể trung gian u không cao và mức độ thường nhẹ. - Tổn thương da: tổn thương lan rộng nhanh với đặc điểm: đỏ, bóng, căng mọng, ranh giới không rõ với da lành, dễ bị loét. Có thể xuất hiện nhiều tổn thương mới. - Tổn thương thần kinh: hầu hết các dây thần kinh ngoại biên bị ảnh hưởng ở mức độ nhẹ. Một số trường hợp dây thần kinh ngoại biên sưng to, mềm, đau. - Toàn trạng: bệnh nhân mệt mỏi, sốt cao liên tục 39 - 40°C. Một số bệnh nhân có kèm theo tổn thương của hồng ban nút hoặc có thêm các biểu hiện của các cơ quan khác như viêm mống mắt, viêm tinh hoàn, viêm ngón tay, ngón chân, chảy máu cam, phù thanh quản.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Phản Ứng Phong Loại 2",
+          "name_source": "PHẢN ỨNG PHONG LOẠI 2",
+          "english_alias": null,
+          "source_page": 55,
+          "clinical_visual_features": ":30 - Nút/nốt (Nodule): Đặc trưng của ENL là sự xuất hiện của hồng ban nút. Các 02 tổn thương có thể ở bất cứ vị trí nào trên cơ thể và không liên quan đến các tổn thương 2/2 da cũ. Các tổn thương kích thước từ 1 - 2 cm. Một số trường hợp nặng, các nút có thể 6/1 bị loét. nh _0 Sốt, mệt mỏi Di - inh - Viêm hạch bạch huyết TB Viêm khớp SY - hu - Viêm tinh hoàn nt Va - Viêm mống mắt, thể mi vt_ h_ - Rối loạn tiêu hóa din inh - Phù tay, chân t_b Viêm màng xương sy - - Viêm dây thần kinh Diễn biến tự nhiên của một đợt ENL cấp tính từ 1 - 2 tuần và có thể tái phát nhiều đợt trong nhiều tháng. Một số trường hợp những đợt phản ứng có thể kéo dài trên 2 năm. Có 3 loại ENL: - ENL cấp tính: thời gian diễn biến dưới 6 tháng, điều trị giảm liều theo phác đồ và không tái phát. - ENL tái phát: có đợt phản ứng sau khi kết thúc phác đồ điều trị cơn phản ứng từ 28 ngày trở lên. - ENL mạn tính: thời gian diễn biến trên 6 tháng hoặc có đợt phản ứng sau khi kết thúc phác đồ điều trị dưới 28 ngày.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh da do nấm – ký sinh trùng",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Ghẻ",
+          "name_source": "BỆNH GHẺ",
+          "english_alias": "Scabies",
+          "source_page": 66,
+          "clinical_visual_features": "- Thời gian ủ bệnh: Khó xác định, trung bình 2-6 tuần ở từng người khác nhau, phụ thuộc vào khả năng miễn dịch. Nhiễm ghẻ lần đầu, thời gian ủ bệnh có thể đến 3 tuần. Trong trường hợp tái nhiễm ghẻ, thời gian ủ bệnh thường là từ 1-3 ngày. - Yếu tố dịch tễ: nhiều thành viên trong gia đình có biểu hiện tương tự. - Thể điển hình: + Mụn nước: xuất hiện trên nền da lành, sắp xếp rải rác, riêng rẽ từng cái một. Mụn nước thường ở vùng da mỏng như ở kẽ ngón tay, mặt trước cổ tay, cẳng tay, vú, quanh thắt lưng, rốn, kẽ mông, mặt trong đùi và bộ phận sinh dục. Ở trẻ sơ sinh mụn nước ở lòng bàn tay, chân, ở qui đầu. Ở vùng sinh dục tổn thương thường tròn, 5-7 mm đường kính, ở giữa có thể trợt được gọi là săng ghẻ, dễ nhầm với săng giang mai. + Sẩn cục hay sẩn huyết thanh: hay gặp ở nách, bẹn, bìu. + Đường hầm ghẻ: còn gọi là “luống ghẻ”, đặc hiệu nhưng không phải lúc nào cũng dễ tìm thấy. Luống ghẻ do con ghẻ cái tạo thành dài 3 -5mm, bên trên mặt da là một mụn nước nhỏ, lấy kim chích dịch chảy ra, để lộ màu xám hoặc đen, dùng kim khêu sẽ bắt được cái ghẻ bám trên đầu kim, di động khi đặt lên mặt kính + Tại nơi gãi do ngứa, xuất hiện những vết xước, vảy da, đỏ da, dát thâm. Có thể có bội nhiễm, chàm hoá, mụn mủ. - Thể Ghẻ vảy/Ghẻ sừng hóa hay Ghẻ Na Uy (Norwegian Scabies) + Thường gặp ở những bệnh nhân suy giảm miễn dịch: điều trị bằng corticosteroid :42 dài ngày, HIV/AIDS, người được ghép tạng, dùng các thuốc ức chế miễn dịch, suy :30 dinh dưỡng, người già. 3 16 + Biểu hiện lâm sàng có thể dưới dạng viêm da mạn tính, viêm da dạng vảy nến, viêm 2/2 da tiết bã hoặc đỏ da toàn thân kèm bong vảy nhiều. 6/1 _0 + Tổn thương cơ bản: các lớp vảy chồng lên nhau và lan toả gần như toàn cơ thể, có nh Di thể tìm thấy hàng nghìn cái ghẻ trong các vảy nhỏ này. Tại các khu vực bị nhiễm ghẻ inh vảy nặng, các mảng có ranh giới rõ được bao phủ bởi một lớp vảy rất dày. Ở tay, chân TB SY có thể gây nên bệnh da dạng hạt cơm, với dấu hiệu tăng sừng ở giường móng. Tổn hu thương phân bố toàn thân (thậm chí ở đầu và cổ) hoặc khu trú từng vùng chủ yếu ở nt Va các khu vực nếp kẽ. Lớp vảy da, vảy tiết được tìm thấy trên mặt duỗi bàn tay, cổ tay, vt_ ngón tay, khớp bàn ngón tay, lòng bàn tay, mặt duỗi của khuỷu tay, da đầu, lòng bàn h_ din chân và ngón chân. inh - Triệu chứng cơ năng: ngứa nhiều, đặc biệt về đêm, có thể gây mất ngủ. t_b sy",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Do Demodex",
+          "name_source": "VIÊM DA DO DEMODEX",
+          "english_alias": "Demodicosis",
+          "source_page": 70,
+          "clinical_visual_features": "- Gồm viêm da do Demodex nguyên phát và viêm da do Demodex thứ phát: + Viêm da do Demodex nguyên phát: khởi phát muộn, thường sau 40 tuổi hoặc người cao tuổi, ảnh hưởng đến mặt, quanh miệng, quanh mắt hoặc quanh tai. Tổn thương thường phân bố không đối xứng, được nhóm lại theo hình dạng không đều có tổn thương vệ tinh. Người bệnh không có triệu chứng hoặc ngứa nhẹ. Không thấy các biểu hiện điển hình của trứng cá đỏ như ban đỏ, cơn đỏ bừng thoáng qua, giãn mạch. + Viêm da do Demodex thứ phát xuất hiện sớm hơn, tổn thương phân bố ở mặt hoặc thân mình viêm nhiều và lan tỏa hơn. Người bệnh thường có tiền sử hoặc kèm theo bệnh trứng cá đỏ, viêm da quanh miệng - Triệu chứng của viêm da do Demodex thường không đặc hiệu: + Vảy mỏng vùng nang lông + Dát, sẩn, mụn mủ, viêm nang lông + Có thể kèm theo ngứa, vảy vùng quanh mắt, viêm kết mạc mắt, giảm thị lực. 71",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Lang Ben",
+          "name_source": "BỆNH LANG BEN",
+          "english_alias": "Pityriasis versicolor",
+          "source_page": 73,
+          "clinical_visual_features": "- Tổn thương cơ bản là các dát, mảng hình tròn hoặc bầu dục kích thước 1-3cm, màu hồng, nâu hoặc trắng trên da, có thể liên kết với nhau thành các tổn thương lớn, cào nhẹ xuất hiện vảy da (dấu hiệu vỏ bào). - Vị trí thường gặp: ở người lớn thường gặp ở vùng chi trên, ngực, lưng; ở trẻ em thường gặp ở mặt. - Thường không có triệu chứng cơ năng, một số trường hợp có thể ngứa. - Nếu không điều trị, lang ben có thể dai dẳng hằng năm, bệnh hay tái phát vào mùa nắng nóng. 74",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Da Do Nấm Sợi",
+          "name_source": "BỆNH DA DO NẤM SỢI",
+          "english_alias": "Dermatophytosis",
+          "source_page": 77,
+          "clinical_visual_features": "- Tổn thương là dát, mảng đỏ, hình tròn hay hình nhiều cung, có vảy da, xu hướng lành giữa và lan rộng ra xung quanh, ngứa nhiều. Một số trường hợp có mụn nước hoặc mụn mủ. - Tuỳ từng vị trí tổn thương (mặt, bẹn, tay, chân, thân mình) các triệu chứng có thể khác nhau.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Da Và Niêm Mạc Do Candida",
+          "name_source": "BỆNH DA VÀ NIÊM MẠC DO CANDIDA",
+          "english_alias": "Mucocutaneous candidiasis",
+          "source_page": 81,
+          "clinical_visual_features": "- Nhiễm Candida da: vị trí hay gặp là kẽ ngón tay, ngón chân, nếp lằn dưới vú, mông, nách, khoeo. Các yếu tố thuận lợi mắc bệnh là ngâm nước nhiều, nóng, ẩm và béo phì. Nhiễm Candida da biểu hiện dát đỏ rõ rệt, đôi khi trợt thường đi kèm với mụn mủ vệ tinh. Candida có thể phát triển trên tổn thương vùng kẽ do viêm da dầu hoặc vảy nến. - Nhiễm Candida da/niêm mạc mạn tính và u hạt: gặp ở người suy giảm miễn dịch, có bệnh lý nội tiết, tự miễn dịch, u ác tính. Tổn thương là mảng đỏ, dày sừng, dày da, niêm mạc và có thể tổn thương cả móng. Vị trí hay gặp là ở mặt, da đầu, tay, thân mình. Bệnh tiến triển mạn tính. - Nhiễm Candida niêm mạc: + Viêm lưỡi giả mạc (tưa miệng): biểu hiện có thể cấp hoặc mạn tính. Cấp tính hay gặp ở trẻ em, phụ nữ cho con bú và người già với biểu hiện đốm giả mạc màu hơi trắng, trên nền niêm mạc đỏ, phù nề ở lưỡi, vòm miệng, má, vùng hầu. Triệu chứng cơ năng là rát và bỏng nhẹ. Ở thể mạn tính, tổn thương ít đỏ và phù nề hơn nhưng lan rộng, có thể xuống thực quản. Giả mạc có thể dễ lấy bỏ để lại nền niêm mạc đỏ hoặc trợt. + Viêm teo: thượng bì miệng mỏng, cảm giác dát bỏng, phù. Có thể teo, đỏ và loét ở niêm mạc lưỡi, hay gặp ở người sử dụng răng giả. + Viêm góc miệng: vết nứt ở da góc miệng, vảy da trắng, cảm giác đau khi nhai :42 và tổn thương có thể lan ra xung quanh miệng. :30 + Viêm âm hộ/âm đạo: tham khảo bài viêm âm hộ/âm đạo do Candida. 02 + Viêm quy đầu: tổn thương là sẩn đỏ, mụn mủ, vảy tiết, cảm giác kích ứng, đau 2/2 6/1 ở quy đầu và bao da quy đầu. Bệnh hay tái phát. _0 nh - Nhiễm Candida quanh móng và móng: (tham khảo bài Nấm móng). Di inh",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Âm Hộ - Âm Đạo Do Nấm Candida",
+          "name_source": "VIÊM ÂM HỘ - ÂM ĐẠO DO NẤM CANDIDA",
+          "english_alias": "Vulvovaginal Candidiasis",
+          "source_page": 85,
+          "clinical_visual_features": "- Triệu chứng cơ năng: + Ngứa dữ dội, Trường hợp nặng người bệnh ngứa nhiều, gãi gây xước âm hộ và nấm có thể lan đến tầng sinh môn, bẹn và vùng quanh hậu môn. + Cảm giác rát bỏng vùng âm hộ gặp ở hầu hết các trường hợp. + Đau rát khi quan hệ tình dục. + Tiết dịch âm đạo: khí hư như váng sữa. - Triệu chứng thực thể: + Âm hộ, âm đạo đỏ, phù toàn bộ hoặc từng đám, bờ rõ rệt. Môi lớn đỏ, rãnh giữa môi lớn và môi bé phủ chất nhày trắng đục, thành âm đạo màu đỏ tươi. + Âm đạo: nhiều khí hư trắng đục, có khi lổn nhổn, khi lau khí hư có thể thấy âm đạo phù nề, đỏ, vết trợt đỏ ở dưới. Ở cùng đồ sau, khí hư đọng lại như những hạt :42 sữa. :30 Cổ tử cung bình thường, có thể thấy phủ một lớp giả mạc lấy ra dễ dàng. + 02",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Nấm Da Đầu, Nấm Râu, Nấm Tóc",
+          "name_source": "NẤM DA ĐẦU, NẤM RÂU, NẤM TÓC",
+          "english_alias": "Tinea capitis",
+          "source_page": 88,
+          "clinical_visual_features": "2.1.1. Nấm da đầu, nấm tóc - Nấm Dermatophytes: biểu hiện triệu chứng tuỳ thuộc vào hình thức xâm nhập và tồn tại của nấm ở tóc. Gồm 3 dạng: + Dạng nội sợi: biểu hiện lâm sàng đa dạng với vảy da, mảng rụng tóc với chấm đen, hình thành kerion. T. tonsurans và T. violaceum là hai nguyên nhân quan trọng của nhiễm nấm nội sợi. + Dạng ngoại sợi: lớp biểu bì bên ngoài sợi tóc bị phá hủy. Biểu hiện lâm sàng đa dạng từ mảng bong vảy hoặc mảng rụng tóc kèm viêm từ ít đến nặng, hình thành kerion. + Dạng Favus là dạng nặng nhất của nhiễm nấm dermatophyte ở tóc. Nguyên nhân chủ yếu là do T. schoenleinii. Favus biểu hiện mảng vảy tiết màu vàng, dày chứa sợi và mảng da chết. Khi nhiễm nấm mãn tính có thể gây nên rụng tóc sẹo. - Kerion là hậu quả phản ứng quá mức của cơ thể gây biểu hiện mảng mủ, ướt, kèm hình thành các ổ áp xe nhỏ và rụng tóc. Một số bệnh nhân có biểu hiện toàn thân, mệt mỏi, sưng hạch. - Tình trạng mang nấm T. tonsurans là tình trạng không biểu hiện lâm sàng nhưng :42 khi nuôi cấy nấm dương tính, thường gặp hơn ở người lớn, người có tiếp xúc với trẻ :30 bị bệnh. 3 16 - Nấm tóc Piedra: có hai dạng chính là Piedra đen và Piedra trắng. 2/2 + Piedra đen: thường biểu hiện nốt màu nâu hoặc đen dọc theo thân tóc, thường bắt 6/1 đầu dưới lớp biểu bì của sợi tóc và lan rộng ra ngoài. Tóc vỡ, nốt lớn bọc thân tóc. _0 nh + Piedra trắng: cũng bắt đầu bên dưới lớp biểu bì và phát triển thông qua thân tóc Di gây suy yếu và gẫy tóc. Các nốt mềm, ít dính, màu trắng nhưng cũng có thể là màu inh TB đỏ, xanh lá cây hoặc màu nâu sáng. Ở những người bệnh suy giảm miễn dịch, T. SY beigelii có thể gây ra nhiễm nấm hệ thống nghiêm trọng với sốt, nấm huyết, thâm hu nhiễm phổi, tổn thương da (sẩn mụn nước và xuất huyết, hoại tử trung tâm) và bệnh nt Va thận. vt_ h_ 2.1.2. Nấm râu din inh Có 2 hình thái lâm sàng t_b sy - Hình thái nông: do Violaceum, T. rubrum gây nên. Sợi râu gãy và bong vảy hoặc khô, không bong, khi nhổ lên chân vẫn bình thường. - Hình thái sâu: do T. mentagrophytes gây nên. Tiến triển chậm, các u nhỏ liên kết với nhau tạo thành mảng thâm nhiễm và ăn sâu xuống hình thành các áp xe. Da trên bề mặt viêm tấy, sợi râu rụng hoặc không có, mủ chảy ra qua lỗ chân râu.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Nấm Móng",
+          "name_source": "NẤM MÓNG",
+          "english_alias": "Onychomycosis",
+          "source_page": 92,
+          "clinical_visual_features": "- Biểu hiện nấm móng do nấm sợi bao gồm: dày sừng dưới móng, trắng móng, mủn móng. Xen kẽ với các những vùng sừng hóa là những vùng tách móng, là nơi cư trú của nấm sợi. Bề mặt móng có thể có đốm hoặc khía trắng. - Biểu hiện chia làm 3 nhóm, phụ thuộc vào vị trí xâm nhập của nấm vào móng: + Tổn thương ở phần bên và phần xa dưới móng. + Tổn thương ở bề mặt móng. + Tổn thương ở gốc móng. 93",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh da do virus",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Zona",
+          "name_source": "BỆNH ZONA",
+          "english_alias": "Herpes zoster hay shingles",
+          "source_page": 97,
+          "clinical_visual_features": "- Triệu chứng ban đầu: thường kéo dài 1-5 ngày với cảm giác bất thường trên một vùng da như bỏng, nóng rát, châm chích, tê, đau, dị cảm nhất là về đêm. Người bệnh có thể nhức đầu, sợ ánh sáng và khó chịu. Giai đoạn này được cho là virus lan truyền dọc dây thần kinh. - Khởi phát: khoảng nửa ngày đến một ngày sau, tổn thương là mảng đỏ, hơi nề nhẹ, đường kính khoảng vài cm, gờ cao hơn mặt da, sắp xếp dọc theo đường phân bố thần kinh và dần dần nối với nhau thành dải, thành vệt. - Toàn phát: + Triệu chứng da: Trên nền dát đỏ xuất hiện mụn nước, bọng nước hình tròn hoặc bầu dục, lõm giữa, tập trung thành đám giống như chùm nho. Mụn nước, bọng nước ban đầu chứa dịch trong, sau hóa mủ hoặc xuất huyết, dập vỡ để lại vết trợt đóng vẩy tiết, đôi khi có thể hoại tử. Thời gian trung bình từ khi phát tổn thương đến khi lành :42 sẹo khoảng 2-4 tuần. Ở người cao tuổi, tổn thương nhiều, lan rộng. Ở trẻ nhỏ, tổn :30 thương ít, tiến triển nhanh. 3 16 + Vị trí thường gặp ở vùng lưng ngực, đầu mặt cổ và mông đùi hoặc khu trú ở vùng 2/2 niêm mạc miệng, sinh dục, bàng quang. Tổn thương da thường chỉ ở một bên, không 6/1 vượt quá đường giữa cơ thể và theo đường phân bố của một dây thần kinh ngoại biên. nh _0 Các trường hợp suy giảm miễn dịch, tổn thương da lan tỏa như thủy đậu và có thể Di inh xuất huyết, đôi khi tiến triển nặng. TB + Triệu chứng hạch: Hạch bạch huyết vùng lân cận sưng to. SY hu + Các rối loạn khác: rối loạn bài tiết mồ hôi, vận mạch, phản xạ dựng lông nhưng nt hiếm gặp. Va vt_ + Viêm thần kinh cấp: đau là triệu chứng hay gặp nhất, đau bỏng rát, đau giật hoặc h_ din đau như dao đâm. Mức độ đau đa dạng từ nhẹ như cảm giác rát bỏng, âm ỉ tại chỗ inh hay nặng như kim châm, giật từng cơn. Triệu chứng đau thường phụ thuộc vào tuổi. t_b sy Trẻ em, người trẻ đau ít. Người nhiều tuổi thường đau thành từng cơn, kéo dài. Cần phân biệt đau cấp với đau sau Zona. + Đau sau zona (post herpetic neuralgia-PHN) là hiện tượng đau dai dẳng trên 3 tháng, thậm chí hàng năm với biểu hiện đau nhạy cảm, rát bỏng, đau âm ỉ hay đau nhói như dao đâm ở vùng da tổn thương zona đã lành sẹo. Bệnh thường xuất hiện ở người già, người suy giảm miễn dịch, mắc bệnh ung thư. Nguyên nhân: do VZV gây viêm, hoại tử và xơ hóa các đầu mút thần kinh. Một số trường hợp có thể kèm đau cơ, đau khớp, mất ngủ do đau, ảnh hưởng chất lượng cuộc sống.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Do Herpes Simplex",
+          "name_source": "BỆNH DO HERPES SIMPLEX",
+          "english_alias": "Herpes simplex",
+          "source_page": 104,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Thủy Đậu",
+          "name_source": "BỆNH THỦY ĐẬU",
+          "english_alias": "Varicella",
+          "source_page": 108,
+          "clinical_visual_features": "- Thời gian ủ bệnh khoảng 14 ngày (10 - 23 ngày). Trước khi xuất hiện các mụn nước thuỷ đậu có thể có triệu chứng toàn thân như: sốt, nhức đầu, mệt mỏi... - Triệu chứng da xuất hiện sớm nhất là các ban đỏ, các sẩn sau đó nhanh chóng thành các mụn nước. Các mụn nước rất nhỏ như những giọt sương trên cánh hoa hồng, nông, xung quanh là quầng đỏ, ở giữa lõm. Kích thước mụn nước khoảng 2- 3mm. Mụn nước nhanh chóng thành mụn mủ và đóng vảy tiết, có thể mọc ở niêm mạc mắt miệng, để lại vết trợt nông nhưng thường ít. Trên người bệnh cùng lúc các tổn thương là sẩn, mụn nước, mụn mủ và vẩy tiết. - Những biến chứng nghiêm trọng của thuỷ đậu có thể xảy ra trên những người có suy giảm miễn dịch như dùng corticosteroid, các thuốc ức chế miễn dịch khác, nhiễm HIV/AIDS... Các biến chứng khác có thể xảy ra là viêm phổi, viêm não - màng não, nhiễm khuẩn tại chỗ... Phụ nữ có thai mắc thuỷ đậu trong 3 tháng đầu thai kỳ có thể gây sảy thai, tử vong thai nhi hay bị dị tật như đầu nhỏ, bại não, sẹo trên da bẩm sinh do các nốt thuỷ đậu để lại...",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Hạt Cơm",
+          "name_source": "BỆNH HẠT CƠM",
+          "english_alias": "Warts",
+          "source_page": 111,
+          "clinical_visual_features": "− Hạt cơm thông thường (common warts) + Thường gặp nhất. + Tổn thương ban đầu là những sẩn nhỏ bằng hạt kê, màu da. Sau vài tuần hoặc vài tháng, thương tổn lớn dần, nổi cao, có hình bán cầu, bề mặt sần sùi thô ráp, dày sừng với nhiều kích thước khác nhau. Các thương tổn rải rác hoặc thành dải hoặc thành đám hay gặp ở mu bàn tay, mu bàn chân, ngón tay và ngón chân, quanh móng, da đầu. − Hạt cơm bàn tay, bàn chân (palmo-plantar warts) + Hạt cơm ở bàn tay, bàn chân thường đa dạng. Điển hình là các sẩn, kích thước từ 2-10mm, bề mặt xù xì làm mất những đường vân trên bề mặt, sắp xếp riêng rẽ hoặc tập trung thành đám ở những vùng tỳ đè, quanh móng được gọi là hạt cơm thể khảm. Đôi khi biểu hiện của hạt cơm chỉ là sẩn nhẵn, bằng phẳng với mặt da, màu vàng đục hoặc sẩn xù xì có gai nhỏ và lõm ở giữa. Bệnh nhân thường đau khi đi lại. + Khi dùng dao mổ gọt bỏ phần dày sừng thấy bên dứới là một mô màu trắng :42 trên có các chấm đen do hiện tượng tắc các mạch máu nhỏ tạo nên. Đây là dấu hiệu :30 có giá trị giúp chẩn đoán phân biệt giữa hạt cơm với những bệnh khác như chai chân 3 16 hay dày sừng bàn tay bàn chân khu trú. 2/2 − Hạt cơm phẳng (flat warts): Tổn thương là các sẩn hơi nổi cao trên mặt da, bề 6/1 _0 mặt phẳng, kích thước nhỏ từ 1 đến 5 mm, hình tròn hay hình đa giác, màu da hay nh thẫm vàng nâu, ranh giới rõ đứng riêng rẽ hay thành đám, đôi khi thành dải (dấu hiệu Di inh Koebner). Số lượng thương tổn thường ít nhưng ở những trường hợp lan tỏa có tới TB vài trăm thương tổn, hay gặp ở vùng da hở nhất là ở mặt, cánh tay và thân mình. SY hu",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Mềm Lây",
+          "name_source": "U MỀM LÂY",
+          "english_alias": "Molluscum Contagiosum",
+          "source_page": 115,
+          "clinical_visual_features": "- Thời gian ủ bệnh: từ 2 tuần đến 6 tháng. - Tổn thương cơ bản là các sẩn mềm màu hồng nhạt, trắng đục hoặc vàng hoặc màu da thường với kích thước từ 2-6mm đường kính, lõm giữa, đứng riêng rẽ hoặc thành từng đám, có thể sắp xếp thành dải, theo vệt (dấu hiệu Koebner). Vị trí thường gặp ở trẻ em là vùng da hở như mặt, cổ, nếp gấp. Vị trí thường gặp ở người lớn là vùng bụng dưới, phía trong đùi, xương mu và sinh dục. Bệnh có thể xuất hiện ở một vài vị trí ít gặp như miệng, lưỡi, lòng bàn tay, bàn chân. - Ở những bệnh nhân bị suy giảm miễn dịch như nhiễm HIV, mắc các bệnh mạn tính, bẩm sinh, hoặc điều trị bằng các thuốc ức chế miễn dịch, tổn thương u mềm lây thường có kích thước lớn hơn, lan tỏa toàn thân với số lượng nhiều và tồn tại dai dẳng.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh da tự miễn",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Lupus Ban Đỏ Hệ Thống",
+          "name_source": "BỆNH LUPUS BAN ĐỎ HỆ THỐNG",
+          "english_alias": "Systemic lupus erythematosus",
+          "source_page": 118,
+          "clinical_visual_features": "2.1.1. Triệu chứng toàn thân Sốt, mệt mỏi, gầy sút là những biểu hiện hay gặp, đặc biệt trong giai đoạn bệnh tiến triển. 2.1.2. Tổn thương da, niêm mạc, tóc - Tổn thương da + Tổn thương da đặc hiệu: • Tổn thương cấp tính: ban đỏ khu trú hình cánh bướm ở hai má, mặt, hơi phù, có thể tồn tại trong nhiều tuần, nhiều tháng. Dát đỏ lan tỏa xuất hiện ở tay, chân hay, thân mình ít gặp hơn. Các dát nhạy cảm với ánh nắng mặt trời. Hiếm gặp ban :42 cấp tính dạng hoại tử thượng bì. :30 • Tổn thương bán cấp: tổn thương dát sẩn bong vảy dạng “vảy nến” vùng 3 16 ngực, lưng, cánh tay. Tổn thương mảng hình nhẫn, hình vòng, trung tâm không có 2/2 vảy. Một số trường hợp hiếm gặp bọng nước căng hoặc ban đỏ bán cấp dạng hoại tử 6/1 thượng bì. _0 nh • Tổn thương mạn tính: lupus ban đỏ dạng đĩa khu trú hoặc lan tỏa: mảng đỏ, Di trên có vảy da, sẩn sừng nang lông, chậm lành, khi khỏi để lại tăng sắc tố, sẹo trắng, inh TB teo da trung tâm. Lupus thể phì đại, lupus profundus, viêm mô mỡ, lupus tumidus, SY lupus dạng cước là những tổn thương da mạn tính ít gặp. hu + Tổn thương da không đặc hiệu: sẩn phù, ban xuất huyết, viêm mạch/mao mạch nt Va gây xuất huyết, loét, hoại tử, viêm mạch dạng mạng lưới, lắng đọng canxi, hội chứng vt_ raynaud, tổn thương bọng nước,… có thể gặp. h_ din - Tổn thương niêm mạc: Môi, miệng, mũi, sinh dục trong đó thường gặp nhất ở inh niêm mạc khẩu cái cứng. Biểu hiện dát đỏ, xuất huyết, trợt, loét và thường không đau. t_b sy - Rụng tóc + Rụng tóc không sẹo kiểu rừng thưa hay rụng lan tỏa toàn bộ có thể gặp. Tóc có thể mọc lại khi lui bệnh. + Rụng tóc có sẹo gây mất các nang tóc và không thể mọc lại. 2.1.3. Tổn thương các cơ quan - Tổn thương khớp: viêm sưng đau, cứng khớp nhỏ nhỡ (hay gặp khớp bàn ngón tay, ngón chân, cổ tay, khuỷu tay, đầu gối…) gây hạn chế vận động. Một số có thể gặp tràn dịch các khớp. - Viêm cơ: viêm cơ, yếu cơ. Triệu chứng hồi phục nhanh sau điều trị bằng corticosteroid đường toàn thân. - Tổn thương thận: viêm thận lupus với tổn thương tiểu cầu thận hoặc mô kẽ, ống thận. - Tim mạch: tràn dịch ngoài màng tim, nhịp nhanh, có thể gặp tim to, suy tim. Viêm nội tâm mạc cấp và bán cấp do vi khuẩn có thể phối hợp với tổn thương van tim trong hội chứng Libman-Sacks. Tăng áp động mạch phổi ít gặp. - Phổi: viêm màng phổi, tràn dịch màng phổi số lượng ít, viêm phổi kẽ, có thể gây triệu chứng đau ngực, khó thở. - Thần kinh, tâm thần: rối loạn phương hướng, tri giác, trí nhớ. Đôi khi có đau đầu dữ dội, rối loạn tâm thần hoặc động kinh, co giật. Biểu hiện của rối loạn vận động như múa giật, múa vờn, bất thường thị lực, rối loạn dây thần kinh sọ cũng có thể gặp. Triệu chứng tâm thần có thể nặng thêm khi dùng corticosteroid liều cao kéo dài. - Tiêu hóa: nôn, buồn nôn, chán ăn. Đau bụng ít gặp nhưng là một triệu chứng rất quan trọng. Có thể gặp viêm gan, xơ gan, tăng men gan. - Hạch bạch huyết: hạch ngoại biên to, đặc biệt là giai đoạn bệnh nặng và thường gặp hơn ở trẻ em. Có thể phối hợp với gan to, lách to. :42 - Huyết học: thiếu máu (mệt mỏi, da niêm mạc nhợt), xuất huyết dưới da. :30",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Cơ",
+          "name_source": "VIÊM DA CƠ",
+          "english_alias": "Dermatomyositis",
+          "source_page": 130,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Xơ Cứng Bì Hệ Thống",
+          "name_source": "BỆNH XƠ CỨNG BÌ HỆ THỐNG",
+          "english_alias": "Systemic sclerosis - Scleroderma",
+          "source_page": 139,
+          "clinical_visual_features": "2.1.1. Tổn thương da − Thường bắt đầu từ các ngón tay với biểu hiện phù nề, sau đó xuất hiện hiện tượng dày da, cứng da tiến triển lan dần lên cẳng tay, cánh tay, mặt, phần trên của cổ, ngực, bụng… Tổn thương xơ cứng da ngày càng tiến triển nặng làm bệnh nhân khó cử động. Da mất nếp nhăn, rõ nhất ở mặt làm bệnh nhân giảm khả năng biểu hiện tình cảm trên nét mặt và khó há mồm. Hãm lưỡi xơ cứng ít hay nhiều tùy tiến triển của bệnh. − Da bị mất sắc tố, hay gặp ở phía mu bàn tay, vùng cổ, ngực, lưng, có thể thấy hiện tượng loang lổ sắc tố. − Lắng đọng canxi tại các mô mềm gây tình trạng ngứa, loét các vùng da lân cận. − Thể giới hạn: xơ cứng da ở mặt và chi từ vùng khuỷu tay và đầu gối trở xuống, không có tổn thương vùng thân mình và gốc chi. − Thể lan tỏa: xơ cứng da có xuất hiện đến vùng gốc chi, thân mình hoặc toàn bộ cơ thể. 2.1.2. Hiện tượng Raynaud Tình trạng co thắt các tiểu động mạch hoặc động mạch tại các đầu chi như ngón tay, ngón chân xuất hiện khi tiếp xúc với nhiệt độ lạnh hoặc khi thay đổi cảm xúc với sự thay đổi màu da ở đầu chi theo ba giai đoạn: nhợt nhạt, xanh tái và đỏ tím. Tổn thương loét, hoại tử tại các đầu chi, sẹo lõm đầu ngón do hội chứng Raynaud kéo :42 dài. :30 2.1.3. Hội chứng CREST 3 16 Phối hợp các triệu chứng canxi hóa (Calcinosis), hiên tượng Raynaud 2/2 (Raynaud), co thắt thực quản (Esophageal), xơ cứng da ngón, đầu chi (Sclero- 6/1 dactylic) và giãn mạch (Telangiectasia). _0 nh 2.1.4. Tổn thương các cơ quan khác Di − Cơ xương khớp: bệnh nhân có thể đau nhiều khớp chủ yếu là các khớp ở chi inh TB trên có thể viêm các khớp nhưng không có di chứng biến dạng khớp. Một số có đau SY mỏi cơ, tăng men cơ, viêm cơ, teo cơ. hu − Phổi: tổn thương phổi hay gặp nhất là xơ phổi, bệnh nhân ho khan, khó thở khi nt Va gắng sức. Nghe phổi có ran rít hoặc ran ẩm khi có bội nhiễm phổi. Có thể có tràn dịch vt_ màng phổi với lượng dịch ít. h_ din − Tim mạch: bệnh nhân có nhịp tim nhanh, hoặc rối loạn nhịp tim với nhiều mức inh độ khác nhau, có thể gặp suy tim. t_b sy − Tiêu hóa: tổn thương hay gặp nhất là tổn thương thực quản, cảm giác nóng rát phía sau xương ức, triệu chứng trào ngược, xơ cứng và co thắt thực quản làm bệnh nhân khó nuốt (nhất là với thức ăn đặc). Có thể kèm táo bón hoặc đi ngoài phân lỏng từng đợt. − Tổn thương thận: suy thận, xơ hóa cầu thận,… − Thần kinh: đau đầu, động kinh, đột quỵ,...",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Hội Chứng Trùng Lắp",
+          "name_source": "HỘI CHỨNG TRÙNG LẮP",
+          "english_alias": "Overlap syndrome",
+          "source_page": 148,
+          "clinical_visual_features": "Hội chứng trùng lắp có biểu hiện lâm sàng đa dạng của các bệnh lý mô liên kết tự miễn mà bệnh bao gồm. 2.1.1 Bệnh Lupus ban đỏ hệ thống: - Triệu chứng toàn thân: sốt, mệt mỏi, chán ăn, gầy sút cân. - Tổn thương da, niêm mạc: ban cánh bướm, ban đỏ bán cấp dạng hình nhẫn hoặc vảy nến, tổn thương dạng đĩa, nhạy cảm ánh sáng, trợt niêm mạc miệng. Một số tổn thương da khác của lupus như viêm mạch, lắng đọng can xi, .... - Tổn thương tóc: rụng tóc không sẹo, rụng tóc có sẹo. - Tổn thương cơ xương khớp: đau, viêm một hoặc nhiều khớp tuy nhiên thường không có bào mòn và làm biến dạng khớp. - Tổn thương nội tạng: + Thận: viêm cầu thận có phù, đái ít, protein niệu, hồng cầu niệu, trụ niệu. Đợt cấp thường có hội chứng cầu thận cấp, hội chứng thận hư và suy thận. + Máu: thiếu máu, xuất huyết. Có thể gan, lách, hạch to. :42 + Tim mạch: hay gặp là viêm màng ngoài tim có tràn dịch màng tim, nhịp nhanh :30 xoang, viêm màng ngoài tim co thắt, viêm cơ tim, viêm nội tâm mạc. 02 + Phổi, màng phổi: Viêm màng phổi, tràn dịch màng phổi, viêm phổi kẽ dẫn tới 2/2 6/1 xơ phổi, tăng áp lực động mạch phổi . _0 nh + Thần kinh, tâm thần: đau đầu, co giật kiểu động kinh toàn thể hoặc cục bộ, hội Di chứng thần kinh khu trú, viêm thần kinh ngoại vi, viêm màng não nước trong, .... inh TB + Hệ tiêu hoá: hay gặp nôn, ỉa chảy, ậm ạch, đầy hơi, khó tiêu, giảm nhu động ruột SY gây giãn quai ruột, viêm tuỵ cấp, viêm tuyến nước bọt, .... hu nt Va 2.1.2 Bệnh xơ cứng bì hệ thống vt_ - Tổn thương da: Phù nề lan tỏa bàn tay, bàn chân thường gặp ở giai đoạn sớm, h_ din trước khi có tổn thương xơ cứng tiến triển (tổn thương thường nặng ở bàn tay, cẳng inh tay, đầu mặt cổ trước các vùng khác). Bộ mặt đặc trưng: mất nếp nhăn, bộ mặt vô t_b sy cảm. Tăng giảm sắc tố, da màu muối tiêu. - Calci hóa da: Các tổn thương này có thể thấy rõ trên phim chụp X quang. Tổn thương thường gặp nhất ở các ngón tay đặc biệt là phía gan tay của đốt giữa, dọc xương sống, giữa các đốt sống, quanh đầu gối, mu chân và quanh khớp khuỷu. - Tổn thương mạch máu: hiện tượng Raynaud’s, loét ngón, bất thường mao mạch nền móng, giãn mạch. - Tổn thương nội tạng: + Tổn thương phổi: Tổn thương phổi thường gặp biểu hiện dưới hai bệnh chính là bệnh phổi kẽ và tăng áp lực động mạch phổi làm giảm chức năng hô hấp, khó thở. + Tổn thương đường tiêu hoá: trào ngược dạ dày thực quản, tăng sinh vi khuẩn đường ruột và bán tắc ruột mạn tính. Các triệu chứng phổ biến khác có thể gặp bao gồm: nuốt nghẹn, khản giọng, ho, táo bón và tiêu chảy xen kẽ … + Tổn thương thận: thường không có biểu hiện lâm sàng. Cơn kịch phát thận thường xảy ra ở giai đoạn sớm của bệnh học do tăng huyết áp nặng, bệnh mạch máu, thiếu máu tan máu và giảm tiểu cầu, phù phổi, đau đầu, mờ mắt, bệnh não do cao huyết áp. + Tổn thương cơ xương khớp: đau nhiều khớp và không có biến dạng khớp. Biểu hiện tổn thương cơ được đánh giá bằng các dấu hiệu lâm sàng như cứng, teo cơ, xuất hiện khi có tổn thương da nặng. + Ngoài các tổn thương hay gặp trên, bệnh nhân có thể gặp tổn thương thương các cơ quan khác như tim, hệ thống thần kinh, sinh dục 2.1.3. Bệnh viêm da cơ/viêm đa cơ - Tổn thương da: là những dát màu đỏ tím khu trú ở mi mắt trên, sưng, phù nề :42 tạo nên dấu hiệu “Heliotrope”, dát đỏ tím vùng da hở như tam giác cổ áo (V-sign) :30 hoặc vùng lưng (Shawl sign), đùi (Holster sign), các sẩn hay mảng sẩn ở mu các khớp 3 16 ngón tay và bàn tay, khuỷu tay, khớp gối, mắt cá chân (sẩn Gottron), nếu tổn thương 2/2 này là dát thì được gọi là dấu hiệu Go",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Pemphigus",
+          "name_source": "BỆNH PEMPHIGUS",
+          "english_alias": "Pemphigus",
+          "source_page": 157,
+          "clinical_visual_features": "2.1.1. Pemphigus thể sâu a. Pemphigus thông thường (Pemphigus vulgaris = P.V) - Tổn thương niêm mạc: + Tổn thương niêm mạc hay gặp nhất, bọng nước vỡ nhanh tạo thành vết trợt giới hạn rõ, hình tròn hoặc đa cung. Vị trí: lợi, môi, vòm khẩu cái, lan tới vòm hầu, rất đau và lâu lành. + Tổn thương vùng niêm mạc khác: kết mạc, thực quản, âm đạo, cổ tử cung, dương vật, niệu đạo, hậu môn. - Tổn thương da: + Bọng nước trong, kích thước lớn, mềm, nhăn nheo, nằm rời rạc trên nền da :42 bình thường không viêm, rất dễ vỡ, để lại những vết trợt da hình tròn hoặc bầu dục :30 khu trú hoặc lan tỏa. Tổn thương da có thể xuất hiện sau tổn thương niêm mạc vài 3 16 tuần hoặc vài tháng. 2/2 + Trường hợp bội nhiễm, có thể gặp bọng nước hóa mủ trên nền da viêm đỏ 6/1 đóng vảy tiết vàng nâu dày. _0 nh + Dấu hiệu Nikolsky dương tính. Di - Tổn thương móng: dày sừng, loạn dưỡng móng, viêm quanh móng. inh TB - Toàn thân: có thể sốt, suy kiệt cơ thể nếu đi kèm với tình trạng nhiễm khuẩn, rối SY loạn điện giải và dinh dưỡng kém. hu b. Pemphigus sùi (Pemphigus vegetans = P.Veg) nt Va Là biến thể khu trú của pemphigus thông thường. Vị trí thường ở niêm mạc, vt_ nếp gấp; tổn thương là các mảng u sùi, có vảy, mủ, hôi thối, hiếm gặp hơn thể thông h_ din thường. inh 2.1.2. Pemphigus thể nông t_b sy a. Pemphigus vảy lá (Pemphigus foliaceu s= P.F) Biểu hiện lâm sàng gồm 2 giai đoạn: - Giai đoạn bọng nước: khởi đầu bọng nước nhỏ, mềm nhăn nheo, nhanh chóng dập vỡ, vị trí ở mặt, lưng, ngực. Tổn thương có thể xuất hiện trên da lành hay mảng đỏ da. Niêm mạc không bị tổn thương. Đây là tiêu chuẩn lâm sàng quan trọng để chẩn đoán phân biệt Pemphigus thể thông thường và Pemphigus vảy lá. - Giai đoạn đỏ da: bọng nước biến mất nhanh, để lại những mảng ban đỏ tróc vảy, rỉ dịch nhiều, chiếm toàn bộ cơ thể hình thành bệnh cảnh đỏ da toàn thân. b. Pemphigus thể đỏ da hay da mỡ (Pemphigus erythematosus, Pemphigus seborrheic, hội chứng Senear - Ushear = P.S) Đây là một thể khu trú của Pemphigus vảy lá. - Tổn thương cơ bản là bọng nước, nhanh chóng dập vỡ để lại những mảng hồng ban đóng vảy tiết. Vảy tròn, dày, màu vàng khu trú ở các vùng tiết bã: mặt, vùng xương trước ức, rãnh lưng, thắt lưng. - Niêm mạc không bị tổn thương. - Toàn trạng bệnh nhân tương đối tốt. 2.1.3. Pemphigus á u - Khoảng 2/3 trường hợp bệnh xuất hiện đồng thời với khối u và 1/3 trường hợp còn lại, u được phát hiện sau tổn thương da và niêm mạc. - Tổn thương da: Tổn thương da của pemphigus á u rất đa dạng, bệnh có thể biểu hiện giống 5 bệnh sau: + Pemphigus: các bọng nước nhăn, nông. + Pemphigoid: bọng nước căng, nổi trên nền ban đỏ. + Hồng ban đa dạng: tổn thương da nặng, nhiều hình thái; có/không kèm tổn :42 thương niêm mạc. :30 + Hội chứng mảnh ghép chống vật chủ (graft-vs-host disease): tổn thương dạng 3 16 lichen lan tỏa kèm tổn thương niêm mạc nặng. 2/2 + Lichen phẳng: các sẩn bóng, tím, có vảy, hình đa giác. 6/1 - Tổn thương niêm mạc: _0 nh + Tổn thương sớm nhất và thường gặp nhất: các vết loét miệng đau, lâu lành. Di + Ngoài ra, bệnh có thể ảnh hưởng đến các vùng niêm mạc khác như kết mạc, inh TB niêm mạc sinh dục như âm đạo, môi lớn, môi bé, dương vật. SY - Các tổn thương khác: hu + Tổn thương của niêm mạc đường tiêu hóa và hô hấp và là nguyên nhân đáng kể nt Va gây tử vong. vt_ + Tổn thương của phổi bao gồm: bệnh phổi tắc nghẽn và viêm tiểu phế quản tắc h_ din nghẽn, có thể gây tử vong. Trên lâm sàng, bệnh nhân thấy khó thở nhưng trên phim inh chụp X - quang có thể bình thường. t_b sy 2.1.4.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Pemphigoid Bọng Nước",
+          "name_source": "PEMPHIGOID BỌNG NƯỚC",
+          "english_alias": "Bullous pemphigoid",
+          "source_page": 165,
+          "clinical_visual_features": "2.1.1. Tổn thương da - Bệnh thường khởi phát bằng tổn thương dạng sẩn ngứa, mày đay kéo dài một đến vài tháng trước khi xuất hiện tổn thương bọng nước điển hình. - Tổn thương da điển hình là các bọng nước có kích thước lớn thường từ 1-4 cm :42 trên nền da đỏ, hình tròn hoặc bầu dục, rải rác hoặc tập trung thành hình đa cung. :30 Bọng nước căng, chứa đầy dịch trong, có thể gặp bọng nước xuất huyết, khó vỡ, khi 3 16 vỡ tạo thành đám vảy tiết. Tổn thương khi lành không để lại sẹo nhưng thường để lại 2/2 dát tăng hoặc giảm sắc tố, có thể có hạt milia. Dấu hiệu Nikolsky (-). 6/1 _0 - Các tổn thương khác: dát đỏ, tổn thương dạng mày đay, sẩn ngứa, vết trợt do nh Di cào gãi. inh - Vị trí tổn thương: thường gặp ở bụng dưới, mặt trong đùi, bẹn, nách, mặt gấp TB cẳng tay, phần dưới cẳng chân (thường là dấu hiệu đầu tiên). Một số trường hợp bọng SY hu nước khu trú một vùng cơ thể, thường ở chi dưới. nt Va 2.1.2. Tổn thương niêm mạc vt_ h_ Tổn thương niêm mạc ít gặp, nếu có thường ở niêm mạc miệng, bọng nước din nhỏ, khó vỡ, khi vỡ lành nhanh không để lại sẹo. Hiếm gặp ở môi, thực quản, sinh inh t_b dục, hậu môn. sy 2.1.3. Triệu chứng cơ năng và toàn thân -Cơ năng: bệnh nhân thường ngứa, mức độ thay đổi có thể ít ngứa hoặc ngứa rất nhiều. Một số trường hợp ngứa kéo dài hoặc ngứa xuất hiện trước tổn thương da. Triệu chứng toàn thân: sốt, mệt mỏi khi tổn thương da lan rộng, bệnh nặng - hoặc có nhiễm khuẩn kèm theo.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Dạng Herpes",
+          "name_source": "VIÊM DA DẠNG HERPES",
+          "english_alias": "Dermatitis herpetiformis",
+          "source_page": 170,
+          "clinical_visual_features": "sy - Tổn thương thường xuất hiện từ từ trên một thể trạng bình thường. Bệnh nhân sốt nhẹ hoặc không sốt, mệt mỏi, sút cân không đáng kể. Trên các vùng da sắp có tổn thương thường có dấu hiệu báo trước là ngứa, sau đó là bỏng rát hoặc đau. - Tổn thương lúc khởi phát là các ban đỏ, mụn nước, sẩn mày đay, sau dần dần xuất hiện bọng nước. Bọng nước thường xuất hiện trên nền dát đỏ, sắp xếp lẻ tẻ hay cụm lại như trong bệnh herpes nên còn gọi là “viêm da dạng herpes”. Các bọng nước to bằng hạt ngô, căng, tròn và bóng, trong chứa dịch màu vàng chanh, hiếm khi có bọng nước xuất huyết, xung quanh bọng nước có quầng đỏ. Bọng nước tồn tại 5-7 ngày, sau đó trở nên đục nếu có bội nhiễm. Sau vài ngày bọng nước vỡ ra để lại vết trợt, đóng vảy tiết. - Trên cùng một bệnh nhân, các tổn thương thường đa dạng, nhiều hình thái và nhiều lứa tuổi, có chỗ là ban đỏ, có chỗ là bọng nước, có chỗ là sẩn phù, mụn nước, thậm chí có chỗ chỉ là một dát sẫm màu. - Dấu hiệu Nikolsky âm tính. - Vị trí tổn thương thường ở khuỷu tay, đầu gối, mông, đùi, sau đó là ở lưng và bụng, hiếm khi có tổn thương ở kẽ nách, vùng xương cùng. Ở phần lớn các trường hợp, tổn thương có tính chất đối xứng. -Tổn thương niêm mạc ít gặp, chỉ khoảng 4,6% bệnh nhân DH, nếu có, thường ở họng. -Ở nhiều bệnh nhân, bệnh xuất hiện hoặc nặng lên trong vòng vài giờ hoặc vài ngày khi ăn chế độ ăn có gluten hoặc iode. Ngoài ra còn có thể thấy trên bệnh nhân đái đường typ I, bệnh tuyến giáp, bệnh máu ác tính và các u lympho. - Tiến triển: Bệnh tiến triển mạn tính, thành từng đợt, lúc tăng lúc giảm, lúc tạm :42 ổn định. Một phần ba trường hợp có thể tự khỏi. Bệnh có thể tái phát nhưng có thể :30 khống chế được nhờ uống sulfon (dapson) hoặc chế độ ăn không có gluten. Có trường 3 16 hợp bệnh kéo dài suốt đời nhưng bệnh nhân vẫn sinh hoạt, lao động như bình thường, 2/2 trừ vài trường hợp ở người cao tuổi, lâu ngày có thể bị suy kiệt. 6/1",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Iga Thành Dải",
+          "name_source": "BỆNH IGA THÀNH DẢI",
+          "english_alias": "Linear IgA dermatosis",
+          "source_page": 174,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh da dị ứng – miễn dịch và bệnh da viêm",
+      "diseases": [
+        {
+          "name_vi": "Viêm Da Tiếp Xúc",
+          "name_source": "VIÊM DA TIẾP XÚC",
+          "english_alias": "dapson",
+          "source_page": 172,
+          "clinical_visual_features": ":30 2.1.1. Tổn thương da 02 2/2 - Tổn thương cơ bản là các đám mụn nước, bọng nước chứa dịch trong 6/1 và/hoặc xuất huyết sắp xếp thành hình tròn hoặc bầu dục trên nền da bình thường hay nh _0 nền da đỏ/mảng da đỏ phù dạng mày đay. Các tổn thương này sắp xếp thành đám, Di thành cụm giống bệnh herpes nên còn gọi là hình thái herpes (herpetiform) hay tập inh TB trung ở rìa bờ dát đỏ theo hình nhẫn hoặc hình đa cung, hay gặp ở mặt duỗi của đầu SY gối và khuỷu tay. hu nt - Các loại tổn thương khác là mảng đỏ, dát, sẩn giống hồng ban đa dạng hay Va các tổn thương thứ phát như vảy tiết, vết trợt, vết loét, có thể đối xứng hoặc không, vt_ h_ khi lành không để lại sẹo. din inh - Sự phân bố của các tổn thương khác nhau giữa người lớn và trẻ em t_b sy + Ở trẻ em, tổn thương điển hình thường xuất hiện trước tuổi dậy thì với một khởi phát đột ngột là bọng nước ở bộ phận sinh dục, sau đó lan đến tay, chân và mặt. Thời kì toàn phát, tổn thương chủ yếu ở vùng bụng dưới, sinh dục ngoài và vùng đáy chậu. Ngoài ra còn thấy các tổn thương ở tay, chân, mặt, đặc biệt là vùng quanh miệng. + Ở người lớn, vị trí đầu tiên thường ở các chi, sau đó có thể xuất hiện ở bất cứ vị trí nào trên cơ thể. Vùng đáy chậu và quanh miệng ít gặp hơn. Hình ảnh các tổn thương tương tự như viêm da dạng herpes (DH), pemphigoid bọng nước (BP) hay hồng ban đa dạng (erythema multiforme-EM). - Bệnh có thể làm tăng nguy cơ bị u lympho. - Cơ năng có thể có ngứa. 2.1.2. Tổn thương niêm mạc - Khoảng 50% các trường hợp LAD ở cả người lớn và trẻ em có tổn thương trong miệng. Triệu chứng bao gồm các mụn nước trợt loét, dát đỏ, viêm lợi, viêm môi trợt… Các biểu hiện này có thể xuất hiện trước khi có tổn thương da. - Có thể thấy tổn thương ở mắt như kích ứng, khô, nhạy cảm ánh sáng, nhìn mờ, sẹo giác mạc và thậm chí mù lòa. - Nếu bệnh kéo dài, tổn thương niêm mạc khi lành thường để lại sẹo và có thể gây nên hậu quả nặng nề. Viêm lợi thứ phát có thể làm hỏng răng. Tổn thương ở mắt rất khó phân biệt được với pemphigoid sẹo (pemphigoid cicatricial) và có thể dẫn đến mù lòa. Ngoài ra, có thể thấy tổn thương ở hầu họng, thanh quản, mũi, trực tràng và thực quản. 2.1.3. Tiến triển :42 - Bệnh LAD ở trẻ em thường lành tính, tự thuyên giảm, có thể tồn tại một vài :30 tháng đến vài năm, nhưng hiếm khi đến tuổi dậy thì. 02 - Ở người lớn bệnh thường kéo dài hơn, trung bình 5-6 năm, kéo dài trong 2/2 6/1 khoảng 1-15 năm. _0 nh - Các trường hợp bệnh gây nên do thuốc thường mất đi nhanh chóng nếu xác Di định được thuốc gây bệnh và ngừng sử dụng. inh TB",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Cơ Địa",
+          "name_source": "VIÊM DA CƠ ĐỊA",
+          "english_alias": "Atopic Dermatitis",
+          "source_page": 185,
+          "clinical_visual_features": "Bệnh viêm da cơ địa có các biểu hiện khác nhau tuỳ theo lứa tuổi. - Viêm da cơ địa ở trẻ nhũ nhi + Bệnh phát sớm khoảng 2-3 tháng sau sinh, thường cấp tính với các đám đỏ da, ngứa, sau đó xuất hiện nhiều mụn nước nông nhỏ như đầu đinh ghim tập trung thành từng đám, dễ vỡ, xuất tiết và đóng vảy tiết, có thể bội nhiễm, hạch lân cận sưng to. + Vị trí hay gặp nhất là 2 má, có thể ở da đầu, trán, cổ, thân mình, mặt dưới các chi. Khi trẻ biết bò có thể xuất hiện tổn thương ở đầu gối. Không thấy tổn thương ở vùng tã lót. + Trẻ có thể dị ứng với một số thức ăn như sữa, hải sản, thịt bò, thịt gà… Khi không ăn các thức ăn gây dị ứng thì bệnh viêm da cơ địa giảm rõ rệt. :42 + Bệnh hay tái phát, mạn tính và rất nhạy cảm với các yếu tố như nhiễm trùng, :30 mọc răng, tiêm chủng, thay đổi khí hậu hay môi trường sống. 3 16 + Hầu hết bệnh sẽ tự khỏi khi trẻ được 18-24 tháng. 2/2 - Viêm da cơ địa ở trẻ em 6/1 + Thường từ viêm da cơ địa nhũ nhi chuyển sang. _0 nh + Tổn thương là các sẩn đỏ, vết trợt, da dày, mụn nước khu trú hay lan toả Di cấp tính kèm theo nhiễm khuẩn thứ phát. inh TB + Vị trí hay gặp nhất là ở khoeo, nếp gấp khuỷu tay, mi mắt, hai bên cổ, cẳng SY tay, ở cổ có sạm da mạng lưới, ít khi ở mặt duỗi các chi. hu + Bệnh thường trở nên cấp tính khi trẻ tiếp xúc với lông súc vật, gia cầm, mặc nt Va đồ len, dạ… vt_ + Nếu tổn thương trên 50% diện tích da, trẻ thường suy dinh dưỡng. h_ din + Khoảng 50% sẽ khỏi khi trẻ được 10 tuổi. inh - Viêm da cơ địa ở thanh thiếu niên và người lớn t_b sy + Biểu hiện là mụn nước, sẩn đỏ dẹt, có vùng da mỏng trên mảng da dày, lichen hoá, ngứa. Vị trí hay gặp: nếp gấp khuỷu, khoeo, cổ, rốn, vùng da quanh mắt. Khi bệnh lan toả thì vùng nặng nhất là các nếp gấp. + Viêm da lòng bàn tay, chân: gặp ở 20-80% người bệnh, có thể là dấu hiệu đầu tiên của viêm da cơ địa ở người lớn. + Viêm da quanh mi mắt, chàm ở vú. + Tiến triển mạn tính, ảnh hưởng nhiều bởi các dị nguyên, môi trường, tâm sinh lý người bệnh. - Các biểu hiện khác của viêm da cơ địa + Khô da: do tăng mất nước qua biểu bì. + Da cá, dày da lòng bàn tay, bàn chân, dày sừng nang lông, lông mi thưa. + Viêm môi bong vảy. + Dấu hiệu ở mắt, quanh mắt: mi mắt dưới có thể có 2 nếp gấp, tăng sắc tố quanh mắt, viêm kết mạc tái diễn có thể gây lộn mi. + Chứng da vẽ nổi. - Tiến triển và biến chứng: + Khoảng 70% trẻ bị viêm da cơ địa sẽ khỏi khi lớn lên. Còn lại 30% kéo dài dai dẳng. + Khoảng 30-50% người bệnh viêm da cơ địa sẽ xuất hiện thêm các bệnh dị ứng khác như viêm mũi dị ứng, hen phế quản.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Tiếp Xúc Do Ánh Sáng",
+          "name_source": "VIÊM DA TIẾP XÚC DO ÁNH SÁNG",
+          "english_alias": "Photocontact Dermatitis",
+          "source_page": 191,
+          "clinical_visual_features": ":30 2.1.1. Viêm da tiếp xúc kích ứng do ánh sáng 02 2/2 - Triệu chứng xuất hiện vài phút đến vài giờ sau khi tiếp xúc với ánh sáng. 6/1 _0 - Biểu hiện giống bỏng nắng như đỏ da, phù nề, mụn nước, bọng nước ở vùng nh tiếp xúc với tác nhân và ánh sáng. Di inh - Viêm da tiếp xúc ánh sáng do thực vật (phytophotodermatitis): các tổn TB SY thương xuất hiện thành vệt, thành hình theo vị trí tiếp xúc với thực vật, sau đó để lại hu dát tăng sắc tố kéo dài. nt Va - Cơ năng: bỏng rát, châm chích tại tổn thương. vt_ h_ - Triệu chứng thường nặng nhất sau tiếp xúc ánh sáng 24-48 giờ. Tổn thương din inh có thể để lại dát tăng sắc tố kéo dài hàng tháng, hàng năm. t_b 2.1.2. Viêm da tiếp xúc dị ứng do ánh sáng sy - Triệu chứng xuất hiện 24 - 48 giờ sau khi tiếp xúc với ánh sáng. - Biểu hiện giống tổn thương dạng chàm cấp tính như đỏ da, phù nề, sẩn mụn nước, chảy nước, bong vảy da, vảy tiết. Vị trí chủ yếu ở vùng da tiếp xúc với ánh sáng, nhưng có thể xuất hiện ở vùng da cạnh đó dù không tiếp xúc với ánh sáng. - Cơ năng: rất ngứa. - Bệnh có thể tồn tại dai dẳng nhiều tháng, nhiều năm, tiến triển thành viêm da ánh sáng mạn tính.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Phản Ứng Thuốc Có Tăng Bạch Cầu Ái Toan Và Triệu Chứng Toàn Thân",
+          "name_source": "PHẢN ỨNG THUỐC CÓ TĂNG BẠCH CẦU ÁI TOAN VÀ TRIỆU CHỨNG TOÀN THÂN",
+          "english_alias": "Drug Reaction with Eosinophilia and Systemic Symptoms",
+          "source_page": 195,
+          "clinical_visual_features": "DRESS đặc trưng bởi các tổn thương đa dạng, thay đổi theo thời gian và diễn biến bệnh. Biểu hiện lâm sàng thường xuất hiện sau 2-8 tuần dùng thuốc, và có thể xuất hiện nhanh hơn sau vài giờ đến vài ngày nếu dùng lại thuốc đó. Các bất thường về mặt xét nghiệm có thể xuất hiện trước khi có biểu hiện lâm sàng. 2.1.1.Tổn thương da - Tổn thương da khởi phát thường là ban mịn dạng sởi, ngứa nhẹ, bắt đầu ở mặt, cổ, chi trên rồi lan tỏa toàn thân. Các dạng thường gặp là: phát ban dạng sẩn phù, phát ban dạng sởi, đỏ da bong vảy toàn thân và phát ban dạng hồng ban đa dạng. Trong đó, phát ban dạng hồng ban đa dạng thường tiên lượng kém, hay kết hợp với tổn thương gan nặng. Tổn thương mụn mủ, mụn nước hoặc bọng nước, xuất huyết gặp trong một vài trường hợp. Có thể gặp phù nề vùng giữa mặt, đối xứng và dai dẳng. - Diện tích tổn thương da thường trên 50%. - Tổn thương da phân bố đối xứng ở thân mình, các chi. 2.1.2. Tổn thương niêm mạc - Khoảng 50% bệnh nhân DRESS có tổn thương niêm mạc mức độ nhẹ, thường chỉ ở 1 vị trí niêm mạc, hay gặp nhất là niêm mạc miệng hoặc hầu họng. - 15% bệnh nhân DRESS có tổn thương từ 2 niêm mạc trở lên. :42 2.1.3. Triệu chứng toàn thân: :30 - Sốt gặp ở trên 90% trường hợp DRESS và thường xuất hiện trước tổn thương da, với nhiệt độ cao >38 độ C và tăng nhanh. 02 - Tổn thương cơ quan nội tạng: 2/2 + 85-96% trường hợp DRESS có tổn thương nội tạng, là tiêu chí đánh giá 6/1 mức độ nặng của bệnh. nh _0 + 50-60% bệnh nhân có tổn thương từ 2 cơ quan trở lên, Di + Các tổn thương thường gặp: bất thường hệ hạch bạch huyết (30-60%), hệ inh máu, gan (75%), sau đó là thận (10-30%), tim và phổi (5-25%). Các trường hợp rất TB nặng có thể có tổn thương hệ thần kinh, tiêu hóa và nội tiết. SY",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Hồng Ban Đa Dạng",
+          "name_source": "HỒNG BAN ĐA DẠNG",
+          "english_alias": "Erythema multiforme",
+          "source_page": 200,
+          "clinical_visual_features": "2.1.1. Tổn thương da - Tổn thương đặc trưng của hồng ban đa dạng là hình bia bắn điển hình. Đó là những tổn thương hình tròn, đường kính dưới 3cm, ranh giới rõ với da lành, được tạo nên bởi ít nhất 3 vòng tròn đồng tâm, hai vòng ngoài có màu sắc khác nhau bao quanh một tâm ở giữa sẫm màu (là nơi có sự phá hủy của thượng bì để hình thành nên một mụn nước hoặc vảy tiết). - Ngoài ra, trên da bệnh nhân còn có các tổn thương khác như dát đỏ, sẩn phù, mụn nước, bọng nước. - Phân bố tổn thương: thường xuất hiện ở các chi và vùng mặt, đặc biệt ở chi trên (mặt duỗi của cánh tay, cẳng tay, lòng bàn tay). Ở một số vị trí như khuỷu tay, đầu gối, tổn thương có xu hướng tập trung thành nhóm. - Có thể gặp hiện tượng Koebner: tổn thương hình bia bắn xuất hiện ở vùng da bị sang chấn. 2.1.2. Tổn thương niêm mạc :42 - Tổn thương niêm mạc thường gặp và thường xuất hiện đồng thời với tổn :30 thương da. Hiếm gặp trường hợp chỉ có tổn thương niêm mạc mà không có tổn thương 02 da. 2/2 6/1 - Thường gặp nhất là tổn thương trợt ở miệng bao gồm vùng niêm mạc môi, _0 niêm mạc má, niêm mạc lợi. Các vị trí khác có thể gặp như niêm mạc sinh dục và nh Di niêm mạc mắt. inh TB 2.1.3. Biểu hiện toàn thân SY Biểu hiện toàn thân thường gặp ở hồng ban đa dạng thể nặng. Triệu chứng toàn hu nt thân có thể biểu hiện trước khi có tổn thương da, bao gồm các triệu chứng như sốt, Va mệt mỏi, sưng đau các khớp, viêm phổi không điển hình. vt_ h_ din 2.1.4. Tiến triển inh - Hồng ban đa dạng thể điển hình là bệnh da tự giới hạn. Đa số các tổn thương t_b sy xuất hiện trong 3-5 ngày và thường khỏi sau 1-2 tuần. Thời gian từ khi khởi phát đến khi khỏi thường dưới 4 tuần. Một số trường hợp có tổn thương niêm mạc thì bệnh có thể kéo dài đến 6 tuần. - Tổn thương da khỏi không để lại sẹo, có thể để lại dát tăng sắc tố dai dẳng. Tổn thương niêm mạc có thể để lại di chứng nếu chăm sóc và điều trị không kịp thời như viêm giác mạc, sẹo kết mạc, viêm màng bồ đào, sẹo thực quản, .…",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Hội Chứng Stevens – Johnson Và Hoại Tử Thượng Bì Nhiễm Độc",
+          "name_source": "HỘI CHỨNG STEVENS – JOHNSON VÀ HOẠI TỬ THƯỢNG BÌ NHIỄM ĐỘC",
+          "english_alias": "Steven Johnson syndrome and Toxic Epidermal Necrolysis",
+          "source_page": 204,
+          "clinical_visual_features": "t_b sy - Tổn thương da: + Là các dát đỏ sẫm màu, sau nổi mụn nước, bọng nước nông, nhăn nheo, trợt hoại tử, xen kẽ các mảng sẩn phù, tổn thương hình bia bắn không điển hình, không ngứa. Da bong trợt từng mảng lớn để lại nền da màu đỏ, tím. + Dấu hiệu Nikolsky thường dương tính. + Trường hợp nặng, tổn thương tiết dịch rất nhiều hoặc chảy máu. + Vị trí tổn thương ban đầu thường ở mặt, ngực, sau nhanh chóng lan ra khắp người kể cả lòng bàn tay chân. - Tổn thương niêm mạc: + Gặp trên 90% trường hợp. Với hội chứng SJS, tổn thương từ 2 hốc tự nhiên trở lên. + Tổn thương niêm mạc miệng, sinh dục: thường gặp nhất. Biểu hiện chủ yếu là các bọng nước nông dễ vỡ, để lại vết trợt, loét, tiết dịch, chảy máu, đóng vảy tiết nâu đen, người bệnh ăn uống khó, đau rát nhiều. + Tổn thương ở niêm mạc họng, hầu, thanh quản: gây chít hẹp thanh quản, xuất huyết đường tiêu hóa. + Tổn thương ở mắt: gây viêm kết mạc làm mắt viêm đỏ, phù nề, không mở được mắt, có thể bị viêm dính kết mạc, loét giác mạc, nặng hơn có thể gây mù lòa. + Tổn thương mũi: viêm mũi, xung huyết, chảy máu mũi. - Toàn thân: + Sốt, mệt mỏi, ho, viêm họng, đau khớp, đau đầu, nôn, tiêu chảy. + Trường hợp nặng, người bệnh sốt cao liên tục 39-40oC, nhiễm trùng da, tổn :42 thương nội tạng, rối loạn nước điện giải, có thể li bì, hôn mê. :30 - Tiến triển: 02 + Nếu được chẩn đoán sớm, tiên lượng tốt, thường tiến triển 2-4 tuần. Sau khi 2/2 6/1 tổn thương khỏi, có thể để lại các sẹo, dát tăng hoặc mất sắc tố. _0 nh + Tỉ lệ tử vong khoảng 5% Di inh + Nếu không được điều trị sớm có thể có các biến chứng: viêm màng não, TB nhiễm khuẩn da thứ phát, nhiễm khuẩn huyết, viêm loét kết mạc, giác mạc, mù lòa, SY xuất huyết tiêu hóa, chít hẹp thực quản, viêm phổi, viêm cơ tim, có thể tử vong do hu nt suy đa tạng. Va vt_",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Sẩn Ngứa",
+          "name_source": "SẨN NGỨA",
+          "english_alias": "Prurigo",
+          "source_page": 209,
+          "clinical_visual_features": "- Sẩn huyết thanh: sẩn có mụn nước ở trung tâm, mụn nước có thể vỡ gây tiết dịch và đóng vảy tiết. - Sẩn cục: tổn thương sẩn chắc, màu đỏ nâu hoặc xám. Kích thước từ 1 đến 2 cm. - Tổn thương rải rác chủ yếu vùng da hở. - Cơ năng: ngứa ở các mức độ khác nhau.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Mày Đay",
+          "name_source": "BỆNH MÀY ĐAY",
+          "english_alias": "Urticaria",
+          "source_page": 212,
+          "clinical_visual_features": "- Sẩn phù: các sẩn phù màu trắng, đỏ ranh giới rõ và/hoặc quầng đỏ, kích thước 1 - 8 cm hình tròn, ovan, đa cung, mảng lớn, thường xuất hiện và biến mất trong vòng 24 giờ mà không để lại dát thâm. - Phù mạch: biểu hiện đau, sưng nề bàn tay, chân, môi, mắt, lưỡi, sinh dục, sưng nề thanh gây khó thở. Phù mạch có thể kéo dài đến 72 giờ. - Cơ năng: ngứa, đôi khi nóng rát tại tổn thương. - Toàn thân: + Các triệu chứng cấp tính như khó thở, suy hô hấp, tiếng rít thanh quản xuất :42 hiện khi có phù mạch gây chít hẹp đường hô hấp, bệnh nhân cần phải xử trí cấp cứu. :30 + Các triệu chứng khác tùy thuộc nguyên nhân: sốt, viêm long đường hô hấp, 02 viêm đường hô hấp trên trong mày đay do nhiễm khuẩn. 2/2",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Hồng Ban Nút",
+          "name_source": "HỒNG BAN NÚT",
+          "english_alias": "Erythema nodosum",
+          "source_page": 218,
+          "clinical_visual_features": "- Triệu chứng da: + Các cục hoặc các mảng nóng, đỏ, đau, ranh giới không rõ, kích thước từ 1 – 6 cm. Tổn thương có thể tồn tại vài ngày hoặc vài tuần sau đó liên kết với nhau tạo :42 thành mảng đỏ hoặc mảng thâm tím nếu có xuất huyết trong mô mỡ, không có loét :30 và khi khỏi không để lại teo da hay sẹo. 3 16 + Vị trí: thường gặp ở mặt duỗi hai cẳng chân, đối xứng nhau. Các vị trí khác 2/2 có thể xuất hiện tổn thương bao gồm: cánh tay, đùi, hiếm khi xuất hiện ở thân mình 6/1 và mặt. _0 nh Di + Tiến triển: Tổn thương thường kéo dài 3 - 6 tuần, tuy nhiên thời gian có thể inh dài hơn hoặc tái phát nhiều lần. TB SY - Triệu chứng toàn thân: tuỳ thuộc vào nguyên nhân, hay gặp nhất thường là hu sốt, mệt mỏi. nt Va - Các triệu chứng khác: đau khớp, viêm khớp, đau đầu, đau bụng, nôn, tiêu vt_ h_ chảy và ho. Viêm họng, viêm amidan, viêm đường hô hấp trên thường xuất hiện trước din khi có tổn thương da khoảng 20 - 30% các trường hợp và có thể xuất hiện trước khi inh t_b xuất hiện tổn thương da 1- 3 tuần. sy",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Áp Tơ",
+          "name_source": "BỆNH ÁP TƠ",
+          "english_alias": "Aphthous stomatitis",
+          "source_page": 222,
+          "clinical_visual_features": "- Tổn thương cơ bản: + Vết loét riêng rẽ, hình tròn hoặc hình oval, xung quanh có quầng đỏ và dịch :42 tiết hơi vàng dính ở trung tâm. :30 + Loét aphthous thể nhỏ (minor aphthous ulcer): thường gặp, là các vết loét 02 nông, đường kính <1cm, số lượng 1-5 vết loét, thường tự khỏi sau 1-2 tuần. 2/2 6/1 + Loét aphthous thể lớn (major apthous ulcer): ít gặp, là vết loét sâu, đường _0 kính tổn thương >1cm, lâu lành, thường sau vài tuần hoặc vài tháng, khi lành có thể nh Di để lại sẹo. inh TB + Loét aphthous dạng herpes (herpetiform aphthous) nhiều vết loét nhỏ như SY đầu đinh ghim. hu nt + Vị trí thường gặp: niêm mạc tiền đình miệng, lưỡi, vòm họng, họng, và sàn Va miệng. Lợi và vòm khẩu cái rất hiếm khi có tổn thương. vt_ h_ din - Cơ năng: các vết loét đau với mức độ tái phát khác nhau tùy từng thể bệnh. inh Một số ít bệnh nhân có triệu chứng ngứa ran hoặc rát bỏng tại khu vực hình thành t_b sy loét. - Toàn thân: một số trường hợp có triệu chứng sốt nhẹ.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh đỏ da có vảy",
+      "diseases": [
+        {
+          "name_vi": "Viêm Da Dầu",
+          "name_source": "VIÊM DA DẦU",
+          "english_alias": "Seborrheic Dermatitis",
+          "source_page": 228,
+          "clinical_visual_features": "2.1.1. Viêm da dầu ở trẻ nhỏ - Tổn thương là các dát đỏ, mảng đỏ, trên có vảy da, vảy mỡ bóng dính, có thể kèm theo các vết nứt. - Vị trí: + Vùng da đầu: hay gặp ở vùng trán và đỉnh đầu, tổn thương có thể lan rộng toàn bộ da đầu. + Vùng mặt, thân mình: hay gặp ở trán, rãnh mũi má, lông mày, mí mắt, rãnh sau :42 tai, ống tai ngoài và ngực. Tổn thương có thể lan rộng ra toàn bộ thân mình và các :30 chi. 3 16 + Vùng kẽ: hay gặp ở nách, bẹn, quanh rốn, quanh ống hậu môn. 2/2 6/1 - Bệnh đỏ da toàn thân do viêm da dầu (Leiner’s disease): đây là một thể nặng _0 lan tỏa của viêm da dầu ở trẻ em, Tổn thương viêm da dầu lan tỏa dẫn đến tình trạng nh Di đỏ da bong vảy toàn thân kèm theo sốt, tiêu chảy, thiếu máu, nôn và sút cân. Trẻ có inh thể tử vong nếu không được điều trị. TB SY - Viêm da dầu ở trẻ nhỏ có tiên lượng tốt, hầu hết thoái lui sau vài tuần hoặc vài hu tháng, các trường hợp kéo dài quá 12 tháng rất ít. nt Va 2.1.2. Viêm da dầu ở người lớn vt_ h_ din - Tổn thương là các vảy da màu trắng, mỏng trong một số trường hợp có thể là inh các vảy da và vảy mỡ màu vàng trên nền da viêm đỏ. t_b sy - Vị trí: + Ở da đầu: hay gặp ở vùng trán, thái dương và vùng đỉnh nhưng có thể lan tỏa toàn bộ đầu. + Ở mặt: tập trung ở má, đầu trong lông mày, rãnh mũi má, rãnh sau tai, vành tai, ống tai ngoài, ngực và lưng. + Vùng nếp gấp: nách, nếp lằn dưới vú, quanh rốn. - Ở bệnh nhân suy giảm miễn dịch: các tổn thương có xu hướng lan tỏa, có thể gặp ở các vùng da không tăng tiết bã như tay chân và rất khó điều trị.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Vảy Phấn Hồng",
+          "name_source": "VẢY PHẤN HỒNG",
+          "english_alias": "Pityriasis rosea",
+          "source_page": 233,
+          "clinical_visual_features": "- Tiền triệu: có thể gặp các triệu chứng gợi ý đến nguyên nhân vi rút như đau đầu, sốt, mệt mỏi, chán ăn, đau họng, hạch to và đau khớp. - Dát Herald (tổn thương mẹ): là triệu chứng thường gặp, khởi phát cấp tính, xuất hiện đầu tiên. Tổn thương thường đơn độc, kích thước 2-5cm, có hình tròn hoặc bầu dục, giới hạn rõ, màu hồng hoặc màu cá hồi, có vảy mỏng ở rìa tổn thương (dấu hiệu viền vảy), có xu hướng lành ở trung tâm. Vị trí thường gặp ở mạn sườn, lưng. - Các tổn thương con: xuất hiện sau tổn thương tiên phát từ 2 ngày tới 2 tháng với đặc điểm tổn thương tương tự tổn thương mẹ nhưng kích thước nhỏ hơn (khoảng 0,5-1cm). Vị trí: thường gặp ở thân mình, vùng ít tiếp xúc với ánh sáng, đối xứng tạo hình ảnh cây thông Noel. Tổn thương bùng phát và lan rộng theo hướng ly tâm, từ trên xuống trong vài ngày đến vài tuần. - Cơ năng: có thể gặp ngứa ở các mức độ khác nhau. - Tiến triển: Quá trình bong vảy hoàn tất và ban đỏ mờ dần. Đa số các tổn thương sẽ biến mất sau 2-12 tuần, một số trường hợp có thể lâu hơn 5-6 tháng. Bệnh thường khỏi hoàn toàn, hiếm khi tái phát. Tăng sắc tố sau viêm thường gặp ở những người có da sẫm màu và thường mất vài tháng hoặc lâu hơn.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Vảy Phấn Đỏ Nang Lông",
+          "name_source": "VẢY PHẤN ĐỎ NANG LÔNG",
+          "english_alias": "Pityriasis Rubra Pilaris",
+          "source_page": 237,
+          "clinical_visual_features": "- Sẩn sừng nang lông: sẩn hình chóp, màu nâu đỏ hoặc vàng đỏ, kích thước bằng đầu ghim, trên đỉnh là nút sừng, ở giữa nút sừng có gắn sợi lông. Các sẩn tập trung thành mảng, có hiện tượng bong vảy lan toả làm các sẩn nang lông mờ đi rồi biến mất để lại nền da đỏ, bong vảy khô. - Dát màu đỏ cam, có thể lan tỏa gây nên đỏ da toàn thân kèm theo đảo da lành đặc trưng của bệnh. - Vị trí: hay gặp là 2 bên cổ, thân mình, mặt duỗi của chi, đặc biệt là ở mu đốt ngón 1,2. - Dày sừng lòng bàn chân, bàn tay màu vàng sáp. - Móng đục, dày, xù xì, mủn, có khía, có khuynh hướng nứt và gãy, đôi khi có rỗ móng. - Cơ năng: ngứa nhẹ. :42",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Vảy Nến Thể Thông Thường",
+          "name_source": "VẢY NẾN THỂ THÔNG THƯỜNG",
+          "english_alias": "Psoriasis vulgaris",
+          "source_page": 240,
+          "clinical_visual_features": "- Tổn thương da: điển hình là những sẩn, mảng màu đỏ tươi, giới hạn rõ với da lành, trên có vảy da trắng, dày, dễ bong. Vị trí thường ở chỗ tỳ đè, vùng hay bị cọ xát như khuỷu tay, đầu gối, mấu chuyển, mặt duỗi các chi. Tổn thương có khuynh hướng đối xứng. - Tổn thương móng: rỗ móng, rãnh ngang móng, móng xù xì, vạch trắng ngang móng, dấu hiệu giọt dầu, tách móng, dày sừng dưới móng, xuất huyết. - Tổn thương khớp: sưng nóng đỏ đau các khớp, viêm một/nhiều khớp, hình ảnh lâm sàng giống viêm đa khớp dạng thấp, viêm khớp cột sống, viêm điểm bám gân và phần mềm quanh khớp tạo hình ảnh ngón tay, ngón chân hình khúc dồi. - Tổn thương niêm mạc: thường gặp ở niêm mạc quy đầu, âm hộ. Đó là dát màu hồng, không thâm nhiễm, giới hạn rõ, ít hoặc không có vảy, tiến triển mạn tính. Ở lưỡi tổn thương giống viêm lưỡi hình bản đồ hoặc viêm lưỡi phì đại tróc vảy. - Các triệu chứng của bệnh phối hợp: tim mạch, rối loạn chuyển hóa, tâm thần, :42 ruột,.... :30 16",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Vảy Nến Thể Mủ",
+          "name_source": "VẢY NẾN THỂ MỦ",
+          "english_alias": "Pustular psoriasis",
+          "source_page": 248,
+          "clinical_visual_features": "- Tổn thương cơ bản: + Tổn thương da: Là các mụn mủ vô khuẩn, nông, nhỏ bằng đầu đinh ghim, màu trắng đục trên nền da đỏ, các mụn mủ đứng riêng rẽ hoặc tập trung thành hồ mủ. Khi mụn mủ khô để lại vảy da trắng mỏng. Các mụn mủ phân bố lan tỏa toàn bộ cơ :42 thể trong vảy nến thể mủ toàn thân hoặc khu trú tại các vùng da ở đầu chi hoặc lòng :30 bàn tay bàn chân trong vảy nến thể mủ khu trú. 3 16 + Tổn thương móng: có thể gặp đặc biệt là ở vảy nến thể mủ đầu chi có thể 2/2 gây loạn dưỡng móng hoặc mất móng. 6/1 _0 + Tổn thương niêm mạc: có thể gặp viêm lưỡi bản đồ, viêm màng tiếp hợp, nh viêm quy đầu. Di inh - Triệu chứng cơ năng: sưng đau tại vùng tổn thương, có thể có ngứa TB - Triệu chứng toàn thân: thường gặp ở vảy nến thể mủ toàn thân bao gồm sốt SY hu cao, mệt mỏi, suy kiệt. nt Va - Tiến triển: các triệu chứng lâm sàng tái phát nhiều lần. vt_ - Biến chứng: Đợt cấp của vảy nến thể mủ toàn thân nếu không được điều trị h_ din kịp thời có thể gây ra các biến chứng: nhiễm trùng thứ phát, rối loạn nước điện giải, inh mất protein gây giảm albumin dẫn đến sốc giảm thể tích, suy giảm chức năng gan t_b sy thận, suy tim, ....",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Vảy Phấn Dạng Lichen",
+          "name_source": "VẢY PHẤN DẠNG LICHEN",
+          "english_alias": "Pityriasis Lichenoides",
+          "source_page": 253,
+          "clinical_visual_features": "- Tổn thương cơ bản: là các sẩn chắc, hơi nổi cao (còn được xếp vào nhóm bệnh da có sẩn), màu đỏ hồng hoặc nâu xám, lúc đầu nhỏ bằng hạt đỗ, sau lớn dần, trên sẩn xuất hiện vảy da màu trắng xám, khô và dính vào tổn thương. Tổn thương rải rác khắp thân mình và các chi. - Cạo vảy theo phương pháp Brocq: vảy bong cả mảng nhưng còn dính một bên, gọi là dấu hiệu kẹp chì hay dấu hiệu gắn xi. - Ngoài sẩn điển hình còn thấy dát đỏ có vảy da, đôi khi chỉ có vảy da hoặc vảy hơi hồng, vảy tiết màu xám. - Trường hợp cấp tính, tổn thương là dát đỏ và sẩn phù, trung tâm có thể thấy mụn nước và xuất huyết. Các sẩn, mụn nước nằm sâu, có dạng đậu mùa là dấu hiệu quan trọng để chẩn đoán. Các sẩn này sau loét, hoại tử và đóng vảy tiết; khi lành để lại sẹo lõm, màu thâm, dạng đậu mùa và có thể tăng hoặc giảm sắc tố da. - Cơ năng: không ngứa, không đau. Trường hợp cấp tính có nhức đầu, suy nhược, mệt mỏi. - Toàn trạng ít bị ảnh hưởng. Trường hợp cấp tính có thể có đôi khi sốt nhẹ, tăng tốc độ lắng máu, hạch ngoại biên to.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Đỏ Da Toàn Thân",
+          "name_source": "ĐỎ DA TOÀN THÂN",
+          "english_alias": "Erythroderma",
+          "source_page": 258,
+          "clinical_visual_features": "- Tổn thương da + Đỏ da màu sắc thay đổi tùy theo thời gian, căn nguyên, và sự tiến triển của bệnh, tổn thương chiếm >90% diện tích cơ thể. :42 + Vảy da có thể bong sớm nhưng thường thấy xuất hiện đồng thời với dát đỏ và :30 kéo dài trong suốt quá trình tiến triển của bệnh. Kích thước vảy ở giai đoạn cấp thường 02 lớn thành mảng, giai đoạn mạn tính thì thường nhỏ dạng vảy cám. 2/2 6/1 + Phù nề cũng thường gặp nhưng ít hơn so với hai triệu chứng trên. Phù có thể _0 toàn thân, cũng có thể chỉ khu trú ở chi dưới. Đôi khi thấy có mụn nước kèm tiết dịch nh Di hoặc không tiết dịch. inh TB + Da dày và các nếp da hằn sâu xuống, đặc biệt là khi phù nề và thâm nhiễm tế SY bào ở trung bì hoặc lichen hóa. Lòng bàn tay, bàn chân trên 80% có thể bị dày sừng hu ở những trường hợp đỏ da toàn thân mạn tính. nt Va + Tăng hoặc giảm sắc tố làm da thâm sạm hay tạo thành những đám loang lổ. vt_ h_ din + Da quanh hốc mắt có thể bị viêm đỏ, lộn mi, chảy nước mắt. Ở mặt có thể biến inh dạng do phù nề hoặc thâm nhiễm làm mất đi các nếp nhăn trên mặt, thay vào đó là t_b những khối gồ lên trông như mặt sư tử. sy + Nếu bội nhiễm sẽ có mủ, vảy tiết làm cho bệnh nặng thêm. - Tổn thương niêm mạc: viêm môi, viêm kết mạc, viêm miệng... - Tổn thương tóc, móng: đa số trường hợp có rụng tóc, thưa lông mày, lông mi. Móng xù xì, màu nâu, dày sừng dưới móng, tạo thành những rãnh sâu mủn móng, viêm quanh móng, loạn dưỡng móng thậm chí bong móng thường gặp ở những trường hợp bệnh tiến triển sau nhiều tuần. - Cơ năng + Ngứa là triệu chứng nổi bật và thường gặp. + Ngứa có thể rất dữ dội, làm mất ngủ, gây ra các tổn thương do cào gãi, đặc biệt ở những người bệnh có tổn thương nặng và lan rộng. + Một số ít trường hợp người bệnh chỉ ngứa nhẹ hoặc có cảm giác rấm rứt khó chịu. + Có cảm giác da khô làm hạn chế cử động. - Triệu chứng toàn thân Người bệnh có thể sốt cao hoặc có cảm giác ớn lạnh hay rét run. Đôi khi thấy + hạch ngoại biên, gan, lách to. + Ảnh hưởng đến toàn trạng: sốt hoặc hạ nhiệt độ, tình trạng suy kiệt, gầy sút, mất nước, hạ huyết áp, nhiễm trùng huyết. - Triệu chứng khác tùy theo căn nguyên gây đỏ da toàn thân. - Biến chứng: + Bội nhiễm da thường do tụ cầu. :42 + Rối loạn điện giải, kèm theo mất nước. :30 + Loét tỳ đè có thể là lối vào gây nhiễm trùng hệ thống như: viêm phổi, tắc mạch, 02 huyết khối, đặc biệt ở những người cao tuổi. 2/2 6/1 + Những biến chứng điều trị do dùng corticosteroid tại chỗ hoặc toàn thân kéo nh _0 dài gây chàm hóa, kích ứng, suy giảm miễn dịch, viêm nhiễm mạn tính. Di inh",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Lichen Phẳng",
+          "name_source": "BỆNH LICHEN PHẲNG",
+          "english_alias": "Lichen planus",
+          "source_page": 263,
+          "clinical_visual_features": "− Tổn thương da: + Sẩn nhẵn, bóng, dẹt, hình đa giác, màu tím hoa cà, kích thước 1-10mm, bề mặt thường có những khía ngang dọc gọi là mạng lưới Wickham. Sẩn có thể liên kết thành mảng, khi khỏi để lại vết thâm. Tổn thương ở da đầu có thể gây rụng tóc vĩnh viễn. + Vị trí thường gặp: cổ tay, thắt lưng, cẳng chân, đầu, dương vật. + Có thể gặp hiện tượng Koebner: người bệnh gãi, dọc theo vết gãi xuất hiện tổn thương mới. − Tổn thương niêm mạc: + Tổn thương đặc trưng là những dải hoặc mạng lưới màu trắng như sứ hoặc màu xám. + Vị trí thường gặp: lưỡi và niêm mạc má, ngoài ra còn có thể gặp ở thanh quản, amiđan, quy đầu, âm đạo, niêm mạc dạ dày-ruột, quanh hậu môn. :42 − Tổn thương móng gặp ở 10% người bệnh với các biểu hiện là những khía dọc, :30 dày móng, tách móng hoặc teo móng. 02 − Cơ năng: ngứa ít hoặc nhiều tùy từng trường hợp. 2/2 6/1",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh lây truyền qua đường tình dục",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Giang Mai",
+          "name_source": "BỆNH GIANG MAI",
+          "english_alias": "Syphilis",
+          "source_page": 268,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Âm Đạo Do Trùng Roi",
+          "name_source": "VIÊM ÂM ĐẠO DO TRÙNG ROI",
+          "english_alias": "Trichomoniasis",
+          "source_page": 283,
+          "clinical_visual_features": "- Âm đạo là nơi bị nhiễm nhiều nhất, sau đó đến niệu đạo, các tuyến Bartholin và Skène, cổ tử cung. - Thời gian ủ bệnh từ 1- 4 tuần. Nhiễm trùng roi sinh dục nữ có thể từ không triệu chứng đến viêm âm đạo nặng. Khoảng 1/4 trường hợp không có biểu hiện lâm sàng. - Triệu chứng thường gặp nhất là khí hư âm đạo. Dịch tiết nhiều, loãng, có bọt, màu vàng xanh, mùi hôi. - Có thể kèm theo ngứa âm hộ, đi tiểu khó, đau bụng dưới và đau khi giao hợp. - Khám: âm hộ - âm đạo viêm đỏ, phù nề. Cổ tử cung viêm đỏ có thể có xuất huyết điểm giống hình ảnh “quả dâu tây”. Cùng đồ có nhiều khí hư màu vàng xanh loãng và có bọt. - Các biến chứng: viêm tiểu khung, vỡ ối sớm, đẻ non.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Lậu",
+          "name_source": "BỆNH LẬU",
+          "english_alias": "Gonorrhea",
+          "source_page": 285,
+          "clinical_visual_features": "Thời gian ủ bệnh ở nam giới trung bình từ 3-5 ngày. Ở nữ giới thời gian ủ bệnh thường kéo dài hơn, trung bình 5-7 ngày. Thời gian này người bệnh không có triệu chứng nhưng vẫn có khả năng lây lan cho người khác. 2.1.1. Nhiễm lậu cầu không biến chứng - Nam giới: thường có biểu hiện tiết dịch niệu đạo và tiểu buốt. Khám thấy dịch tiết niệu đạo có thể ít hoặc nhiều, nhầy hoặc mủ. - Nữ giới: thường không có triệu chứng cơ năng, dưới 50% bệnh nhân có tiết dịch âm đạo bất thường, tiểu buốt, đau vùng bụng dưới và đau khi quan hệ tình dục. Khám thấy dịch âm đạo và viêm cổ tử cung, có thể có mủ. Phần lớn bệnh nhân không có triệu chứng rõ ràng nên không được phát hiện và điều trị. - Lậu trực tràng: phần lớn không có triệu chứng ở cả hai giới; đôi khi có đau hoặc tiết dịch ở hậu môn, trực tràng. - Lậu hầu họng: chủ yếu không có triệu chứng, có thể đau họng nhẹ và viêm họng.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Nhiễm Herpes Simplex Sinh Dục",
+          "name_source": "NHIỄM HERPES SIMPLEX SINH DỤC",
+          "english_alias": "Genital herpes simplex",
+          "source_page": 291,
+          "clinical_visual_features": "Người bệnh mắc bệnh lần đầu tiên được gọi là nhiễm HSV sinh dục tiên phát. Tuy cách lây truyền HSV-1, HSV-2 khác nhau và gây bệnh ở những vị trí khác nhau nhưng biểu hiện lâm sàng của nhiễm HSV-1 và HSV-2 sinh dục thường khó phân biệt về mặt lâm sàng mà chỉ có thể phân biệt bằng xét nghiệm. Hầu hết bệnh nhân nhiễm HSV-2 sinh dục tiên phát có triệu chứng sau đó sẽ bị những đợt tái phát. Nhiễm HSV-1 sinh dục thường ít tái phát hơn. Triệu chứng của các đợt tái phát thường nhẹ hơn đợt tiên phát. Sau đợt nhiễm HSV-2 tiên phát, thường xuất hiện những đợt thải vi rút từ các tổn thương sinh dục mặc dù không có triệu chứng lâm sàng. Vì vậy HSV-2 thường 0:4 lây truyền từ những người không biết mình bị nhiễm hoặc những người không có 6:3 triệu chứng ở thời điểm quan hệ tình dục. 02 2.1.1. Nhiễm HSV sinh dục tiên phát 2/2 6/1 - Thời gian ủ bệnh khoảng 4-7 ngày. _0 nh - Tổn thương là các mụn nước trên nền dát đỏ, tập trung thành đám ở bộ phận Di inh sinh dục ngoài, quanh hậu môn, mông. Các mụn nước tiến triển thành mụn mủ, vết trợt TB bờ đa cung, đóng vảy tiết và lành không để lại sẹo trong vòng 2-3 tuần. Tổn thương tại SY niêm mạc có thể trợt, loét mà không có biểu hiện mụn nước trước đó. hu nt - Tổn thương không điển hình của nhiễm HSV-2 sinh dục có thể gặp như vết t_Va loét, vết nứt nhỏ, khó tiểu, viêm niệu đạo mà không có tổn thương. _v h din - Triệu chứng tại chỗ: đau, ngứa bộ phận sinh dục hoặc bí tiểu. inh t_b - Triệu chứng toàn thân: có thể sốt, nhức đầu, đau cơ, hạch bẹn sưng đau, viêm sy cổ tử cung. 2.1.2. Nhiễm HSV sinh dục tái phát - Tiền triệu: đau, bỏng rát, dị cảm trước khi xuất hiện mụn nước. - Lâm sàng: các tổn thương tái phát thường ít hơn, ở một bên và không đau nhiều như nhiễm HSV tiên phát, thường tự lành sau 5-10 ngày. - Hầu như không có triệu chứng toàn thân. - Ở những bệnh nhân suy giảm miễn dịch, bệnh nhân HIV, các đợt tái phát diễn ra thường xuyên hơn và có triệu chứng rầm rộ, ảnh hưởng nhiều đến thể chất và tinh thần.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Do Chlamydia Trachomatis",
+          "name_source": "BỆNH DO CHLAMYDIA TRACHOMATIS",
+          "english_alias": "Chlamydia trachomatis",
+          "source_page": 296,
+          "clinical_visual_features": "2.1.1. Nhiễm Chlamydia không biến chứng - Nhiễm Chlamydia sinh dục – tiết niệu: 70% ở nữ và 50% ở nam giới nhiễm Chlamydia sinh dục – tiết niệu không có biểu hiện lâm sàng. Các trường hợp có triệu chứng lâm sàng bao gồm: + Ở nữ giới: tiết dịch âm đạo bất thường; tiểu khó; chảy máu khi quan hệ tình dục; viêm, tiết dịch cổ tử cung. + Ở nam giới: tiết dịch niệu đạo, tiểu khó, đau tinh hoàn - Nhiễm Chlamydia ngoài sinh dục: + Trực tràng: phần lớn không có biểu hiện lâm sàng, một số trường hợp có tiết dịch, đau và có máu trong phân. + Hầu họng: hiếm khi có triệu chứng, có thể viêm họng, đau họng nhẹ. 2.1.2. Nhiễm Chlamydia có biến chứng - Ở nam giới: viêm mào tinh hoàn, viêm ống dẫn tinh, túi tinh và có thể dẫn đến vô sinh. - Ở nữ giới: viêm tiểu khung, chửa ngoài tử cung, viêm vòi trứng, ống dẫn trứng và có thể dẫn đến vô sinh. - Ở phụ nữ có thai: sinh non và/hoặc trẻ sinh ra thiếu cân. - Ở trẻ sơ sinh: có thể bị nhiễm Chlamydia từ mẹ trong quá trình chuyển dạ 0:4 dẫn đến viêm kết mạc (tiết dịch, sưng mí mắt), viêm mũi họng, viêm phổi. 6:3 2.1.3. Biểu hiện lâm sàng của bệnh hột xoài (lymphogranuloma venereum) 2/2 - Do các biến thể L1-3 của C. trachomatis xâm nhập sâu hơn đến tổ chức dưới 6/1 niêm mạc và hạch lân cận. _0 nh Di - Tổn thương thường gặp ở hạch bẹn hoặc hạch đùi một bên, hạch mềm và vết inh loét hoặc sẩn ở bộ phận sinh dục. TB SY - Tổn thương ở hậu môn trực tràng có thể biểu hiện viêm hậu môn trực tràng, hu tiết dịch, đau, táo bón hoặc mót rặn. Nếu không được điều trị, có thể dẫn đến chít hẹp nt Va hoặc rò hậu môn. t_ _v",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Sùi Mào Gà",
+          "name_source": "BỆNH SÙI MÀO GÀ",
+          "english_alias": "Genital warts",
+          "source_page": 301,
+          "clinical_visual_features": "",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "U da",
+      "diseases": [
+        {
+          "name_vi": "Ung Thư Biểu Mô Tế Bào Đáy",
+          "name_source": "UNG THƯ BIỂU MÔ TẾ BÀO ĐÁY",
+          "english_alias": "Basal cell carcinoma - BCC",
+          "source_page": 310,
+          "clinical_visual_features": "- Ung thư biểu mô tế bào đáy thường gặp ở người lớn tuổi, vị trí thường gặp là ở vùng mặt, nơi tiếp xúc trực tiếp với ánh sáng mặt trời, tiến triển chậm, tổn thương có thể lan rộng, xâm lấn tổ chức xung quanh gây biến dạng và làm rối loạn chức năng của một số cơ quan bộ phận như mũi, miệng và mắt. Nếu được phát hiện sớm và điều trị kịp thời, cắt bỏ tổn thương, tiên lượng bệnh rất tốt. - Ung thư biểu mô tế bào đáy có nhiều thể lâm sàng. Các triệu chứng lâm sàng thay đổi tùy thuộc vào thể lâm sàng: + Thể u: thường gặp ở vùng đầu, cổ và nửa trên thân mình. Tổn thương ban đầu là khối u nhỏ, mật độ chắc, trên có giãn mạch, không ngứa, không đau, tiến triển chậm, tăng dần về kích thước, lan ra xung quanh, thâm nhiễm, xâm lấn đến các tổ chức dưới da. Tổn thương có thể loét, dễ chảy máu, đóng vảy tiết đen, bờ nổi cao với các sẩn bóng, chắc được gọi là “hạt ngọc ung thư”. + Thể nông: thường gặp là ở vùng thân và ít có xu hướng xâm lấn. Tổn thương là những dát, sẩn màu hồng hoặc đỏ nâu, có vảy da, trung tâm tổn thương thường lành, bờ hơi nổi cao giống như sợi chỉ. + Thể xơ: thường gặp ở vùng mũi hoặc trán.Tổn thương bằng phẳng với mặt da, đôi khi lõm nhẹ, thâm nhiễm, trên có các mạch máu giãn, giới hạn không rõ ràng với da lành. + Thể hỗn hợp: Ung thư biểu mô tế bảo vảy – đáy (BSCC) + Thể tăng sắc tố. 0:4 - Ung thư biểu mô tế bào đáy nhiều tổn thương: 6:3 + Hội chứng Gorlin là hội chứng thường gặp nhất, biểu hiện nhiều tổn thương BCC, kèm theo nang xương hàm dưới, dày sừng điểm lòng bàn tay, bàn chân... 2/2 + Những bệnh nhân bị bệnh khô da sắc tố, hội chứng Muir-Torre có nguy cơ cao 6/1 xuất hiện nhiều tổn thương BCC và các loại ung thư da khác. _0 nh",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Ung Thư Biểu Mô Tế Bào Vảy",
+          "name_source": "UNG THƯ BIỂU MÔ TẾ BÀO VẢY",
+          "english_alias": "Squamous cell carcinoma - SCC",
+          "source_page": 315,
+          "clinical_visual_features": "Biểu hiện thay đổi tùy thuộc vào từng thể lâm sàng 2.1.1. Tổn thương tiền ung thư - Dày sừng ánh sáng: Tổn thương ban đầu là chấm nhỏ, gồ ghề như giấy nhám. Tăng dần kích thước, đỏ da, bong vảy, ở vùng tiếp xúc với ánh sáng. - Bạch sản miệng: tổn thương là một mảng màu trắng bám chắc ở niêm mạc miệng, lưỡi, ranh giới thường rõ, không có triệu chứng cơ năng. - Hồng sản Queyrat: tổn thương là mảng đỏ giới hạn rõ, bề mặt ướt, khu trú ở niêm mạc sinh dục nam, không ngứa, không đau, tiến triển chậm. 2.1.2. Ung thư biểu mô tế bào vảy tại chỗ (in-situ) Bệnh Bowen: Tổn thương là mảng da màu hồng hoặc đỏ, trên có vảy, giới hạn rõ với da lành. Vị trí ở vùng da tiếp xúc với ánh nắng. Cần xét nghiệm mô bệnh học để xác định chẩn đoán. 2.1.3. Ung thư biểu mô tế bào vảy xâm nhập (invasive) - Tổn thương cơ bản: dạng sẩn hoặc mảng, dày sừng bong vảy ở các mức độ khác nhau, có thể loét, sùi, trợt, đóng vảy tiết. Tiến triển tự nhiên của khối u thay đổi khác nhau. Tổn thương do ánh sáng thường ở giai đoạn sớm, tỷ lệ di căn thấp (0,5%), những tổn thương có kích thước > 2cm và ở các vị trí như môi, tai, sinh dục (âm hộ, dương vật) có nguy cơ di căn cao hơn. Hạch vùng lân cận tổn thương có thể to do viêm phản ứng hoặc là hạch di căn (to, dính, mật độ không đều) 0:4 - Một số thể đặc biệt của ung thư biểu mô tế bào vảy: 6:3 + SCC quanh miệng: thường gặp ở môi dưới, tổn thương là mảng cứng thâm 02 nhiễm, màu hồng, loét, dễ chảy máu, xâm lấn tổ chức xung quanh, dễ di căn xa. 2/2 + SCC quanh móng: dễ nhầm với hạt cơm, chẩn đoán dựa vào sinh thiết, thường 6/1 _0 liên quan đến HPV tuýp 16 nh + U quá sản sừng (Keratoacanthoma): tổn thương là u màu đỏ, nổi cao, bóng, Di inh trung tâm có tổ chức sừng như miệng núi lửa, xuất hiện và tiến triển nhanh. TB - Một số thể SCC nguy cơ di căn thấp: SY + Ung thư biểu mô tế bào vảy thể sùi (verrucous carcinoma): tổn thương khối sùi hu nt lớn, bề mặt nhiều thùy, múi. Va + Ung thư biểu mô tế bào vảy – đáy (BSCC): biểu hiện mô bệnh học cả ung thư t_ _v h biểu mô tế bào vảy, xu hướng xâm lấn và di căn cao hơn BCC. din inh",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Ung Thư Tế Bào Hắc Tố",
+          "name_source": "UNG THƯ TẾ BÀO HẮC TỐ",
+          "english_alias": "Malignant melanoma",
+          "source_page": 321,
+          "clinical_visual_features": "Biểu hiện thay đổi tùy thuộc vào thể lâm sàng: - Thể u: thường gặp ở tuổi 50 đến 60, tổn thương là khối u, nổi cao, hình vòm, đôi khi có cuống, màu nâu đen không đồng nhất, có thể loét, dễ chảy máu, thường gặp ở thân mình, tiến triển nhanh và tiên lượng xấu. - Thể nông: thường gặp ở người da trắng, tuổi từ 40 đến 50. Nữ thường gặp ở cẳng chân, nam thường gặp ở lưng. Tổn thương có màu không đều, nâu xen lẫn xanh, bờ không đều, bề mặt phẳng, xu hướng lan rộng. - Ung thư tế bào hắc tố của Dubreuilh: thường gặp ở người lớn tuổi. Tổn thương là các dát màu nâu hoặc đen, không đều, thường xuất hiện ở vùng da hở, tiến triển chậm, có xu hướng lan rộng, lành ở giữa, sau đó xâm lấn xuống sâu. - Thể đầu chi: thường gặp ở bàn tay, bàn chân, đặc biệt là ở gót chân. Khởi phát là mảng da tăng sắc tố, màu không đều, màu nâu xen lẫn đen xám, ranh giới không rõ, nổi cao hơn mặt da, có thể loét, dễ chảy máu, không đau, không ngứa. + Ung thư tế bào hắc tố dưới móng: thường được chẩn đoán muộn vì dễ nhầm cần được khám kĩ, phát hiện dấu hiệu Hutchinson và các bất thường khác bằng Dermoscopy để chẩn đoán ung thư tế bào hắc tố dưới móng. - Thể niêm mạc: hiếm gặp, có thể xuất hiện ở miệng, sinh dục, quanh hậu môn. Tổn thương là mảng da tăng sắc tố, tiến triển nhanh, lan ra xung quanh. Trường hợp nghi ngờ cần làm sinh thiết mặc dù chưa có biểu hiện ác tính. - Thể không nhiễm hắc tố: hiếm gặp, tổn thương là u sùi, màu đỏ, có thể loét, dễ chảy máu, giống với u hạt nhiễm khuẩn. Trường hợp này cần làm mô bệnh học và hóa mô miễn dịch để chẩn đoán xác định. - Ung thư tế bào hắc tố thứ phát: khoảng 5% trường hợp không thấy tổn thương nguyên phát. Tổn thương thường là khối u đơn độc, không tăng sắc tố, khu trú dưới da, niêm mạc. Di căn đến từ u hắc tố ở tạng hoặc da đã thoái triển. 322",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Ung Thư Biểu Mô Tế Bào Vảy Dương Vật",
+          "name_source": "UNG THƯ BIỂU MÔ TẾ BÀO VẢY DƯƠNG VẬT",
+          "english_alias": "Penile squamous cell carcinoma",
+          "source_page": 326,
+          "clinical_visual_features": "- Tổn thương thường là những khối sùi, nổi cao trên bề mặt da, sần sùi, màu đỏ, mật độ chắc, có vảy. - Có hai thể lâm sàng: thể sùi và thể loét. + Thể sùi: tổn thương cơ bản là các khối u, mùi hôi, nổi cao, có thể loét trên bề mặt khối sùi, tổn thương có thể đơn độc hoặc kết hợp với nhau thành khối như súp lơ; vị trí thường gặp ở quy đầu và bao quy đầu, ít gặp hơn ở thân dương vật. + Thể loét: khối u xâm lấn đến các tổ chức sâu hơn, thường nhỏ, nông, loét hình tròn, có thể gồ cao trên nền cứng. - Trường hợp đến muộn, khối u có thể loét, nhiễm khuẩn, mùi hôi, di căn tới các hạch lân cận hoặc đến các cơ quan nội tạng như phổi, não, khi đó có thể gặp các triệu chứng toàn thân.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Paget",
+          "name_source": "BỆNH PAGET",
+          "english_alias": "Paget’s disease",
+          "source_page": 333,
+          "clinical_visual_features": "- Paget vú: tổn thương cơ bản là mảng đỏ, xuất phát từ núm vú một bên, tiến triển chậm, lan rộng ra xung quanh, bề mặt có vảy, tiết dịch; núm vú có thể biến dạng làm tụt núm vú. Người bệnh có thể ngứa hoặc không. Phần lớn các trường hợp có thể phát hiện khối u ở vú và hạch ở nách cùng bên. - Bệnh Paget ngoài vú: tổn thương cơ bản giống với tổn thương Paget ở vú, hay gặp ở vùng sinh dục, hậu môn, nách. Ngoài ra còn có thể gặp ở vị trí khác như bụng, đùi… Thường chẩn đoán nhầm với các bệnh da khác. Có thể phát hiện các khối u nội tạng khác (đại trực tràng, âm đạo, cổ tử cung, niệu đạo, tuyến tiền liệt, bàng quang).",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Ống Tuyến Mồ Hôi",
+          "name_source": "U ỐNG TUYẾN MỒ HÔI",
+          "english_alias": "Syringoma",
+          "source_page": 336,
+          "clinical_visual_features": "- Tổn thương cơ bản: là các sẩn nhỏ, kích thước 1-5mm, màu da hay màu vàng nhạt, nâu nhạt, trắng, chắc, trơn nhẵn và thường có tính phân bố đối xứng. Một số tổn thương lớn hơn, tập trung thành mảng. - Vị trí: thường ở vùng quanh mắt, nhất là mi dưới, gò má, trán, mặt, cổ, nách, ngực, bụng, đùi, sinh dục, cẳng chân. Đôi khi có ở vùng đầu và gây ra tình trạng rụng tóc không sẹo. - Triệu chứng cơ năng: thường không có triệu chứng cơ năng, có thể có ngứa khi tăng tiết mồ hôi. - Toàn trạng không bị ảnh hưởng.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bớt Hắc Tố Bẩm Sinh",
+          "name_source": "BỚT HẮC TỐ BẨM SINH",
+          "english_alias": "Congenital Melanocytic Nevus",
+          "source_page": 339,
+          "clinical_visual_features": "- Hầu hết các bớt hắc tố bẩm sinh có kích thước nhỏ và đơn độc, có thể xuất hiện ở bất kể vị trí nào trên cơ thể, ngay sau sinh. Bớt lớn cũng thường có 1 tổn thương đơn độc, một số ít đi kèm các vệ tinh nhỏ. - Tổn thương cơ bản là các mảng có màu sắc nâu đen, ranh giới rõ ràng, bề mặt xù xì, nhiều lông đen cứng. Một số ít các trường hợp, bớt có màu nâu nhạt, ranh giới không rõ, bề mặt bằng phẳng, lông màu nâu, mềm. - Bớt hắc tố bẩm sinh khổng lồ thường đi kèm nhiều tổn thương vệ tinh, có trường hợp trên 100 vệ tinh và hội chứng hắc tố thần kinh da với biểu hiện cơn động kinh, tăng áp lực nội sọ, liệt dây thần kinh sọ khu trú, não úng tủy… - Tỉ lệ tiến triển thành ung thư tế bào hắc tố trên các bớt nhỏ thấp, chiếm khoảng 0,7% đến 2.2% nhưng cao hơn ở những bớt khổng lồ, có thể lên đến 3% đến 8%.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bớt Sùi Thượng Bì",
+          "name_source": "BỚT SÙI THƯỢNG BÌ",
+          "english_alias": "Verrucous epidermal nevus",
+          "source_page": 342,
+          "clinical_visual_features": "- Tổn thương da: + Tổn thương cơ bản: là dát hoặc mảng sần sùi, ranh giới rõ, màu da hoặc màu nâu, dày hơn và sẫm màu hơn theo thời gian, phân bố theo đường Blaschko có dạng dải. + Tổn thương có thể phát triển quá sản dạng u nhú, viêm, loét, mùi hôi do sự phát triển của vi khuẩn tại chỗ. + Vị trí: vùng thân mình, các chi và ít khi gặp ở mặt hay da đầu, ở một bên cơ thể, đối xứng hai bên hoặc lan tỏa toàn thân. - Một số ít trường hợp có thể kèm theo bất thường ở các cơ quan khác như tim mạch, thần kinh và mắt. - Triệu chứng cơ năng: có thể có ngứa trong trường hợp viêm (inflammatory linear verrucous epidermal nevus - ILVEN). - Tiến triển: lành tính, không ảnh hưởng tới chức năng các cơ quan, chủ yếu gây mất thẩm mỹ.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Lympho B Ở Da",
+          "name_source": "U LYMPHO B Ở DA",
+          "english_alias": "Cutaneous B cell Lymphoma",
+          "source_page": 344,
+          "clinical_visual_features": "Biểu hiện tùy thuộc và thể bệnh 2.1.1. U lympho B vùng ngoại vi nguyên phát - Tổn thương cơ bản là các nốt, mảng, sẩn màu đỏ đến tím, kích thước nhỏ, căng, bóng. - Vị trí thường gặp là chi trên và thân mình. - Tuổi trung bình là 55 tuổi và ưu thế ở nữ giới. - Liên quan đến nhiễm khuẩn B.burgdorferi. 2.1.2. U lympho B thể nang nguyên phát - Tổn thương cơ bản là các u, mảng, sẩn đơn độc hoặc thành nhóm không có vảy, tổn thương có thể hình nhẫn. - Vị trí thường gặp ở đầu, cổ, có thể ở thân mình nhưng hiếm khi ở chân. - Tuổi trung bình là 58, nam thường gặp nhiều gấp đôi nữ. 2.1.3. U lympho B tế bào lớn, tiên phát lan tỏa ở chân - Đây là thể ác tính hơn với các tế bào u lympho B lớn, liên quan đến mất đoạn gen trên nhiễm sắc thể 9p21. - Tổn thương cơ bản là các u, mảng màu đỏ hơi xanh đơn độc hoặc thành mảng khu trú ở chân. - Các tổn thương thường loét nên dễ nhầm với loét do suy tĩnh mạch mạn. 0:4 6:3 - Tuổi trung bình là 65 tuổi, ưu thế ở nữ. 31",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Lympho T Ở Da",
+          "name_source": "U LYMPHO T Ở DA",
+          "english_alias": "Cutaneous T cell Lymphoma",
+          "source_page": 347,
+          "clinical_visual_features": "Biểu hiện tùy thuộc vào thể bệnh 2.1.1. Triệu chứng lâm sàng của MF - Thương tổn ở da: tùy từng giai đoạn có những biểu hiện khác nhau.Trên một bệnh nhân có thể có cùng lúc nhiều loại tổn thương + Giai đoạn dát: một hoặc nhiều dát hồng trên có vảy da mỏng, kích thước đa dạng, ranh giới rõ. Màu sắc từ hồng nhạt đến tím đỏ, có thể mất sắc tố. Vị trí thường ở vùng kín nhất là các nếp gấp, nếp kẽ ở giai đoạn sớm. + Giai đoạn mảng: các mảng ranh giới rõ, thâm nhiễm, có vảy da, màu đỏ sẫm hoặc tím, lành ở giữa ở bờ nổi cao, hình nhẫn hoặc rắn bò, có thể có chấm tăng hoặc giảm sắc tố, loang lổ (poikiloderma). Vì có hình ảnh giống nấm da nên có tên gọi là u sùi dạng nấm. + Giai đoạn u: các u màu đỏ nâu hoặc đỏ tím bề mặt mềm và thường loét, có thể nhiễm trùng thứ phát. Vị trí hay gặp ở vùng mặt, các nếp gấp lớn như nách, nếp vú. - Hạch ngoại vi to. - Có thể thấy biểu hiện ở cơ quan khác như: phổi, lách, gan, đường tiêu hoá. 2.1.2. Triệu chứng lâm sàng của các dạng khác của MF - MF hướng nang lông: thương tổn cơ bản là sẩn nang lông, dạng trứng cá, có 0:4 thể có các mảng thâm nhiễm, u chủ yếu ở đầu và cổ. Thường kèm rụng lông và tóc, 6:3 nhất là vùng lông mày kèm ngứa. - U lympho dạng Paget: thường tiến triển chậm và không thấy thương tổn ở nơi 2/2 khác ngoài ở trên da. Thương tổn cơ bản là dát, mảng dạng vảy nến, dày sừng thường 6/1 khu trú ở các chi. _0 nh - U lympho có phản ứng u hạt nhão da: hiếm gặp, thương tổn cơ bản là mảng/dát Di inh với da chảy nhão, thường ở vùng hõm nách, khoeo. TB 2.1.3. Triệu chứng lâm sàng của một số dạng u lympho T ở da khác SY Hội chứng Sézary: có thể là nguyên phát, không liên quan tới MF hoặc tiến hu nt triển từ MF. Thương tổn là các mảng đỏ tươi, bong vảy, chiếm phần lớn diện tích cơ Va thể (trên 90%), thường ở các vùng gấp như bụng, nách, khuỷu tay được gọi là dấu t_ _v hiệu cái ghế gấp. Một số triệu chứng khác có thể gặp như sốt, hạch to, ngứa, giảm h din cân, loạn dưỡng móng, dày sừng lòng bàn tay, bàn chân. inh t_b",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Mạch Máu Trẻ Em",
+          "name_source": "U MẠCH MÁU TRẺ EM",
+          "english_alias": "Infantile hemangioma",
+          "source_page": 354,
+          "clinical_visual_features": "2.1.1. Giai đoạn tăng sinh (sau sinh đến khoảng 5 - 6 tháng tuổi) - Khi trẻ mới sinh tổn thương chỉ là các tia máu hoặc các dát hơi đỏ, sau đó có màu đỏ tươi hoặc đỏ thẫm.Tổn thương tiển triển nhanh, gồ cao lên mặt da trong vòng 4 tuần đầu tiên. - Tùy thuộc vào kích thước và độ sâu mà tổn thương có thể có dạng vòm, dạng thùy, dạng khối u hoặc hỗn hợp. Màu sắc của u mạch máu phản ánh mức độ sâu của tổn thương, thay đổi từ màu đỏ nhạt hoặc đỏ đậm (u mạch máu nông), xanh, tím hoặc hồng nhạt (u sâu hơn). - Tổn thương căng, chắc, đàn hồi và màu đậm hơn khi tăng áp lực trong mạch máu (như khi trẻ khóc). - U mạch máu có kích thước trung bình từ 0,5 - 5cm, có thể tới 20cm đường kính. - Tổn thương có thể khu trú (ở một vùng nhỏ) hoặc phân đoạn (đơn vị da thần kinh lớn hơn - neuroectodermal unit). U mạch máu thể phân đoạn nặng hơn u mạch máu thể khu trú và có thể kèm theo các bất thường bẩm sinh khác như hội chứng PHACE, hội chứng PELVIS. - U mạch máu được chia thành: thể nông, thể sâu và thể hỗn hợp. + Thể nông còn được gọi là u mạch máu mao mạch (capillary haemangioma) hay 0:4 u mạch máu đơn giản, do sự bất thường của các mạch máu ở lớp nông của da, 6:3 biểu hiện thường là các dát, mảng màu đỏ tươi. 02 2/2 + Thể sâu: còn được gọi là u mạch máu dạng hang, nằm sâu hơn ở lớp trung bì 6/1 và hạ bì, biểu hiện là những khối dưới da và có màu xanh nhạt hoặc không _0 nh màu, mật độ mềm hoặc chắc. Di inh + Thể hỗn hợp: mang đặc điểm của cả hai thể. TB - U mạch máu thường xuất hiện ở vùng đầu cổ, tiếp đến là thân mình và tay chân. SY Ngoài ra, bệnh có thể xuất hiện ở cơ quan nội tạng như gan, ruột, lách, tuyến giáp… hu nt Va 2.1.2. Giai đoạn thoái lui (sau 1 tuổi) t_ _v - Giai đoạn này có thể xảy ra sớm vài tháng sau sinh hoặc muộn 2 - 3 năm sau h din sinh. Tổn thương trở nên nhạt màu hơn, mềm dần từ trung tâm ra ngoại vi và thường inh t_b không để lại di chứng. sy - Với tổn thương thoái lui muộn, đa số các trường hợp để lại thay đổi vĩnh viễn ở da như giãn mạch nông, teo da, giảm sắc tố hoặc thừa da. - Khoảng 50% thoái lui hoàn toàn sau 5 năm, 70% sau 7 năm và thoái lui hoàn toàn sau 9 năm mà không cần can thiệp. 2.1.3. Biến chứng - Loét: xảy ra khoảng 10% với tuổi trung bình là 4 tháng, đặc biệt là những tổn thương ở môi, vùng hậu môn sinh dục hoặc vùng nếp gấp. - Chảy máu: hiếm khi chảy máu nhiều và thường có thể cầm được bằng cách ấn trực tiếp lên tổn thương. - Biến dạng ảnh hưởng đến chức năng: + Vị trí ở khoang miệng, lưỡi gây cản trở việc ăn, nuốt hoặc nói + Vị trí quanh mắt gây ảnh hưởng tới thị giác: giảm thị lực, chứng loạn thị, lác mắt, một số ảnh hưởng khác như tắc nghẽn tuyến lệ, viêm giác mạc, lồi mắt. + Vị trí đầu mũi, nhân trung, môi (đặc biệt khi u vượt qua viền môi): nguy cơ cao gây biến dạng cấu trúc mặt (cũng như gây loét với u mạch máu môi). + Vị trí ở tai: gây giảm/mất thính giác nếu gây bít ống tai + Vị trí ở ngực (nữ): có thể ảnh hưởng tới quầng vú - Biến chứng liên quan tới nội tạng: nguy cơ có u mạch máu nội tạng khi có trên 5 tổn thương ở da. + U mạch máu vùng mặt dưới thường liên quan tới u mạch máu đường thở, gây thở khò khè, tiếng thở lớn. + Hội chứng Kasabach-Merritt (Kasabach-Merritt syndrome) + Suy tim: có thể xảy ra với những u mạch máu lớn ở gan với thông động tĩnh mạch gan dẫn đến suy tim sung huyết. 0:4 + Biến chứng liên quan tới một số hội chứng: hội chứng PHACE, hội chứng 6:3 PELVIS. 2/2",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bớt Rượu Vang",
+          "name_source": "BỚT RƯỢU VANG",
+          "english_alias": "Port Wine Stain",
+          "source_page": 361,
+          "clinical_visual_features": "sy - Bớt rượu vang có thể xuất hiện ở bất cứ đâu trên cơ thể, gặp nhiều nhất ở vùng đầu mặt cổ, cánh tay và cẳng chân. - Thời điểm xuất hiện tổn thương: thường xuất hiện ngay khi sinh. - Trong giai đoạn đầu, tổn thương là dạng dát phẳng, ranh giới rõ với da lành, từ vài milimet đến vài centimet, màu hồng hoặc hồng nhạt. Giai đoạn sau, ở trẻ lớn và người lớn, tổn thương tăng lên về kích thước, dày hơn và có thể phát triển thành tổn thương dạng sẩn hay cục, dễ chảy máu khi chà xát, cào gãi hay chấn thương. - Tiến triển: song song với sự phát triển của cơ thể và không tự thoái triển. - Trường hợp bớt rượu vang vùng mắt có thể kèm theo Glocom, đặc biệt khi tổn thương ở cả hai mắt hoặc cả mi trên, mi dưới. Những trường hợp này cần được tầm soát các tổn thương màng não, hội chứng Sturge Weber. - Biến chứng: quá sản mô mềm và xương vùng bớt, rối loạn đông máu, thuyên tắc mạch, phù bạch huyết, chảy máu, viêm mô bào, … - Tổn thương có thể đơn thuần, hoặc là triệu chứng trong các hội chứng: + Hội chứng Sturge Weber: Bớt rượu vang, co giật, động kinh, dị dạng mạch não, liệt nửa người hoặc các biểu hiệu giống đột quỵ, khuyết tật trí tuệ, rối loạn hành vi, các biểu hiện bất thường ở mắt như tăng nhãn áp, khiếm khuyết thị trường và một số các biểu hiện khác. + Hội chứng Klippel Trenaunay: biểu hiện gồm bớt rượu vang, giãn tĩnh mạch nông chủ yếu chi dưới, dị dạng bạch huyết, phì đại xương và mô mềm.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Mạch Sừng Hóa",
+          "name_source": "U MẠCH SỪNG HÓA",
+          "english_alias": "Angiokeratoma",
+          "source_page": 363,
+          "clinical_visual_features": "U mạch sừng hóa được chia thành 5 thể lâm sàng: - Thể đơn độc (solitary angiokeratoma): + Thường gặp nhất + Tổn thương là một sẩn hoặc cục duy nhất, kích thước từ 2 - 10 mm, màu đỏ đậm ánh xanh hoặc màu đen, bề mặt sừng hóa. Ban đầu tổn thương có thể là sẩn mềm, không dày sừng, sáng màu, sau đó mới tăng kích thước và sừng hóa. + Vị trí hay gặp: chân. - Thể của Mibelli (angiokeratoma of Mibelli): + Biểu hiện ở da là các sẩn dày sừng ở mặt duỗi ngón tay, ngón chân, bàn tay, bàn chân, đầu gối, khuỷu tay, thường đối xứng 2 bên. Tổn thương có thể chảy máu khi va chạm nhẹ và thường liên quan tới biểu hiện cước. + Bệnh thường gặp ở nữ nhiều hơn nam. - Thể khu trú (angiokeratoma circumscriptum): + Bệnh thường xuất hiện từ ngay sau đẻ, đôi khi gặp ở trẻ em hoặc người trưởng thành. + Biểu hiện gồm nhiều mảng màu đỏ hơi tím, bề mặt dày sừng tạo thành hình ảnh giống như chiếc thuyền, thường ở 1 bên. + Vị trí thường gặp: phần dưới của chân, bàn chân, mông. + Nữ mắc nhiều hơn nam. - Thể Fordyce (angiokeratoma of Fordyce): :42 + Thường gặp ở nam trên 40 tuổi. :30 + Tổn thương cơ bản: sẩn màu đỏ tím hoặc màu xanh đen, mềm, bề mặt 3 16 thường có vảy. 2/2 + Số lượng: 1 hoặc nhiều tổn thương, có thể trên 100 tổn thương. 6/1 + Vị trí hay gặp: vùng da bìu. Ít gặp ở: thân dương vật, môi lớn, âm hộ, mặt _0 nh trong đùi và vùng bụng dưới. Di + Bệnh có thể liên quan đến tình trạng viêm tắc tĩnh mạch, giãn tĩnh mạch ở inh TB bìu và tình trạng thoát vị bẹn. SY - Thể lan tỏa (angiokeratoma corporis diffusum hay bệnh Fabry): hu + Bệnh hiếm gặp, di truyền liên kết NST giới tính X nt Va + Đột biến gen tổng hợp men alpha-galactosidase A gây thiếu hụt enzyme vt_ này, dẫn đến rối loạn chuyển hóa, lắng đọng glycosphingolipid tại nội mô thành h_ din mạch của nhiều cơ quan, dẫn đến biểu hiện dị dạng mạch máu lan tỏa ở nhiều cơ inh qua: da, mắt, thận, tim, não và thần kinh ngoại biên. t_b sy + U mạch sừng hóa tiến triển lành tính, tăng dần theo lứa tuổi, thường không tự mất đi. + Phần lớn các trường hợp không gây ảnh hưởng đến sức khỏe trừ khi có biến chứng chảy máu hoặc đau do huyết khối và viêm hoặc ảnh hưởng đến vấn đề thẩm mỹ. + Bệnh Fabry là bệnh di truyền, do đột biến gen liên kết NST X dẫn đến ảnh hưởng nhiều cơ quan. Vì vậy, cần khám sớm và kết hợp các chuyên khoa khi có biểu hiện nghi ngờ bệnh để đánh giá và theo dõi, điều trị phù hợp. Thực hiện chẩn đoán trước sinh bằng cách phân tích DNA và hoặc kiểm tra hoạt tính của galactosidase trước khi sinh ở tế bào trong nước ối hoặc nhung mao màng đệm và trong huyết thanh sau khi sinh hoặc bạch cầu là cần thiết khi có bố hoặc mẹ mắc bệnh.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Sarcoidose",
+          "name_source": "BỆNH SARCOIDOSE",
+          "english_alias": "Sarcoidosis",
+          "source_page": 366,
+          "clinical_visual_features": "- Tổn thượng da gồm tổn thương đặc hiệu và tổn thương không đặc hiệu. + Tổn thương đặc hiệu gồm có: • Tổn thương dạng sẩn: thường gặp nhất, tổn thương dạng sẩn chắc, màu da hoặc màu vàng nâu, nâu đỏ, đỏ tím, có trường hợp giảm sắc tố, kích thước từ 1 đến 10mm. Các sẩn có thể tập trung tạo thành hình nhẫn, thành mảng và phân bố chủ yếu vùng đầu mặt, các chi, đối xứng hoặc không. Dấu hiệu “thạch táo” - tổn thương chuyển màu vàng nâu khi ấn kính. • Tổn thương dạng nốt: là thể thường gặp, biểu hiện bằng các nốt, sẩn màu nâu đỏ hoặc vàng nâu, sờ chắc, ranh giới rõ, đường kính từ 1cm đến 2cm, đứng đơn độc hoặc thành đám. Tổn thương thể nốt ở mũi cần phân biệt với mũi sư tử (rhinophyma) trong bệnh trứng cá đỏ. • Tổn thương dạng mảng: tổn thương hình ovan hoặc hình nhẫn màu đỏ hoặc :42 nâu, đôi lúc có vảy da. Vị trí thường gặp ở tay, lưng, hông. :30 • Tổn thương dạng dát sẩn: tổn thương là các mảng thâm nhiễm nhẹ có hoặc 3 16 không kèm các sẩn nhỏ, tổn thương tăng sắc tố hoặc có màu đỏ, nâu hoặc 2/2 tím, tổn thương thường kèm theo ngứa nhẹ, hay gặp ở vùng mặt, mí mắt; ở 6/1 cổ, tay chân và thân mình ít gặp hơn. _0 nh • Tổn thương dạng “lupus” pernio: là các mảng màu tím, chắc, đối xứng ở Di chóp mũi, vành tai, má, môi, ngón tay. Lâm sàng dễ nhầm với lupus ban đỏ. inh TB Thể này có thể gặp tổn thương xương mũi, chảy máu cam do lan rộng vào SY khoang mũi. Tổn thương dạng “angiolupoid” là các sẩn mảng màu hồng hoặc hu tím kèm giãn mạch, phân bố thường ở mặt cũng có thể là một dạng của lupus nt Va pernio. vt_ • Sẹo sarcoidose: là tổn thương gặp trên nền sẹo hoặc vị trí da bị chấn thương h_ din hoặc tại vị trí đặt dụng cụ trong da như sau đặt silicon. Biểu hiện sẹo viêm, inh sờ thâm nhiễm và mềm hơn so với tổn thương sẹo bình thường. t_b sy • Tổn thương giảm sắc tố: thường gặp ở người da đen với dấu hiệu lâm sàng là các dát giảm sắc tố, phẳng so với bề mặt da, ranh giới tương đối rõ, hình ovan hoặc tròn. Tổn thương có thể kèm theo dạng sẩn ở trung tâm tổn thương giảm sắc tố, có hình ảnh giống như trứng ốp. • Tổn thương teo - loét: ít gặp, biểu hiện lâm sàng là các dát, mảng teo da có thể kèm theo loét hoặc không. • Nốt dưới da: có kích thước từ 0.5 – 2 cm, chắc, không đau, di động, số lượng thay đổi từ 1 đến 100. Các nốt này thường liên quan tới tổn thương ở phổi, gan, lách trong bệnh sarcoidose. + Các tổn thương da không đặc hiệu gồm có: hồng ban nút với hội chứng Löfgren: diễn biến cấp tính có tam chứng: hồng ban nút, hạch rốn phổi hai bên, đau khớp. Có thể có sốt và đây thường là biểu hiện khởi đầu của sarcoidose. - Bệnh lý khác kèm theo: viêm da mủ hoại thư, phù hai chân, đỏ da toàn thân, hội chứng Sweet, hồng ban đa dạng. - Tổn thương cơ quan khác: + Phổi là cơ quan thường gặp tổn thương sarcoidose nhất (90%), giai đoạn sớm không biểu hiện triệu chứng, giai đoạn sau có khó thở, đau ngực, rít thanh quản. Chẩn đoán sớm bằng X - quang và cắt lớp vi tính lồng ngực... + Các cơ quan khác: triệu chứng về mắt như đỏ mắt, nhìn mờ gặp trong 25 - 50% các trường hợp. Triệu chứng tim mạch có thể gặp rối loạn nhịp tim, suy tim, ngón tay hình dùi trống. Triệu chứng thần kinh thường do tổn thương dây thần kinh nội sọ như liệt mặt (tổn thương dây thần kinh số VII) cũng có thể gặp. Các triệu chứng khác như rụng tóc sẹo, móng dày sừng, hạch ngoại vi to, gan lách to, sốt, đổ mồ hôi về đêm ít gặp hơn. :42 - Sarcoidose có thể biểu hiện cấp tính hoặc mạn tính: :30 + Tổn thương cấp tính: sẩn đỏ, dát đỏ xuất hiện đột ngột kèm theo đau khớp, 3 16 hoặc",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Các bệnh da di truyền",
+      "diseases": [
+        {
+          "name_vi": "Dày Sừng Lòng Bàn Tay, Bàn Chân Di Truyền",
+          "name_source": "DÀY SỪNG LÒNG BÀN TAY, BÀN CHÂN DI TRUYỀN",
+          "english_alias": "Hereditary Palmoplantar Keratoderma",
+          "source_page": 371,
+          "clinical_visual_features": "Biểu hiện tùy thuộc vào thể lâm sàng: - Dày sừng lòng bàn tay, bàn chân lan tỏa gồm: + Thể có ly thượng bì của Vorner: thể hay gặp nhất, di truyền trội, da khô như da rắn, ít tổn thương ở khuỷu, gối. + Thể không có ly thượng bì (bệnh Unna-Thost): di truyền trội trên nhiễm sắc thể thường, dày sừng không vượt quá lằn chỉ cổ tay, có thể tổn thương đầu gối, khuỷu tay, nếp gấp khớp kèm tăng tiết mồ hôi nên ẩm ướt dễ nhiễm nấm. + Type Nagashima: phổ biến nhất ở châu Á, di truyền lặn, không có ly thượng bì, bị ở cả mặt mu tay chân, mặt trong cổ tay, mắt cá và gân Achilles, tiếp xúc với nước lòng bàn tay bàn chân chuyển thành màu trắng, hơi xốp rất đặc trưng. + Hội chứng Huriez: di truyền trội với xơ cứng ngón tay, xuất hiện từ khi sinh, dày sừng đối xứng lòng bàn tay, chân. + Hội chứng Mal de Meleda: di truyền lặn, dày sừng lan rộng tới vùng mu của bàn tay như đi găng, có thể dày sừng bề mặt khớp đốt ngón tay, khuỷu tay, đầu gối, “giả ainhum” quanh ngón, có thể chốc mép, tăng tiết mồ hôi và chậm phát triển. + Hội chứng Naegeli-Franceschetti-Jadasohn: di truyền trội trên nhiễm sắc thể thường, dát sắc tố hình mạng lưới có thể lan rộng, hay gặp ở cổ và nách. Dày sừng lan toả dạng điểm, hỏng men răng, hình dạng bất thường và mất răng sớm. Giảm mồ hôi hoặc không có mồ hôi nên không chịu được nóng. :42 - Dày sừng lòng bàn tay, bàn chân khu trú gồm: :30 + Dày sừng lòng bàn tay, chân dạng dải: đột biến gen trội trên nhiễm sắc thể 3 16 thường, có thể thấy ít vết chai, có thể tổn thương khuỷu tay và đầu gối, móng và tóc. 2/2 + Dày móng bẩm sinh type I hay hội chứng Jadasohn-Lewandowsky: đột biến 6/1 gen trội trên nhiễm sắc thể thường, chủ yếu lòng bàn chân ở điểm tỳ đè, dày sừng _0 nh dưới gốc móng, có thể có bất thường tóc và miệng, thực quản và dày sừng nang Di inh lông. TB + Dày sừng lòng bàn tay, chân thành ổ với dày sừng niêm mạc miệng: di SY truyền gen trội trên nhiễm sắc thể thường, chai các điểm tỳ đè lòng bàn tay. Dày hu sừng trong miệng, đặc biệt vùng niêm mạc môi gần với lưỡi. nt Va + Bệnh Buschke-Fischer-Brauer: di truyền gen trội trên nhiễm sắc thể thường, vt_ phát triển ở độ tuổi 20-30, nhiều các đốm chấm dày sừng, có thể thành khối lan tỏa h_ din tại các điểm tỳ đè. inh + Dày sừng dạng gai: do gen trội trên nhiễm sắc thể thường, khởi phát muộn t_b sy 12-15 tuổi. Nhiều nút sừng nhỏ, như là các gai nhỏ toàn bộ lòng bàn tay, bàn chân. Có thể phối hợp với tăng sản tuyến bã ở mặt. - Dày sừng và các hội chứng phối hợp: + Dày sừng lòng bàn tay, chân lan toả kết hợp với tóc quăn như len và rối loạn nhịp nguyên phát cơ tim thất phải (bệnh Naxos): di truyền trội và lặn. Rối loạn gen lặn phối hợp với bệnh cơ tim. Tóc quăn như len trên đầu và ngắn, lông mày ít, lông mi, râu và có lông ở xương mu và nách kèm bất thường nhịp, cơ tim. + Dày sừng lòng bàn tay bàn chân dạng dải, tóc quăn và bệnh cơ tim giãn thất trái (Hội chứng Carvajal): di truyền trội và lặn.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Ly Thượng Bì Bọng Nước Bẩm Sinh",
+          "name_source": "LY THƯỢNG BÌ BỌNG NƯỚC BẨM SINH",
+          "english_alias": "Inheried epidermolysis bullosa",
+          "source_page": 375,
+          "clinical_visual_features": "- Tổn thương cơ bản: + Bọng nước tại vị trí sang chấn, xuất hiện sau chấn thương. Tùy thuộc vào vị trí tổn thương tại vùng nối thượng bì – trung bì, bọng nước có thể ở nông hoặc sâu. + Trợt, loét vùng có bọng nước hoặc niêm mạc miệng, thực quản, khí quản, sinh dục, tiết niệu và mắt. + Dát tăng, giảm sắc tố. + Sẹo ở da và niêm mạc. + Teo da, hoặc milia. + Biến chứng: bội nhiễm, co rút các chi, hẹp khí quản, biến dạng và hẹp thực quản, chậm phát triển, thiếu máu, loãng xương, co rút khớp, bệnh cơ tim hoặc bệnh amyloidosis ở thận… - Triệu chứng cơ năng: ngứa, đau tại tổn thương... 376",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Khô Da Sắc Tố",
+          "name_source": "BỆNH KHÔ DA SẮC TỐ",
+          "english_alias": "Xeroderma pigmentosum",
+          "source_page": 379,
+          "clinical_visual_features": "2.1.1. Tổn thương da - Triệu chứng sớm thường bắt đầu xuất hiện từ lúc 1 đến 2 tuổi (75%). - Bỏng nắng: là biểu hiện đầu tiên thường gặp, nhất là các thể XPA, XPB, XPD, XPF, XPG. - Tổn thương da mạn tính ở vùng da hở (mặt, cổ, tay) xuất hiện sớm: khô da, tăng sắc tố giống tàn nhang, lão hóa da sớm, tổn thương dạng poikiloderma, có thể xơ hóa quanh các hốc tự nhiên gây dính góc miệng, môi, lỗ mũi. - Tổn thương tiền ung thư và ung thư da vùng da hở: thường xuất hiện sớm bao gồm dày sừng ánh sáng, ung thư biểu mô tế bào đáy, ung thư biểu mô tế bào vảy, ung thư tế bào hắc tố. 2.1.2. Tổn thương mắt - Gặp ở 40-100% bệnh nhân khô da sắc tố, xuất hiện sớm trong 10 năm đầu đời. Thường gặp vùng mí mắt, giác mạc, kết mạc. Hay gặp ở nhóm XPC, XPE, XPV hơn nhóm XPA, XPB, XPD, XPF, XPG. - Nhạy cảm với ánh nắng (đỏ mắt, chảy nước mắt), sợ ánh sáng, viêm kết mạc, :42 viêm giác mạc, loét/sẹo/đục giác mạc, khô mắt, đục thủy tinh thể, giảm thị lực, mù. :30 - Tổn thương da vùng mí mắt: tăng sắc tố, teo da, rụng lông mi. 02 - Khối u ác tính ở bề mặt nhãn cầu và mí mắt: ung thư biểu mô tế bào vảy, ung 2/2 6/1 thư biểu mô tế bào đáy, ung thư tế bào hắc tố. _0 nh 2.1.3. Triệu chứng khác Di inh - Thần kinh: Khởi phát có thể sớm ở tuổi nhũ nhi hoặc muộn hơn sau tuổi 20, TB chiếm 20-30% bệnh nhân khô da sắc tố, mỗi bệnh nhân có thể có một hoặc nhiều SY triệu chứng thần kinh. Triệu chứng từ nhẹ giảm phản xạ khu trú đến nặng với tật hu nt đầu nhỏ, suy giảm trí tuệ tiến triển, mất khả năng nghe bắt đầu với tần số cao, co Va cứng, co giật, múa vờn, liệt tứ chi, mất điều hòa, động kinh, hay xảy ra ở thể XPA, vt_ h_ XPD, XPB, XPF, XPG; hiếm khi ở XPC, XPE. din inh - Ung thư ở cơ quan khác gấp 10-20 lần so với người không bị khô da sắc tố: ở t_b khoang miệng, não, tủy sống, phổi, tử cung, vú, tinh hoàn, thận, tụy, máu, dạ dày. sy",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "U Xơ Thần Kinh",
+          "name_source": "U XƠ THẦN KINH",
+          "english_alias": "Neurofibromatosis - NF",
+          "source_page": 383,
+          "clinical_visual_features": "2.1.2. U xơ thần kinh tuýp 1 (bệnh Von Recklinghausen) - Dát cà phê sữa giới hạn rõ, màu nâu sáng, kích thước từ 0,5 đến 50cm và thường là biểu hiện đầu tiên của bệnh. Nhiều người bệnh có dát cà phê bắt đầu từ 4 tuổi. Tổn thương tăng dần về kích thước và số lượng trong vòng 10 năm đầu đời. - Các u xơ thần kinh ở da có hình tròn, mật độ mềm, kích thước vài milimet đến vài centimet, đôi khi có cuống. Số lượng có thể đến hàng trăm tổn thương ở bất kỳ vị trí nào của cơ thể, chủ yếu gặp ở thân mình. Ở nữ hay gặp xung quanh quầng vú. - Các u dạng búi (plexiform) lan tỏa, dọc theo đường đi của dây thần kinh thường ở thần kinh tam thoa hoặc ở cổ, xuất hiện sớm. Trên búi xơ có dát tăng sắc tố. Khi tổn thương lan đến đường giữa cơ thể biểu hiện khối u đã lan đến tuỷ sống. - U xơ thần kinh “voi” do quá sản các tổ chức dưới da làm cho cơ thể biến dạng. - Đám tàn nhang (freckling) 70% tổn thương gặp ở vùng nách. - Tổn thương dạng u nhú ở miệng thường không đối xứng gặp ở 5 đến 10%. - Nốt Lisch với biểu hiện là các tổn thương hình vòm, nông quanh mống mắt, gặp trong 90% các trường hợp. Số lượng tổn thương tăng theo tuổi. Nốt Lisch thường không ảnh hưởng tới thị lực nhưng lại có giá trị chẩn đoán. - Các u có thể xuất hiện trong não (glioma thị giác), astrocytoma gây động kinh, hoặc u ở tuỷ sống. - Hiện tượng ung thư hoá từ các u xơ thần kinh có thể gặp từ 1,5 đến 15% các trường hợp. Một số bệnh lý ác tính khác có thể kết hợp với u xơ thần kinh như u :42 Wilm, Rhabdomyosarcoma, ung thư máu hoặc ung thư tế bào hắc tố. :30 - Các biểu hiện khác của bệnh như chậm phát triển thể chất hoặc chứng đầu 3 16 to, biến dạng xương, bệnh Addison, cường tuyến cận giáp... 2/2 2.1.2. U xơ thần kinh tuýp 2 (Bilateral acoustic neurofibromatosis) 6/1 - Biểu hiện lâm sàng đặc trưng là các u tiền phòng hai bên và các u thần kinh _0 nh trung ương khác như u màng não, u các tế bào đệm. Di - Dát cà phê sữa và u xơ thần kinh ở da có thể thấy nhưng ít hơn so với thể NF- inh TB 1. Tuổi xuất hiện bệnh thường muộn (trung bình là 22,6 tuổi). SY",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Dị Sừng Darier",
+          "name_source": "DỊ SỪNG DARIER",
+          "english_alias": "Darier’s disease",
+          "source_page": 386,
+          "clinical_visual_features": "- Da: + Các sẩn sừng ở nang lông và ngoài nang lông, kích thước 1-3mm, màu vàng nâu bóng hoặc trên có vảy xám bẩn, sẩn sùi, thô ráp dính. Ban đầu tổn thương khu trú ở vùng da mỡ như trán, da đầu, rãnh mũi má, tai, ngực, lưng, vùng nếp gấp như nách, bẹn, nếp dưới vú ở nữ sau có thể lan rộng toàn thân. Một số ít trường hợp có tổn thương là các mảng sùi, bề mặt xù xì thô ráp gặp ở nách, bẹn, quanh hậu môn. + Dày sừng từng điểm, các chấm lỗ rỗ ở lòng bàn tay hay các sẩn đỉnh phẳng ở mu tay. - Móng: sọc trắng, đỏ dọc theo chiều dài của móng, tạo nên hình ảnh bánh sandwich, các khía dọc móng, tách móng theo chiều dọc, khía hình chữ V ở bờ tự :42 do, dày sừng dưới móng; tổn thương thường gặp ở móng tay, đôi khi gặp móng :30 chân. 3 16 - Niêm mạc: gặp khoảng 15% trường hợp, chủ yếu ở niêm mạc miệng là các 2/2 sẩn màu trắng lõm trung tâm, đôi khi gây cản trở bít tắc tuyến nước bọt. Một số 6/1 _0 trường hợp có tổn thương ở vùng niêm mạc hậu môn, sinh dục. nh Di - Tổn thương khác inh + Bất thường về thần kinh: một số trường hợp có bất thường về thần kinh như TB SY động kinh, chậm phát triển tâm thần, rối loạn cảm xúc. hu + Tổn thương cơ quan khác: có thể thấy tổn thương tuyến giáp, phổi, loạn sản nt Va mạch máu, u nang xương nhưng rất hiếm gặp. vt_ + Một số trường hợp nhiễm khuẩn thứ phát: nhiễm khuẩn tại chỗ hoặc HSV h_ din lan tỏa (eczema herpecticum). inh t_b",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Vảy Cá",
+          "name_source": "BỆNH VẢY CÁ",
+          "english_alias": null,
+          "source_page": 388,
+          "clinical_visual_features": "2/2 Biểu hiện tùy thuộc vào thể bệnh 6/1 2.1.1. Vảy cá thông thường _0 nh - Biểu hiện sau sinh khoảng 2 tháng, đa số các trường hợp trước 5 tuổi. Triệu Di inh chứng có thể nặng lên cho đến tuổi dậy thì, và đôi khi cải thiện theo tuổi. TB - Khô da: ở mặt, ở mặt ngoài chi, đối xứng, nếp gấp không có tổn thương, da SY đầu bong vảy phấn nhẹ, có thể thấy rụng tóc sẹo lan tỏa kết hợp với dày sừng nang hu nt lông. Lòng bàn tay khô, nếp lằn sâu. Cơ năng: không ngứa, bệnh nhân cảm thấy da Va khô, sờ thô ráp và ảnh hưởng đến thẩm mỹ. vt_ h_ - 35% bệnh nhân kết hợp với các bệnh cơ địa như: viêm da cơ địa, hen phế din quản, viêm mũi dị ứng. Do đó, cần chẩn đoán phân biệt với các bệnh cơ địa. inh t_b - Tiến triển thường nặng về mùa đông, giảm đi về mùa hè. Bệnh giảm dần, đặc sy biệt khi đến tuổi dậy thì, tuy nhiên có thể nặng thêm. - Mức độ nghiêm trọng của bệnh có thể rất khác nhau, từ thể nhẹ, phổ biến như vảy cá thông thường, có thể dễ nhầm với tình trạng khô da thông thường cho đến các thể nặng có thể đe dọa tính mạng như vảy cá Harlequin. - Có hơn 20 thể bệnh vảy cá được phân loại dựa vào biểu hiện lâm sàng, mức độ nghiêm trọng, nguyên nhân và phương thức di truyền. - Bệnh vảy cá được phân loại thành 2 nhóm chính: vảy cá không hội chứng và vảy cá có hội chứng: + Vảy cá không hội chứng (Nonsyndromic ichthyoses) là nhóm các thể bệnh chỉ có tổn thương da: vảy cá thông thường, vảy cá bẩm sinh di truyền lặn nhiễm sắc thể thường, vảy cá dạng ly thượng bì,…(Bảng 1) + Vảy cá có hội chứng (Syndromic ichthyoses) là nhóm các thể bệnh vảy cá có tổn thương da và các cơ quan khác: hội chứng Chanarin-Dorfman, hội chứng Netherton, hội chứng KID, bệnh Refsum, hội chứng Sjögren-Larsson [SLS], và những bệnh khác (Bảng 1) + Ngoài ra còn có thể bệnh vảy cá không có tính chất di truyền: bệnh vảy cá mắc phải 2.1.2. Vảy cá gen lặn liên kết NST X - Bệnh biểu hiện nặng hơn so với vảy cá thông thường, biểu hiện lâm sàng ngay từ lúc sinh hoặc sau khi sinh ít ngày. - Vảy da to, dày, màu nâu bẩn. Tổn thương lan tỏa ở chi trên, chi dưới, mặt và thân mình có tính chất đối xứng, các nếp gấp thường bị ảnh hưởng. - Không có dày sừng nang lông; lòng bàn tay, bàn chân hoàn toàn bình thường, bệnh không kết hợp với các bệnh cơ địa dị ứng. - Những phụ nữ mang gen bệnh dẫn đến thiếu hụt steroid sulfat, ảnh hưởng đến vấn đề sinh đẻ (chuyển dạ lâu, khó xóa cổ tử cung). Nam giới có thể gặp tinh :42 hoàn lạc chỗ (20%), đục giác mạc (50%). :30 - Tiến triển: bệnh không giảm theo theo tuổi, nặng lên vào mùa đông. 3 16 2.1.3. Vảy cá bọng nước 2/2 6/1 - Đỏ da toàn thân dạng vảy cá bẩm sinh bọng nước: hình ảnh lâm sàng khác _0 nhau theo tuổi của người bệnh. Lúc đẻ thì biểu hiện như bỏng toàn thân, sau đó đỏ nh Di da toàn thân, có khuynh hướng hình thành các bọng nước mềm nhẽo và da bong inh thành mảng lớn. Có thể tử vong do nhiễm khuẩn. TB - Sau 2-4 năm, những bọng nước giảm dần thay thế bằng dày sừng màu vàng SY hu nâu hoặc hơi đen lan tỏa nhưng không đồng đều. Ở các nếp gấp và mu bàn tay, bàn nt chân, dày sừng giống như da rắn. Ngoài dạng lan tỏa toàn thân còn có dạng bớt. Mùi Va vt_ rất khó chịu do bội nhiễm vi khuẩn, dày sừng kéo dài. Điều đó làm cho người bệnh h_ khó hòa nhập với cộng đồng. Ở người lớn thể này dần chuyển thành thể vảy cá đỏ din inh da toàn thân không có bọng nước. t_b - Vảy cá bọng nước của Siemens: là bệnh di truyền trội, được coi như là một sy hình thái của đỏ da toàn thân dạng vảy cá bẩm sinh bọng nước nhưng các biểu hiện lâm sàng nhẹ hơn, khu trú ",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Rối loạn sắc tố",
+      "diseases": [
+        {
+          "name_vi": "Bệnh Bạch Biến",
+          "name_source": "BỆNH BẠCH BIẾN",
+          "english_alias": "Vitiligo",
+          "source_page": 397,
+          "clinical_visual_features": ":30 - Trên da xuất hiện các dát, đám giảm, mất sắc tố hình tròn hay bầu dục, giới 02 hạn rõ. Tổn thương có khuynh hướng phát triển ra ngoại vi và liên kết với nhau, 2/2 6/1 xung quanh có một vùng da tăng sắc tố hơn màu da bình thường. Tổn thương không _0 có vảy, không ngứa, không đau. nh Di - Điển hình là hình ảnh ba màu (trichrome): vùng mất sắc tố, vùng giảm sắc tố inh TB và vùng da lành xen kẽ. SY - Hình ảnh giảm sắc tố kiểu rắc hoa giấy (confetti-like depigmentation) hay gặp hu nt ở bạch biến do tiếp xúc với hóa chất. Va vt_ - Lông hoặc tóc trên vùng tổn thương có nhiều trường hợp cũng mất sắc tố. h_ din - Đôi khi thấy hình ảnh bạch biến viêm, rìa tổn thương viêm đỏ, ít có vảy. inh t_b - Vị trí thường gặp ở mặt, cổ, mu bàn tay, cổ tay, cẳng tay, bộ phận sinh dục và sy vùng xung quanh bộ phận sinh dục. Có đến 80% trường hợp các dát mất sắc tố khu trú ở vùng hở. Lòng bàn tay, bàn chân và niêm mạc thường không xuất hiện tổn thương. Tổn thương thường có tính chất đối xứng, tuy nhiên, cũng có nhiều trường hợp chỉ có một bên của cơ thể. Đôi khi thấy giảm sắc tố xuất hiện ở vị trí chấn thương (dấu hiệu Koebner). - Bạch biến có thể đi kèm với bệnh lý tuyến giáp, tiểu đường, bệnh Addison, rụng tóc từng mảng, bớt Halo, ung thư da….",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Tăng Sắc Tố Sau Viêm",
+          "name_source": "TĂNG SẮC TỐ SAU VIÊM",
+          "english_alias": "Postinflammatory hyperpigmentation- PIH",
+          "source_page": 404,
+          "clinical_visual_features": "- Tổn thương cơ bản là dát tăng sắc tố, đa dạng về hình dáng và kích thước, xuất hiện tại nơi chấn thương hay viêm trước đó. Theo độ sâu của tổn thương, PIH được phân thành 2 loại: + PIH nông (thượng bì): • Dát màu nâu, nâu đen hay đen. • Có thể tự hết sau vài tháng đến vài năm mà không điều trị. • Nhìn rõ dưới ánh sáng đèn Wood. + PIH sâu (trung bì): • Dát màu xanh xám. • Có thể tồn tại vĩnh viễn hoặc tự hết sau một thời gian rất dài không điều trị. • Không nhìn rõ dưới ánh sáng đèn Wood. - PIH thường xuất hiện sau quá trình viêm trung bình 1-2 tháng. Đa số các :42 trường hợp có thể tự biến mất mà không cần điều trị. Thời gian trung bình là 6 :30 tháng ở mặt, 1-2 năm ở thân mình, chi trên và 2-4 năm ở chi dưới. PIH ở người trẻ 3 16 có tiên lượng tốt hơn ở người già, ở thượng bì tốt hơn ở trung bì. 2/2 6/1",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Rám Má",
+          "name_source": "RÁM MÁ",
+          "english_alias": "Melasma",
+          "source_page": 410,
+          "clinical_visual_features": "inh t_b - Tổn thương cơ bản: các dát tăng sắc tố màu nâu, nâu đen, xanh đen; đồng sy đều hoặc không; ranh giới thường không rõ; không ngứa, không đau; đối xứng ở hai bên gò má, thái dương, trán, mũi, cằm. - Tổn thương tăng đậm về mùa xuân hè, giảm về mùa thu đông. - Phân loại: có nhiều cách phân loại rám má. + Dựa vào vị trí tổn thương: thể trung tâm (tổn thương ở trán, má, môi trên, mũi, cằm); thể má và mũi; thể góc hàm. + Phân loại theo độ sâu của tổn thương (Gilchrest 1977): thượng bì, trung bì, hỗn hợp. + Phân loại theo mức độ nặng: dựa theo thang điểm MSS (Melasma Severity Scale) và MASI (Melasma area and severity index).",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh da do rối loạn chuyển hóa",
+      "diseases": [
+        {
+          "name_vi": "U Vàng",
+          "name_source": "U VÀNG",
+          "english_alias": "Xanthoma",
+          "source_page": 416,
+          "clinical_visual_features": "Biểu hiện tùy theo thể bệnh 2.1.1. Thể bùng phát (eruptive xanthoma) - Biểu hiện là các sẩn nhỏ, màu vàng, kích thước đều, thường có ngứa, đầu tổn thương có thể hơi nứt nhẹ. - Vị trí lan tỏa ở mông, vai, mặt duỗi chi, hiếm khi ở mặt hoặc niêm mạc miệng. - Liên quan đến tăng triglycerid máu. 2.1.2. Thể phẳng (plane xanthoma) Tổn thương chủ yếu là các dát – sẩn màu vàng dựa vào vị trí chia làm các loại sau đây: - U vàng mi mắt (xanthelasma): dát, mảng màu vàng quanh mắt, 50% trường hợp có liên quan đến tăng cholesterol. - U vàng ở nếp gấp lòng bàn tay: liên quan tới bất thường mỡ máu tiên phát beta III. - U vàng ở kẽ các ngón tay (interdigital xanthoma): liên quan đến tăng :42 cholesterol gia đình. :30 - U vàng phẳng lan tỏa: dát - sẩn màu vàng chủ yếu ở thân mình, cổ, một phần 02 mặt. Mỡ máu bình thường, có thể liên quan đến các bệnh lý về máu. 2/2 6/1 2.1.3. Thể củ (tuberous xanthoma) _0 nh - Các sẩn, củ cứng màu vàng nhạt, dính vào da, tiến triển chậm, không đau, Di thường không loét, có thể kết hợp lại tạo thành các khối nhiều thùy, hay gặp ở vị trí inh TB tỳ đè như đầu gối, khuỷu tay, mông, tai và gót chân, hiếm gặp ở mặt. SY - Thường liên quan đến tăng cholesterol gia đình, gammopathies đơn dòng, đa hu nt u tủy xương, bệnh bạch cầu. Va vt_ 2.1.4. Thể ở gân (tendinous xanthoma) h_ din - Tổn thương là các nốt màu vàng ở vùng gân hay dây chằng, tiến triển từ từ inh trong nhiều tháng, thường liên quan đến chấn thương. t_b sy - Bệnh liên quan đến tăng cholesterol máu gia đình hoặc thiếu protein vận chuyển và chuyển hóa cholesterol. 2.1.5. Thể sùi (verruciform xanthoma) Tổn thương sùi màu vàng thường gặp ở niêm mạc miệng, hậu môn - sinh dục. Bệnh thường không đi kèm với rối loạn mỡ máu, có thể kết hợp với các bớt lành tính ở da, u mạch máu... hoặc bệnh lý da như lichen phẳng, vảy nến, lupus.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Gai Đen",
+          "name_source": "BỆNH GAI ĐEN",
+          "english_alias": "Acanthosis nigricans",
+          "source_page": 420,
+          "clinical_visual_features": "- Triệu chứng cơ năng: thường không có triệu chứng kèm theo, một vài trường hợp có thể ngứa nhẹ. - Tổn thương cơ bản: các mảng dày da, tăng sắc tố màu nâu hoặc đen, bề mặt có nhú, sờ cảm giác mượt, hay gặp nhất ở vùng nếp gấp nách, bẹn, cổ, lưng với tính chất đối xứng 2 bên. Trường hợp nặng có thể gặp quanh các hốc tự nhiên. - Các tổn thương khác: quá sản dạng u nhú lành tính ở da và niêm mạc; u mềm treo ở xung quanh tổn thương tăng sắc tố; tăng sắc tố ở niêm mạc mắt, miệng, mũi, thanh quản, quầng vú.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Viêm Da Đầu Chi Ruột",
+          "name_source": "VIÊM DA ĐẦU CHI RUỘT",
+          "english_alias": "Acrodermatitis Enteropathica",
+          "source_page": 423,
+          "clinical_visual_features": "2.1.1. Biểu hiện da, niêm mạc - Dát đỏ, ranh giới rõ với da lành trên có vảy da và vảy tiết, có thể có tổn thương mụn nước, bọng nước, mụn mủ. Bệnh thường kèm thêm nhiễm khuẩn thứ phát như tụ cầu vàng, nấm Candida… - Vị trí: hay gặp quanh các hốc tự nhiên, đầu cực như tai, mũi, đầu các ngón tay, chân. - Bệnh kéo dài có thể khô da, tăng sắc tố, bong vảy da, dày sừng, nứt gót chân 2 bên, viêm niêm mạc miệng lưỡi, loạn dưỡng móng, viêm quanh móng, tóc giòn, dễ gãy, rụng tóc. 2.1.2. Biểu hiện khác - Rối loạn tiêu hóa và chuyển hóa: chán ăn hoặc giảm ăn, giảm bú, chậm tiêu, táo bón nhẹ, buồn nôn và nôn kéo dài. - Rối loạn tâm thần kinh: rối loạn giấc ngủ, khó ngủ, thức giấc nhiều lần trong đêm, khóc đêm kéo dài, suy nhược thần kinh, đau đầu, dễ kích thích, suy giảm trí nhớ; rối loạn cảm xúc, thờ ơ, lãnh đạm, trầm cảm, thay đổi tính tình. Nặng hơn có thể suy yếu hoạt động của não, mơ màng chậm chạp, hoang tưởng, mất điều hòa lời nói, rối loạn vị khứu giác, khuyết tật, bại não, chậm phát triển tâm thần vận động… - Thiếu dinh dưỡng: suy dinh dưỡng nhẹ và vừa, chậm tăng trưởng chiều cao… - Suy giảm khả năng miễn dịch: nhiễm trùng tái diễn đường hô hấp như viêm :42 mũi họng, viêm phế quản, viêm đường tiêu hóa… :30 - Tổn thương mắt: sợ ánh sáng, giảm khả năng thích nghi với bóng tối, quáng 3 16 gà, khô mắt, loét giác mạc… 2/2",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Pellagra",
+          "name_source": "BỆNH PELLAGRA",
+          "english_alias": "Pellagra",
+          "source_page": 426,
+          "clinical_visual_features": ":42 Bệnh đặc trưng bởi tam chứng gồm 3 chữ D: tiêu chảy (diarrhea), viêm da :30 (dermatitis) và giảm trí nhớ (dementia). Các triệu chứng thường xuất hiện lần lượt 02 theo thứ tự như trên. 2/2 6/1 - Tổn thương da: _0 nh + Bắt đầu là dát đỏ giới hạn rõ, trên có vảy da, có khi có bọng nước, mụn Di nước, da vùng bị bệnh phù nhẹ, dần dần trở nên khô dày và sẫm màu, kèm theo có inh TB ngứa, hoặc cảm giác nóng ở vùng tổn thương. SY + Vị trí: hay gặp vùng hở hu nt • Ở mặt: hai bên vành tai, rãnh mũi, má (có khi tạo thành hình cánh bướm), Va vt_ trán, cằm, tháp mũi (ít khi xuất hiện ở mi mắt). h_ din • Vùng tam giác cổ áo. inh t_b • Mu tay, mặt duỗi cẳng tay, bả vai cánh tay, khuỷu tay, đầu gối, mu chân. sy Giai đoạn muộn: có thể có triệu chứng khô da, dày da, tăng sắc tố... - Tổn thương nội tạng: + Tiêu hoá: ỉa chảy, chán ăn, buồn nôn, đôi khi có rối loạn chức năng gan. Các triệu chứng rối loạn tiêu hoá thường xuất hiện trước khi có tổn thương da. + Thần kinh: người bệnh thường đau đầu, chóng mặt, đau các dây thần kinh ngoại biên, giảm trí nhớ, có khi có dấu hiệu thiểu năng tinh thần, rối loạn thị giác. - Tiến triển và biến chứng: Bệnh thường xuất hiện và nặng lên vào mùa hè. Nếu không được điều trị bệnh tiến triển càng ngày càng nặng. Da dần dần thâm, khô, dày, bong vảy liên tục. Các biểu hiện nội tạng sẽ nặng dần lên nhất là rối loạn tiêu hoá và đau dây thần kinh ngoại biên. Một số trường hợp nặng nếu không điều trị kịp thời có thể dẫn tới tử vong.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Bệnh Porphyrin Da Chậm",
+          "name_source": "BỆNH PORPHYRIN DA CHẬM",
+          "english_alias": "Porphirya cutanea tarda",
+          "source_page": 429,
+          "clinical_visual_features": "- Tổn thương da: + Bọng nước căng, kích thước bằng hạt đậu xanh đến hạt lạc, chứa dịch trong, đục khi nhiễm khuẩn, có thể màu đỏ nếu có máu. Bọng nước dập vỡ để lại vảy tiết, vết trợt, lành để lại sẹo teo trên da, milia và tăng sắc tố. + Có thể có da đỏ lan rộng ở mặt mà hay gặp nhất là quanh mắt và vùng trán. + Vị trí: tổn thương ở vùng hở, đối xứng như mu tay, mặt dưới cẳng tay, mu chân, nếp gấp cổ chân, vùng da tam giác cổ áo, thái dương. Ngoài ra các vùng khác như khoeo chân, nếp gấp khuỷu tay, xung quanh thắt lưng cùng là vùng hay có tổn thương do porphyrin gây ra. Có thể có da đỏ lan rộng ở mặt mà hay gặp nhất là quanh mắt và vùng trán. + Bọng nước thường xuất hiện sau những sang chấn nhẹ như tỳ đè, đụng dập. :42 - Tuổi khởi phát bệnh: thường ở tuổi 30-40, rất hiếm gặp ở tuổi dậy thì. :30 - Có thể gặp các triệu chứng khác như chứng rậm lông ở má và thái dương. 02 2/2 - Triệu chứng cơ năng: ngứa 6/1 - _0 Các biểu hiện khác: nh Di + Nước tiểu đỏ khi quan sát dưới ánh sáng thường hoặc soi bằng đèn Wood. inh + Có thể gặp gan to, lách to. TB SY - Bệnh tiến triển mạn tính, thành từng đợt, nặng lên về mùa xuân - hè. hu",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    },
+    {
+      "category_vi": "Bệnh lý phần phụ của da",
+      "diseases": [
+        {
+          "name_vi": "Trứng Cá",
+          "name_source": "TRỨNG CÁ",
+          "english_alias": "Acnes",
+          "source_page": 433,
+          "clinical_visual_features": "- Tổn thương da: các tổn thương phân bố điển hình ở vùng có nhiều tuyến bã như mặt, cổ, ngực, lưng trên, cánh tay trên. Bao gồm một hoặc nhiều dạng tổn thương: + Mụn nhân đóng (closed comedone) hay mụn đầu trắng: kích thước < 5mm, sẩn có màu da, trắng hoặc xám hình vòm, nhẵn hơi nhô cao hơn mặt da. + Mụn nhân mở (open comedone) hay mụn đầu đen: sẩn kích thước < 5mm, trung tâm có lỗ mở chứa chất sừng xám, nâu hoặc đen. + Mụn mủ (pustule): đường kính tổn thương dưới 5mm, chứa đầu mủ màu trắng hoặc vàng ở trung tâm nền đỏ. + Sẩn mủ (papulopustular): sẩn và mụn mủ tương đối nông ở bề mặt, đường kính < 5 mm. + Cục (nodule): sẩn to (> 5mm) hoặc cục (> 1 mm) viêm sâu, ấn đau do tổn thương :42 viêm sâu hơn xuống trung bì. :30 + Nang (cyst): tổn thương trứng cá dạng nang do tổn thương viêm chứa dịch mủ, 02 sền sệt lẫn máu, thường mềm, dễ vỡ. 2/2 6/1 − Các di chứng sau trứng cá: _0 nh + Tăng sắc tố sau viêm Di inh + Ban đỏ sau viêm TB SY + Sẹo: bao gồm sẹo lõm, sẹo quá phát, sẹo lồi. hu ● Sẹo lõm trứng cá chia làm 3 loại: nt Va vt_ ✔ Sẹo hình phễu (ice pick): hay gặp nhất, đường kính < 2mm, bờ rõ, có thể sâu h_ tới lớp hạ bì. din inh ✔ Sẹo lòng chảo (rolling scars): đường kính 4 - 5mm, do sợi xơ trung bì dính với t_b thượng bì gây co kéo tạo thành đáy lòng chảo. sy ✔ Sẹo đáy phẳng (box scars): hình tròn hay ovan, bờ sẹo thẳng đứng, đường kính 1,5 - 4mm. ● Sẹo quá phát, sẹo lồi: do sự tăng sinh xơ bất thường trong quá trình lành thương, thường gặp ở vị trí ngực, lưng, bả vai, góc hàm, mặt. − Các biểu hiện của bệnh lý liên quan: Cường androgen: rậm lông thứ phát ở nách, mu, ngực, râu cằm, rụng tóc hói. Nữ giới có kinh nguyệt bất thường (không đều, vòng kinh kéo dài quá 35 ngày hoặc ngắn dưới 21 ngày, …), phì đại âm vật, giọng trầm. − Biến chứng: + Trứng cá tối cấp (Acne fulminans): Sự bùng phát cấp tính các nang, cục viêm lớn kèm theo các vết trợt, loét, đóng vảy xuất huyết. Có thể kèm theo triệu chứng toàn thân như sốt, mệt mỏi, đau xương, khớp, hồng ban nút. Xét nghiệm thấy tăng bạch cầu, máu lắng, Protein phản ứng C, thiếu máu. Tình trạng này hiếm gặp, gặp chủ yếu ở nam giới tuổi vị thành niên. Có thể xảy ra sau dùng isotretinoin đường uống hoặc xuất hiện tự nhiên. + Viêm nang lông do vi khuẩn gram âm: gặp ở những bệnh nhân điều trị kháng sinh lâu dài dẫn đến kháng thuốc. Biểu hiện là các sẩn, cục viêm, mụn mủ trung tâm mặt, quanh mũi. + Phù nề cứng mặt (bệnh Morbihan's): ban đỏ và phù nề mô mềm vùng mặt. + Ảnh hưởng tâm lý do trứng cá. 435",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Kén Thượng Bì",
+          "name_source": "KÉN THƯỢNG BÌ",
+          "english_alias": "Epidermoid cyst",
+          "source_page": 443,
+          "clinical_visual_features": "− Tổn thương cơ bản + Tổn thương dạng nang dưới da, da trên bề mặt tổn thương bình thường, đôi khi tại vùng trung tâm tổn thương có điểm sẫm màu hoặc lỗ nang lông giãn rộng. + Tổn thương thường có ranh giới rõ, di động dưới mặt da. + Kích thước tổn thương có thể từ vài milimet tới vài centimet. Thông thường không có triệu chứng cơ năng, tuy nhiên có thể có biểu hiện của viêm: sưng nóng đỏ đau, kích thước ổ viêm tăng dần tại vị trí của tổn thương. + Vị trí tổn thương: Có thể xuất hiện ở bất cứ vị trí nào (đặc biệt là vùng phân bố nhiều tuyến bã). + Có khoảng 1% các tổn thương kén biến đổi thành tổn thương ác tính như SCC hay BCC nên có thể có biểu hiện lâm sàng của BCC hay SCC. − Triệu chứng khác + Kén thượng bì có thể biểu hiện kèm với các triệu chứng theo nguyên nhân tạo ra: Tổn thương trứng cá, Hội chứng Gardner, hội chứng Gorlin, hội chứng Farve- Racouchot... + Ngoài ra, các biến chứng do kén thượng bì gây ra: chảy máu, nhiễm khuẩn... :42 :30",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Rụng Tóc Mảng",
+          "name_source": "RỤNG TÓC MẢNG",
+          "english_alias": "Alopecia areata",
+          "source_page": 446,
+          "clinical_visual_features": "− Rụng tóc mảng thường xuất hiện đột ngột, rụng hoàn toàn để lại một hoặc nhiều dát hình tròn hoặc oval. − Vị trí: Da đầu hoặc các vùng có lông khác. − Da vùng rụng tóc, rụng lông bình thường, không có viêm. Sắc tố của tóc có thể bạc màu, sợi tóc thanh mảnh, nếu mọc lại thường tóc bạc và dễ gãy. − Không đau, không ngứa tại vùng tổn thương. − Test kéo tóc dương tính ở giai đoạn hoạt động. − Tổn thương móng kèm theo: rỗ móng, móng ráp như giấy cát, giòn, dễ gãy, tách móng, đường lõm ngang, dọc... − Tiến triển của bệnh đa dạng và đặc trưng bởi các đợt tái phát, khoảng 25% bệnh nhân chỉ bị duy nhất một lần, đa phần tóc mọc lại tự nhiên, có khi xuất hiện các đám rụng tóc mới trong khi các đám cũ đang mọc lại. Tuy nhiên, có thể tiến triển thành các thể nặng hơn.",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        },
+        {
+          "name_vi": "Rụng Tóc Do Nội Tiết Tố Nam",
+          "name_source": "RỤNG TÓC DO NỘI TIẾT TỐ NAM",
+          "english_alias": "Androgenetic alopecia",
+          "source_page": 451,
+          "clinical_visual_features": "2.1.1. Rụng tóc androgen ở nam giới − Tóc rụng thưa mỏng một cách từ từ, thường bắt đầu ở vùng thái dương, vùng trán giữa hoặc vùng đỉnh, vùng chẩm ít bị ảnh hưởng hơn, hậu quả là để lại một vành tóc ở hai bên và vùng chẩm của đầu. − Nam giới cũng có thể có kiểu hình giống với rụng tóc kiểu hói ở nữ giới, vẫn còn vùng chân tóc phía trước, rụng tóc,thưa mỏng dần phần đỉnh đầu, nhưng ít gặp hơn. − Thường có rậm lông thứ phát ở nách, mu, ngực, râu cằm. 2.1.2. Rụng tóc androgen ở nữ giới :42 − Tóc thưa dần trên toàn bộ da đầu, nhưng chủ yếu vùng đỉnh. Vùng tóc ở phía :30 trước thường ít rụng hơn nên không thấy thay đổi đường chân tóc phía trán. Rụng 02 tóc kiểu cây thông Noel. 2/2 6/1 − Tóc ở vùng rụng mảnh hơn, ngắn hơn trở thành lông tơ và nang tóc gần như teo _0 hoàn toàn. Thường rụng tóc kiểu hói nữ không gây hói toàn bộ. nh Di − Có các dấu hiệu nam hoá do cường androgen như có trứng cá, rậm lông ở thân inh TB mình và vùng mặt, kinh nguyệt bất thường (không đều, vòng kinh kéo dài quá 35 SY ngày hoặc ngắn dưới 21 ngày…). hu nt",
+          "ai_note": "Image findings are supportive only; do not treat this entry as a definitive diagnosis."
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "chapters": 12,
+    "diseases": 86
+  }
+}

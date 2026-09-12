@@ -21,6 +21,7 @@ import Order from "./models/Order.js";
 import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import MedicalGuideline from "./models/MedicalGuideline.js";
+import SkinDiseaseKnowledge from "./models/SkinDiseaseKnowledge.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
@@ -999,6 +1000,95 @@ app.post("/api/medical/search", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Lỗi tìm kiếm tài liệu Y tế", error: err.message });
+  }
+});
+
+// Load local skin disease knowledge base JSON as fallback
+const skinDiseaseKnowledgePath = path.join(__dirname, "data/skin_disease_knowledge_base.json");
+function loadLocalSkinDiseaseKnowledge() {
+  try {
+    if (fs.existsSync(skinDiseaseKnowledgePath)) {
+      return JSON.parse(fs.readFileSync(skinDiseaseKnowledgePath, "utf-8"));
+    }
+  } catch (e) {
+    console.error("Lỗi nạp skin_disease_knowledge_base.json:", e);
+  }
+  return { chapters: [], skin_types: [], lesion_features_for_vision: [] };
+}
+
+let localSkinDiseaseData = loadLocalSkinDiseaseKnowledge();
+console.log(`--> Đã nạp Skin Disease Knowledge Base (86 bệnh da liễu, 12 chương) vào bộ nhớ dự phòng.`);
+
+// GET Overview of Skin Disease Knowledge Base
+app.get("/api/skin-diseases/knowledge-base", async (req, res) => {
+  try {
+    const categories = await SkinDiseaseKnowledge.distinct("category_vi");
+    const totalDiseases = await SkinDiseaseKnowledge.countDocuments();
+    res.json({
+      success: true,
+      source: "MongoDB Atlas",
+      totalDiseases,
+      categoriesCount: categories.length,
+      categories,
+      skinTypes: localSkinDiseaseData.skin_types || [],
+      lesionFeaturesForVision: localSkinDiseaseData.lesion_features_for_vision || []
+    });
+  } catch (err) {
+    res.json({
+      success: true,
+      source: "Local JSON Fallback",
+      totalDiseases: (localSkinDiseaseData.chapters || []).reduce((acc, c) => acc + (c.diseases || []).length, 0),
+      categoriesCount: (localSkinDiseaseData.chapters || []).length,
+      categories: (localSkinDiseaseData.chapters || []).map(c => c.category_vi),
+      skinTypes: localSkinDiseaseData.skin_types || [],
+      lesionFeaturesForVision: localSkinDiseaseData.lesion_features_for_vision || []
+    });
+  }
+});
+
+// POST Search Skin Diseases by query, category, or lesion_features for Skin Analysis
+app.post("/api/skin-diseases/search", async (req, res) => {
+  try {
+    const { query, category, lesionFeatures, limit = 10 } = req.body;
+
+    let filter = {};
+    if (category) {
+      filter.category_vi = { $regex: category, $options: "i" };
+    }
+
+    if (lesionFeatures && Array.isArray(lesionFeatures) && lesionFeatures.length > 0) {
+      filter.lesion_features = { $in: lesionFeatures };
+    }
+
+    if (query && query.trim()) {
+      const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
+      const regexArr = terms.map(t => new RegExp(t, "i"));
+      
+      const textConditions = [
+        { name_vi: { $in: regexArr } },
+        { english_alias: { $in: regexArr } },
+        { clinical_visual_features: { $in: regexArr } },
+        { category_vi: { $in: regexArr } }
+      ];
+
+      if (filter.$or) {
+        filter.$and = [{ $or: filter.$or }, { $or: textConditions }];
+        delete filter.$or;
+      } else {
+        filter.$or = textConditions;
+      }
+    }
+
+    const diseases = await SkinDiseaseKnowledge.find(filter).limit(Number(limit)).lean();
+
+    return res.json({
+      success: true,
+      source: "MongoDB Atlas",
+      count: diseases.length,
+      results: diseases
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Lỗi tìm kiếm cơ sở dữ liệu bệnh da liễu", error: err.message });
   }
 });
 
