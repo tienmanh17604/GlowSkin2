@@ -41,7 +41,8 @@ const PORT = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Database Connection
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/glowskin";
@@ -1089,6 +1090,66 @@ app.post("/api/skin-diseases/search", async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Lỗi tìm kiếm cơ sở dữ liệu bệnh da liễu", error: err.message });
+  }
+});
+
+// 7. REMOVE.BG BACKGROUND REMOVAL ENDPOINT
+app.post("/api/skin/remove-background", async (req, res) => {
+  try {
+    const { imageBase64 } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ success: false, message: "Thiếu dữ liệu ảnh (imageBase64)" });
+    }
+
+    const apiKey = process.env.REMOVE_BG_API_KEY;
+    if (!apiKey) {
+      console.warn("[Remove.bg] Chưa cấu hình REMOVE_BG_API_KEY trong .env, fallback về ảnh gốc");
+      return res.json({ success: false, fallbackImage: imageBase64, message: "Chưa cấu hình API Key" });
+    }
+
+    // Tách phần dữ liệu base64 thuần
+    const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+
+    const formData = new FormData();
+    formData.append("image_file_b64", cleanBase64);
+    formData.append("size", "preview"); // 'preview' tối ưu dùng credit miễn phí 50 lượt/tháng
+    formData.append("type", "person");
+    formData.append("format", "png");
+
+    const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+      method: "POST",
+      headers: {
+        "X-Api-Key": apiKey,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.warn(`[Remove.bg] API trả về status ${response.status}:`, errText);
+      return res.json({
+        success: false,
+        fallbackImage: imageBase64,
+        error: `Remove.bg error: ${response.status}`,
+      });
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const resultBase64 = Buffer.from(arrayBuffer).toString("base64");
+    const transparentDataUrl = `data:image/png;base64,${resultBase64}`;
+
+    console.log("[Remove.bg] Xóa nền ảnh khuôn mặt thành công!");
+    return res.json({
+      success: true,
+      resultImage: transparentDataUrl,
+    });
+  } catch (error) {
+    console.error("[Remove.bg] Lỗi khi xử lý:", error.message);
+    return res.json({
+      success: false,
+      fallbackImage: req.body?.imageBase64,
+      error: error.message,
+    });
   }
 });
 

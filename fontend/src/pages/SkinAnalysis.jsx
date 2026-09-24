@@ -304,6 +304,8 @@ export default function SkinAnalysis() {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
+    ctx.translate(video.videoWidth, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
     const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
     stopCamera();
@@ -367,10 +369,10 @@ export default function SkinAnalysis() {
       const parsed = parseAnalysis(skinAnalysis.content);
       setCurrentAnalysisSections(parsed);
 
-      // Save formatted diagnostic scan data for the "Da của bạn" page from AI Vision + Bộ Y Tế JSON
+      // Save formatted diagnostic scan data for the "Da của bạn" page from AI Vision JSON
       const jsonRes = parsed.jsonData || {};
       const defaultZones = [
-        { id: "forehead", title: "Vùng Trán", condition: "Mụn viêm & Thâm dai dẳng", detail: "Nhận diện lỗ chân lông bít tắc theo QĐ 4416/QĐ-BYT.", angle: -90 },
+        { id: "forehead", title: "Vùng Trán", condition: "Mụn viêm & Thâm dai dẳng", detail: "Nhận diện lỗ chân lông bít tắc theo phác đồ chuyên khoa da liễu.", angle: -90 },
         { id: "eyebrow", title: "Vùng Lông Mày", condition: "Cần cải thiện nhẹ", detail: "Nền da tương đối ổn định.", angle: -30 },
         { id: "upper_cheek", title: "Vùng Má", condition: "Mụn đầu đen & Thâm mụn", detail: "Dấu hiệu thâm sau viêm (PIH).", angle: 30 },
         { id: "chin", title: "Vùng Cằm", condition: "Mụn ẩn & Bã nhờn", detail: "Cần làm sạch sâu và dùng BHA.", angle: 90 },
@@ -383,7 +385,7 @@ export default function SkinAnalysis() {
         date: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) + ", " + new Date().toLocaleDateString("vi-VN"),
         score: jsonRes.score || 72,
         scoreLabel: jsonRes.scoreLabel || "Phân tích Y Khoa & AI Vision",
-        medicalReference: jsonRes.medicalReference || "Quyết định 4416/QĐ-BYT Bộ Y Tế",
+        medicalReference: jsonRes.medicalReference || "Tiêu chuẩn Chuyên Khoa Da Liễu",
         image: dataUrl,
         aiOverview: parsed.overview,
         routine: parsed.routine,
@@ -393,7 +395,7 @@ export default function SkinAnalysis() {
           { title: "Phân tích AI Vision", en: "(AI Vision Diagnosis)", desc: "Nhận diện tình trạng từ ảnh khuôn mặt thực tế." }
         ],
         severity: jsonRes.severity || {
-          recommendation: "Cần điều trị tích cực và bảo vệ da theo Hướng dẫn Bộ Y Tế."
+          recommendation: "Cần điều trị tích cực và bảo vệ da theo Tiêu chuẩn Chuyên khoa Da liễu."
         },
         zones: (jsonRes.zones && jsonRes.zones.length) ? jsonRes.zones : defaultZones,
       };
