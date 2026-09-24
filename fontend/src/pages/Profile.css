@@ -465,22 +465,27 @@
 }
 
 .profile-save-btn {
-  background: linear-gradient(90deg, #f59e0b 0%, #a855f7 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(212, 175, 55, 0.4);
   font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   font-weight: 800;
   font-size: 13.5px;
   padding: 12px 42px;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.28);
   transition: all 0.3s ease;
 }
 
 .profile-save-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+  filter: brightness(1.05);
+}
+
+.profile-save-btn:active {
+  transform: translateY(0);
 }
 
 .profile-save-btn:disabled {
