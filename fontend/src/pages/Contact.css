@@ -3,8 +3,7 @@
 .contact-page-wrapper {
   min-height: 100vh;
   min-height: 100svh;
-  background-color: #fdf1ec;
-  /* Exact soft peach/pink background from wemo */
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -160,8 +159,8 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  box-shadow: 0 8px 25px rgba(226, 171, 143, 0.12);
-  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 0 8px 25px rgba(226, 171, 143, 0.08);
+  border: 1px solid #f1eee9;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
 }
@@ -169,6 +168,7 @@
 @media (prefers-color-scheme: dark) {
   .info-card {
     background-color: #1d1e26;
+    border-color: rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 }
@@ -249,8 +249,8 @@
   background-color: #ffffff;
   border-radius: 20px;
   padding: 24px 32px;
-  box-shadow: 0 8px 25px rgba(226, 171, 143, 0.12);
-  border: none;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03), 0 8px 25px rgba(226, 171, 143, 0.08);
+  border: 1px solid #f1eee9;
   box-sizing: border-box;
   text-align: left;
   display: flex;
@@ -260,6 +260,7 @@
 @media (prefers-color-scheme: dark) {
   .contact-form-card {
     background-color: #1d1e26;
+    border-color: rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
 }
