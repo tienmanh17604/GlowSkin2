@@ -84,7 +84,7 @@ export default function UserMenu() {
               </div>
               <div className="user-menu-item-text">
                 <strong>Thông tin tài khoản</strong>
-                <span>Tài khoản, Đơn hàng, Địa chỉ giao nhận, Đổi mật khẩu</span>
+                <span>Quản lý thông tin cá nhân & hồ sơ</span>
               </div>
             </button>
 
@@ -105,27 +105,6 @@ export default function UserMenu() {
               <div className="user-menu-item-text">
                 <strong>Báo cáo Da của bạn</strong>
                 <span>Xem chẩn đoán AI & phác đồ chăm sóc da cá nhân</span>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              className="user-menu-item"
-              onClick={() => {
-                navigate("/profile?tab=orders");
-                setIsOpen(false);
-              }}
-            >
-              <div className="user-menu-item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-              </div>
-              <div className="user-menu-item-text">
-                <strong>Lịch sử đặt hàng</strong>
-                <span>Tra cứu đơn hàng đã đặt trước đó</span>
               </div>
             </button>
 
