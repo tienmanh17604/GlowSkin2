@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import "./Profile.css";
 
 export default function Profile() {
-  const { currentUser, orders, updateProfile, wishlist } = useApp();
+  const { currentUser, orders, updateProfile, wishlist, logout } = useApp();
   const { setIsCartOpen } = useCart();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -144,6 +144,11 @@ export default function Profile() {
     setSaveStatus(null);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <div className="profile-page-wrapper">
       <Navbar />
@@ -234,38 +239,15 @@ export default function Profile() {
               </button>
               <button
                 type="button"
-                className={`profile-nav-item ${activeTab === "orders" ? "active" : ""}`}
-                onClick={() => changeTab("orders")}
+                className="profile-nav-item profile-nav-logout-btn"
+                onClick={handleLogout}
               >
-                Đơn hàng
-              </button>
-              <button
-                type="button"
-                className={`profile-nav-item ${activeTab === "address" ? "active" : ""}`}
-                onClick={() => changeTab("address")}
-              >
-                Địa chỉ giao nhận
-              </button>
-              <button
-                type="button"
-                className={`profile-nav-item ${activeTab === "rewards" ? "active" : ""}`}
-                onClick={() => changeTab("rewards")}
-              >
-                Ưu đãi của tôi
-              </button>
-              <button
-                type="button"
-                className={`profile-nav-item ${activeTab === "qna" ? "active" : ""}`}
-                onClick={() => changeTab("qna")}
-              >
-                Câu hỏi của tôi
-              </button>
-              <button
-                type="button"
-                className={`profile-nav-item ${activeTab === "events" ? "active" : ""}`}
-                onClick={() => changeTab("events")}
-              >
-                Sự kiện của tôi
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "8px", verticalAlign: "middle" }}>
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Đăng xuất
               </button>
             </nav>
           </aside>

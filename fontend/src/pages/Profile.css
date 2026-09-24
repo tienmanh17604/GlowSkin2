@@ -339,6 +339,30 @@
   }
 }
 
+.profile-nav-logout-btn {
+  color: #ef4444 !important;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding: 12px 6px;
+  border-top: 1px solid #f1eee9;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .profile-nav-logout-btn {
+    border-top-color: rgba(255, 255, 255, 0.08);
+    color: #f87171 !important;
+  }
+}
+
+.profile-nav-logout-btn:hover {
+  color: #dc2626 !important;
+  padding-left: 10px;
+}
+
 /* Right Content Panel Column */
 .profile-content-panel {
   background-color: #ffffff;
