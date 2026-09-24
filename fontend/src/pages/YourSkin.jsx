@@ -510,12 +510,16 @@ export default function YourSkin() {
             if (data.success && data.resultImage) {
               return data.resultImage;
             }
-            console.warn("[Remove.bg] Backend trả về không thành công:", data.message || data.error);
-            return imageDataUrl;
+            throw new Error(data.message || data.error || "Backend chưa xóa được nền");
           })
-          .catch((err) => {
-            console.warn("[Remove.bg] Lỗi gọi API xóa nền backend:", err.message);
-            return imageDataUrl;
+          .catch(async (err) => {
+            console.warn("[Remove.bg] Backend chưa khả dụng, tự động chuyển sang MediaPipe xóa nền cục bộ:", err.message);
+            try {
+              const localResult = await removeImageBackground(imageDataUrl);
+              return localResult || imageDataUrl;
+            } catch {
+              return imageDataUrl;
+            }
           }),
         analyzeSkinImage(imageDataUrl),
       ]);

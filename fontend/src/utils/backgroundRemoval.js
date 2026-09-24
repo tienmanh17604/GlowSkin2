@@ -71,7 +71,7 @@ async function getSegmenter() {
   });
 
   segmenter.setOptions({
-    modelSelection: 0, // 0: General/Selfie model siêu nhẹ (~200KB), tối ưu tốc độ 100-200ms
+    modelSelection: 1, // 1: Landscape/High-Quality model (phát hiện chi tiết viền tóc, cổ, cằm tốt nhất)
     selfieMode: false,
   });
 
@@ -100,15 +100,15 @@ export async function removeImageBackground(imageInput) {
   if (!imageInput) return imageInput;
 
   return new Promise(async (resolve) => {
-    // Timeout an toàn 4 giây: nếu máy người dùng quá yếu thì tự fallback về ảnh gốc
+    // Timeout an toàn 5 giây: nếu máy người dùng quá yếu thì tự fallback về ảnh gốc
     let finished = false;
     const timeout = setTimeout(() => {
       if (!finished) {
         finished = true;
-        console.warn("[MediaPipe] Xóa nền timeout (4s), giữ ảnh gốc");
+        console.warn("[MediaPipe] Xóa nền timeout (5s), giữ ảnh gốc");
         resolve(typeof imageInput === "string" ? imageInput : imageInput.src);
       }
-    }, 4000);
+    }, 5000);
 
     try {
       // 1. Chuẩn bị thẻ Image
@@ -151,8 +151,10 @@ export async function removeImageBackground(imageInput) {
           // Xóa toàn bộ canvas về trong suốt (alpha = 0)
           ctx.clearRect(0, 0, naturalW, naturalH);
 
-          // Vẽ mask (MediaPipe segmentationMask: vùng người là màu đục, nền là màu trong)
+          // Vẽ mask với độ mờ viền 1.5px để khử răng cưa và làm mềm mượt đường viền tóc/cổ
+          ctx.filter = "blur(1.5px)";
           ctx.drawImage(results.segmentationMask, 0, 0, naturalW, naturalH);
+          ctx.filter = "none";
 
           // Áp dụng composite operation 'source-in': chỉ giữ lại các điểm ảnh của người trùng với mask
           ctx.globalCompositeOperation = "source-in";
