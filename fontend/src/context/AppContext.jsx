@@ -69,17 +69,20 @@ export function AppProvider({ children }) {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   // Global Wishlist/Favorites State — scoped per user
+  // Xóa toàn bộ dữ liệu sản phẩm yêu thích cũ theo yêu cầu
   const [wishlist, setWishlist] = useState(() => {
     try {
-      const session = localStorage.getItem(USER_SESSION_KEY);
-      const user = session ? JSON.parse(session) : null;
-      if (!user) return {};
-      const key = `glowskin-wishlist-${user._id || user.id}`;
-      const saved = localStorage.getItem(key);
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
+      if (typeof window !== "undefined" && window.localStorage) {
+        Object.keys(localStorage).forEach((k) => {
+          if (k.startsWith("glowskin-wishlist")) {
+            localStorage.removeItem(k);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("Lỗi dọn dẹp danh sách yêu thích:", e);
     }
+    return {};
   });
 
   const toggleWishlist = (productId) => {
@@ -133,9 +136,16 @@ export function AppProvider({ children }) {
 
   const clearWishlist = () => {
     setWishlist({});
-    if (currentUser) {
-      const key = `glowskin-wishlist-${currentUser._id || currentUser.id}`;
-      localStorage.removeItem(key);
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        Object.keys(localStorage).forEach((k) => {
+          if (k.startsWith("glowskin-wishlist")) {
+            localStorage.removeItem(k);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn("Lỗi dọn dẹp wishlist:", e);
     }
   };
 
