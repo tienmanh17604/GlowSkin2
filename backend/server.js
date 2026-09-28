@@ -182,16 +182,22 @@ app.post("/api/users/register", async (req, res) => {
 app.put("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, addresses } = req.body;
+    const { name, email, phone, addresses, preferredName } = req.body;
     
     const updateFields = {};
     if (name !== undefined) updateFields.name = name;
     if (email !== undefined) updateFields.email = email;
     if (phone !== undefined) updateFields.phone = phone;
     if (addresses !== undefined) updateFields.addresses = addresses;
+    if (preferredName !== undefined) updateFields.preferredName = preferredName;
     
+    let query = { id: id };
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      query = { $or: [{ id: id }, { _id: id }] };
+    }
+
     const updatedUser = await User.findOneAndUpdate(
-      { id: id },
+      query,
       { $set: updateFields },
       { new: true }
     );

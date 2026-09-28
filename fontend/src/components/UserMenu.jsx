@@ -4,14 +4,16 @@ import { useApp } from "../context/AppContext";
 import "./UserMenu.css";
 
 export default function UserMenu() {
-  const { currentUser, logout } = useApp();
+  const { currentUser, logout, setIsNameModalOpen } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Get capitalized last name (first word from right) for display: e.g. "Nguyen Van Manh" -> "MANH"
+  // Display preferred calling name if set, otherwise fallback to last name (e.g., "NHI", "KHÁNH BU")
   const displayName = currentUser
-    ? currentUser.name.trim().split(" ").pop().toUpperCase()
+    ? (currentUser.preferredName
+        ? currentUser.preferredName.trim().toUpperCase()
+        : currentUser.name?.trim().split(" ").pop()?.toUpperCase() || "BẠN")
     : "";
 
   // Time-based greeting: "Good morning", "Good afternoon", "Good evening"
@@ -105,6 +107,26 @@ export default function UserMenu() {
               <div className="user-menu-item-text">
                 <strong>Báo cáo Da của bạn</strong>
                 <span>Xem chẩn đoán AI & phác đồ chăm sóc da cá nhân</span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              className="user-menu-item"
+              onClick={() => {
+                setIsNameModalOpen(true);
+                setIsOpen(false);
+              }}
+            >
+              <div className="user-menu-item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+              </div>
+              <div className="user-menu-item-text">
+                <strong>Tên gọi thân mật</strong>
+                <span>Đổi tên bạn muốn GlowSkin gọi</span>
               </div>
             </button>
 

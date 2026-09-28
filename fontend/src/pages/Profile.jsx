@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import "./Profile.css";
 
 export default function Profile() {
-  const { currentUser, orders, updateProfile, wishlist, logout } = useApp();
+  const { currentUser, orders, updateProfile, updatePreferredName, wishlist, logout } = useApp();
   const { setIsCartOpen } = useCart();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ export default function Profile() {
   // Form states for account tab
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [preferredName, setPreferredName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   
@@ -63,6 +64,7 @@ export default function Profile() {
       const last = names.slice(1).join(" ") || "";
       setFirstName(first);
       setLastName(last);
+      setPreferredName(currentUser.preferredName || "");
       setEmail(currentUser.email || "");
       setPhone(currentUser.phone || "");
     }
@@ -104,6 +106,9 @@ export default function Profile() {
     }
 
     const result = await updateProfile(currentUser.id, fullName, email.trim(), phone.trim());
+    if (preferredName.trim() !== (currentUser.preferredName || "")) {
+      await updatePreferredName(preferredName.trim());
+    }
     if (result.success) {
       setSaveStatus({ type: "success", text: "Cập nhật thông tin thành công!" });
     } else {
@@ -304,6 +309,15 @@ export default function Profile() {
                         onChange={(e) => setPhone(e.target.value)}
                         required
                         placeholder="+84..."
+                      />
+                    </div>
+                    <div className="profile-input-group" style={{ gridColumn: "1 / -1" }}>
+                      <label>Tên bạn muốn GlowSkin gọi (Biệt danh hiển thị)</label>
+                      <input
+                        type="text"
+                        value={preferredName}
+                        onChange={(e) => setPreferredName(e.target.value)}
+                        placeholder="Ví dụ: Khánh Bu, Nhi..."
                       />
                     </div>
                   </div>

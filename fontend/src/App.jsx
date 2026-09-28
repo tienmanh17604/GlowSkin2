@@ -10,6 +10,7 @@ import ProductDetail from "./pages/ProductDetail";
 import CartDrawer from "./components/CartDrawer";
 import WishlistDrawer from "./components/WishlistDrawer";
 import LoginModal from "./components/LoginModal";
+import WelcomeNameModal from "./components/WelcomeNameModal";
 import ChatWidget from "./components/ChatWidget";
 import SplashScreen from "./components/SplashScreen";
 import Contact from "./pages/Contact";
@@ -73,6 +74,7 @@ export default function App() {
         </Routes>
         <WishlistDrawer />
         <LoginModal />
+        <WelcomeNameModal />
         {!showSplash && <ChatWidget />}
       </BrowserRouter>
     </CartProvider>

@@ -6,7 +6,7 @@ import "./LoginModal.css";
 
 export default function LoginModal() {
   const navigate = useNavigate();
-  const { isLoginOpen, setIsLoginOpen, login, register } = useApp();
+  const { isLoginOpen, setIsLoginOpen, setIsNameModalOpen, login, register } = useApp();
 
   const [activeTab, setActiveTab] = useState("login"); // "login" | "register"
   const [formData, setFormData] = useState({
@@ -56,6 +56,8 @@ export default function LoginModal() {
         setIsLoginOpen(false);
         if (result.user.role === "admin") {
           navigate("/admin");
+        } else {
+          setIsNameModalOpen(true);
         }
       } else {
         setError(result.message);
@@ -68,6 +70,7 @@ export default function LoginModal() {
       const result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
         setIsLoginOpen(false);
+        setIsNameModalOpen(true);
       } else {
         setError(result.message);
       }

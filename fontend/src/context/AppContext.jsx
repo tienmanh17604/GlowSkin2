@@ -66,6 +66,7 @@ export function AppProvider({ children }) {
   });
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   // Global Wishlist/Favorites State — scoped per user
@@ -320,6 +321,7 @@ export function AppProvider({ children }) {
     setCurrentUser(null);
     setLatestScan(null);
     setWishlist({});
+    setIsNameModalOpen(false);
     localStorage.removeItem(USER_SESSION_KEY);
   };
 
@@ -364,6 +366,41 @@ export function AppProvider({ children }) {
       setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
       return { success: true, user: updated };
     }
+  };
+
+  const updatePreferredName = async (preferredName) => {
+    if (!currentUser) return { success: false, message: "Chưa đăng nhập!" };
+    const id = currentUser.id || currentUser._id;
+    const cleanName = preferredName?.trim() || "";
+
+    const updated = { ...currentUser, preferredName: cleanName };
+    setCurrentUser(updated);
+    setUsers((prev) => prev.map((u) => ((u.id === id || u._id === id) ? updated : u)));
+
+    try {
+      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
+    } catch (e) {
+      console.error("Lỗi lưu session:", e);
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ preferredName: cleanName }),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        setCurrentUser(data.user);
+        setUsers((prev) => prev.map((u) => ((u.id === id || u._id === id) ? data.user : u)));
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(data.user));
+        return { success: true, user: data.user };
+      }
+    } catch (err) {
+      console.warn("Lỗi đồng bộ preferredName lên backend:", err);
+    }
+
+    return { success: true, user: updated };
   };
 
   // Product management actions
@@ -627,6 +664,8 @@ export function AppProvider({ children }) {
       currentUser,
       isLoginOpen,
       setIsLoginOpen,
+      isNameModalOpen,
+      setIsNameModalOpen,
       isWishlistOpen,
       setIsWishlistOpen,
       login,
@@ -645,10 +684,11 @@ export function AppProvider({ children }) {
       toggleWishlist,
       clearWishlist,
       updateProfile,
+      updatePreferredName,
       latestScan,
       saveLatestScan,
     }),
-    [users, products, orders, reviews, currentUser, isLoginOpen, isWishlistOpen, wishlist, latestScan]
+    [users, products, orders, reviews, currentUser, isLoginOpen, isNameModalOpen, isWishlistOpen, wishlist, latestScan]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
