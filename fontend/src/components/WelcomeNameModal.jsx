@@ -1841,7 +1841,7 @@ export default function WelcomeNameModal() {
                     <span>Đang phân tích 3 góc mặt...</span>
                   </span>
                 ) : canContinueFromCamera ? (
-                  "Tiếp tục phân tích da (3/3) ✓"
+                  "Phân tích da"
                 ) : (
                   `Chụp đủ 3 góc mặt để tiếp tục (${capturedAnglesCount}/3)`
                 )}
