@@ -323,6 +323,13 @@ export function AppProvider({ children }) {
     setWishlist({});
     setIsNameModalOpen(false);
     localStorage.removeItem(USER_SESSION_KEY);
+    try {
+      Object.keys(sessionStorage).forEach((key) => {
+        if (key.startsWith("glowskin_name_prompt_dismissed_")) {
+          sessionStorage.removeItem(key);
+        }
+      });
+    } catch {}
   };
 
   const register = async (name, email, password) => {
@@ -345,17 +352,25 @@ export function AppProvider({ children }) {
     }
   };
 
-  const updateProfile = async (id, name, email, phone, addresses, preferredName) => {
+  const updateProfile = async (id, name, email, phone, addresses, preferredName, extraFields = {}) => {
     try {
       const cleanPreferred = preferredName !== undefined ? preferredName.trim() : (currentUser?.preferredName || "");
-      const res = await fetch(`${API_URL}/users/${id}`, {
+      const payload = {
+        name,
+        email,
+        phone,
+        addresses,
+        preferredName: cleanPreferred,
+        ...extraFields,
+      };
+      const res = await fetch(`${API_URL}/users/${encodeURIComponent(id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, addresses, preferredName: cleanPreferred }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {
-        const mergedUser = { ...currentUser, ...data.user, preferredName: cleanPreferred };
+        const mergedUser = { ...currentUser, ...data.user, preferredName: cleanPreferred, ...extraFields };
         setCurrentUser(mergedUser);
         localStorage.setItem(USER_SESSION_KEY, JSON.stringify(mergedUser));
         setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? mergedUser : u)));
@@ -365,7 +380,7 @@ export function AppProvider({ children }) {
     } catch (err) {
       console.error("Lỗi cập nhật hồ sơ:", err);
       const cleanPreferred = preferredName !== undefined ? preferredName.trim() : (currentUser?.preferredName || "");
-      const updated = { ...currentUser, name, email, phone, addresses, preferredName: cleanPreferred };
+      const updated = { ...currentUser, name, email, phone, addresses, preferredName: cleanPreferred, ...extraFields };
       setCurrentUser(updated);
       localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
       setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? updated : u)));

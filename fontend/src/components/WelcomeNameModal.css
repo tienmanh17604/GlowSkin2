@@ -1,4 +1,10 @@
-/* Onboarding Survey Wizard - Apple-grade / Aesthetic UI matching user screenshots */
+/* Global Lock when Onboarding Modal is active */
+html.onboarding-scroll-locked,
+body.onboarding-scroll-locked {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
 
 .onboarding-modal-overlay {
   position: fixed;
@@ -11,6 +17,8 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
+  overscroll-behavior: contain;
+  touch-action: none;
   animation: onboardingFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -39,6 +47,7 @@
   padding: 24px 28px 28px;
   box-sizing: border-box;
   overflow: hidden;
+  overscroll-behavior: contain;
   animation: onboardingSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -291,9 +300,9 @@
 }
 
 .onboarding-choice-card.selected {
-  background: #ffffff;
-  border-color: #111827;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  background: #b5bbf5;
+  border-color: #a3a9ee;
+  box-shadow: 0 4px 16px rgba(91, 96, 221, 0.16);
 }
 
 .onboarding-choice-label {
@@ -310,8 +319,8 @@
 
 /* Radio circle */
 .onboarding-radio-circle {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid #d1d5db;
   box-sizing: border-box;
@@ -323,14 +332,14 @@
 }
 
 .onboarding-choice-card.selected .onboarding-radio-circle {
-  border-color: #111827;
-  background: #111827;
+  border-color: #5b60dd;
+  background: #5b60dd;
 }
 
 .onboarding-choice-card.selected .onboarding-radio-circle::after {
   content: "";
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #ffffff;
 }
@@ -344,6 +353,28 @@
   margin: 10px 0 20px;
   overflow: hidden;
   user-select: none;
+}
+
+/* Gradient Fade Masks for Apple iOS aesthetic */
+.onboarding-date-wheel-container::before,
+.onboarding-date-wheel-container::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 75px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.onboarding-date-wheel-container::before {
+  top: 0;
+  background: linear-gradient(to bottom, #ffffff 25%, rgba(255, 255, 255, 0) 100%);
+}
+
+.onboarding-date-wheel-container::after {
+  bottom: 0;
+  background: linear-gradient(to top, #ffffff 25%, rgba(255, 255, 255, 0) 100%);
 }
 
 /* Center Highlight Pill */
@@ -369,7 +400,8 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 .onboarding-wheel-col::-webkit-scrollbar {
@@ -377,7 +409,7 @@
 }
 
 .onboarding-wheel-list {
-  padding: 106px 0; /* Centers active element */
+  padding: 106px 0; /* Centers active element in 260px container: (260 - 48) / 2 = 106px */
 }
 
 .onboarding-wheel-item {
@@ -386,11 +418,14 @@
   align-items: center;
   justify-content: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 18px;
+  font-size: 17px;
   color: #9ca3af;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: color 0.15s ease, font-size 0.15s ease;
+  scroll-snap-align: center;
+  scroll-snap-stop: normal;
+  box-sizing: border-box;
 }
 
 .onboarding-wheel-item:hover {
@@ -398,7 +433,7 @@
 }
 
 .onboarding-wheel-item.active {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: #111827;
 }
@@ -446,6 +481,8 @@
   flex-direction: column;
   gap: 10px;
   padding-right: 4px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .onboarding-cities-scroll::-webkit-scrollbar {
@@ -494,20 +531,31 @@
 .onboarding-scrollable-survey {
   flex-grow: 1;
   overflow-y: auto;
-  max-height: 400px;
-  padding-right: 6px;
+  max-height: 440px;
+  padding-right: 8px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .onboarding-scrollable-survey::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
+}
+
+.onboarding-scrollable-survey::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 4px;
 }
 
 .onboarding-scrollable-survey::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
+  background: #d1d5db;
   border-radius: 4px;
+}
+
+.onboarding-scrollable-survey::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 .onboarding-survey-section {
@@ -522,6 +570,244 @@
   line-height: 1.35;
   color: #111827;
   margin: 0 0 16px 0;
+}
+
+.onboarding-survey-question-main {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.onboarding-survey-question-main.sensitivity-question {
+  margin-top: 30px;
+}
+
+/* Options List & Choice Cards (Step 4 & Step 5) */
+.onboarding-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.onboarding-choice-card {
+  width: 100%;
+  padding: 15px 18px;
+  background: #f8f9fb;
+  border: 1.5px solid #e7e9ee;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.onboarding-choice-card:hover {
+  background: #f1f3fa;
+  border-color: #cbd2ee;
+  transform: translateY(-1px);
+}
+
+.onboarding-choice-card.selected {
+  background: #b5bbf5;
+  border-color: #949ef0;
+  box-shadow: 0 4px 14px rgba(91, 96, 221, 0.16);
+}
+
+.onboarding-choice-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.35;
+}
+
+.onboarding-choice-card.selected .onboarding-choice-label {
+  color: #161828;
+  font-weight: 600;
+}
+
+.onboarding-radio-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #cbd0dd;
+  background: transparent;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.onboarding-choice-card.selected .onboarding-radio-circle,
+.onboarding-skin-type-card.selected .onboarding-radio-circle {
+  background: #5b60dd;
+  border-color: #5b60dd;
+}
+
+.onboarding-choice-card.selected .onboarding-radio-circle::after,
+.onboarding-skin-type-card.selected .onboarding-radio-circle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ================= STEP 5: SKIN TYPE CARDS ================= */
+.onboarding-skin-type-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.onboarding-skin-type-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #ececf1;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding-skin-type-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+  border-color: #cbd2ee;
+}
+
+.onboarding-skin-type-card.selected {
+  background: #b5bbf5;
+  border-color: #949ef0;
+  box-shadow: 0 8px 24px rgba(91, 96, 221, 0.22);
+}
+
+.onboarding-skin-visual-wrapper {
+  position: relative;
+  width: 100%;
+  height: 195px;
+  background: #fbf5ef;
+  overflow: hidden;
+}
+
+.onboarding-skin-base-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+}
+
+.onboarding-skin-scan-badge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  z-index: 4;
+}
+
+.onboarding-skin-scan-badge svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Face Overlays */
+.onboarding-skin-mask-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.onboarding-skin-dry-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.onboarding-dry-texture-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.onboarding-skin-oily-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 42%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 28%),
+    radial-gradient(ellipse at 35% 58%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 32%),
+    radial-gradient(ellipse at 65% 58%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 32%);
+  mix-blend-mode: overlay;
+}
+
+.skin-type-dry {
+  filter: contrast(1.1) brightness(0.96) saturate(0.85);
+}
+
+.skin-type-normal {
+  filter: contrast(1.02) brightness(1.02);
+}
+
+.skin-type-combination_oily_cheeks,
+.skin-type-combination_tzone {
+  filter: contrast(1.04);
+}
+
+.skin-type-oily {
+  filter: contrast(1.08) brightness(1.05);
+}
+
+.onboarding-skin-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 18px;
+  gap: 12px;
+  background: #ffffff;
+  transition: background 0.2s ease;
+}
+
+.onboarding-skin-type-card.selected .onboarding-skin-card-bottom {
+  background: #b5bbf5;
+}
+
+.onboarding-skin-card-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.35;
+  flex: 1;
+}
+
+.onboarding-skin-type-card.selected .onboarding-skin-card-label {
+  color: #161828;
+  font-weight: 600;
 }
 
 /* ================= BOTTOM ACTION BUTTON ================= */
@@ -575,3 +861,728 @@
 .onboarding-primary-btn.with-arrow:hover:not(:disabled) svg {
   transform: translateX(4px);
 }
+
+.sensitivity-step-question {
+  margin-bottom: 24px;
+  line-height: 1.4;
+  font-size: 19px;
+  color: #111827;
+}
+
+.onboarding-loading-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.onboarding-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: onboardingSpin 0.7s linear infinite;
+}
+
+@keyframes onboardingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================= SPECIAL FULL SCREEN MODAL MODES ================= */
+.onboarding-modal-card.camera-mode {
+  padding: 0;
+  background: #000000;
+  border-radius: 32px;
+  overflow: hidden;
+  height: 680px;
+  max-height: 94vh;
+}
+
+.onboarding-modal-card.products-mode {
+  min-height: 640px;
+  max-height: 92vh;
+  background: #ffffff !important;
+  color: #111827;
+}
+
+/* ================= STEP 6: VIDEO GUIDE VIEW ================= */
+.onboarding-video-guide-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  overflow: hidden;
+}
+
+.onboarding-video-guide-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.onboarding-guide-video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.onboarding-video-guide-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  padding: 22px 24px 26px;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.28);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.onboarding-guide-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.onboarding-guide-dot {
+  width: 26px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.onboarding-guide-dot.active {
+  background: #111827;
+  width: 36px;
+}
+
+.onboarding-video-guide-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+  line-height: 1.4;
+  margin: 0 0 20px 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================= STEP 7: 3-ANGLE CAMERA SCANNER ================= */
+.onboarding-camera-view {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #000000;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.onboarding-camera-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  z-index: 20;
+}
+
+.onboarding-camera-top-bar.video-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.onboarding-camera-nav-btn {
+  width: 38px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.onboarding-camera-nav-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.onboarding-camera-nav-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.onboarding-camera-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.onboarding-camera-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #0d0e12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-camera-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.onboarding-camera-feed.mirror-cam {
+  transform: scaleX(-1);
+}
+
+.onboarding-face-guide-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.onboarding-face-guide-svg {
+  width: 90%;
+  height: 90%;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.onboarding-camera-error-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.onboarding-upload-trigger-btn {
+  margin-top: 14px;
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #111827;
+  border: none;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 3-Angle Face Slots */
+.onboarding-camera-slots-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 20px 8px;
+  background: #000000;
+  z-index: 10;
+}
+
+.onboarding-face-slot {
+  width: 66px;
+  height: 66px;
+  border-radius: 18px;
+  background: #23252c;
+  border: 2px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.onboarding-face-slot:hover {
+  background: #2d3038;
+}
+
+.onboarding-face-slot.active {
+  border-color: #ffffff;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+  background: #2d3038;
+}
+
+.onboarding-slot-thumb-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.onboarding-slot-thumb-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.onboarding-slot-del-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  background: #ef4444;
+  color: #ffffff;
+  border: 1.5px solid #ffffff;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.onboarding-slot-placeholder {
+  width: 68%;
+  height: 68%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.onboarding-slot-placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Camera Controls Bar */
+.onboarding-camera-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 24px 18px;
+  background: #000000;
+  z-index: 10;
+}
+
+.onboarding-shutter-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: transparent;
+  border: 4px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.12s ease;
+}
+
+.onboarding-shutter-btn:active {
+  transform: scale(0.92);
+}
+
+.onboarding-shutter-inner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: block;
+}
+
+.onboarding-camera-side-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #23252c;
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.onboarding-camera-side-btn:hover {
+  background: #32353f;
+  transform: scale(1.05);
+}
+
+.onboarding-camera-side-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.onboarding-camera-continue-bar {
+  padding: 0 24px 18px;
+  background: #000000;
+  z-index: 10;
+}
+
+.onboarding-camera-continue-btn {
+  width: 100%;
+  height: 48px;
+  background: #ffffff;
+  color: #111827;
+  border: none;
+  border-radius: 9999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.onboarding-camera-continue-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.onboarding-header-simple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.onboarding-header-simple .onboarding-back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #111827;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.onboarding-header-simple .onboarding-back-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #111827;
+}
+
+.onboarding-header-simple .onboarding-back-btn:hover {
+  background: #e5e7eb;
+}
+
+.onboarding-title-simple {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.onboarding-trending-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #f43f5e;
+  margin-bottom: 14px;
+}
+
+.onboarding-trending-tag svg {
+  width: 16px;
+  height: 16px;
+}
+
+.onboarding-products-scroll-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.onboarding-products-scroll-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.onboarding-products-scroll-list::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.onboarding-product-card-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #f1f2f6;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.onboarding-product-card-item:hover {
+  background: #fafafc;
+  border-color: #e5e7eb;
+}
+
+.onboarding-product-item-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #f3f4f6;
+  flex-shrink: 0;
+}
+
+.onboarding-product-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.onboarding-product-item-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.onboarding-product-item-brand {
+  font-weight: 750;
+  letter-spacing: -0.2px;
+}
+
+.onboarding-product-item-meta {
+  font-size: 12.5px;
+  color: #6b7280;
+  margin-top: 3px;
+}
+
+.onboarding-product-toggle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #151421;
+  color: #ffffff;
+  border: none;
+  font-size: 19px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.onboarding-product-toggle-btn:hover {
+  transform: scale(1.08);
+}
+
+.onboarding-product-toggle-btn.selected {
+  background: #10b981;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* HIGH-TECH AI ANALYZING OVERLAY */
+.onboarding-ai-analyzing-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 13, 22, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeInAiOverlay 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInAiOverlay {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.onboarding-ai-card {
+  width: 100%;
+  max-width: 440px;
+  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12), rgba(18, 19, 32, 0.96) 70%);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.1);
+}
+
+.onboarding-ai-radar-box {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.onboarding-ai-radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(212, 175, 55, 0.35) 60deg, transparent 70deg);
+  animation: aiRadarRotate 2s linear infinite;
+}
+
+@keyframes aiRadarRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.onboarding-ai-radar-sparkle {
+  position: relative;
+  z-index: 2;
+  font-size: 28px;
+  animation: aiSparklePulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes aiSparklePulse {
+  from { transform: scale(0.9); opacity: 0.8; }
+  to { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.8)); }
+}
+
+.onboarding-ai-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.onboarding-ai-subtitle {
+  margin: 0 0 20px;
+  font-size: 13.5px;
+  color: #9ca3af;
+  line-height: 1.45;
+}
+
+.onboarding-ai-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: #fef08a;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.onboarding-ai-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(254, 240, 138, 0.3);
+  border-top-color: #fef08a;
+  border-radius: 50%;
+  animation: aiSpinnerSpin 0.7s linear infinite;
+}
+
+@keyframes aiSpinnerSpin {
+  to { transform: rotate(360deg); }
+}
+
+.onboarding-ai-angle-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.onboarding-ai-angle-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.onboarding-ai-angle-thumb img {
+  width: 58px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1.5px solid rgba(212, 175, 55, 0.6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background: #1e1e2d;
+}
+
+.onboarding-ai-angle-thumb span {
+  font-size: 11px;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.onboarding-ai-medical-badge {
+  font-size: 11.5px;
+  color: #9ca3af;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+

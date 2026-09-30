@@ -318,12 +318,14 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
   return cachedMedicalContext;
 }
 
-// Ưu tiên gemini-2.5-flash: Tốc độ phản hồi cực nhanh (~1.1 giây)
+// Ưu tiên gemini-3.5-flash: Tốc độ phản hồi cực nhanh & ổn định
 const CANDIDATE_MODELS = [
-  "gemini-2.5-flash",
   "gemini-3.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-flash-latest",
   "gemini-3.6-flash",
-  "gemini-flash-latest"
+  "gemini-3.7-flash",
+  "gemini-2.5-flash"
 ];
 
 async function callOpenAI(messages) {
@@ -471,6 +473,101 @@ export async function analyzeSkinImage(imageDataUrl) {
   const content = await callOpenAI(messages);
   return { content, isDemo: false };
 }
+
+export async function analyzeMultiAngleSkinImages({
+  frontImage,
+  leftImage,
+  rightImage,
+  surveyData = {},
+  selectedProducts = []
+}) {
+  // 1. Tối ưu nén cả 3 ảnh trong suốt/jpeg để tối ưu tốc độ và không tràn bộ nhớ
+  const [optFront, optLeft, optRight, medicalContext] = await Promise.all([
+    frontImage ? compressImageIfNeeded(frontImage, 720, 0.72) : Promise.resolve(null),
+    leftImage ? compressImageIfNeeded(leftImage, 720, 0.72) : Promise.resolve(null),
+    rightImage ? compressImageIfNeeded(rightImage, 720, 0.72) : Promise.resolve(null),
+    fetchMedicalContext(surveyData?.skinType ? `mụn trứng cá ${surveyData.skinType}` : "mụn trứng cá viêm da")
+  ]);
+
+  const optimizedImages = {
+    front: optFront || frontImage || null,
+    left: optLeft || leftImage || null,
+    right: optRight || rightImage || null
+  };
+
+  if (!hasApiKey()) {
+    await new Promise((r) => setTimeout(r, 800));
+    return {
+      content: DEMO_ANALYSIS,
+      isDemo: true,
+      optimizedImages
+    };
+  }
+
+  // 2. Xây dựng prompt chuyên biệt cho 3 góc chụp
+  let systemPromptText = SYSTEM_PROMPT;
+  if (medicalContext) {
+    systemPromptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU:\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+  }
+
+  let promptInstruction = `Bạn đang nhận được các bức ảnh chụp khuôn mặt thực tế của người dùng từ 3 góc khác nhau:\n`;
+  if (optFront) promptInstruction += `- ẢNH 1 (Chính diện): Quan sát trán, mắt, mũi, nhân trung, môi và cằm.\n`;
+  if (optLeft) promptInstruction += `- ẢNH 2 (Góc nghiêng trái): Quan sát má trái, quai hàm trái, thái dương trái.\n`;
+  if (optRight) promptInstruction += `- ẢNH 3 (Góc nghiêng phải): Quan sát má phải, quai hàm phải, thái dương phải.\n`;
+
+  promptInstruction += `\nThông tin người dùng khai báo trong khảo sát:
+- Tự nhận định loại da: ${surveyData.skinType || "Da hỗn hợp"}
+- Mức độ nhạy cảm: ${surveyData.skinSensitivity || "Bình thường"}
+- Giới tính: ${surveyData.gender || "Không rõ"}
+- Năm sinh: ${surveyData.birthDate || "Không rõ"}
+- Ngân sách: ${surveyData.budget || "Phù hợp"}
+`;
+
+  if (selectedProducts && selectedProducts.length > 0) {
+    promptInstruction += `\nCác sản phẩm skincare người dùng đang sử dụng hiện tại:
+${selectedProducts.map((p, idx) => `${idx + 1}. [${p.brand || "Brand"}] ${p.name} - ${p.category || ""}`).join("\n")}
+-> Hãy đối chiếu và nhận xét chi tiết trong phần Routine & Ingredients xem những sản phẩm này CÓ THỰC SỰ PHÙ HỢP với các khuyết điểm quan sát được trên 3 góc ảnh không.`;
+  }
+
+  promptInstruction += `\n\nHãy quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra chẩn đoán Y khoa trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
+
+  const userContent = [{ type: "text", text: promptInstruction }];
+  if (optFront) {
+    userContent.push({ type: "text", text: "📸 ẢNH 1: GÓC CHÍNH DIỆN" });
+    userContent.push({ type: "image_url", image_url: { url: optFront } });
+  }
+  if (optLeft) {
+    userContent.push({ type: "text", text: "📸 ẢNH 2: GÓC NGHIÊNG TRÁI" });
+    userContent.push({ type: "image_url", image_url: { url: optLeft } });
+  }
+  if (optRight) {
+    userContent.push({ type: "text", text: "📸 ẢNH 3: GÓC NGHIÊNG PHẢI" });
+    userContent.push({ type: "image_url", image_url: { url: optRight } });
+  }
+
+  const apiMessages = [
+    { role: "system", content: systemPromptText },
+    { role: "user", content: userContent }
+  ];
+
+  try {
+    const content = await callOpenAI(apiMessages);
+    return {
+      content,
+      isDemo: false,
+      optimizedImages
+    };
+  } catch (err) {
+    console.warn("Lỗi gọi Gemini AI Vision 3 góc, kích hoạt phân tích dự phòng:", err.message);
+    return {
+      content: DEMO_ANALYSIS,
+      isDemo: true,
+      optimizedImages,
+      error: err.message
+    };
+  }
+}
+
 
 export async function sendFollowUp(chatHistory) {
   if (!hasApiKey()) {

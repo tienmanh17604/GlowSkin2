@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
@@ -189,11 +189,18 @@ export default function YourSkin() {
 
   // Direct Photo Upload & Camera Workflow States
   const [currentImage, setCurrentImage] = useState(() => latestScan?.image || null);
+  const [selectedAngle, setSelectedAngle] = useState("front");
   const [cropModalImage, setCropModalImage] = useState(null); // Ảnh chờ người dùng cắt và căn chỉnh
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAnalyzed, setIsAnalyzed] = useState(() => !!latestScan?.zones?.length);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    if (latestScan?.image && !currentImage) {
+      setCurrentImage(latestScan.image);
+    }
+  }, [latestScan]);
 
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
@@ -262,6 +269,61 @@ export default function YourSkin() {
   const scan = latestScan;
   const displayScan = scan || DEFAULT_DEMO_SCAN;
   const displayImage = currentImage || displayScan?.image;
+
+  const navigate = useNavigate();
+  const [resultViewMode, setResultViewMode] = useState("preview"); // "preview" (matching Screenshot 3) | "advanced_2d"
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [currentAngleIndex, setCurrentAngleIndex] = useState(0);
+  const [isProductScanOpen, setIsProductScanOpen] = useState(false);
+  const [productScanSearch, setProductScanSearch] = useState("");
+
+  const angleImages = useMemo(() => {
+    const defaultFace = currentImage || displayScan?.image || "/images/skin-types/model_base.jpg";
+    const angles = displayScan?.faceAngles || {};
+    return [
+      { id: "front", label: "Chính diện", url: angles.front || defaultFace },
+      { id: "left", label: "Má trái", url: angles.left || angles.front || defaultFace },
+      { id: "right", label: "Má phải", url: angles.right || angles.front || defaultFace },
+    ];
+  }, [displayScan, currentImage]);
+
+  const skinTypeTitle = useMemo(() => {
+    if (displayScan?.skinType) return displayScan.skinType;
+    const sum = displayScan?.summary?.find((s) => s.en?.includes("Skin Type") || s.title?.toLowerCase().includes("da "));
+    if (sum?.title) return sum.title;
+    return "Da hỗn hợp thiên dầu";
+  }, [displayScan]);
+
+  const sensitivityTitle = useMemo(() => {
+    if (displayScan?.sensitivity) return displayScan.sensitivity;
+    const sum = displayScan?.summary?.find((s) => s.en?.includes("Sensitivity") || s.title?.toLowerCase().includes("nhạy cảm"));
+    if (sum?.title) {
+      return sum.title.toLowerCase().includes("thấp") || sum.title.toLowerCase().includes("không") ? "Không" : "Có";
+    }
+    return "Có";
+  }, [displayScan]);
+
+  const diagnosticMetrics = useMemo(() => [
+    { id: "mun_viem", title: "Mụn viêm", score: "2/10", dotColor: "#f43f5e" },
+    { id: "mun_khong_viem", title: "Mụn không viêm", score: "4/10", dotColor: "#eab308" },
+    { id: "soi_ba_nhon", title: "Sợi bã nhờn", score: "6/10", dotColor: "#8b5cf6" },
+    { id: "seo", title: "Sẹo", score: "1/10", dotColor: "#ef4444" },
+    { id: "sac_to_da", title: "Sắc tố da", score: "3/10", dotColor: "#f97316" },
+    { id: "lo_chan_long", title: "Lỗ chân lông", score: "5/10", dotColor: "#10b981" }
+  ], []);
+
+  const sampleProductsList = useMemo(() => {
+    const base = (products && products.length > 0) ? products : [
+      { id: "p1", name: "SUPPLE PREPARATION FACIAL TONER", brand: "DEAR, KLAIRS", category: "Toner", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&q=80&auto=format&fit=crop" },
+      { id: "p2", name: "SEBIACLEAR GEL MOUSSANT", brand: "SVR", category: "Sữa rửa mặt", image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&q=80&auto=format&fit=crop" },
+      { id: "p3", name: "WINTER MELON MICELLAR WATER", brand: "THE COCOON", category: "Nước tẩy trang", image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=300&q=80&auto=format&fit=crop" },
+      { id: "p4", name: "MICELLAR WATER FOR OILY SKIN", brand: "GARNIER", category: "Nước tẩy trang", image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=300&q=80&auto=format&fit=crop" },
+      { id: "p5", name: "H9 HYALURONIC AMPOULE CLEANSING WATER", brand: "JMSOLUTION", category: "Nước tẩy trang", image: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?w=300&q=80&auto=format&fit=crop" }
+    ];
+    if (!productScanSearch.trim()) return base;
+    const q = productScanSearch.toLowerCase();
+    return base.filter(p => (p.name || "").toLowerCase().includes(q) || (p.brand || "").toLowerCase().includes(q));
+  }, [products, productScanSearch]);
 
   const rawZones = displayScan?.zones && displayScan.zones.length ? displayScan.zones : DEFAULT_DEMO_SCAN.zones;
   const zones = useMemo(() => {
@@ -767,13 +829,178 @@ export default function YourSkin() {
             </div>
           </div>
         ) : (
-          /* STATE 2: 2D TOÀN MÀN HÌNH SKIN ANALYSIS (KHÔNG ĐỂ TRONG KHUNG ẢNH) */
-          <div
-            ref={stageContainerRef}
-            className={`skin-2d-fullscreen-stage ${isFullscreen ? "is-fullscreen-mode" : ""}`}
-          >
-            {/* TOP 2D HUD TOOLBAR */}
-            <div className="skin-2d-hud-toolbar">
+          /* STATE 2: SKIN ANALYSIS RESULT SCREEN */
+          <div className="skin-result-screen-wrapper">
+            {/* View Mode Switcher Tabs */}
+            <div className="skin-result-view-tabs">
+              <button
+                type="button"
+                className={`skin-result-view-tab ${resultViewMode === "preview" ? "active" : ""}`}
+                onClick={() => setResultViewMode("preview")}
+              >
+                📱 Kết quả chẩn đoán (Tổng quan)
+              </button>
+              <button
+                type="button"
+                className={`skin-result-view-tab ${resultViewMode === "advanced_2d" ? "active" : ""}`}
+                onClick={() => setResultViewMode("advanced_2d")}
+              >
+                🔬 Sơ đồ 2D chuyên sâu (5 vùng da)
+              </button>
+            </div>
+
+            {resultViewMode === "preview" ? (
+              /* ================= SCREENSHOT 3 VIEW ================= */
+              <div className="skin-result-phone-frame">
+                {/* TOP PHOTO CAROUSEL */}
+                <div className="skin-result-photo-section">
+                  <img
+                    src={angleImages[currentAngleIndex]?.url}
+                    alt={angleImages[currentAngleIndex]?.label || "Ảnh phân tích"}
+                    className="skin-result-face-img"
+                  />
+
+                  {/* Top Bar with Pagination Dots & Close */}
+                  <div className="skin-result-photo-top-bar">
+                    <div className="skin-result-pagination-dots">
+                      {angleImages.map((ang, idx) => (
+                        <div
+                          key={ang.id}
+                          className={`skin-result-dot ${currentAngleIndex === idx ? "active" : ""}`}
+                          onClick={() => setCurrentAngleIndex(idx)}
+                          title={ang.label}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="skin-result-top-right-group">
+                      <div className="skin-result-counter-pill">
+                        {currentAngleIndex + 1}/{angleImages.length}
+                      </div>
+                      <button
+                        type="button"
+                        className="skin-result-close-btn"
+                        onClick={() => navigate("/")}
+                        title="Đóng / Về trang chủ"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Left & Right side navigation arrows */}
+                  <button
+                    type="button"
+                    className="skin-result-nav-arrow left"
+                    onClick={() => setCurrentAngleIndex((prev) => (prev - 1 + angleImages.length) % angleImages.length)}
+                    aria-label="Góc trước"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="skin-result-nav-arrow right"
+                    onClick={() => setCurrentAngleIndex((prev) => (prev + 1) % angleImages.length)}
+                    aria-label="Góc tiếp theo"
+                  >
+                    ›
+                  </button>
+
+                  {/* Bottom Right Floating Button: Quét sản phẩm */}
+                  <button
+                    type="button"
+                    className="skin-result-scan-product-btn"
+                    onClick={() => setIsProductScanOpen(true)}
+                  >
+                    <span>Quét sản phẩm</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                      <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                      <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                      <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* BOTTOM SHEET CARD */}
+                <div className="skin-result-card-bottom">
+                  {/* Dark Header Strip */}
+                  <div className="skin-result-dark-header">
+                    <div className="skin-result-header-col">
+                      <div className="skin-result-header-label">Loại da</div>
+                      <div className="skin-result-header-value">{skinTypeTitle}</div>
+                    </div>
+                    <div className="skin-result-header-col">
+                      <div className="skin-result-header-label">Nhạy cảm</div>
+                      <div className="skin-result-header-value">{sensitivityTitle}</div>
+                    </div>
+                  </div>
+
+                  {/* 6 Diagnostic Metrics Grid */}
+                  <div className="skin-result-metrics-grid">
+                    {diagnosticMetrics.map((metric) => (
+                      <div key={metric.id} className="skin-result-metric-card">
+                        <div className="skin-result-metric-title">{metric.title}</div>
+                        <div className="skin-result-metric-bottom">
+                          <div className="skin-result-metric-score">
+                            {isUnlocked ? (
+                              <span>{metric.score}</span>
+                            ) : (
+                              <>
+                                <span className="lock-icon">🔒</span>/10
+                              </>
+                            )}
+                          </div>
+                          <span
+                            className="skin-result-metric-dot"
+                            style={{ backgroundColor: metric.dotColor }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Promotion Offer Banner */}
+                  <div className="skin-result-offer-banner">
+                    {isUnlocked ? (
+                      <p className="skin-result-offer-text" style={{ color: "#059669" }}>
+                        ✨ Đã mở khóa chu trình chăm sóc da phù hợp riêng bạn!
+                      </p>
+                    ) : (
+                      <p className="skin-result-offer-text">
+                        Tặng kèm 1 chu trình chăm sóc da phù hợp riêng bạn khi mở khóa
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Dual Action Buttons */}
+                  <div className="skin-result-actions-row">
+                    <button
+                      type="button"
+                      className="skin-result-btn-unlock"
+                      onClick={() => setIsUnlocked(true)}
+                    >
+                      {isUnlocked ? "✓ Đã mở khóa" : "Mở khóa (19k)"}
+                    </button>
+                    <button
+                      type="button"
+                      className="skin-result-btn-sub"
+                      onClick={() => setIsUnlocked(true)}
+                    >
+                      Đăng ký dài hạn
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* ================= 2D ADVANCED DIAGRAM VIEW ================= */
+              <div
+                ref={stageContainerRef}
+                className={`skin-2d-fullscreen-stage ${isFullscreen ? "is-fullscreen-mode" : ""}`}
+              >
+                {/* TOP 2D HUD TOOLBAR */}
+                <div className="skin-2d-hud-toolbar">
               <div className="skin-2d-hud-actions">
                 <button
                   type="button"
@@ -840,6 +1067,52 @@ export default function YourSkin() {
 
               {/* CENTER: 2D FACE CANVAS CHÂN DUNG 4K THEO ẢNH MẪU */}
               <div className="skin-2d-face-canvas">
+                {/* ANGLE SWITCHER TABS (CHÍNH DIỆN | GÓC TRÁI | GÓC PHẢI) */}
+                {displayScan?.faceAngles && (displayScan.faceAngles.front || displayScan.faceAngles.left || displayScan.faceAngles.right) && (
+                  <div className="skin-face-angle-tabs-bar">
+                    <span className="skin-face-angle-tabs-title">📐 Góc ảnh AI:</span>
+                    {displayScan.faceAngles.front && (
+                      <button
+                        type="button"
+                        className={`skin-face-angle-tab ${selectedAngle === "front" ? "active" : ""}`}
+                        onClick={() => {
+                          setSelectedAngle("front");
+                          setCurrentImage(displayScan.faceAngles.front);
+                        }}
+                      >
+                        <span className="skin-angle-tab-icon">👤</span>
+                        <span className="skin-angle-tab-text">Chính diện</span>
+                      </button>
+                    )}
+                    {displayScan.faceAngles.left && (
+                      <button
+                        type="button"
+                        className={`skin-face-angle-tab ${selectedAngle === "left" ? "active" : ""}`}
+                        onClick={() => {
+                          setSelectedAngle("left");
+                          setCurrentImage(displayScan.faceAngles.left);
+                        }}
+                      >
+                        <span className="skin-angle-tab-icon">↰</span>
+                        <span className="skin-angle-tab-text">Góc trái</span>
+                      </button>
+                    )}
+                    {displayScan.faceAngles.right && (
+                      <button
+                        type="button"
+                        className={`skin-face-angle-tab ${selectedAngle === "right" ? "active" : ""}`}
+                        onClick={() => {
+                          setSelectedAngle("right");
+                          setCurrentImage(displayScan.faceAngles.right);
+                        }}
+                      >
+                        <span className="skin-angle-tab-icon">↱</span>
+                        <span className="skin-angle-tab-text">Góc phải</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 <div className="skin-face-container">
                   {/* CHÂN DUNG ĐÃ ĐƯỢC AI MEDIA PIPE BÓC TÁCH XÓA NỀN 100% TRONG SUỐT */}
                   <img
@@ -993,10 +1266,12 @@ export default function YourSkin() {
             </div>
           </div>
         )}
+      </div>
+    )}
 
         {/* SCORE & MEDICAL STATUS SUMMARY BANNER - CHỈ HIỂN THỊ KHI ĐÃ HOÀN TẤT */}
-        {displayScan && isAnalyzed && !isAnalyzing && (
-          <div className="gold-report-container" style={{ gap: "0", marginBottom: "40px" }}>
+        {displayScan && isAnalyzed && !isAnalyzing && (resultViewMode === "advanced_2d" || isUnlocked) && (
+          <div className="gold-report-container" style={{ gap: "24px", marginBottom: "40px" }}>
             <div className="gold-report-summary-card">
               <div className="gold-score-badge-circle">
                 <span className="gold-score-number">{displayScan.score || 72}</span>
@@ -1004,7 +1279,7 @@ export default function YourSkin() {
               </div>
               <div className="gold-summary-info">
                 <div className="gold-badge" style={{ display: "inline-block", marginBottom: "6px" }}>
-                  {displayScan.scoreLabel || "Phân tích Y Khoa & AI Vision"}
+                  {displayScan.scoreLabel || "Phân tích Y Khoa & AI Vision (3 Góc Mặt)"}
                 </div>
                 <h3 className="gold-report-heading">Báo Cáo Tình Trạng Da Toàn Diện</h3>
                 <div className="gold-summary-chips">
@@ -1020,6 +1295,85 @@ export default function YourSkin() {
                 </div>
               </div>
             </div>
+
+            {/* CLINICAL SECTIONS: OVERVIEW, ROUTINE, INGREDIENTS, WARNINGS */}
+            <div className="gold-clinical-grid">
+              {(displayScan.aiOverview || displayScan.overview) && (
+                <div className="gold-clinical-card">
+                  <div className="gold-clinical-card-header">
+                    <span className="gold-clinical-card-icon">🔬</span>
+                    <h4 className="gold-clinical-card-title">Chẩn Đoán Y Khoa 3 Góc Mặt</h4>
+                  </div>
+                  <div className="gold-clinical-card-body">
+                    {formatChatMessage(displayScan.aiOverview || displayScan.overview)}
+                  </div>
+                </div>
+              )}
+
+              {displayScan.routine && (
+                <div className="gold-clinical-card">
+                  <div className="gold-clinical-card-header">
+                    <span className="gold-clinical-card-icon">☀️🌙</span>
+                    <h4 className="gold-clinical-card-title">Lộ Trình Routine Chuẩn Chuyên Khoa</h4>
+                  </div>
+                  <div className="gold-clinical-card-body">
+                    {formatChatMessage(displayScan.routine)}
+                  </div>
+                </div>
+              )}
+
+              {displayScan.ingredients && (
+                <div className="gold-clinical-card">
+                  <div className="gold-clinical-card-header">
+                    <span className="gold-clinical-card-icon">💧</span>
+                    <h4 className="gold-clinical-card-title">Hoạt Chất Khuyên Dùng &amp; Nên Tránh</h4>
+                  </div>
+                  <div className="gold-clinical-card-body">
+                    {formatChatMessage(displayScan.ingredients)}
+                  </div>
+                </div>
+              )}
+
+              {displayScan.warning && (
+                <div className="gold-clinical-card warning">
+                  <div className="gold-clinical-card-header">
+                    <span className="gold-clinical-card-icon">⚠️</span>
+                    <h4 className="gold-clinical-card-title">Lưu Ý Kích Ứng &amp; Chống Chỉ Định</h4>
+                  </div>
+                  <div className="gold-clinical-card-body">
+                    {formatChatMessage(displayScan.warning)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SẢN PHẨM ĐANG DÙNG CỦA BẠN (TỪ KHẢO SÁT 3 GÓC) */}
+            {displayScan.usedProducts && displayScan.usedProducts.length > 0 && (
+              <div className="gold-used-products-section">
+                <div className="gold-used-products-header">
+                  <div className="gold-badge">🧴 KHẢO SÁT SẢN PHẨM HIỆN TẠI</div>
+                  <h4 className="gold-used-products-title">Sản phẩm bạn đang sử dụng &amp; Đánh giá tương thích</h4>
+                  <p className="gold-used-products-subtitle">
+                    Hệ thống AI đối chiếu từng sản phẩm với các khuyết điểm quan sát được trên 3 góc ảnh mặt của bạn.
+                  </p>
+                </div>
+                <div className="gold-used-products-grid">
+                  {displayScan.usedProducts.map((prod) => (
+                    <div key={prod.id} className="gold-used-product-item">
+                      <img src={prod.image} alt={prod.name} className="gold-used-prod-img" />
+                      <div className="gold-used-prod-info">
+                        <div className="gold-used-prod-brand">{prod.brand}</div>
+                        <div className="gold-used-prod-name">{prod.name}</div>
+                        <div className="gold-used-prod-meta">{prod.category} • {prod.volume}</div>
+                        <div className="gold-used-prod-tag">
+                          <span>✓ Đang có trong Routine của bạn</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -1296,6 +1650,65 @@ export default function YourSkin() {
                 </button>
               </form>
 
+            </div>
+          </div>
+        )}
+
+        {/* QUICK PRODUCT COMPATIBILITY SCANNER MODAL */}
+        {isProductScanOpen && (
+          <div className="product-scan-modal-overlay" onClick={() => setIsProductScanOpen(false)}>
+            <div className="product-scan-modal-card" onClick={(e) => e.stopPropagation()}>
+              <div className="product-scan-header">
+                <h3 className="product-scan-title">Quét &amp; Kiểm tra sản phẩm</h3>
+                <button
+                  type="button"
+                  className="product-scan-close-btn"
+                  onClick={() => setIsProductScanOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="product-scan-body">
+                <div className="product-scan-search-wrap">
+                  <svg className="product-scan-search-icon" viewBox="0 0 24 24" fill="none" strokeWidth="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="text"
+                    className="product-scan-search-input"
+                    placeholder="Tìm theo tên mỹ phẩm hoặc thương hiệu..."
+                    value={productScanSearch}
+                    onChange={(e) => setProductScanSearch(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+
+                <div className="product-scan-results-list">
+                  {sampleProductsList.map((prod) => (
+                    <div key={prod.id} className="product-scan-item-card">
+                      <img
+                        src={prod.image}
+                        alt={prod.name}
+                        className="product-scan-item-img"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=300&q=80&auto=format&fit=crop";
+                        }}
+                      />
+                      <div className="product-scan-item-info">
+                        <div className="product-scan-item-name">
+                          <span className="product-scan-item-brand">{prod.brand}</span> {prod.name}
+                        </div>
+                        <div className="product-scan-compat-badge">
+                          <span>✓ Phù hợp với {skinTypeTitle}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}

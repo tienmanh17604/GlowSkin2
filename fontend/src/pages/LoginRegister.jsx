@@ -6,7 +6,7 @@ import "./LoginRegister.css";
 
 export default function LoginRegister() {
   const navigate = useNavigate();
-  const { login, register } = useApp();
+  const { login, register, setIsNameModalOpen } = useApp();
 
   const [activeTab, setActiveTab] = useState("login"); // "login" | "register"
   const [formData, setFormData] = useState({
@@ -42,6 +42,9 @@ export default function LoginRegister() {
         if (result.user.role === "admin") {
           navigate("/admin");
         } else {
+          if (!result.user.onboardingCompleted) {
+            setIsNameModalOpen(true);
+          }
           navigate("/");
         }
       } else {
@@ -54,6 +57,7 @@ export default function LoginRegister() {
       }
       const result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
+        setIsNameModalOpen(true);
         navigate("/");
       } else {
         setError(result.message);
