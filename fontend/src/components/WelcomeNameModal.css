@@ -98,7 +98,7 @@ body.onboarding-scroll-locked {
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #111827;
+  color: #6B4E37;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,7 +134,7 @@ body.onboarding-scroll-locked {
 
 .onboarding-progress-fill {
   height: 100%;
-  background: #1c1917;
+  background: #6B4E37;
   border-radius: 999px;
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1024,7 +1024,7 @@ body.onboarding-scroll-locked {
   background: #f4ede4;
   border: 1px solid #e5ded4;
   border-radius: 50%;
-  color: #1c1917;
+  color: #6B4E37;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1047,7 +1047,7 @@ body.onboarding-scroll-locked {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 17px;
   font-weight: 700;
-  color: #1c1917;
+  color: #4A3525;
   margin: 0;
   letter-spacing: -0.2px;
 }
@@ -1212,13 +1212,19 @@ body.onboarding-scroll-locked {
   height: 72px;
   border-radius: 50%;
   background: transparent;
-  border: 4px solid #1c1917;
+  border: 4px solid #6B4E37;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  transition: transform 0.12s ease;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(107, 78, 55, 0.18);
+}
+
+.onboarding-shutter-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 18px rgba(107, 78, 55, 0.28);
 }
 
 .onboarding-shutter-btn:active {
@@ -1229,7 +1235,7 @@ body.onboarding-scroll-locked {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #1c1917;
+  background: linear-gradient(135deg, #7A5B44 0%, #5E432E 100%);
   display: block;
 }
 
@@ -1239,7 +1245,7 @@ body.onboarding-scroll-locked {
   border-radius: 50%;
   background: #f4ede4;
   border: 1px solid #e5ded4;
-  color: #1c1917;
+  color: #6B4E37;
   display: flex;
   align-items: center;
   justify-content: center;
