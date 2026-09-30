@@ -13,12 +13,22 @@
   {
     "id": "u2",
     "name": "Nguyễn Khánh Nhi",
-    "preferredName": "",
+    "preferredName": "nhi",
     "email": "user@glowskin.com",
     "password": "user123",
     "role": "user",
     "membership": "Free",
     "addresses": [],
-    "createdAt": "2026-09-30T00:00:00.000Z"
+    "createdAt": "2026-09-30T00:00:00.000Z",
+    "updatedAt": "2026-09-30T02:41:48.868Z",
+    "gender": "Nam",
+    "birthDate": "1/4/2004",
+    "city": "An Giang",
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Câu hỏi không phù hợp với tôi",
+      "hasPrescriptionMedication": "Câu hỏi không phù hợp với tôi"
+    },
+    "onboardingCompleted": true
   }
 ]

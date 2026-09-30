@@ -108,9 +108,10 @@
   height: 20px;
 }
 
-.onboarding-close-icon {
-  font-size: 15px;
-  color: #6b7280;
+.onboarding-nav-spacer {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 }
 
 .onboarding-progress-track {
@@ -127,27 +128,6 @@
   background: linear-gradient(90deg, #e11d48 0%, #f43f5e 100%);
   border-radius: 999px;
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.onboarding-skip-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.onboarding-skip-btn:hover {
-  color: #111827;
-  background: rgba(0, 0, 0, 0.05);
 }
 
 /* ================= STEP CONTENT VIEW ================= */

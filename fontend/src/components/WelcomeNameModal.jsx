@@ -90,13 +90,10 @@ export default function WelcomeNameModal() {
     }
   }, [isNameModalOpen, currentUser]);
 
-  // Auto-prompt modal on initial login if preferredName is not set
+  // Auto-prompt modal if onboarding is not completed
   useEffect(() => {
-    if (currentUser && !currentUser.preferredName && !currentUser.onboardingCompleted) {
-      const hasDismissed = sessionStorage.getItem(`glowskin_name_prompt_dismissed_${currentUser.id || currentUser._id}`);
-      if (!hasDismissed) {
-        setIsNameModalOpen(true);
-      }
+    if (currentUser && !currentUser.onboardingCompleted) {
+      setIsNameModalOpen(true);
     }
   }, [currentUser, setIsNameModalOpen]);
 
@@ -104,19 +101,9 @@ export default function WelcomeNameModal() {
 
   const currentPreferredName = nameInput.trim() || currentUser.preferredName || "bạn";
 
-  const handleClose = () => {
-    if (currentUser) {
-      const userKey = currentUser.id || currentUser._id || currentUser.email || "user";
-      sessionStorage.setItem(`glowskin_name_prompt_dismissed_${userKey}`, "true");
-    }
-    setIsNameModalOpen(false);
-  };
-
   const handleBack = () => {
     if (step > 0) {
       setStep((prev) => prev - 1);
-    } else {
-      handleClose();
     }
   };
 
@@ -155,7 +142,7 @@ export default function WelcomeNameModal() {
     setStep(4);
   };
 
-  // Step 4: Finish complete onboarding survey
+  // Step 4: Finish complete onboarding survey - ONLY WAY TO CLOSE MODAL
   const handleFinishOnboarding = async () => {
     setIsSubmitting(true);
     const birthDateStr = `${day}/${month}/${year}`;
@@ -190,8 +177,22 @@ export default function WelcomeNameModal() {
         body: JSON.stringify(surveyPayload),
       }).catch((e) => console.warn("Lưu khảo sát backend:", e));
 
+      // Mark user as completed onboarding
+      const updatedUser = {
+        ...currentUser,
+        preferredName: nameInput.trim() || currentUser.preferredName,
+        gender,
+        birthDate: birthDateStr,
+        city: selectedCity,
+        skinSurvey: surveyPayload.skinSurvey,
+        onboardingCompleted: true,
+      };
+      localStorage.setItem("glowskin-currentuser", JSON.stringify(updatedUser));
+
       const userKey = currentUser.id || currentUser._id || currentUser.email || "user";
       sessionStorage.setItem(`glowskin_name_prompt_dismissed_${userKey}`, "true");
+      
+      // Successfully completed: Close modal!
       setIsNameModalOpen(false);
     } catch (err) {
       console.error("Lỗi hoàn thành khảo sát:", err);
@@ -216,25 +217,25 @@ export default function WelcomeNameModal() {
   const currentProgress = progressMap[step] || 20;
 
   return (
-    <div className="onboarding-modal-overlay" onClick={handleClose}>
-      <div className="onboarding-modal-card" onClick={(e) => e.stopPropagation()}>
+    <div className="onboarding-modal-overlay">
+      <div className="onboarding-modal-card">
         
-        {/* Top Header: Back Arrow & Sleek Progress Bar */}
+        {/* Top Header: Back Arrow & Sleek Progress Bar (No Skip or Close button) */}
         <div className="onboarding-top-nav">
-          <button
-            type="button"
-            className="onboarding-back-btn"
-            onClick={handleBack}
-            aria-label="Quay lại"
-          >
-            {step > 0 ? (
+          {step > 0 ? (
+            <button
+              type="button"
+              className="onboarding-back-btn"
+              onClick={handleBack}
+              aria-label="Quay lại"
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
-            ) : (
-              <span className="onboarding-close-icon">✕</span>
-            )}
-          </button>
+            </button>
+          ) : (
+            <div className="onboarding-nav-spacer"></div>
+          )}
 
           <div className="onboarding-progress-track">
             <div
@@ -243,14 +244,7 @@ export default function WelcomeNameModal() {
             ></div>
           </div>
 
-          <button
-            type="button"
-            className="onboarding-skip-btn"
-            onClick={handleClose}
-            aria-label="Đóng"
-          >
-            ✕
-          </button>
+          <div className="onboarding-nav-spacer"></div>
         </div>
 
         {/* Ambient Subtle Glow */}
