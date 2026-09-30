@@ -276,6 +276,64 @@ export default function YourSkin() {
   const [currentAngleIndex, setCurrentAngleIndex] = useState(0);
   const [isProductScanOpen, setIsProductScanOpen] = useState(false);
   const [productScanSearch, setProductScanSearch] = useState("");
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState("unlock_single");
+
+  const SUBSCRIPTION_PLANS = [
+    {
+      id: "unlock_single",
+      name: "Mở khóa 1 lần",
+      badge: "Tiết kiệm",
+      price: "19.000đ",
+      period: "/ lần khám",
+      desc: "Mở khóa ngay báo cáo phân tích da chuyên sâu cho lần chụp này.",
+      features: [
+        "Mở khóa đầy đủ 6 chỉ số da (Mụn viêm, bã nhờn, sẹo,...)",
+        "Tặng kèm 1 chu trình chăm sóc da cá nhân hóa",
+        "Đánh giá độ nhạy cảm & chẩn đoán loại da chính xác",
+        "Gợi ý sản phẩm lành tính phù hợp loại da"
+      ],
+      buttonText: "Mở khóa ngay (19k)",
+      isFeatured: false
+    },
+    {
+      id: "premium",
+      name: "Premium",
+      badge: "Khuyên dùng",
+      price: "99.000đ",
+      period: "/ tháng",
+      desc: "Phân tích sâu hơn, gợi ý sản phẩm chi tiết & mở khóa routine nâng cao.",
+      features: [
+        "Đầy đủ quyền lợi gói Mở khóa 19k",
+        "Quét da AI chuyên sâu không giới hạn",
+        "Gợi ý thành phần mỹ phẩm chi tiết",
+        "Lưu lịch sử & theo dõi tiến trình da thay đổi"
+      ],
+      buttonText: "Nâng cấp Premium (99k)",
+      isFeatured: true
+    },
+    {
+      id: "professional",
+      name: "Professional",
+      badge: "Chuyên nghiệp",
+      price: "249.000đ",
+      period: "/ tháng",
+      desc: "Phù hợp cho người muốn theo dõi dài hạn hoặc kết nối chuyên gia da liễu.",
+      features: [
+        "Đầy đủ tính năng gói Premium",
+        "Báo cáo phân tích chuẩn y khoa PDF",
+        "Kết nối tư vấn 1-1 với bác sĩ da liễu",
+        "Công cụ quản lý hồ sơ da chuyên sâu"
+      ],
+      buttonText: "Đăng ký ngay (249k)",
+      isFeatured: false
+    }
+  ];
+
+  const handleSelectPlan = (plan) => {
+    setIsUnlocked(true);
+    setIsPricingModalOpen(false);
+  };
 
   const angleImages = useMemo(() => {
     const defaultFace = currentImage || displayScan?.image || "/images/skin-types/model_base.jpg";
@@ -979,14 +1037,20 @@ export default function YourSkin() {
                     <button
                       type="button"
                       className="skin-result-btn-unlock"
-                      onClick={() => setIsUnlocked(true)}
+                      onClick={() => {
+                        setSelectedPlanId("unlock_single");
+                        setIsPricingModalOpen(true);
+                      }}
                     >
                       {isUnlocked ? "✓ Đã mở khóa" : "Mở khóa (19k)"}
                     </button>
                     <button
                       type="button"
                       className="skin-result-btn-sub"
-                      onClick={() => setIsUnlocked(true)}
+                      onClick={() => {
+                        setSelectedPlanId("premium");
+                        setIsPricingModalOpen(true);
+                      }}
                     >
                       Đăng ký dài hạn
                     </button>
@@ -1269,113 +1333,6 @@ export default function YourSkin() {
       </div>
     )}
 
-        {/* SCORE & MEDICAL STATUS SUMMARY BANNER - CHỈ HIỂN THỊ KHI ĐÃ HOÀN TẤT */}
-        {displayScan && isAnalyzed && !isAnalyzing && (resultViewMode === "advanced_2d" || isUnlocked) && (
-          <div className="gold-report-container" style={{ gap: "24px", marginBottom: "40px" }}>
-            <div className="gold-report-summary-card">
-              <div className="gold-score-badge-circle">
-                <span className="gold-score-number">{displayScan.score || 72}</span>
-                <span className="gold-score-denom">/100</span>
-              </div>
-              <div className="gold-summary-info">
-                <div className="gold-badge" style={{ display: "inline-block", marginBottom: "6px" }}>
-                  {displayScan.scoreLabel || "Phân tích Y Khoa & AI Vision (3 Góc Mặt)"}
-                </div>
-                <h3 className="gold-report-heading">Báo Cáo Tình Trạng Da Toàn Diện</h3>
-                <div className="gold-summary-chips">
-                  {(displayScan.summary || [
-                    { title: "Bít tắc lỗ chân lông", en: "(Enlarged Pores)" },
-                    { title: "Mụn viêm rải rác", en: "(Inflammatory Acne)" },
-                    { title: "Thâm mụn sau viêm", en: "(PIH)" }
-                  ]).map((item, idx) => (
-                    <span key={idx} className="gold-summary-chip">
-                      ✦ {item.title} <small>{item.en || ""}</small>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* CLINICAL SECTIONS: OVERVIEW, ROUTINE, INGREDIENTS, WARNINGS */}
-            <div className="gold-clinical-grid">
-              {(displayScan.aiOverview || displayScan.overview) && (
-                <div className="gold-clinical-card">
-                  <div className="gold-clinical-card-header">
-                    <span className="gold-clinical-card-icon">🔬</span>
-                    <h4 className="gold-clinical-card-title">Chẩn Đoán Y Khoa 3 Góc Mặt</h4>
-                  </div>
-                  <div className="gold-clinical-card-body">
-                    {formatChatMessage(displayScan.aiOverview || displayScan.overview)}
-                  </div>
-                </div>
-              )}
-
-              {displayScan.routine && (
-                <div className="gold-clinical-card">
-                  <div className="gold-clinical-card-header">
-                    <span className="gold-clinical-card-icon">☀️🌙</span>
-                    <h4 className="gold-clinical-card-title">Lộ Trình Routine Chuẩn Chuyên Khoa</h4>
-                  </div>
-                  <div className="gold-clinical-card-body">
-                    {formatChatMessage(displayScan.routine)}
-                  </div>
-                </div>
-              )}
-
-              {displayScan.ingredients && (
-                <div className="gold-clinical-card">
-                  <div className="gold-clinical-card-header">
-                    <span className="gold-clinical-card-icon">💧</span>
-                    <h4 className="gold-clinical-card-title">Hoạt Chất Khuyên Dùng &amp; Nên Tránh</h4>
-                  </div>
-                  <div className="gold-clinical-card-body">
-                    {formatChatMessage(displayScan.ingredients)}
-                  </div>
-                </div>
-              )}
-
-              {displayScan.warning && (
-                <div className="gold-clinical-card warning">
-                  <div className="gold-clinical-card-header">
-                    <span className="gold-clinical-card-icon">⚠️</span>
-                    <h4 className="gold-clinical-card-title">Lưu Ý Kích Ứng &amp; Chống Chỉ Định</h4>
-                  </div>
-                  <div className="gold-clinical-card-body">
-                    {formatChatMessage(displayScan.warning)}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* SẢN PHẨM ĐANG DÙNG CỦA BẠN (TỪ KHẢO SÁT 3 GÓC) */}
-            {displayScan.usedProducts && displayScan.usedProducts.length > 0 && (
-              <div className="gold-used-products-section">
-                <div className="gold-used-products-header">
-                  <div className="gold-badge">🧴 KHẢO SÁT SẢN PHẨM HIỆN TẠI</div>
-                  <h4 className="gold-used-products-title">Sản phẩm bạn đang sử dụng &amp; Đánh giá tương thích</h4>
-                  <p className="gold-used-products-subtitle">
-                    Hệ thống AI đối chiếu từng sản phẩm với các khuyết điểm quan sát được trên 3 góc ảnh mặt của bạn.
-                  </p>
-                </div>
-                <div className="gold-used-products-grid">
-                  {displayScan.usedProducts.map((prod) => (
-                    <div key={prod.id} className="gold-used-product-item">
-                      <img src={prod.image} alt={prod.name} className="gold-used-prod-img" />
-                      <div className="gold-used-prod-info">
-                        <div className="gold-used-prod-brand">{prod.brand}</div>
-                        <div className="gold-used-prod-name">{prod.name}</div>
-                        <div className="gold-used-prod-meta">{prod.category} • {prod.volume}</div>
-                        <div className="gold-used-prod-tag">
-                          <span>✓ Đang có trong Routine của bạn</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* WEBCAM CAPTURE MODAL */}
         {isCameraOpen && (
@@ -1708,6 +1665,61 @@ export default function YourSkin() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SUBSCRIPTION & UNLOCK PACKAGES MODAL */}
+        {isPricingModalOpen && (
+          <div className="pricing-paywall-modal-overlay" onClick={() => setIsPricingModalOpen(false)}>
+            <div className="pricing-paywall-modal-card" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                className="pricing-modal-close"
+                onClick={() => setIsPricingModalOpen(false)}
+              >
+                ✕
+              </button>
+              <div className="pricing-tag-wrapper">
+                <span className="pricing-tag">✦ Gói dịch vụ GlowSkin</span>
+              </div>
+              <h2 className="pricing-title">Mở Khóa Báo Cáo Da &amp; Lộ Trình Cá Nhân Hóa</h2>
+              <p className="pricing-subtitle">
+                Lựa chọn gói mở khóa hoặc đăng ký hội viên để xem toàn diện 6 chỉ số da và nhận chu trình chăm sóc chuẩn Y khoa.
+              </p>
+
+              <div className="pricing-cards-grid-row">
+                {SUBSCRIPTION_PLANS.map((plan) => {
+                  const isSelected = selectedPlanId === plan.id;
+                  return (
+                    <div
+                      key={plan.id}
+                      className={`pricing-card ${plan.isFeatured ? "premium-card pricing-card--featured" : ""} ${isSelected ? "selected-plan" : ""}`}
+                    >
+                      {plan.isFeatured && <div className="premium-tag">Khuyên dùng</div>}
+                      <span className="plan-badge">{plan.badge}</span>
+                      <h3 className="plan-name">{plan.name}</h3>
+                      <div className="plan-price">
+                        <span className="price-val">{plan.price}</span>
+                        <span className="price-period">{plan.period}</span>
+                      </div>
+                      <p className="plan-desc">{plan.desc}</p>
+                      <ul className="plan-features">
+                        {plan.features.map((feat, idx) => (
+                          <li key={idx}>✓ {feat}</li>
+                        ))}
+                      </ul>
+                      <button
+                        type="button"
+                        className={`plan-btn ${plan.isFeatured ? "featured" : ""}`}
+                        onClick={() => handleSelectPlan(plan)}
+                      >
+                        {plan.buttonText}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
