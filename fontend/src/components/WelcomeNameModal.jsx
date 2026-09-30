@@ -550,12 +550,6 @@ export default function WelcomeNameModal() {
     }
   }, [isNameModalOpen, currentUser?.email, currentUser?.id, currentUser?._id]);
 
-  // Auto-prompt modal if onboarding is not completed
-  useEffect(() => {
-    if (currentUser && !currentUser.onboardingCompleted) {
-      setIsNameModalOpen(true);
-    }
-  }, [currentUser?.onboardingCompleted, currentUser?.email, currentUser?.id, setIsNameModalOpen]);
 
   // Calculate max days for selected month and year
   const maxDays = new Date(year, month, 0).getDate();
