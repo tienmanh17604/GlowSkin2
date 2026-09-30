@@ -35,27 +35,32 @@ const SKIN_TYPE_OPTIONS = [
   {
     id: "dry",
     label: "Da khô căng, thiếu độ ẩm, có thể bong tróc",
-    type: "dry"
+    type: "dry",
+    img: "/images/skin-types/dry.png"
   },
   {
     id: "normal",
     label: "Da đủ ẩm, không khô rít, không bóng nhờn, khá mịn màng",
-    type: "normal"
+    type: "normal",
+    img: "/images/skin-types/model_base.jpg"
   },
   {
     id: "combo_oily_cheeks",
     label: "Vùng chữ T và 2 má tiết nhiều dầu, các khu vực khác khô",
-    type: "combination_oily_cheeks"
+    type: "combination_oily_cheeks",
+    img: "/images/skin-types/combo_cheeks.png"
   },
   {
     id: "combo_tzone",
     label: "Vùng chữ T tiết nhiều dầu, 2 má khô",
-    type: "combination_tzone"
+    type: "combination_tzone",
+    img: "/images/skin-types/combo_tzone.png"
   },
   {
     id: "oily",
     label: "Da thừa dầu, bóng nhờn",
-    type: "oily"
+    type: "oily",
+    img: "/images/skin-types/oily.png"
   }
 ];
 
@@ -66,76 +71,35 @@ const SKIN_SENSITIVITY_OPTIONS = [
   "Rất hay gặp"
 ];
 
-function SkinTypeVisual({ type, label }) {
+function SkinTypeVisual({ type, label, imageSrc, onScanClick }) {
+  const currentSrc = imageSrc || "/images/skin-types/model_base.jpg";
+
   return (
     <div className="onboarding-skin-visual-wrapper">
       <img
-        src="/images/skin-types/model_base.jpg"
+        src={currentSrc}
         alt={label}
-        className={`onboarding-skin-base-img skin-type-${type}`}
+        className="onboarding-skin-base-img"
         loading="lazy"
       />
 
-      {/* AI Camera scanner badge */}
-      <div className="onboarding-skin-scan-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      {/* AI Camera scanner badge / inspect button */}
+      <button
+        type="button"
+        className="onboarding-skin-scan-badge"
+        onClick={(e) => {
+          e.stopPropagation();
+          onScanClick?.(currentSrc);
+        }}
+        title="Xem ảnh chi tiết"
+        aria-label="Xem ảnh chi tiết"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 8V5a1 1 0 0 1 1-1h3 M16 4h3a1 1 0 0 1 1 1v3 M20 16v3a1 1 0 0 1-1 1h-3 M8 20H5a1 1 0 0 1-1-1v-3" />
           <path d="M9 10a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1z" />
           <circle cx="12" cy="12" r="1.5" />
         </svg>
-      </div>
-
-      {/* Skin Type specific visual overlays */}
-      {type === "dry" && (
-        <div className="onboarding-skin-dry-overlay">
-          <svg className="onboarding-dry-texture-svg" viewBox="0 0 200 200" preserveAspectRatio="none">
-            <defs>
-              <pattern id="dryCrackle" width="12" height="12" patternUnits="userSpaceOnUse">
-                <path d="M 0 6 L 6 0 M 6 12 L 12 6 M 0 12 L 12 0" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" />
-              </pattern>
-            </defs>
-            <ellipse cx="62" cy="116" rx="28" ry="20" fill="url(#dryCrackle)" opacity="0.85" />
-            <ellipse cx="138" cy="116" rx="28" ry="20" fill="url(#dryCrackle)" opacity="0.85" />
-            <ellipse cx="100" cy="58" rx="42" ry="16" fill="url(#dryCrackle)" opacity="0.75" />
-          </svg>
-        </div>
-      )}
-
-      {type === "combination_oily_cheeks" && (
-        <svg className="onboarding-skin-mask-svg" viewBox="0 0 200 200" preserveAspectRatio="none">
-          <defs>
-            <filter id="purpleGlowCheeks" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4.5" />
-            </filter>
-          </defs>
-          {/* Forehead */}
-          <ellipse cx="100" cy="62" rx="48" ry="18" fill="#aab2f2" opacity="0.8" filter="url(#purpleGlowCheeks)" />
-          {/* Nose bridge & tip */}
-          <ellipse cx="100" cy="98" rx="14" ry="24" fill="#aab2f2" opacity="0.8" filter="url(#purpleGlowCheeks)" />
-          {/* Left cheek */}
-          <ellipse cx="64" cy="116" rx="20" ry="14" fill="#aab2f2" opacity="0.76" filter="url(#purpleGlowCheeks)" />
-          {/* Right cheek */}
-          <ellipse cx="136" cy="116" rx="20" ry="14" fill="#aab2f2" opacity="0.76" filter="url(#purpleGlowCheeks)" />
-        </svg>
-      )}
-
-      {type === "combination_tzone" && (
-        <svg className="onboarding-skin-mask-svg" viewBox="0 0 200 200" preserveAspectRatio="none">
-          <defs>
-            <filter id="purpleGlowTzone" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4.5" />
-            </filter>
-          </defs>
-          {/* Forehead */}
-          <ellipse cx="100" cy="62" rx="48" ry="18" fill="#aab2f2" opacity="0.8" filter="url(#purpleGlowTzone)" />
-          {/* Nose bridge & tip */}
-          <ellipse cx="100" cy="98" rx="14" ry="24" fill="#aab2f2" opacity="0.8" filter="url(#purpleGlowTzone)" />
-        </svg>
-      )}
-
-      {type === "oily" && (
-        <div className="onboarding-skin-oily-sheen"></div>
-      )}
+      </button>
     </div>
   );
 }
@@ -436,6 +400,7 @@ export default function WelcomeNameModal() {
   // Step 5: Skin Diagnosis
   const [skinType, setSkinType] = useState("");
   const [skinSensitivity, setSkinSensitivity] = useState("");
+  const [previewSkinImage, setPreviewSkinImage] = useState(null);
 
   // Step 6: Video Guide
   const [videoGuideIndex, setVideoGuideIndex] = useState(0);
@@ -1380,7 +1345,12 @@ export default function WelcomeNameModal() {
                         className={`onboarding-skin-type-card ${isSelected ? "selected" : ""}`}
                         onClick={() => handleSelectSkinType(opt.label)}
                       >
-                        <SkinTypeVisual type={opt.type} label={opt.label} />
+                        <SkinTypeVisual
+                          type={opt.type}
+                          label={opt.label}
+                          imageSrc={opt.img}
+                          onScanClick={(src) => setPreviewSkinImage(src)}
+                        />
                         <div className="onboarding-skin-card-bottom">
                           <span className="onboarding-skin-card-label">{opt.label}</span>
                           <span className="onboarding-radio-circle"></span>
@@ -1892,6 +1862,27 @@ export default function WelcomeNameModal() {
               <div className="onboarding-ai-medical-badge">
                 🩺 Tiêu chuẩn Chuyên Khoa Da Liễu • Phân tích chính xác 100% theo ảnh thật
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* SKIN TYPE IMAGE INSPECTION LIGHTBOX (Pure image from file, NO text below) */}
+        {previewSkinImage && (
+          <div className="onboarding-image-lightbox-overlay" onClick={() => setPreviewSkinImage(null)}>
+            <div className="onboarding-image-lightbox-container" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                className="onboarding-lightbox-close-btn"
+                onClick={() => setPreviewSkinImage(null)}
+                aria-label="Đóng"
+              >
+                ✕
+              </button>
+              <img
+                src={previewSkinImage}
+                alt="Chi tiết loại da"
+                className="onboarding-lightbox-img"
+              />
             </div>
           </div>
         )}
