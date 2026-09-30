@@ -345,37 +345,47 @@ export function AppProvider({ children }) {
     }
   };
 
-  const updateProfile = async (id, name, email, phone, addresses) => {
+  const updateProfile = async (id, name, email, phone, addresses, preferredName) => {
     try {
+      const cleanPreferred = preferredName !== undefined ? preferredName.trim() : (currentUser?.preferredName || "");
       const res = await fetch(`${API_URL}/users/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, addresses }),
+        body: JSON.stringify({ name, email, phone, addresses, preferredName: cleanPreferred }),
       });
       const data = await res.json();
       if (data.success) {
-        setCurrentUser(data.user);
-        setUsers((prev) => prev.map((u) => (u.id === id ? data.user : u)));
-        return { success: true, user: data.user };
+        const mergedUser = { ...currentUser, ...data.user, preferredName: cleanPreferred };
+        setCurrentUser(mergedUser);
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(mergedUser));
+        setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? mergedUser : u)));
+        return { success: true, user: mergedUser };
       }
       return { success: false, message: data.message || "Lỗi khi cập nhật thông tin!" };
     } catch (err) {
       console.error("Lỗi cập nhật hồ sơ:", err);
-      const updated = { ...currentUser, name, email, phone, addresses };
+      const cleanPreferred = preferredName !== undefined ? preferredName.trim() : (currentUser?.preferredName || "");
+      const updated = { ...currentUser, name, email, phone, addresses, preferredName: cleanPreferred };
       setCurrentUser(updated);
-      setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
+      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
+      setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? updated : u)));
       return { success: true, user: updated };
     }
   };
 
   const updatePreferredName = async (preferredName) => {
     if (!currentUser) return { success: false, message: "Chưa đăng nhập!" };
-    const id = currentUser.id || currentUser._id;
     const cleanName = preferredName?.trim() || "";
+    if (!cleanName) return { success: false, message: "Tên không được để trống!" };
 
-    const updated = { ...currentUser, preferredName: cleanName };
+    const id = currentUser.id || currentUser._id || currentUser.email;
+
+    // 1. Immediately update local state & localStorage (instant synchronous guarantee!)
+    const updated = {
+      ...currentUser,
+      preferredName: cleanName,
+    };
     setCurrentUser(updated);
-    setUsers((prev) => prev.map((u) => ((u.id === id || u._id === id) ? updated : u)));
 
     try {
       localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
@@ -383,21 +393,55 @@ export function AppProvider({ children }) {
       console.error("Lỗi lưu session:", e);
     }
 
+    // Also update in users array
+    setUsers((prev) =>
+      prev.map((u) => {
+        if ((id && (u.id === id || u._id === id)) || (currentUser.email && u.email === currentUser.email)) {
+          return { ...u, preferredName: cleanName };
+        }
+        return u;
+      })
+    );
+
     try {
-      const res = await fetch(`${API_URL}/users/${id}`, {
+      const savedUsers = localStorage.getItem(USERS_KEY);
+      if (savedUsers) {
+        const parsed = JSON.parse(savedUsers);
+        const updatedUsers = parsed.map((u) => {
+          if ((id && (u.id === id || u._id === id)) || (currentUser.email && u.email === currentUser.email)) {
+            return { ...u, preferredName: cleanName };
+          }
+          return u;
+        });
+        localStorage.setItem(USERS_KEY, JSON.stringify(updatedUsers));
+      }
+    } catch (e) {
+      console.error("Lỗi cập nhật danh sách users:", e);
+    }
+
+    // 2. Synchronize to backend API
+    try {
+      const targetId = encodeURIComponent(id || currentUser.email);
+      const res = await fetch(`${API_URL}/users/${targetId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preferredName: cleanName }),
+        body: JSON.stringify({
+          preferredName: cleanName,
+          email: currentUser.email,
+        }),
       });
-      const data = await res.json();
-      if (data.success && data.user) {
-        setCurrentUser(data.user);
-        setUsers((prev) => prev.map((u) => ((u.id === id || u._id === id) ? data.user : u)));
-        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(data.user));
-        return { success: true, user: data.user };
+
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (data && data.user) {
+          const finalMerged = { ...currentUser, ...data.user, preferredName: cleanName };
+          setCurrentUser(finalMerged);
+          localStorage.setItem(USER_SESSION_KEY, JSON.stringify(finalMerged));
+          return { success: true, user: finalMerged };
+        }
       }
     } catch (err) {
-      console.warn("Lỗi đồng bộ preferredName lên backend:", err);
+      console.warn("Backend sync note:", err.message);
     }
 
     return { success: true, user: updated };

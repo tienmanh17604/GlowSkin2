@@ -1,0 +1,50 @@
+[
+  {
+    "productId": "tfs-sun-cream",
+    "userName": "Khánh Linh",
+    "rating": 5,
+    "comment": "Kem chống nắng kiềm dầu cực tốt, nâng tone nhẹ nhàng tự nhiên. Không bị bí da."
+  },
+  {
+    "productId": "tfs-nose-strips",
+    "userName": "Nguyễn Nam",
+    "rating": 5,
+    "comment": "Rửa mặt siêu sạch lỗ chân lông, hết sạch bã nhờn, da sờ sướng hẳn."
+  },
+  {
+    "productId": "tfs-herb-day",
+    "userName": "Trần Hà",
+    "rating": 5,
+    "comment": "Sữa rửa mặt thơm mùi nha đam nhẹ dịu, rửa xong không khô da."
+  },
+  {
+    "productId": "goodal-vit-c",
+    "userName": "Quỳnh Anh",
+    "rating": 5,
+    "comment": "Serum mờ thâm mụn siêu nhanh luôn, dùng tầm 2 tuần là thấy rõ sự khác biệt."
+  },
+  {
+    "productId": "goodal-vit-c",
+    "userName": "Lê Hoa",
+    "rating": 4,
+    "comment": "Chất serum mát lạnh thấm nhanh, làm sáng da tốt nhưng cần kiên trì."
+  },
+  {
+    "productId": "cetaphil-gentle",
+    "userName": "Huyền Trang",
+    "rating": 5,
+    "comment": "Sữa rửa mặt quốc dân cho da mụn nhạy cảm, vô cùng êm dịu."
+  },
+  {
+    "productId": "lrp-baume-b5",
+    "userName": "Đức Anh",
+    "rating": 5,
+    "comment": "Phục hồi da tổn thương sau mụn rất tốt, baume chất hơi đặc nhưng xoa kỹ thấm êm."
+  },
+  {
+    "productId": "loreal-micellar",
+    "userName": "Phạm Vy",
+    "rating": 5,
+    "comment": "Tẩy trang sạch sâu dịu nhẹ, không cay mắt, giá rẻ mà xài cực thích."
+  }
+]

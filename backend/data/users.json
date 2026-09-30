@@ -1,0 +1,24 @@
+[
+  {
+    "id": "u1",
+    "name": "Nguyễn Văn Admin",
+    "preferredName": "",
+    "email": "admin@glowskin.com",
+    "password": "admin123",
+    "role": "admin",
+    "membership": "VIP",
+    "addresses": [],
+    "createdAt": "2026-09-30T00:00:00.000Z"
+  },
+  {
+    "id": "u2",
+    "name": "Nguyễn Khánh Nhi",
+    "preferredName": "",
+    "email": "user@glowskin.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [],
+    "createdAt": "2026-09-30T00:00:00.000Z"
+  }
+]

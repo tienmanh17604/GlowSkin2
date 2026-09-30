@@ -105,7 +105,7 @@ export default function Profile() {
       }
     }
 
-    const result = await updateProfile(currentUser.id, fullName, email.trim(), phone.trim());
+    const result = await updateProfile(currentUser.id, fullName, email.trim(), phone.trim(), currentUser.addresses, preferredName.trim());
     if (preferredName.trim() !== (currentUser.preferredName || "")) {
       await updatePreferredName(preferredName.trim());
     }

@@ -59,20 +59,24 @@ export default function WelcomeNameModal() {
     if (e) e.preventDefault();
     const trimmed = nameInput.trim();
     if (!trimmed) {
-      // If empty, keep existing or fallback to user's name
       handleClose();
       return;
     }
 
     setIsSubmitting(true);
     try {
+      // 1. Immediately update preferredName in AppContext, localStorage and backend
       await updatePreferredName(trimmed);
-      if (currentUser) {
-        sessionStorage.setItem(`glowskin_name_prompt_dismissed_${currentUser.id || currentUser._id}`, "true");
-      }
+
+      // 2. Mark prompt as completed
+      const userKey = currentUser.id || currentUser._id || currentUser.email || "user";
+      sessionStorage.setItem(`glowskin_name_prompt_dismissed_${userKey}`, "true");
+
+      // 3. Immediately close modal so user sees the change right away
       setIsNameModalOpen(false);
     } catch (err) {
-      console.error("Lỗi khi lưu tên gọi:", err);
+      console.error("Lỗi cập nhật tên gọi thân mật:", err);
+      setIsNameModalOpen(false);
     } finally {
       setIsSubmitting(false);
     }

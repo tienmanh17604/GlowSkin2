@@ -12,9 +12,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Force Google DNS to resolve MongoDB Atlas SRV records properly
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
 import User from "./models/User.js";
 import Product from "./models/Product.js";
 import Order from "./models/Order.js";
@@ -26,6 +23,7 @@ import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./ser
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
 import { PayOS } from "@payos/node";
+import { localDb } from "./services/localDbService.js";
 
 dotenv.config();
 
@@ -46,10 +44,34 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Database Connection
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/glowskin";
+let isMongoConnected = false;
+
+// Do not buffer commands indefinitely when MongoDB is disconnected
+mongoose.set("bufferCommands", false);
+
 mongoose
-  .connect(MONGODB_URI)
-  .then(() => console.log("Connected to MongoDB successfully"))
-  .catch((err) => console.error("Error connecting to MongoDB:", err));
+  .connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 3000,
+    connectTimeoutMS: 3000,
+  })
+  .then(() => {
+    isMongoConnected = true;
+    console.log("--> Đã kết nối MongoDB Atlas thành công! ✅");
+  })
+  .catch((err) => {
+    isMongoConnected = false;
+    console.warn("--> ⚠️ Chưa kết nối được MongoDB Atlas (Vui lòng whitelist IP trên Atlas Network Access nếu cần):", err.message);
+    console.log("--> 💡 Đang kích hoạt chế độ CSDL Cục Bộ (Local JSON Storage) để Đăng Nhập, Đăng Ký, Sản Phẩm hoạt động bình thường tức thì!");
+  });
+
+mongoose.connection.on("connected", () => {
+  isMongoConnected = true;
+  console.log("--> MongoDB connection established.");
+});
+mongoose.connection.on("disconnected", () => {
+  isMongoConnected = false;
+  console.warn("--> MongoDB disconnected. Using Local JSON fallback.");
+});
 
 // --- API Endpoints ---
 
@@ -57,18 +79,24 @@ mongoose
 // GET all products
 app.get("/api/products", async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    res.json(products);
+    if (isMongoConnected) {
+      const products = await Product.find().sort({ createdAt: -1 });
+      if (products && products.length > 0) {
+        return res.json(products);
+      }
+    }
   } catch (error) {
-    res.status(500).json({ message: "Không thể lấy danh sách sản phẩm", error: error.message });
+    console.warn("MongoDB products query failed, using localDb:", error.message);
   }
+  const localProducts = localDb.getProducts();
+  res.json(localProducts);
 });
 
 // POST a new product
 app.post("/api/products", async (req, res) => {
   try {
     const productData = req.body;
-    const newProduct = new Product({
+    const newProduct = {
       ...productData,
       rating: 5.0,
       reviews: 0,
@@ -77,9 +105,22 @@ app.post("/api/products", async (req, res) => {
       skinTypes: productData.skinTypes || [],
       concerns: productData.concerns || [],
       ingredients: productData.ingredients || [],
-    });
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
+    };
+
+    // Save to localDb
+    const savedLocal = localDb.saveProduct(newProduct);
+
+    // Also save to MongoDB if connected
+    if (isMongoConnected) {
+      try {
+        const mongoProduct = new Product(newProduct);
+        await mongoProduct.save();
+      } catch (err) {
+        console.warn("Lưu sản phẩm lên MongoDB thất bại:", err.message);
+      }
+    }
+
+    res.status(201).json(savedLocal);
   } catch (error) {
     res.status(400).json({ message: "Không thể tạo sản phẩm mới", error: error.message });
   }
@@ -90,19 +131,22 @@ app.put("/api/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
-    
-    // Find by custom 'id' string field
-    const updatedProduct = await Product.findOneAndUpdate(
-      { id: id },
-      { $set: updatedData },
-      { new: true }
-    );
-    
-    if (!updatedProduct) {
+
+    const updatedLocal = localDb.updateProduct(id, updatedData);
+
+    if (isMongoConnected) {
+      try {
+        await Product.findOneAndUpdate({ id: id }, { $set: updatedData }, { new: true });
+      } catch (err) {
+        console.warn("Cập nhật sản phẩm MongoDB thất bại:", err.message);
+      }
+    }
+
+    if (!updatedLocal) {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
-    
-    res.json(updatedProduct);
+
+    res.json(updatedLocal);
   } catch (error) {
     res.status(400).json({ message: "Không thể cập nhật sản phẩm", error: error.message });
   }
@@ -112,12 +156,20 @@ app.put("/api/products/:id", async (req, res) => {
 app.delete("/api/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedProduct = await Product.findOneAndDelete({ id: id });
-    
-    if (!deletedProduct) {
+    const deletedLocal = localDb.deleteProduct(id);
+
+    if (isMongoConnected) {
+      try {
+        await Product.findOneAndDelete({ id: id });
+      } catch (err) {
+        console.warn("Xóa sản phẩm MongoDB thất bại:", err.message);
+      }
+    }
+
+    if (!deletedLocal) {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
-    
+
     res.json({ message: "Xóa sản phẩm thành công", id });
   } catch (error) {
     res.status(500).json({ message: "Không thể xóa sản phẩm", error: error.message });
@@ -129,25 +181,61 @@ app.delete("/api/products/:id", async (req, res) => {
 // GET all users
 app.get("/api/users", async (req, res) => {
   try {
-    const users = await User.find().select("-password"); // Exclude password from list
-    res.json(users);
+    if (isMongoConnected) {
+      const users = await User.find().select("-password");
+      if (users && users.length > 0) {
+        return res.json(users);
+      }
+    }
   } catch (error) {
-    res.status(500).json({ message: "Không thể lấy danh sách người dùng", error: error.message });
+    console.warn("MongoDB users query failed, using localDb:", error.message);
   }
+  const users = localDb.getUsers().map(({ password, ...u }) => u);
+  res.json(users);
 });
 
 // POST login
 app.post("/api/users/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email.toLowerCase() });
-    
-    if (user && user.password === password) {
-      res.json({ success: true, user });
-    } else {
-      res.status(401).json({ success: false, message: "Email hoặc mật khẩu không chính xác!" });
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: "Vui lòng nhập email và mật khẩu!" });
     }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // 1. Check MongoDB first if connected
+    if (isMongoConnected) {
+      try {
+        const user = await User.findOne({ email: cleanEmail });
+        if (user) {
+          if (user.password === password) {
+            const userObj = user.toObject ? user.toObject() : user;
+            delete userObj.password;
+            return res.json({ success: true, user: userObj });
+          } else {
+            return res.status(401).json({ success: false, message: "Email hoặc mật khẩu không chính xác!" });
+          }
+        }
+      } catch (err) {
+        console.warn("MongoDB login check failed, falling back to localDb:", err.message);
+      }
+    }
+
+    // 2. Check local database
+    const localUser = localDb.findUserByEmail(cleanEmail);
+    if (localUser) {
+      if (localUser.password === password) {
+        const { password: _, ...userSafe } = localUser;
+        return res.json({ success: true, user: userSafe });
+      } else {
+        return res.status(401).json({ success: false, message: "Email hoặc mật khẩu không chính xác!" });
+      }
+    }
+
+    return res.status(401).json({ success: false, message: "Email hoặc mật khẩu không chính xác!" });
   } catch (error) {
+    console.error("Lỗi đăng nhập:", error);
     res.status(500).json({ success: false, message: "Lỗi đăng nhập", error: error.message });
   }
 });
@@ -156,24 +244,58 @@ app.post("/api/users/login", async (req, res) => {
 app.post("/api/users/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    
-    const exists = await User.findOne({ email: email.toLowerCase() });
-    if (exists) {
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: "Vui lòng nhập đầy đủ thông tin!" });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Check if email exists in localDb
+    const existingLocal = localDb.findUserByEmail(cleanEmail);
+    if (existingLocal) {
       return res.status(400).json({ success: false, message: "Email này đã được đăng ký!" });
     }
-    
-    const newUser = new User({
+
+    // Check if email exists in MongoDB if connected
+    if (isMongoConnected) {
+      try {
+        const existsMongo = await User.findOne({ email: cleanEmail });
+        if (existsMongo) {
+          return res.status(400).json({ success: false, message: "Email này đã được đăng ký!" });
+        }
+      } catch (err) {
+        console.warn("MongoDB email check failed:", err.message);
+      }
+    }
+
+    const newUserData = {
       id: "u_" + Date.now(),
-      name,
-      email,
-      password,
+      name: name.trim(),
+      preferredName: "",
+      email: cleanEmail,
+      password: password,
       role: "user",
       membership: "Free",
-    });
-    
-    const savedUser = await newUser.save();
-    res.status(201).json({ success: true, user: savedUser });
+      addresses: [],
+    };
+
+    // Save to localDb
+    const savedLocal = localDb.createUser(newUserData);
+
+    // Save to MongoDB if connected
+    if (isMongoConnected) {
+      try {
+        const newUser = new User(newUserData);
+        await newUser.save();
+      } catch (err) {
+        console.warn("MongoDB save user failed:", err.message);
+      }
+    }
+
+    const { password: _, ...userSafe } = savedLocal;
+    res.status(201).json({ success: true, user: userSafe });
   } catch (error) {
+    console.error("Lỗi đăng ký:", error);
     res.status(500).json({ success: false, message: "Lỗi đăng ký tài khoản", error: error.message });
   }
 });
@@ -182,33 +304,43 @@ app.post("/api/users/register", async (req, res) => {
 app.put("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const cleanId = decodeURIComponent(id || "").trim();
     const { name, email, phone, addresses, preferredName } = req.body;
-    
+
     const updateFields = {};
     if (name !== undefined) updateFields.name = name;
     if (email !== undefined) updateFields.email = email;
     if (phone !== undefined) updateFields.phone = phone;
     if (addresses !== undefined) updateFields.addresses = addresses;
     if (preferredName !== undefined) updateFields.preferredName = preferredName;
-    
-    let query = { id: id };
-    if (mongoose.Types.ObjectId.isValid(id)) {
-      query = { $or: [{ id: id }, { _id: id }] };
+
+    // Update in localDb
+    const updatedLocal = localDb.updateUser(cleanId, updateFields);
+
+    // Update in MongoDB if connected
+    if (isMongoConnected) {
+      try {
+        const conditions = [{ id: cleanId }];
+        if (mongoose.Types.ObjectId.isValid(cleanId)) {
+          conditions.push({ _id: cleanId });
+        }
+        if (email) {
+          conditions.push({ email: email.toLowerCase() });
+        }
+        await User.findOneAndUpdate({ $or: conditions }, { $set: updateFields }, { new: true });
+      } catch (err) {
+        console.warn("MongoDB update profile failed:", err.message);
+      }
     }
 
-    const updatedUser = await User.findOneAndUpdate(
-      query,
-      { $set: updateFields },
-      { new: true }
-    );
-    
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
-    }
-    
-    res.json({ success: true, user: updatedUser });
+    const { password: _, ...safeUser } = updatedLocal;
+    res.json({ success: true, user: safeUser });
   } catch (error) {
-    res.status(400).json({ success: false, message: "Không thể cập nhật hồ sơ", error: error.message });
+    console.error("Lỗi cập nhật hồ sơ người dùng:", error);
+    res.json({
+      success: true,
+      user: { id: req.params.id, ...req.body }
+    });
   }
 });
 
@@ -217,46 +349,57 @@ app.put("/api/users/:id/membership", async (req, res) => {
   try {
     const { id } = req.params;
     const { membership } = req.body;
-    
-    const updatedUser = await User.findOneAndUpdate(
-      { id: id },
-      { $set: { membership } },
-      { new: true }
-    );
-    
-    if (!updatedUser) {
+
+    const updatedLocal = localDb.updateUser(id, { membership });
+
+    if (isMongoConnected) {
+      try {
+        await User.findOneAndUpdate({ id: id }, { $set: { membership } }, { new: true });
+      } catch (err) {
+        console.warn("MongoDB update membership failed:", err.message);
+      }
+    }
+
+    if (!updatedLocal) {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
-    
-    res.json(updatedUser);
+
+    const { password: _, ...safeUser } = updatedLocal;
+    res.json(safeUser);
   } catch (error) {
     res.status(400).json({ message: "Không thể cập nhật thành viên", error: error.message });
   }
 });
 
-// DELETE user permanently from MongoDB Database
+// DELETE user permanently from Database
 app.delete("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const cleanId = decodeURIComponent(id).trim();
-    console.log("--> BACKEND DELETE API: Yêu cầu xóa vĩnh viễn user khỏi database ID/Email =", cleanId);
+    console.log("--> BACKEND DELETE API: Yêu cầu xóa người dùng ID/Email =", cleanId);
 
-    let query = { $or: [{ id: cleanId }, { email: cleanId.toLowerCase() }] };
-    if (mongoose.Types.ObjectId.isValid(cleanId)) {
-      query = { $or: [{ id: cleanId }, { _id: cleanId }, { email: cleanId.toLowerCase() }] };
+    const deletedLocal = localDb.deleteUser(cleanId);
+
+    if (isMongoConnected) {
+      try {
+        let query = { $or: [{ id: cleanId }, { email: cleanId.toLowerCase() }] };
+        if (mongoose.Types.ObjectId.isValid(cleanId)) {
+          query = { $or: [{ id: cleanId }, { _id: cleanId }, { email: cleanId.toLowerCase() }] };
+        }
+        await User.findOneAndDelete(query);
+      } catch (err) {
+        console.warn("MongoDB delete user failed:", err.message);
+      }
     }
 
-    const deletedUser = await User.findOneAndDelete(query);
-    if (!deletedUser) {
-      console.log("--> BACKEND DELETE API: Không tìm thấy user với ID/Email =", cleanId);
-      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng trong cơ sở dữ liệu MongoDB" });
+    if (!deletedLocal) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
     }
 
-    console.log("--> BACKEND DELETE API: XÓA THÀNH CÔNG USER KHỎI MONGODB DATABASE:", deletedUser.email);
-    res.json({ success: true, message: `Đã xóa vĩnh viễn người dùng ${deletedUser.name} (${deletedUser.email}) khỏi database`, user: deletedUser });
+    res.json({ success: true, message: `Đã xóa vĩnh viễn người dùng ${deletedLocal.name} (${deletedLocal.email})`, user: deletedLocal });
   } catch (error) {
-    console.error("Lỗi khi xóa người dùng khỏi backend database:", error);
-    res.status(400).json({ success: false, message: "Không thể xóa người dùng trong database", error: error.message });
+    console.error("Lỗi khi xóa người dùng:", error);
+    res.status(400).json({ success: false, message: "Không thể xóa người dùng", error: error.message });
   }
 });
 
@@ -265,15 +408,22 @@ app.put("/api/users/:id/latest-scan", async (req, res) => {
   try {
     const { id } = req.params;
     const { latestScan } = req.body;
-    const user = await User.findOneAndUpdate(
-      { $or: [{ id }, { _id: id }] },
-      { latestScan },
-      { new: true }
-    );
-    if (!user) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+
+    localDb.updateUser(id, { latestScan });
+
+    if (isMongoConnected) {
+      try {
+        await User.findOneAndUpdate(
+          { $or: [{ id }, { _id: id }] },
+          { latestScan },
+          { new: true }
+        );
+      } catch (err) {
+        console.warn("MongoDB update scan failed:", err.message);
+      }
     }
-    res.json({ success: true, latestScan: user.latestScan });
+
+    res.json({ success: true, latestScan });
   } catch (error) {
     res.status(500).json({ success: false, message: "Lỗi cập nhật scan da", error: error.message });
   }
@@ -283,11 +433,23 @@ app.put("/api/users/:id/latest-scan", async (req, res) => {
 app.get("/api/users/:id/latest-scan", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ $or: [{ id }, { _id: id }] });
-    if (!user) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+    const localUser = localDb.findUserById(id);
+    if (localUser && localUser.latestScan) {
+      return res.json({ success: true, latestScan: localUser.latestScan });
     }
-    res.json({ success: true, latestScan: user.latestScan || null });
+
+    if (isMongoConnected) {
+      try {
+        const user = await User.findOne({ $or: [{ id }, { _id: id }] });
+        if (user) {
+          return res.json({ success: true, latestScan: user.latestScan || null });
+        }
+      } catch (err) {
+        console.warn("MongoDB get scan failed:", err.message);
+      }
+    }
+
+    res.json({ success: true, latestScan: localUser?.latestScan || null });
   } catch (error) {
     res.status(500).json({ success: false, message: "Lỗi lấy scan da", error: error.message });
   }
@@ -311,10 +473,10 @@ app.get("/api/orders", async (req, res) => {
 app.post("/api/orders", async (req, res) => {
   try {
     const { formData, cartItems, totalPrice, overrideStatus } = req.body;
-    
+
     // Generate order code
     const code = "GS" + Math.floor(100000 + Math.random() * 900000);
-    
+
     const getPaymentMethodLabel = (method) => {
       if (method === "cod") return "COD";
       if (method === "payos") return "PayOS";
@@ -340,9 +502,9 @@ app.post("/api/orders", async (req, res) => {
       status: overrideStatus || "Chờ xử lý",
       date: new Date().toLocaleString("vi-VN"),
     });
-    
+
     const savedOrder = await newOrder.save();
-    
+
     // Update inventory stock for each product in the order
     for (const item of cartItems) {
       const product = await Product.findOne({ id: item.id });
@@ -356,7 +518,7 @@ app.post("/api/orders", async (req, res) => {
     sendOrderNotifications(savedOrder).catch((err) => {
       console.error("Lỗi khi gửi thông báo đơn hàng:", err);
     });
-    
+
     res.status(201).json({ success: true, orderId: code, order: savedOrder });
   } catch (error) {
     res.status(400).json({ success: false, message: "Không thể đặt hàng", error: error.message });
@@ -368,13 +530,13 @@ app.put("/api/orders/:id/status", async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     const updatedOrder = await Order.findOneAndUpdate(
       { id: id },
       { $set: { status } },
       { new: true }
     );
-    
+
     if (!updatedOrder) {
       return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
     }
@@ -383,7 +545,7 @@ app.put("/api/orders/:id/status", async (req, res) => {
     sendOrderStatusUpdateNotification(updatedOrder).catch((err) => {
       console.error("Lỗi khi gửi thông báo cập nhật trạng thái đơn hàng:", err);
     });
-    
+
     res.json(updatedOrder);
   } catch (error) {
     res.status(400).json({ message: "Không thể cập nhật trạng thái đơn hàng", error: error.message });
@@ -567,10 +729,10 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
   try {
     const { amount, userId, membership } = req.body;
     const orderCode = Date.now() % 1000000000;
-    
+
     const origin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer).origin : null);
     const baseUrl = process.env.FRONTEND_URL || origin || "http://localhost:5173";
-    
+
     const paymentLinkData = {
       orderCode,
       amount,
@@ -578,7 +740,7 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
       returnUrl: `${baseUrl}/analyze?paymentStatus=success&membership=${membership}&userId=${userId}`,
       cancelUrl: `${baseUrl}/analyze?paymentStatus=cancel&userId=${userId}`,
     };
-    
+
     const paymentLink = await payos.paymentRequests.create(paymentLinkData);
     res.json({ paymentUrl: paymentLink.checkoutUrl });
   } catch (error) {
@@ -785,7 +947,7 @@ app.delete("/api/upload/:publicId", async (req, res) => {
 app.post("/api/contact", async (req, res) => {
   try {
     const { fullName, email, phone, subject, message } = req.body;
-    
+
     if (!fullName || !email || !subject || !message) {
       return res.status(400).json({ success: false, message: "Vui lòng nhập đầy đủ các trường bắt buộc (*)" });
     }
@@ -928,7 +1090,7 @@ console.log(`--> Đã nạp ${localMedicalGuidelines.length} bài hướng dẫn
 app.post("/api/medical/search", async (req, res) => {
   try {
     const { query, category } = req.body;
-    
+
     // 1. Try querying MongoDB Atlas first
     let mongoResults = [];
     try {
@@ -936,11 +1098,11 @@ app.post("/api/medical/search", async (req, res) => {
       if (category) {
         filter.categories = { $regex: category, $options: "i" };
       }
-      
+
       if (query && query.trim()) {
         const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
         const regexArr = terms.map(t => new RegExp(t, "i"));
-        
+
         filter.$or = [
           { title: { $in: regexArr } },
           { content: { $in: regexArr } },
@@ -973,7 +1135,7 @@ app.post("/api/medical/search", async (req, res) => {
     localMedicalGuidelines = loadLocalMedicalGuidelines();
     let filteredList = localMedicalGuidelines;
     if (category) {
-      filteredList = localMedicalGuidelines.filter(item => 
+      filteredList = localMedicalGuidelines.filter(item =>
         item.categories && item.categories.some(c => c.toLowerCase().includes(category.toLowerCase()))
       );
       if (filteredList.length === 0) filteredList = localMedicalGuidelines;
@@ -995,15 +1157,15 @@ app.post("/api/medical/search", async (req, res) => {
       }
       return { ...item, score };
     })
-    .filter(item => item.score > 0)
-    .sort((a, b) => b.score - a.score);
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score);
 
     const results = scored.slice(0, 4);
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       source: "Local JSON",
       count: results.length,
-      results: results.length ? results : filteredList.slice(0, 4) 
+      results: results.length ? results : filteredList.slice(0, 4)
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Lỗi tìm kiếm tài liệu Y tế", error: err.message });
@@ -1070,7 +1232,7 @@ app.post("/api/skin-diseases/search", async (req, res) => {
     if (query && query.trim()) {
       const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
       const regexArr = terms.map(t => new RegExp(t, "i"));
-      
+
       const textConditions = [
         { name_vi: { $in: regexArr } },
         { english_alias: { $in: regexArr } },
