@@ -27,8 +27,8 @@ const BUDGET_OPTIONS = [
 ];
 
 const YES_NO_OPTIONS = [
-  "Câu hỏi không phù hợp với tôi",
-  "Có"
+  "Có",
+  "Không"
 ];
 
 const SKIN_TYPE_OPTIONS = [
@@ -529,9 +529,21 @@ export default function WelcomeNameModal() {
         setSelectedCity(currentUser.city || "");
         setCitySearch("");
         setBudget(currentUser.skinSurvey?.budget || "");
-        setHasMedical(currentUser.skinSurvey?.hasMedicalCondition || "");
-        setHasPrescription(currentUser.skinSurvey?.hasPrescriptionMedication || "");
-        setHasSupplements(currentUser.skinSurvey?.hasSupplements || "");
+        setHasMedical(
+          currentUser.skinSurvey?.hasMedicalCondition === "Câu hỏi không phù hợp với tôi"
+            ? "Không"
+            : currentUser.skinSurvey?.hasMedicalCondition || ""
+        );
+        setHasPrescription(
+          currentUser.skinSurvey?.hasPrescriptionMedication === "Câu hỏi không phù hợp với tôi"
+            ? "Không"
+            : currentUser.skinSurvey?.hasPrescriptionMedication || ""
+        );
+        setHasSupplements(
+          currentUser.skinSurvey?.hasSupplements === "Câu hỏi không phù hợp với tôi"
+            ? "Không"
+            : currentUser.skinSurvey?.hasSupplements || ""
+        );
         setSkinType(currentUser.skinSurvey?.skinType || "");
         setSkinSensitivity(currentUser.skinSurvey?.skinSensitivity || "");
         
@@ -786,9 +798,9 @@ export default function WelcomeNameModal() {
       city: selectedCity,
       skinSurvey: {
         budget,
-        hasMedicalCondition: hasMedical || "Câu hỏi không phù hợp với tôi",
-        hasPrescriptionMedication: hasPrescription || "Câu hỏi không phù hợp với tôi",
-        hasSupplements: hasSupplements || "Câu hỏi không phù hợp với tôi",
+        hasMedicalCondition: hasMedical || "Không",
+        hasPrescriptionMedication: hasPrescription || "Không",
+        hasSupplements: hasSupplements || "Không",
         skinType,
         skinSensitivity,
         capturedFaces,
