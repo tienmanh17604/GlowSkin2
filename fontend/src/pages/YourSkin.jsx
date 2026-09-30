@@ -392,6 +392,8 @@ export default function YourSkin() {
     );
   }, [displayScan]);
 
+  const angleKey = currentAngleIndex === 0 ? "front" : currentAngleIndex === 1 ? "left" : "right";
+
   const diagnosticMetricsList = useMemo(() => {
     const m = diagnosticData.metrics || DEFAULT_DIAGNOSTIC_METRICS;
     const order = ["mun_viem", "mun_khong_viem", "soi_ba_nhon", "seo", "sac_to_da", "lo_chan_long"];
@@ -404,7 +406,8 @@ export default function YourSkin() {
         dotColor: item.dotColor || "#f43f5e",
         pillColor: item.pillColor || "#e11d48",
         pointerIndex: item.pointerIndex,
-        points: item.points || []
+        points: item.points || [],
+        pointsByAngle: item.pointsByAngle || DEFAULT_DIAGNOSTIC_METRICS[key]?.pointsByAngle || {}
       };
     });
   }, [diagnosticData]);
@@ -417,11 +420,23 @@ export default function YourSkin() {
     );
   }, [diagnosticMetricsList, activeMetricId]);
 
+  const activePoints = useMemo(() => {
+    if (!activeMetric) return [];
+    if (activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
+      return activeMetric.pointsByAngle[angleKey];
+    }
+    return activeMetric.points || [];
+  }, [activeMetric, angleKey]);
+
   const targetPoint = useMemo(() => {
-    if (!activeMetric?.points || !activeMetric.points.length) return null;
-    const pIdx = activeMetric.pointerIndex !== undefined ? activeMetric.pointerIndex : activeMetric.points.length - 1;
-    return activeMetric.points[pIdx] || activeMetric.points[0];
-  }, [activeMetric]);
+    if (!activePoints || !activePoints.length) return null;
+    const explicitTarget = activePoints.find((p) => p.pointer);
+    if (explicitTarget) return explicitTarget;
+    if (activeMetric?.pointerIndex !== undefined && activePoints[activeMetric.pointerIndex]) {
+      return activePoints[activeMetric.pointerIndex];
+    }
+    return activePoints[activePoints.length - 1];
+  }, [activePoints, activeMetric]);
 
   const sampleProductsList = useMemo(() => {
     const base = (products && products.length > 0) ? products : [
@@ -1015,50 +1030,29 @@ export default function YourSkin() {
                     {/* Dashed Line from Active Badge (bottom-left) to Target Point */}
                     {targetPoint && (
                       <line
-                        x1="26%"
-                        y1="93%"
+                        x1="28%"
+                        y1="93.5%"
                         x2={`${targetPoint.left}%`}
                         y2={`${targetPoint.top}%`}
-                        stroke="rgba(255, 255, 255, 0.85)"
-                        strokeWidth="0.65"
-                        strokeDasharray="1.8 1.8"
+                        stroke="rgba(255, 255, 255, 0.88)"
+                        strokeWidth="0.32"
+                        strokeDasharray="1.2 1.2"
                       />
                     )}
 
-                    {/* Detection Rings for Active Metric */}
-                    {activeMetric?.points?.map((pt, pIdx) => {
-                      const isTarget = targetPoint && pt.left === targetPoint.left && pt.top === targetPoint.top;
-                      return (
-                        <g key={pIdx} className="skin-detection-group">
-                          <circle
-                            cx={`${pt.left}%`}
-                            cy={`${pt.top}%`}
-                            r={pt.r ? pt.r * 0.45 : 3.2}
-                            stroke={activeMetric.pillColor || activeMetric.dotColor}
-                            strokeWidth="0.8"
-                            fill="rgba(255, 255, 255, 0.04)"
-                          />
-                          <circle
-                            cx={`${pt.left}%`}
-                            cy={`${pt.top}%`}
-                            r="0.8"
-                            fill={activeMetric.pillColor || activeMetric.dotColor}
-                          />
-                          {isTarget && (
-                            <circle
-                              cx={`${pt.left}%`}
-                              cy={`${pt.top}%`}
-                              r={pt.r ? pt.r * 0.65 : 4.6}
-                              stroke={activeMetric.pillColor || activeMetric.dotColor}
-                              strokeWidth="0.4"
-                              strokeDasharray="1 1"
-                              fill="none"
-                              opacity="0.8"
-                            />
-                          )}
-                        </g>
-                      );
-                    })}
+                    {/* Accurate Delicate Rings on Actual Blemishes */}
+                    {activePoints.map((pt, pIdx) => (
+                      <circle
+                        key={pIdx}
+                        cx={`${pt.left}%`}
+                        cy={`${pt.top}%`}
+                        r="1.3"
+                        stroke={activeMetric.pillColor || activeMetric.dotColor}
+                        strokeWidth="0.32"
+                        fill="none"
+                        className="skin-detection-precise-ring"
+                      />
+                    ))}
                   </svg>
 
                   {/* Active Metric Badge Tag on Bottom-Left */}

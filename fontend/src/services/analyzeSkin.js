@@ -108,7 +108,12 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     dotColor: "#f472b6",
     pillColor: "#e11d48",
     pointerIndex: 0,
-    points: [{ top: 42, left: 48, r: 9 }]
+    points: [{ top: 57.5, left: 51.0, pointer: true }],
+    pointsByAngle: {
+      front: [{ top: 62.5, left: 41.0, pointer: true }, { top: 64.0, left: 58.0 }],
+      left: [{ top: 57.5, left: 51.0, pointer: true }, { top: 75.0, left: 63.0 }],
+      right: [{ top: 56.0, left: 64.0, pointer: true }]
+    }
   },
   mun_khong_viem: {
     id: "mun_khong_viem",
@@ -116,13 +121,35 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     score: 6,
     dotColor: "#eab308",
     pillColor: "#d97706",
-    pointerIndex: 3,
+    pointerIndex: 4,
     points: [
-      { top: 34, left: 47, r: 8 },
-      { top: 37, left: 60, r: 8 },
-      { top: 36, left: 27, r: 8 },
-      { top: 46.5, left: 65, r: 9 }
-    ]
+      { top: 56.4, left: 47.4 },
+      { top: 61.4, left: 27.5 },
+      { top: 63.8, left: 28.3 },
+      { top: 61.4, left: 60.7 },
+      { top: 76.9, left: 64.9, pointer: true }
+    ],
+    pointsByAngle: {
+      front: [
+        { top: 75.0, left: 50.0, pointer: true },
+        { top: 60.0, left: 39.0 },
+        { top: 60.0, left: 61.0 },
+        { top: 33.0, left: 50.0 }
+      ],
+      left: [
+        { top: 56.4, left: 47.4 },
+        { top: 61.4, left: 27.5 },
+        { top: 63.8, left: 28.3 },
+        { top: 61.4, left: 60.7 },
+        { top: 76.9, left: 64.9, pointer: true }
+      ],
+      right: [
+        { top: 62.0, left: 62.5 },
+        { top: 66.5, left: 58.0 },
+        { top: 54.0, left: 67.0 },
+        { top: 73.5, left: 53.0, pointer: true }
+      ]
+    }
   },
   soi_ba_nhon: {
     id: "soi_ba_nhon",
@@ -132,12 +159,34 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#6862b5",
     pointerIndex: 0,
     points: [
-      { top: 33, left: 57, r: 7 },
-      { top: 34.5, left: 63, r: 8 },
-      { top: 32, left: 61, r: 7 },
-      { top: 35.5, left: 66, r: 8 },
-      { top: 35, left: 56, r: 8 }
-    ]
+      { top: 56.9, left: 63.6, pointer: true },
+      { top: 55.2, left: 61.8 },
+      { top: 55.8, left: 65.2 },
+      { top: 58.2, left: 62.5 },
+      { top: 58.5, left: 64.5 }
+    ],
+    pointsByAngle: {
+      front: [
+        { top: 56.5, left: 50.0, pointer: true },
+        { top: 55.0, left: 47.0 },
+        { top: 55.0, left: 53.0 },
+        { top: 52.0, left: 50.0 },
+        { top: 73.0, left: 50.0 }
+      ],
+      left: [
+        { top: 56.9, left: 63.6, pointer: true },
+        { top: 55.2, left: 61.8 },
+        { top: 55.8, left: 65.2 },
+        { top: 58.2, left: 62.5 },
+        { top: 58.5, left: 64.5 }
+      ],
+      right: [
+        { top: 58.0, left: 54.0, pointer: true },
+        { top: 56.5, left: 51.5 },
+        { top: 56.0, left: 55.5 },
+        { top: 59.5, left: 53.0 }
+      ]
+    }
   },
   seo: {
     id: "seo",
@@ -146,7 +195,12 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     dotColor: "#ef4444",
     pillColor: "#dc2626",
     pointerIndex: 0,
-    points: [{ top: 43, left: 68, r: 8 }]
+    points: [{ top: 52.0, left: 66.2, pointer: true }],
+    pointsByAngle: {
+      front: [{ top: 53.0, left: 65.0, pointer: true }, { top: 53.0, left: 35.0 }],
+      left: [{ top: 52.0, left: 66.2, pointer: true }],
+      right: [{ top: 49.0, left: 72.0, pointer: true }]
+    }
   },
   sac_to_da: {
     id: "sac_to_da",
@@ -156,11 +210,30 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#e15b32",
     pointerIndex: 3,
     points: [
-      { top: 27, left: 66, r: 8 },
-      { top: 29.5, left: 63, r: 7 },
-      { top: 37, left: 65, r: 8 },
-      { top: 43.5, left: 66, r: 9 }
-    ]
+      { top: 46.5, left: 66.2 },
+      { top: 50.2, left: 63.5 },
+      { top: 60.7, left: 65.3 },
+      { top: 71.1, left: 66.0, pointer: true }
+    ],
+    pointsByAngle: {
+      front: [
+        { top: 61.0, left: 64.0, pointer: true },
+        { top: 61.0, left: 36.0 },
+        { top: 32.0, left: 52.0 },
+        { top: 71.0, left: 62.0 }
+      ],
+      left: [
+        { top: 54.0, left: 48.0 },
+        { top: 52.0, left: 66.2 },
+        { top: 63.2, left: 36.2, pointer: true }
+      ],
+      right: [
+        { top: 46.5, left: 66.2 },
+        { top: 50.2, left: 63.5 },
+        { top: 60.7, left: 65.3 },
+        { top: 71.1, left: 66.0, pointer: true }
+      ]
+    }
   },
   lo_chan_long: {
     id: "lo_chan_long",
@@ -170,11 +243,30 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#16a34a",
     pointerIndex: 0,
     points: [
-      { top: 33, left: 52, r: 8 },
-      { top: 35, left: 55, r: 8 },
-      { top: 38, left: 46, r: 8 },
-      { top: 40, left: 54, r: 8 }
-    ]
+      { top: 58.0, left: 52.0, pointer: true },
+      { top: 60.5, left: 55.5 },
+      { top: 62.0, left: 49.0 },
+      { top: 59.0, left: 45.0 }
+    ],
+    pointsByAngle: {
+      front: [
+        { top: 57.0, left: 44.0, pointer: true },
+        { top: 57.0, left: 56.0 },
+        { top: 61.0, left: 43.0 },
+        { top: 61.0, left: 57.0 }
+      ],
+      left: [
+        { top: 58.0, left: 52.0, pointer: true },
+        { top: 60.5, left: 55.5 },
+        { top: 62.0, left: 49.0 },
+        { top: 59.0, left: 45.0 }
+      ],
+      right: [
+        { top: 58.5, left: 58.5, pointer: true },
+        { top: 61.0, left: 61.5 },
+        { top: 62.0, left: 56.0 }
+      ]
+    }
   }
 };
 
