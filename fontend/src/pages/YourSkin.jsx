@@ -911,14 +911,6 @@ export default function YourSkin() {
           <p className="gold-page-subtitle">
             Hệ thống định vị đa vùng chuẩn Y Khoa &amp; Công nghệ AI Gemini Vision {scan ? `| ${scan.date || "Vừa cập nhật"}` : ""}
           </p>
-
-          {isAnalyzed && (
-            <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "16px" }}>
-              <button className="gold-action-btn primary" onClick={() => handleOpenAiDoctor(zones[0])}>
-                💬 Chat Trực Tiếp Với Bác Sĩ AI (360 Bài Y Khoa)
-              </button>
-            </div>
-          )}
         </div>
 
         {!currentUser ? (
@@ -1164,7 +1156,7 @@ export default function YourSkin() {
                       className="skin-result-btn-consult-ai"
                       onClick={() => handleOpenAiDoctor(zones[0])}
                     >
-                      💬 Chat Trực Tiếp Với Bác Sĩ AI (Tư Vấn Thêm)
+                      💬 Chat Trực Tiếp Với Bác Sĩ AI (360 Bài Y Khoa)
                     </button>
                   </div>
                 </div>
