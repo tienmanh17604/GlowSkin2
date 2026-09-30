@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { analyzeMultiAngleSkinImages, parseAnalysisResponse } from "../services/analyzeSkin";
+import { analyzeMultiAngleSkinImages, parseAnalysisResponse, computeDiagnosticMetrics } from "../services/analyzeSkin";
 import "./WelcomeNameModal.css";
 
 const VIETNAM_CITIES = [
@@ -295,10 +295,20 @@ function buildPersonalizedScan(skinTypeChoice, sensitivityChoice, budgetChoice) 
     capturedFaces?.right ||
     "/images/skin-types/model_base.jpg";
 
+  const diagResult = computeDiagnosticMetrics({
+    skinType: skinTypeChoice,
+    skinSensitivity: sensitivityChoice
+  });
+
   return {
     id: `survey-scan-${Date.now()}`,
     date: "Chẩn đoán vừa thực hiện",
-    score,
+    score: Math.round(diagResult.averageScore * 10),
+    averageScore: diagResult.averageScore,
+    detectedIssues: diagResult.detectedIssues,
+    metrics: diagResult.metrics,
+    skinType: skinTypeChoice || "Da hỗn hợp",
+    sensitivity: (sensitivityChoice?.includes("Thường xuyên") || sensitivityChoice?.includes("Rất hay gặp")) ? "Có" : "Không",
     scoreLabel: "Phân tích Y Khoa & AI Vision",
     medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
     image: primaryImage,
@@ -875,12 +885,29 @@ export default function WelcomeNameModal() {
         angle: zone.angle !== undefined ? zone.angle : -90 + (idx * 360) / detectedZones.length
       }));
 
+      const diagResult = computeDiagnosticMetrics(
+        {
+          skinType,
+          skinSensitivity,
+          hasMedicalCondition: hasMedical,
+          hasPrescriptionMedication: hasPrescription,
+          hasSupplements: hasSupplements,
+          hasBloodVessels: hasBloodVessels
+        },
+        parsedData?.jsonData
+      );
+
       const finalScanData = {
         id: "scan-" + Date.now(),
         date: new Date().toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-        score: parsedData.jsonData?.score || (skinSensitivity?.includes("Thường xuyên") ? 72 : 82),
+        score: parsedData.jsonData?.score || Math.round((diagResult.averageScore || 6.7) * 10),
+        averageScore: diagResult.averageScore,
+        detectedIssues: diagResult.detectedIssues,
+        metrics: diagResult.metrics,
         scoreLabel: "Phân tích Y Khoa & AI Vision (3 Góc Mặt)",
         medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
+        skinType: skinType || "Da hỗn hợp thiên dầu",
+        sensitivity: skinSensitivity?.includes("Thường xuyên") || skinSensitivity?.includes("Rất hay gặp") ? "Có" : "Không",
         image: primaryImage,
         faceAngles: {
           front: optImages.front || capturedFaces?.center || null,

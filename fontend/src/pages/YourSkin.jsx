@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
-import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded } from "../services/analyzeSkin";
+import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics } from "../services/analyzeSkin";
 import { generateDotsForZones, DIAGNOSTIC_LEGEND } from "../data/skinDiagnosticDots";
 import { cropFaceZones } from "../utils/faceZoneCropper";
 import { removeImageBackground, preloadMediaPipe } from "../utils/backgroundRemoval";
@@ -17,7 +17,12 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 export const DEFAULT_DEMO_SCAN = {
   id: "demo-scan-01",
   date: "Chẩn đoán vừa thực hiện",
-  score: 72,
+  score: 67,
+  averageScore: 6.7,
+  detectedIssues: ["Lỗ chân lông", "Mụn không viêm"],
+  metrics: DEFAULT_DIAGNOSTIC_METRICS,
+  skinType: "Da hỗn hợp thiên dầu",
+  sensitivity: "Có",
   scoreLabel: "Phân tích Y Khoa & AI Vision",
   medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
   image: "https://res.cloudinary.com/buevamso/image/upload/v1784045582/glowskin/showcase/sample_acne_analysis_face.jpg",
@@ -27,8 +32,8 @@ export const DEFAULT_DEMO_SCAN = {
   warning: "**Lưu ý chống chỉ định:** Tránh tự ý kết hợp Retinol nồng độ cao với BHA/AHA trong cùng một chu trình tối mà không phục hồi đủ ẩm. Luôn thoa kem chống nắng đầy đủ mỗi 3-4 giờ.",
   summary: [
     { title: "Bít tắc lỗ chân lông", en: "(Enlarged Pores)" },
-    { title: "Mụn viêm rải rác", en: "(Inflammatory Acne)" },
-    { title: "Thâm mụn sau viêm", en: "(PIH)" }
+    { title: "Mụn không viêm", en: "(Comedones)" },
+    { title: "Sợi bã nhờn", en: "(Sebaceous Filaments)" }
   ],
   zones: [
     {
@@ -361,14 +366,62 @@ export default function YourSkin() {
     return "Có";
   }, [displayScan]);
 
-  const diagnosticMetrics = useMemo(() => [
-    { id: "mun_viem", title: "Mụn viêm", score: "2/10", dotColor: "#f43f5e" },
-    { id: "mun_khong_viem", title: "Mụn không viêm", score: "4/10", dotColor: "#eab308" },
-    { id: "soi_ba_nhon", title: "Sợi bã nhờn", score: "6/10", dotColor: "#8b5cf6" },
-    { id: "seo", title: "Sẹo", score: "1/10", dotColor: "#ef4444" },
-    { id: "sac_to_da", title: "Sắc tố da", score: "3/10", dotColor: "#f97316" },
-    { id: "lo_chan_long", title: "Lỗ chân lông", score: "5/10", dotColor: "#10b981" }
-  ], []);
+  const [activeMetricId, setActiveMetricId] = useState("sac_to_da");
+  const [feedbackVote, setFeedbackVote] = useState(null);
+  const [feedbackGiven, setFeedbackGiven] = useState(false);
+
+  const handleFeedback = (type) => {
+    setFeedbackVote(type);
+    setFeedbackGiven(true);
+  };
+
+  const diagnosticData = useMemo(() => {
+    if (displayScan?.metrics && displayScan?.averageScore) {
+      return {
+        metrics: displayScan.metrics,
+        averageScore: displayScan.averageScore,
+        detectedIssues: displayScan.detectedIssues || ["Lỗ chân lông", "Mụn không viêm"]
+      };
+    }
+    return computeDiagnosticMetrics(
+      {
+        skinType: displayScan?.skinType,
+        skinSensitivity: displayScan?.sensitivity
+      },
+      displayScan
+    );
+  }, [displayScan]);
+
+  const diagnosticMetricsList = useMemo(() => {
+    const m = diagnosticData.metrics || DEFAULT_DIAGNOSTIC_METRICS;
+    const order = ["mun_viem", "mun_khong_viem", "soi_ba_nhon", "seo", "sac_to_da", "lo_chan_long"];
+    return order.map((key) => {
+      const item = m[key] || DEFAULT_DIAGNOSTIC_METRICS[key] || {};
+      return {
+        id: key,
+        title: item.label || key,
+        score: item.score !== undefined ? item.score : 7,
+        dotColor: item.dotColor || "#f43f5e",
+        pillColor: item.pillColor || "#e11d48",
+        pointerIndex: item.pointerIndex,
+        points: item.points || []
+      };
+    });
+  }, [diagnosticData]);
+
+  const activeMetric = useMemo(() => {
+    return (
+      diagnosticMetricsList.find((m) => m.id === activeMetricId) ||
+      diagnosticMetricsList[4] ||
+      diagnosticMetricsList[0]
+    );
+  }, [diagnosticMetricsList, activeMetricId]);
+
+  const targetPoint = useMemo(() => {
+    if (!activeMetric?.points || !activeMetric.points.length) return null;
+    const pIdx = activeMetric.pointerIndex !== undefined ? activeMetric.pointerIndex : activeMetric.points.length - 1;
+    return activeMetric.points[pIdx] || activeMetric.points[0];
+  }, [activeMetric]);
 
   const sampleProductsList = useMemo(() => {
     const base = (products && products.length > 0) ? products : [
@@ -898,15 +951,26 @@ export default function YourSkin() {
 
                   {/* Top Bar with Pagination Dots & Close */}
                   <div className="skin-result-photo-top-bar">
-                    <div className="skin-result-pagination-dots">
-                      {angleImages.map((ang, idx) => (
-                        <div
-                          key={ang.id}
-                          className={`skin-result-dot ${currentAngleIndex === idx ? "active" : ""}`}
-                          onClick={() => setCurrentAngleIndex(idx)}
-                          title={ang.label}
-                        />
-                      ))}
+                    <button
+                      type="button"
+                      className="skin-result-round-btn skin-result-back-btn"
+                      onClick={() => navigate(-1)}
+                      title="Quay lại"
+                    >
+                      ‹
+                    </button>
+
+                    <div className="skin-result-top-center-group">
+                      <div className="skin-result-pagination-dots">
+                        {angleImages.map((ang, idx) => (
+                          <div
+                            key={ang.id}
+                            className={`skin-result-dot ${currentAngleIndex === idx ? "active" : ""}`}
+                            onClick={() => setCurrentAngleIndex(idx)}
+                            title={ang.label}
+                          />
+                        ))}
+                      </div>
                     </div>
 
                     <div className="skin-result-top-right-group">
@@ -915,7 +979,7 @@ export default function YourSkin() {
                       </div>
                       <button
                         type="button"
-                        className="skin-result-close-btn"
+                        className="skin-result-round-btn skin-result-close-btn"
                         onClick={() => navigate("/")}
                         title="Đóng / Về trang chủ"
                       >
@@ -942,6 +1006,69 @@ export default function YourSkin() {
                     ›
                   </button>
 
+                  {/* SVG HUD Detection Overlay on Face */}
+                  <svg
+                    className="skin-result-hud-svg"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                  >
+                    {/* Dashed Line from Active Badge (bottom-left) to Target Point */}
+                    {targetPoint && (
+                      <line
+                        x1="26%"
+                        y1="93%"
+                        x2={`${targetPoint.left}%`}
+                        y2={`${targetPoint.top}%`}
+                        stroke="rgba(255, 255, 255, 0.85)"
+                        strokeWidth="0.65"
+                        strokeDasharray="1.8 1.8"
+                      />
+                    )}
+
+                    {/* Detection Rings for Active Metric */}
+                    {activeMetric?.points?.map((pt, pIdx) => {
+                      const isTarget = targetPoint && pt.left === targetPoint.left && pt.top === targetPoint.top;
+                      return (
+                        <g key={pIdx} className="skin-detection-group">
+                          <circle
+                            cx={`${pt.left}%`}
+                            cy={`${pt.top}%`}
+                            r={pt.r ? pt.r * 0.45 : 3.2}
+                            stroke={activeMetric.pillColor || activeMetric.dotColor}
+                            strokeWidth="0.8"
+                            fill="rgba(255, 255, 255, 0.04)"
+                          />
+                          <circle
+                            cx={`${pt.left}%`}
+                            cy={`${pt.top}%`}
+                            r="0.8"
+                            fill={activeMetric.pillColor || activeMetric.dotColor}
+                          />
+                          {isTarget && (
+                            <circle
+                              cx={`${pt.left}%`}
+                              cy={`${pt.top}%`}
+                              r={pt.r ? pt.r * 0.65 : 4.6}
+                              stroke={activeMetric.pillColor || activeMetric.dotColor}
+                              strokeWidth="0.4"
+                              strokeDasharray="1 1"
+                              fill="none"
+                              opacity="0.8"
+                            />
+                          )}
+                        </g>
+                      );
+                    })}
+                  </svg>
+
+                  {/* Active Metric Badge Tag on Bottom-Left */}
+                  <div
+                    className="skin-result-active-metric-pill"
+                    style={{ backgroundColor: activeMetric?.pillColor || "#ea580c" }}
+                  >
+                    {activeMetric?.title}
+                  </div>
+
                   {/* Bottom Right Floating Button: Quét sản phẩm */}
                   <button
                     type="button"
@@ -961,76 +1088,89 @@ export default function YourSkin() {
 
                 {/* BOTTOM SHEET CARD */}
                 <div className="skin-result-card-bottom">
-                  {/* Dark Header Strip */}
-                  <div className="skin-result-dark-header">
-                    <div className="skin-result-header-col">
-                      <div className="skin-result-header-label">Loại da</div>
-                      <div className="skin-result-header-value">{skinTypeTitle}</div>
+                  {/* Summary Card with Average Score (Left) & Detected Issues (Right) */}
+                  <div className="skin-result-summary-card">
+                    <div className="skin-summary-score-col">
+                      <span className="skin-summary-label">Điểm trung bình</span>
+                      <span className="skin-summary-big-score">{diagnosticData.averageScore}</span>
                     </div>
-                    <div className="skin-result-header-col">
-                      <div className="skin-result-header-label">Nhạy cảm</div>
-                      <div className="skin-result-header-value">{sensitivityTitle}</div>
-                    </div>
-                  </div>
 
-                  {/* 6 Diagnostic Metrics Grid */}
-                  <div className="skin-result-metrics-grid">
-                    {diagnosticMetrics.map((metric) => (
-                      <div key={metric.id} className="skin-result-metric-card">
-                        <div className="skin-result-metric-title">{metric.title}</div>
-                        <div className="skin-result-metric-bottom">
-                          <div className="skin-result-metric-score">
-                            {isUnlocked ? (
-                              <span>{metric.score}</span>
-                            ) : (
-                              <>
-                                <span className="lock-icon">🔒</span>/10
-                              </>
-                            )}
-                          </div>
-                          <span
-                            className="skin-result-metric-dot"
-                            style={{ backgroundColor: metric.dotColor }}
-                          />
-                        </div>
+                    <div className="skin-summary-issues-col">
+                      <div className="skin-issues-header-row">
+                        <span className="skin-issues-title">Vấn đề da</span>
+                        <span className="skin-issues-ai-badge">AI phát hiện ✨</span>
                       </div>
-                    ))}
+                      <ul className="skin-issues-list">
+                        {diagnosticData.detectedIssues.map((issue, idx) => (
+                          <li key={idx}>- {issue}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  {/* Promotion Offer Banner */}
-                  <div className="skin-result-offer-banner">
-                    {isUnlocked ? (
-                      <p className="skin-result-offer-text" style={{ color: "#059669" }}>
-                        ✨ Đã mở khóa chu trình chăm sóc da phù hợp riêng bạn!
-                      </p>
-                    ) : (
-                      <p className="skin-result-offer-text">
-                        Tặng kèm 1 chu trình chăm sóc da phù hợp riêng bạn khi mở khóa
-                      </p>
-                    )}
+                  {/* 6 Diagnostic Metrics Grid (3 columns x 2 rows) - 100% FREE */}
+                  <div className="skin-result-metrics-grid">
+                    {diagnosticMetricsList.map((metric) => {
+                      const isSelected = activeMetricId === metric.id;
+                      return (
+                        <div
+                          key={metric.id}
+                          className={`skin-result-metric-card ${isSelected ? "active" : ""}`}
+                          onClick={() => setActiveMetricId(metric.id)}
+                        >
+                          <div className="skin-result-metric-title">{metric.title}</div>
+                          <div className="skin-result-metric-bottom">
+                            <div className="skin-result-metric-score">
+                              <span className="score-num">{metric.score}</span>
+                              <span className="score-denom">/10</span>
+                            </div>
+                            <span
+                              className="skin-result-metric-dot"
+                              style={{ backgroundColor: metric.dotColor }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  {/* Dual Action Buttons */}
-                  <div className="skin-result-actions-row">
+                  {/* User Satisfaction Feedback Bar */}
+                  <div className="skin-result-feedback-bar">
+                    <span className="skin-feedback-text">
+                      {feedbackGiven ? "Cảm ơn bạn đã phản hồi kết quả da! ❤️" : "Bạn có hài lòng với kết quả phân tích da không?"}
+                    </span>
+                    <div className="skin-feedback-buttons">
+                      <button
+                        type="button"
+                        className={`skin-feedback-btn ${feedbackVote === "up" ? "active" : ""}`}
+                        onClick={() => handleFeedback("up")}
+                        title="Hài lòng"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        className={`skin-feedback-btn ${feedbackVote === "down" ? "active" : ""}`}
+                        onClick={() => handleFeedback("down")}
+                        title="Chưa hài lòng"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Extra Quick Action: Chat with AI Doctor */}
+                  <div className="skin-result-extra-actions">
                     <button
                       type="button"
-                      className="skin-result-btn-unlock"
-                      onClick={() => {
-                        setSelectedPlanId("unlock_single");
-                        setIsPricingModalOpen(true);
-                      }}
+                      className="skin-result-btn-consult-ai"
+                      onClick={() => handleOpenAiDoctor(zones[0])}
                     >
-                      {isUnlocked ? "✓ Đã mở khóa" : "Mở khóa (19k)"}
-                    </button>
-                    <button
-                      type="button"
-                      className="skin-result-btn-sub"
-                      onClick={() => {
-                        setSelectedPlanId("premium");
-                        setIsPricingModalOpen(true);
-                      }}
-                    >
-                      Đăng ký dài hạn
+                      💬 Chat Trực Tiếp Với Bác Sĩ AI (Tư Vấn Thêm)
                     </button>
                   </div>
                 </div>

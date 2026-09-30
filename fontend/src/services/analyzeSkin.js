@@ -42,12 +42,22 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
 
 ===JSON_DATA===
 {
-  "score": 82,
+  "score": 67,
+  "averageScore": 6.7,
   "scoreLabel": "Phân tích Y Khoa & AI Vision",
   "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
+  "metrics": {
+    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 42, "left": 48, "r": 9 }] },
+    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 34, "left": 47, "r": 8 }, { "top": 37, "left": 60, "r": 8 }, { "top": 36, "left": 27, "r": 8 }, { "top": 46.5, "left": 65, "r": 9 }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 33, "left": 57, "r": 7 }, { "top": 34.5, "left": 63, "r": 8 }, { "top": 32, "left": 61, "r": 7 }, { "top": 35.5, "left": 66, "r": 8 }, { "top": 35, "left": 56, "r": 8 }] },
+    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 43, "left": 68, "r": 8 }] },
+    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 27, "left": 66, "r": 8 }, { "top": 29.5, "left": 63, "r": 7 }, { "top": 37, "left": 65, "r": 8 }, { "top": 43.5, "left": 66, "r": 9 }] },
+    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 33, "left": 52, "r": 8 }, { "top": 35, "left": 55, "r": 8 }, { "top": 38, "left": 46, "r": 8 }, { "top": 40, "left": 54, "r": 8 }] }
+  },
   "summary": [
-    { "title": "Đặc điểm 1 quan sát được", "en": "(English Term)", "desc": "Mô tả ngắn gọn theo ảnh" },
-    { "title": "Đặc điểm 2 quan sát được", "en": "(English Term)", "desc": "Mô tả ngắn gọn theo ảnh" }
+    { "title": "Lỗ chân lông to", "en": "(Enlarged Pores)", "desc": "Tập trung vùng chữ T và hai bên má" },
+    { "title": "Mụn không viêm", "en": "(Comedones)", "desc": "Sợi bã nhờn và mụn cám rải rác" }
   ],
   "zones": [
     { 
@@ -81,14 +91,142 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
     { 
       "id": "chin", 
       "title": "Vùng Cằm", 
-      "condition": "Mô tả thực tế vùng cằm (nếu láng mịn thì ghi không có mụn viêm)", 
+      "condition": "Mô tả thực tế vùng cằm", 
       "detail": "Chi tiết chăm sóc vùng cằm", 
       "status": "green" 
     }
   ]
 }
 
-Chú ý: Thẻ ===JSON_DATA=== phải chứa duy nhất 1 chuỗi JSON hợp lệ. Các thuộc tính status phải là "green", "yellow", hoặc "red" tương ứng đúng với ảnh thật.`;
+Chú ý: Thẻ ===JSON_DATA=== phải chứa duy nhất 1 chuỗi JSON hợp lệ. Đầy đủ các trường averageScore (điểm TB trên thang 10, vd 6.7), detectedIssues (mảng chuỗi 2 vấn đề điểm thấp nhất), metrics (chứa 6 chỉ số: mun_viem, mun_khong_viem, soi_ba_nhon, seo, sac_to_da, lo_chan_long với score từ 1 đến 10 và danh sách tọa độ points {top: %, left: %}).`;
+
+export const DEFAULT_DIAGNOSTIC_METRICS = {
+  mun_viem: {
+    id: "mun_viem",
+    label: "Mụn viêm",
+    score: 9,
+    dotColor: "#f472b6",
+    pillColor: "#e11d48",
+    pointerIndex: 0,
+    points: [{ top: 42, left: 48, r: 9 }]
+  },
+  mun_khong_viem: {
+    id: "mun_khong_viem",
+    label: "Mụn không viêm",
+    score: 6,
+    dotColor: "#eab308",
+    pillColor: "#d97706",
+    pointerIndex: 3,
+    points: [
+      { top: 34, left: 47, r: 8 },
+      { top: 37, left: 60, r: 8 },
+      { top: 36, left: 27, r: 8 },
+      { top: 46.5, left: 65, r: 9 }
+    ]
+  },
+  soi_ba_nhon: {
+    id: "soi_ba_nhon",
+    label: "Sợi bã nhờn",
+    score: 7,
+    dotColor: "#8b5cf6",
+    pillColor: "#6862b5",
+    pointerIndex: 0,
+    points: [
+      { top: 33, left: 57, r: 7 },
+      { top: 34.5, left: 63, r: 8 },
+      { top: 32, left: 61, r: 7 },
+      { top: 35.5, left: 66, r: 8 },
+      { top: 35, left: 56, r: 8 }
+    ]
+  },
+  seo: {
+    id: "seo",
+    label: "Sẹo",
+    score: 7,
+    dotColor: "#ef4444",
+    pillColor: "#dc2626",
+    pointerIndex: 0,
+    points: [{ top: 43, left: 68, r: 8 }]
+  },
+  sac_to_da: {
+    id: "sac_to_da",
+    label: "Sắc tố da",
+    score: 6,
+    dotColor: "#ea580c",
+    pillColor: "#e15b32",
+    pointerIndex: 3,
+    points: [
+      { top: 27, left: 66, r: 8 },
+      { top: 29.5, left: 63, r: 7 },
+      { top: 37, left: 65, r: 8 },
+      { top: 43.5, left: 66, r: 9 }
+    ]
+  },
+  lo_chan_long: {
+    id: "lo_chan_long",
+    label: "Lỗ chân lông",
+    score: 5,
+    dotColor: "#22c55e",
+    pillColor: "#16a34a",
+    pointerIndex: 0,
+    points: [
+      { top: 33, left: 52, r: 8 },
+      { top: 35, left: 55, r: 8 },
+      { top: 38, left: 46, r: 8 },
+      { top: 40, left: 54, r: 8 }
+    ]
+  }
+};
+
+export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}) {
+  const base = JSON.parse(JSON.stringify(DEFAULT_DIAGNOSTIC_METRICS));
+
+  if (parsedJson?.metrics) {
+    for (const key of Object.keys(base)) {
+      if (parsedJson.metrics[key]) {
+        const aiM = parsedJson.metrics[key];
+        if (typeof aiM.score === "number") base[key].score = aiM.score;
+        if (Array.isArray(aiM.points) && aiM.points.length > 0) base[key].points = aiM.points;
+      }
+    }
+  } else {
+    const skinType = (surveyData?.skinType || "").toLowerCase();
+    const isOily = skinType.includes("dầu") || skinType.includes("nhờn");
+    const isDry = skinType.includes("khô");
+    const sensitivity = surveyData?.skinSensitivity || "";
+    const hasVessels = surveyData?.hasBloodVessels === "Có";
+    const hasMeds = surveyData?.hasPrescriptionMedication === "Có" || surveyData?.hasMedicalCondition === "Có";
+
+    if (isOily) {
+      base.lo_chan_long.score = 5;
+      base.soi_ba_nhon.score = 7;
+      base.mun_khong_viem.score = 6;
+      base.mun_viem.score = hasMeds ? 7 : 9;
+    } else if (isDry) {
+      base.lo_chan_long.score = 7;
+      base.soi_ba_nhon.score = 8;
+      base.sac_to_da.score = 6;
+    }
+
+    if (hasVessels || sensitivity === "Thường xuyên" || sensitivity === "Rất hay gặp") {
+      base.sac_to_da.score = Math.min(base.sac_to_da.score, 6);
+    }
+  }
+
+  const metricValues = Object.values(base);
+  const avg = (metricValues.reduce((acc, m) => acc + Number(m.score || 0), 0) / metricValues.length).toFixed(1);
+  const sorted = [...metricValues].sort((a, b) => a.score - b.score);
+  const detectedIssues = parsedJson?.detectedIssues || [
+    sorted[0]?.label || "Lỗ chân lông",
+    sorted[1]?.label || "Mụn không viêm"
+  ];
+
+  return {
+    metrics: base,
+    averageScore: parsedJson?.averageScore || Number(avg),
+    detectedIssues
+  };
+}
 
 const DEMO_ANALYSIS = `===OVERVIEW===
 ## Kết quả phân tích da mặt ✨
@@ -96,10 +234,10 @@ const DEMO_ANALYSIS = `===OVERVIEW===
 **1. Loại da:** Da hỗn hợp thiên dầu — vùng chữ T tăng tiết bã nhờn, hai bên má nhẹ dịu.
 
 **2. Tình trạng da (Căn cứ phác đồ Chuyên khoa Da liễu):**
-- **Trán & Mũi:** Lỗ chân lông bít tắc, có mụn đầu đen và mụn viêm rải rác.
-- **Má & Cằm:** Dấu hiệu thâm sau viêm (PIH) nhẹ và thiếu ẩm bề mặt.
+- **Trán & Mũi:** Lỗ chân lông bít tắc, có mụn đầu đen và sợi bã nhờn rải rác.
+- **Má & Cằm:** Dấu hiệu sắc tố nhẹ và sợi bã nhờn quanh cánh mũi.
 
-**3. Điểm mạnh:** Da có khả năng phục hồi tốt, cấu trúc elastin đồng đều.
+**3. Điểm mạnh:** Nền da có độ đàn hồi tốt, ít tổn thương mụn viêm nặng.
 
 ===ROUTINE===
 **Routine gợi ý (Chuẩn Hướng dẫn Chuyên khoa Da liễu):**
@@ -119,21 +257,30 @@ const DEMO_ANALYSIS = `===OVERVIEW===
 
 ===JSON_DATA===
 {
-  "score": 72,
+  "score": 67,
+  "averageScore": 6.7,
   "scoreLabel": "Phân tích Y Khoa & AI Vision",
   "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
+  "metrics": {
+    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 42, "left": 48, "r": 9 }] },
+    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 34, "left": 47, "r": 8 }, { "top": 37, "left": 60, "r": 8 }, { "top": 36, "left": 27, "r": 8 }, { "top": 46.5, "left": 65, "r": 9 }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 33, "left": 57, "r": 7 }, { "top": 34.5, "left": 63, "r": 8 }, { "top": 32, "left": 61, "r": 7 }, { "top": 35.5, "left": 66, "r": 8 }, { "top": 35, "left": 56, "r": 8 }] },
+    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 43, "left": 68, "r": 8 }] },
+    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 27, "left": 66, "r": 8 }, { "top": 29.5, "left": 63, "r": 7 }, { "top": 37, "left": 65, "r": 8 }, { "top": 43.5, "left": 66, "r": 9 }] },
+    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 33, "left": 52, "r": 8 }, { "top": 35, "left": 55, "r": 8 }, { "top": 38, "left": 46, "r": 8 }, { "top": 40, "left": 54, "r": 8 }] }
+  },
   "summary": [
-    { "title": "Bít tắc lỗ chân lông", "en": "(Enlarged Pores)", "desc": "Tập trung vùng chữ T (Trán & Mũi)" },
-    { "title": "Mụn viêm rải rác", "en": "(Inflammatory Acne)", "desc": "Căn cứ phác đồ Trứng cá chuyên khoa" },
-    { "title": "Thâm mụn sau viêm", "en": "(Post-inflammatory Hyperpigmentation)", "desc": "Cần sử dụng Niacinamide / Vitamin C" }
+    { "title": "Lỗ chân lông to", "en": "(Enlarged Pores)", "desc": "Tập trung vùng chữ T và hai bên má" },
+    { "title": "Mụn không viêm", "en": "(Comedones)", "desc": "Sợi bã nhờn và mụn cám rải rác" }
   ],
   "zones": [
-    { "id": "forehead", "title": "Vùng Trán", "condition": "Mụn viêm & Thâm dai dẳng", "detail": "Có mụn sưng đỏ rải rác và lỗ chân lông bít tắc.", "angle": -90 },
+    { "id": "forehead", "title": "Vùng Trán", "condition": "Mụn ẩn nhẹ rải rác", "detail": "Lỗ chân lông hơi bít tắc vùng chữ T.", "angle": -90 },
     { "id": "eyebrow", "title": "Vùng Lông Mày", "condition": "Da bình thường, ít tổn thương", "detail": "Bề mặt da mịn màng, không có mụn ẩn hay viêm.", "angle": -30 },
-    { "id": "upper_cheek", "title": "Vùng Má", "condition": "Vết thâm mụn nhẹ & Thiếu ẩm", "detail": "Xuất hiện vảy sừng nhẹ và vết thâm mờ sau viêm.", "angle": 30 },
-    { "id": "chin", "title": "Vùng Cằm", "condition": "Mụn đầu đen & Mụn ẩn", "detail": "Nhiều sợi bã nhờn và mụn ẩn dưới da.", "angle": 90 },
-    { "id": "mouth", "title": "Vùng Môi", "condition": "Khô nhẹ xung quanh", "detail": "Cần cấp ẩm và dùng son dưỡng chống nắng.", "angle": 150 },
-    { "id": "jaw", "title": "Vùng Hàm", "condition": "Bình thường - Cần duy trì làm sạch", "detail": "Nền da ổn định, không phát hiện ổ viêm lớn.", "angle": 210 }
+    { "id": "upper_cheek", "title": "Vùng Má", "condition": "Sắc tố nhẹ & Lỗ chân lông", "detail": "Xuất hiện lỗ chân lông hơi giãn nhẹ.", "angle": 30 },
+    { "id": "chin", "title": "Vùng Cằm", "condition": "Sợi bã nhờn & Mụn không viêm", "detail": "Nhiều sợi bã nhờn và mụn cám dưới da.", "angle": 90 },
+    { "id": "mouth", "title": "Vùng Môi", "condition": "Bình thường", "detail": "Cần cấp ẩm và dưỡng môi đều đặn.", "angle": 150 },
+    { "id": "jaw", "title": "Vùng Hàm", "condition": "Bình thường - Ổn định", "detail": "Nền da ổn định, không phát hiện ổ viêm lớn.", "angle": 210 }
   ]
 }
 `;
@@ -161,6 +308,12 @@ export function parseAnalysisResponse(text) {
     try {
       const cleanJson = jsonStr.replace(/^```json\s*/, "").replace(/^```\s*/, "").replace(/\s*```$/, "").trim();
       sections.jsonData = JSON.parse(cleanJson);
+      if (sections.jsonData) {
+        const computed = computeDiagnosticMetrics({}, sections.jsonData);
+        if (!sections.jsonData.metrics) sections.jsonData.metrics = computed.metrics;
+        if (!sections.jsonData.averageScore) sections.jsonData.averageScore = computed.averageScore;
+        if (!sections.jsonData.detectedIssues) sections.jsonData.detectedIssues = computed.detectedIssues;
+      }
     } catch (e) {
       console.warn("Không thể parse JSON_DATA từ Gemini AI:", e);
     }
@@ -533,7 +686,18 @@ ${selectedProducts.map((p, idx) => `${idx + 1}. [${p.brand || "Brand"}] ${p.name
 -> Hãy đối chiếu và nhận xét chi tiết trong phần Routine & Ingredients xem những sản phẩm này CÓ THỰC SỰ PHÙ HỢP với các khuyết điểm quan sát được trên 3 góc ảnh không.`;
   }
 
-  promptInstruction += `\n\nHãy quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra chẩn đoán Y khoa trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
+  promptInstruction += `\n\nQUY ĐỊNH ĐÁNH GIÁ 6 CHỈ SỐ DA (THANG ĐIỂM 1-10) & ĐIỂM TRUNG BÌNH:
+Dựa trên hình ảnh thật từ 3 góc mặt kết hợp chặt chẽ với dữ liệu khảo sát (loại da, độ nhạy cảm, tình trạng hiện mạch máu, bệnh lý/thuốc), bạn BẮT BUỘC trả về đầy đủ trong khối JSON_DATA:
+1. "metrics": gồm 6 chỉ số da chuẩn y khoa:
+   - "mun_viem" (Mụn viêm): điểm từ 1-10 và danh sách tọa độ points [{top: %, left: %}]
+   - "mun_khong_viem" (Mụn không viêm): điểm từ 1-10 và points
+   - "soi_ba_nhon" (Sợi bã nhờn): điểm từ 1-10 và points (ưu tiên vùng mũi, cằm)
+   - "seo" (Sẹo): điểm từ 1-10 và points
+   - "sac_to_da" (Sắc tố da): điểm từ 1-10 và points
+   - "lo_chan_long" (Lỗ chân lông): điểm từ 1-10 và points
+2. "averageScore": Trung bình cộng 6 chỉ số trên (làm tròn 1 chữ số thập phân, ví dụ: 6.7).
+3. "detectedIssues": Danh sách 2 vấn đề có điểm thấp nhất (ví dụ: ["Lỗ chân lông", "Mụn không viêm"]).
+Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra chẩn đoán Y khoa trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
 
   const userContent = [{ type: "text", text: promptInstruction }];
   if (optFront) {
