@@ -421,6 +421,7 @@ export default function WelcomeNameModal() {
   const [hasMedical, setHasMedical] = useState("");
   const [hasPrescription, setHasPrescription] = useState("");
   const [hasSupplements, setHasSupplements] = useState("");
+  const [hasBloodVessels, setHasBloodVessels] = useState("");
 
   // Step 5: Skin Diagnosis
   const [skinType, setSkinType] = useState("");
@@ -507,6 +508,7 @@ export default function WelcomeNameModal() {
       setHasMedical("");
       setHasPrescription("");
       setHasSupplements("");
+      setHasBloodVessels("");
       setSkinType("");
       setSkinSensitivity("");
       return;
@@ -544,6 +546,7 @@ export default function WelcomeNameModal() {
             ? "Không"
             : currentUser.skinSurvey?.hasSupplements || ""
         );
+        setHasBloodVessels(currentUser.skinSurvey?.hasBloodVessels || "");
         setSkinType(currentUser.skinSurvey?.skinType || "");
         setSkinSensitivity(currentUser.skinSurvey?.skinSensitivity || "");
         
@@ -801,6 +804,7 @@ export default function WelcomeNameModal() {
         hasMedicalCondition: hasMedical || "Không",
         hasPrescriptionMedication: hasPrescription || "Không",
         hasSupplements: hasSupplements || "Không",
+        hasBloodVessels: hasBloodVessels || "Không",
         skinType,
         skinSensitivity,
         capturedFaces,
@@ -835,7 +839,11 @@ export default function WelcomeNameModal() {
           skinSensitivity,
           budget,
           gender,
-          birthDate: birthDateStr
+          birthDate: birthDateStr,
+          hasMedicalCondition: hasMedical || "Không",
+          hasPrescriptionMedication: hasPrescription || "Không",
+          hasSupplements: hasSupplements || "Không",
+          hasBloodVessels: hasBloodVessels || "Không"
         },
         selectedProducts
       });
@@ -1282,6 +1290,25 @@ export default function WelcomeNameModal() {
                       key={opt}
                       className={`onboarding-choice-card ${hasSupplements === opt ? "selected" : ""}`}
                       onClick={() => setHasSupplements(opt)}
+                    >
+                      <span className="onboarding-choice-label">{opt}</span>
+                      <span className="onboarding-radio-circle"></span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Question 5: Visible Blood Vessels */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Da mặt của bạn có hiện mạch máu không?
+                </h3>
+                <div className="onboarding-options-list">
+                  {YES_NO_OPTIONS.map((opt) => (
+                    <div
+                      key={opt}
+                      className={`onboarding-choice-card ${hasBloodVessels === opt ? "selected" : ""}`}
+                      onClick={() => setHasBloodVessels(opt)}
                     >
                       <span className="onboarding-choice-label">{opt}</span>
                       <span className="onboarding-radio-circle"></span>

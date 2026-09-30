@@ -521,6 +521,10 @@ export async function analyzeMultiAngleSkinImages({
 - Giới tính: ${surveyData.gender || "Không rõ"}
 - Năm sinh: ${surveyData.birthDate || "Không rõ"}
 - Ngân sách: ${surveyData.budget || "Phù hợp"}
+- Đang mắc bệnh lý/điều trị: ${surveyData.hasMedicalCondition || "Không"}
+- Đang dùng thuốc kê đơn: ${surveyData.hasPrescriptionMedication || "Không"}
+- Đang dùng TPCN/vitamin/thảo dược: ${surveyData.hasSupplements || "Không"}
+- Da mặt có hiện mạch máu (giãn mao mạch / mỏng đỏ): ${surveyData.hasBloodVessels || "Không"}
 `;
 
   if (selectedProducts && selectedProducts.length > 0) {
