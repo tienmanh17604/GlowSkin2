@@ -332,8 +332,8 @@ body.onboarding-scroll-locked {
 }
 
 .onboarding-choice-card.selected .onboarding-radio-circle {
-  border-color: #1c1917;
-  background: #1c1917;
+  border-color: #6B4E37;
+  background: #6B4E37;
 }
 
 .onboarding-choice-card.selected .onboarding-radio-circle::after {
@@ -650,8 +650,8 @@ body.onboarding-scroll-locked {
 
 .onboarding-choice-card.selected .onboarding-radio-circle,
 .onboarding-skin-type-card.selected .onboarding-radio-circle {
-  background: #1c1917;
-  border-color: #1c1917;
+  background: #6B4E37;
+  border-color: #6B4E37;
 }
 
 .onboarding-choice-card.selected .onboarding-radio-circle::after,
