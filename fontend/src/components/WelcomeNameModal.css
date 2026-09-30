@@ -1,20 +1,20 @@
-/* Welcome Name Onboarding Modal - Sleek, Minimalist, High-end Apple-grade UX */
+/* Onboarding Survey Wizard - Apple-grade / Aesthetic UI matching user screenshots */
 
-.welcome-name-overlay {
+.onboarding-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 17, 26, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 17, 26, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  animation: welcomeFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: onboardingFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes welcomeFadeIn {
+@keyframes onboardingFadeIn {
   from {
     opacity: 0;
   }
@@ -23,37 +23,37 @@
   }
 }
 
-.welcome-name-card {
+.onboarding-modal-card {
   position: relative;
   width: 100%;
   max-width: 440px;
-  min-height: 580px;
-  background: linear-gradient(180deg, #fbfbfd 0%, #f4f4f7 50%, #eceef3 100%);
+  min-height: 640px;
+  max-height: 90vh;
+  background: #ffffff;
   border-radius: 36px;
   box-shadow:
-    0 25px 60px -15px rgba(0, 0, 0, 0.22),
-    0 0 0 1px rgba(255, 255, 255, 0.8) inset,
-    0 1px 3px rgba(0, 0, 0, 0.05);
+    0 25px 60px -15px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  padding: 40px 32px 36px;
+  padding: 24px 28px 28px;
   box-sizing: border-box;
   overflow: hidden;
-  animation: welcomeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: onboardingSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (max-width: 480px) {
-  .welcome-name-card {
-    min-height: 520px;
-    padding: 32px 24px 28px;
+  .onboarding-modal-card {
+    min-height: 590px;
+    padding: 20px 20px 24px;
     border-radius: 28px;
   }
 }
 
-@keyframes welcomeSlideUp {
+@keyframes onboardingSlideUp {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(28px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -61,153 +61,206 @@
   }
 }
 
-/* Subtle top glow */
-.welcome-name-glow {
+/* Ambient glow */
+.onboarding-ambient-glow {
   position: absolute;
-  top: -80px;
+  top: -90px;
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(195, 156, 115, 0.22) 0%, rgba(255, 255, 255, 0) 70%);
+  width: 320px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
   pointer-events: none;
 }
 
-/* Close Button */
-.welcome-name-close-btn {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  width: 34px;
-  height: 34px;
+/* ================= TOP NAV & PROGRESS BAR ================= */
+.onboarding-top-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.onboarding-back-btn {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.04);
-  color: #71717a;
+  background: transparent;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.onboarding-back-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.onboarding-back-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.onboarding-close-icon {
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.onboarding-progress-track {
+  flex-grow: 1;
+  height: 3.5px;
+  background: #f1f2f6;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.onboarding-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e11d48 0%, #f43f5e 100%);
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.onboarding-skip-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  z-index: 10;
+  flex-shrink: 0;
 }
 
-.welcome-name-close-btn svg {
-  width: 16px;
-  height: 16px;
+.onboarding-skip-btn:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.welcome-name-close-btn:hover {
-  background: rgba(0, 0, 0, 0.08);
-  color: #111111;
-  transform: scale(1.06);
-}
-
-/* Brand Header */
-.welcome-name-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 8px;
-  margin-bottom: 48px;
-  user-select: none;
-}
-
-.welcome-name-logo-text {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 2.2px;
-  color: #18181b;
-  text-transform: uppercase;
-}
-
-.welcome-name-logo-ai {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: #b58055;
-  position: relative;
-  top: -6px;
-  margin-left: 3px;
-  background: linear-gradient(135deg, #b58055 0%, #8b603a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Content Area */
-.welcome-name-content {
+/* ================= STEP CONTENT VIEW ================= */
+.onboarding-step-view {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  overflow: hidden;
 }
 
-.welcome-name-subtitle {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  color: #8e8e98;
-  margin: 0 0 10px 0;
-  letter-spacing: -0.2px;
+.animate-fade {
+  animation: stepFade 0.3s ease-out;
 }
 
-.welcome-name-title {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 26px;
-  font-weight: 750;
-  line-height: 1.28;
-  color: #111118;
-  margin: 0 0 32px 0;
-  letter-spacing: -0.5px;
-}
-
-@media (max-width: 480px) {
-  .welcome-name-title {
-    font-size: 23px;
-    margin-bottom: 24px;
+@keyframes stepFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Form */
-.welcome-name-form {
+/* Header & Typography */
+.onboarding-header {
+  margin-bottom: 28px;
+}
+
+.serif-title {
+  font-family: 'Newsreader', 'Playfair Display', Georgia, serif;
+  font-size: 29px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111827;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.4px;
+}
+
+@media (max-width: 480px) {
+  .serif-title {
+    font-size: 25px;
+  }
+}
+
+.onboarding-subtitle {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Brand header for Step 0 */
+.onboarding-brand {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.onboarding-brand-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 750;
+  letter-spacing: 2px;
+  color: #111827;
+}
+
+.onboarding-brand-ai {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e11d48;
+  position: relative;
+  top: -5px;
+  margin-left: 3px;
+}
+
+/* Form in Step 0 */
+.onboarding-form {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  justify-content: space-between;
 }
 
-.welcome-name-input-wrap {
+.onboarding-name-input-box {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin: 12px 0 8px 0;
 }
 
-.welcome-name-input {
+.onboarding-name-input {
   width: 100%;
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 26px;
   font-weight: 700;
-  color: #111118;
+  color: #111827;
   background: transparent;
   border: none;
-  border-bottom: 2px solid transparent;
-  padding: 8px 36px 8px 0;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 8px 36px 12px 0;
   outline: none;
   transition: all 0.25s ease;
-  letter-spacing: -0.3px;
 }
 
-.welcome-name-input::placeholder {
-  color: #c4c4cc;
-  font-weight: 500;
+.onboarding-name-input:focus {
+  border-bottom-color: #111827;
 }
 
-.welcome-name-input:focus {
-  border-bottom-color: #b58055;
-}
-
-.welcome-name-clear-btn {
+.onboarding-clear-icon {
   position: absolute;
   right: 0;
   top: 50%;
@@ -217,87 +270,328 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  font-size: 12px;
+  font-size: 11px;
   color: #666;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.onboarding-helper-text {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ================= OPTIONS LIST & CHOICE CARDS ================= */
+.onboarding-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.onboarding-choice-card {
+  background: #f9fafb;
+  border: 1.5px solid #f3f4f6;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.onboarding-choice-card:hover {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.onboarding-choice-card.selected {
+  background: #ffffff;
+  border-color: #111827;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.onboarding-choice-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.onboarding-choice-card.selected .onboarding-choice-label {
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Radio circle */
+.onboarding-radio-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.onboarding-choice-card.selected .onboarding-radio-circle {
+  border-color: #111827;
+  background: #111827;
+}
+
+.onboarding-choice-card.selected .onboarding-radio-circle::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ================= STEP 2: WHEEL DATE PICKER ================= */
+.onboarding-date-wheel-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  height: 260px;
+  margin: 10px 0 20px;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Center Highlight Pill */
+.onboarding-date-wheel-highlight {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  height: 48px;
+  background: #f3f4f6;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.onboarding-wheel-col {
+  flex: 1;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  scroll-behavior: smooth;
+}
+
+.onboarding-wheel-col::-webkit-scrollbar {
+  display: none;
+}
+
+.onboarding-wheel-list {
+  padding: 106px 0; /* Centers active element */
+}
+
+.onboarding-wheel-item {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  color: #9ca3af;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.onboarding-wheel-item:hover {
+  color: #4b5563;
+}
+
+.onboarding-wheel-item.active {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ================= STEP 3: CITY SEARCH & PILLS ================= */
+.onboarding-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.onboarding-search-icon {
+  position: absolute;
+  left: 16px;
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.onboarding-search-box input {
+  width: 100%;
+  height: 48px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 16px;
+  padding: 0 40px 0 46px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  color: #111827;
+  outline: none;
   transition: background 0.2s;
 }
 
-.welcome-name-clear-btn:hover {
-  background: rgba(0, 0, 0, 0.12);
-  color: #111;
+.onboarding-search-box input::placeholder {
+  color: #9ca3af;
 }
 
-.welcome-name-hint {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 12.5px;
-  color: #94949e;
-  line-height: 1.45;
-  margin: 0;
+.onboarding-cities-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
 }
 
-/* Bottom Action Button */
-.welcome-name-action {
+.onboarding-cities-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.onboarding-cities-scroll::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.onboarding-city-pill {
+  width: 100%;
+  padding: 13px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.onboarding-city-pill:hover {
+  border-color: #9ca3af;
+}
+
+.onboarding-city-pill.selected {
+  background: #111827;
+  border-color: #111827;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.onboarding-empty-cities {
+  text-align: center;
+  font-size: 14px;
+  color: #9ca3af;
+  padding: 24px 0;
+}
+
+/* ================= STEP 4: SCROLLABLE SURVEY ================= */
+.onboarding-scrollable-survey {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.onboarding-scrollable-survey::-webkit-scrollbar {
+  width: 4px;
+}
+
+.onboarding-scrollable-survey::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.onboarding-survey-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.onboarding-survey-question {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+/* ================= BOTTOM ACTION BUTTON ================= */
+.onboarding-bottom-action {
   margin-top: auto;
-  padding-top: 48px;
+  padding-top: 20px;
 }
 
-.welcome-name-submit-btn {
+.onboarding-primary-btn {
   width: 100%;
   height: 54px;
   background: #151421;
   color: #ffffff;
   border: none;
   border-radius: 9999px;
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.2px;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 24px -6px rgba(21, 20, 33, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(21, 20, 33, 0.22);
 }
 
-.welcome-name-submit-btn:hover:not(:disabled) {
-  background: #252438;
+.onboarding-primary-btn:hover:not(:disabled) {
+  background: #232234;
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px -4px rgba(21, 20, 33, 0.4);
+  box-shadow: 0 12px 28px rgba(21, 20, 33, 0.3);
 }
 
-.welcome-name-submit-btn:active:not(:disabled) {
+.onboarding-primary-btn:active:not(:disabled) {
   transform: translateY(0) scale(0.985);
 }
 
-.welcome-name-submit-btn:disabled {
-  opacity: 0.7;
+.onboarding-primary-btn:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
-.welcome-name-loading-dots span {
-  animation: dotPulse 1.4s infinite ease-in-out both;
-  font-size: 20px;
-  line-height: 1;
+.onboarding-primary-btn.with-arrow svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
 }
 
-.welcome-name-loading-dots span:nth-child(1) {
-  animation-delay: -0.32s;
-}
-
-.welcome-name-loading-dots span:nth-child(2) {
-  animation-delay: -0.16s;
-}
-
-@keyframes dotPulse {
-  0%, 80%, 100% {
-    opacity: 0.3;
-  }
-  40% {
-    opacity: 1;
-  }
+.onboarding-primary-btn.with-arrow:hover:not(:disabled) svg {
+  transform: translateX(4px);
 }

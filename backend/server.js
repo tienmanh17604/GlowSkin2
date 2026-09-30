@@ -305,7 +305,7 @@ app.put("/api/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const cleanId = decodeURIComponent(id || "").trim();
-    const { name, email, phone, addresses, preferredName } = req.body;
+    const { name, email, phone, addresses, preferredName, gender, birthDate, city, skinSurvey, onboardingCompleted } = req.body;
 
     const updateFields = {};
     if (name !== undefined) updateFields.name = name;
@@ -313,6 +313,11 @@ app.put("/api/users/:id", async (req, res) => {
     if (phone !== undefined) updateFields.phone = phone;
     if (addresses !== undefined) updateFields.addresses = addresses;
     if (preferredName !== undefined) updateFields.preferredName = preferredName;
+    if (gender !== undefined) updateFields.gender = gender;
+    if (birthDate !== undefined) updateFields.birthDate = birthDate;
+    if (city !== undefined) updateFields.city = city;
+    if (skinSurvey !== undefined) updateFields.skinSurvey = skinSurvey;
+    if (onboardingCompleted !== undefined) updateFields.onboardingCompleted = onboardingCompleted;
 
     // Update in localDb
     const updatedLocal = localDb.updateUser(cleanId, updateFields);
