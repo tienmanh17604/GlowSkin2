@@ -803,6 +803,7 @@ export default function WelcomeNameModal() {
 
   // Finish complete onboarding survey - ONLY WAY TO CLOSE MODAL & NAVIGATE TO RESULT
   const handleFinishOnboarding = async () => {
+    stopCamera();
     setIsSubmitting(true);
     setAiAnalyzingStatus("📸 Đang tối ưu và chuẩn bị 3 góc chụp khuôn mặt...");
     const birthDateStr = `${day}/${month}/${year}`;
@@ -1605,7 +1606,7 @@ export default function WelcomeNameModal() {
         )}
 
         {/* ================= STEP 8: CAMERA CHỤP 3 HƯỚNG MẶT ================= */}
-        {currentStep === 8 && (
+        {currentStep === 8 && !isSubmitting && (
           <div className="onboarding-camera-view animate-fade">
             {/* Top Bar */}
             <div className="onboarding-camera-top-bar">
