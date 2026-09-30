@@ -19,15 +19,15 @@
 }
 
 .face-cropper-modal-container {
-  background: linear-gradient(165deg, #18150f 0%, #100e0a 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.6);
+  background: #141416;
+  border: 1.5px solid rgba(228, 222, 215, 0.25);
   border-radius: 24px;
   max-width: 520px;
   width: 100%;
   padding: 24px 20px;
   box-shadow: 
     0 24px 70px rgba(0, 0, 0, 0.8),
-    0 0 30px rgba(212, 175, 55, 0.25);
+    0 0 30px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,9 +41,9 @@
 
 .face-cropper-badge {
   display: inline-block;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  color: #ffd700;
+  background: rgba(228, 222, 215, 0.12);
+  border: 1px solid rgba(228, 222, 215, 0.3);
+  color: #f5f0eb;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
@@ -60,7 +60,7 @@
 }
 
 .face-cropper-subtitle {
-  color: #c9c2b0;
+  color: #a1a1aa;
   font-size: 12px;
   line-height: 1.45;
   margin: 0 auto;
@@ -73,7 +73,7 @@
   max-width: 100%;
   border-radius: 16px;
   overflow: hidden;
-  border: 2px solid rgba(212, 175, 55, 0.4);
+  border: 2px solid rgba(228, 222, 215, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   cursor: crosshair;
   user-select: none;
@@ -100,11 +100,11 @@
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(18, 14, 8, 0.92);
-  border: 1px solid rgba(212, 175, 55, 0.6);
+  background: rgba(20, 20, 24, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 4px 12px;
   border-radius: 999px;
-  color: #fffdf5;
+  color: #f5f0eb;
   font-size: 10.5px;
   font-weight: 700;
   white-space: nowrap;
@@ -126,8 +126,8 @@
 
 .cropper-btn-cancel {
   background: transparent;
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  color: #c9c2b0;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: #d4d4d8;
   padding: 9px 16px;
   border-radius: 999px;
   font-size: 13px;
@@ -137,15 +137,15 @@
 }
 
 .cropper-btn-cancel:hover {
-  border-color: #ffd700;
+  border-color: #ffffff;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .cropper-btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(212, 175, 55, 0.5);
-  color: #ffd700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(228, 222, 215, 0.35);
+  color: #f5f0eb;
   padding: 9px 18px;
   border-radius: 999px;
   font-size: 13px;
@@ -155,29 +155,29 @@
 }
 
 .cropper-btn-secondary:hover {
-  background: rgba(212, 175, 55, 0.16);
-  border-color: #ffd700;
+  background: rgba(228, 222, 215, 0.2);
+  border-color: #ffffff;
   color: #ffffff;
   transform: translateY(-1px);
 }
 
 .cropper-btn-confirm {
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  border: 1.5px solid #ffd700;
-  color: #100e0a;
+  background: #ffffff;
+  border: 1.5px solid #ffffff;
+  color: #111827;
   padding: 9px 22px;
   border-radius: 999px;
   font-size: 13.5px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.38);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
 }
 
 .cropper-btn-confirm:hover {
+  background: #f5f0eb;
   transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(212, 175, 55, 0.55);
-  filter: brightness(1.06);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 @media (max-width: 480px) {

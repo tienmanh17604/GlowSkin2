@@ -767,7 +767,8 @@ export default function WelcomeNameModal() {
     e.target.value = "";
   };
 
-  const canContinueFromCamera = Boolean(capturedFaces.center || capturedFaces.left || capturedFaces.right);
+  const canContinueFromCamera = Boolean(capturedFaces.center && capturedFaces.left && capturedFaces.right);
+  const capturedAnglesCount = (capturedFaces.center ? 1 : 0) + (capturedFaces.left ? 1 : 0) + (capturedFaces.right ? 1 : 0);
 
   const filteredProducts = POPULAR_SKINCARE_PRODUCTS.filter((p) => {
     if (!productSearch.trim()) return true;
@@ -1798,26 +1799,26 @@ export default function WelcomeNameModal() {
               </button>
             </div>
 
-            {/* Next Step trigger if at least 1 angle captured */}
-            {canContinueFromCamera && (
-              <div className="onboarding-camera-continue-bar">
-                <button
-                  type="button"
-                  className="onboarding-camera-continue-btn"
-                  disabled={isSubmitting}
-                  onClick={handleFinishOnboarding}
-                >
-                  {isSubmitting ? (
-                    <span className="onboarding-loading-state">
-                      <span className="onboarding-spinner"></span>
-                      <span>Đang phân tích 3 góc mặt...</span>
-                    </span>
-                  ) : (
-                    "Tiếp tục"
-                  )}
-                </button>
-              </div>
-            )}
+            {/* Next Step trigger - Bắt buộc chụp đủ 3 góc mặt */}
+            <div className="onboarding-camera-continue-bar">
+              <button
+                type="button"
+                className={`onboarding-camera-continue-btn ${!canContinueFromCamera ? "disabled" : ""}`}
+                disabled={!canContinueFromCamera || isSubmitting}
+                onClick={handleFinishOnboarding}
+              >
+                {isSubmitting ? (
+                  <span className="onboarding-loading-state">
+                    <span className="onboarding-spinner"></span>
+                    <span>Đang phân tích 3 góc mặt...</span>
+                  </span>
+                ) : canContinueFromCamera ? (
+                  "Tiếp tục phân tích da (3/3) ✓"
+                ) : (
+                  `Chụp đủ 3 góc mặt để tiếp tục (${capturedAnglesCount}/3)`
+                )}
+              </button>
+            </div>
           </div>
         )}
 

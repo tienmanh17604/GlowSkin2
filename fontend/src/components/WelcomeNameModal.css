@@ -9,9 +9,9 @@ body.onboarding-scroll-locked {
 .onboarding-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 17, 26, 0.5);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(10, 10, 12, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   z-index: 10000;
   display: flex;
   align-items: center;
@@ -1268,9 +1268,19 @@ body.onboarding-scroll-locked {
   transition: all 0.2s ease;
 }
 
-.onboarding-camera-continue-btn:hover {
-  background: #f3f4f6;
+.onboarding-camera-continue-btn:hover:not(:disabled) {
+  background: #f5f0eb;
   transform: translateY(-1px);
+}
+
+.onboarding-camera-continue-btn:disabled,
+.onboarding-camera-continue-btn.disabled {
+  background: #23252c !important;
+  color: #71717a !important;
+  cursor: not-allowed !important;
+  opacity: 0.85;
+  transform: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .onboarding-header-simple {
@@ -1454,12 +1464,12 @@ body.onboarding-scroll-locked {
 .onboarding-ai-card {
   width: 100%;
   max-width: 440px;
-  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12), rgba(18, 19, 32, 0.96) 70%);
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: radial-gradient(circle at 50% 0%, rgba(228, 222, 215, 0.12), rgba(18, 18, 20, 0.98) 70%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 24px;
   padding: 32px 24px;
   text-align: center;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.05);
 }
 
 .onboarding-ai-radar-box {
@@ -1468,8 +1478,8 @@ body.onboarding-scroll-locked {
   height: 76px;
   margin: 0 auto 18px;
   border-radius: 50%;
-  background: rgba(212, 175, 55, 0.08);
-  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1480,7 +1490,7 @@ body.onboarding-scroll-locked {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(212, 175, 55, 0.35) 60deg, transparent 70deg);
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(255, 255, 255, 0.3) 60deg, transparent 70deg);
   animation: aiRadarRotate 2s linear infinite;
 }
 
@@ -1498,7 +1508,7 @@ body.onboarding-scroll-locked {
 
 @keyframes aiSparklePulse {
   from { transform: scale(0.9); opacity: 0.8; }
-  to { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.8)); }
+  to { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); }
 }
 
 .onboarding-ai-title {
@@ -1520,22 +1530,22 @@ body.onboarding-scroll-locked {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 10px 18px;
   border-radius: 999px;
-  color: #fef08a;
+  color: #f5f0eb;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 22px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .onboarding-ai-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(254, 240, 138, 0.3);
-  border-top-color: #fef08a;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: aiSpinnerSpin 0.7s linear infinite;
 }
