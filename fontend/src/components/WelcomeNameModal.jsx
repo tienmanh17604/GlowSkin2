@@ -36,31 +36,31 @@ const SKIN_TYPE_OPTIONS = [
     id: "dry",
     label: "Da khô căng, thiếu độ ẩm, có thể bong tróc",
     type: "dry",
-    img: "/images/skin-types/dry.png"
+    img: "https://res.cloudinary.com/buevamso/image/upload/v1790791250/glowskin/skin-types/skin_dry.png"
   },
   {
     id: "normal",
     label: "Da đủ ẩm, không khô rít, không bóng nhờn, khá mịn màng",
     type: "normal",
-    img: "/images/skin-types/model_base.jpg"
+    img: "https://res.cloudinary.com/buevamso/image/upload/v1790791255/glowskin/skin-types/skin_model_base.jpg"
   },
   {
     id: "combo_oily_cheeks",
     label: "Vùng chữ T và 2 má tiết nhiều dầu, các khu vực khác khô",
     type: "combination_oily_cheeks",
-    img: "/images/skin-types/combo_cheeks.png"
+    img: "https://res.cloudinary.com/buevamso/image/upload/v1790791255/glowskin/skin-types/skin_combo_cheeks.png"
   },
   {
     id: "combo_tzone",
     label: "Vùng chữ T tiết nhiều dầu, 2 má khô",
     type: "combination_tzone",
-    img: "/images/skin-types/combo_tzone.png"
+    img: "https://res.cloudinary.com/buevamso/image/upload/v1790791254/glowskin/skin-types/skin_combo_tzone.png"
   },
   {
     id: "oily",
     label: "Da thừa dầu, bóng nhờn",
     type: "oily",
-    img: "/images/skin-types/oily.png"
+    img: "https://res.cloudinary.com/buevamso/image/upload/v1790791253/glowskin/skin-types/skin_oily.png"
   }
 ];
 
