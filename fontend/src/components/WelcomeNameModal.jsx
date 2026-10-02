@@ -31,6 +31,42 @@ const YES_NO_OPTIONS = [
   "Không"
 ];
 
+const MEDICAL_CONDITION_OPTIONS = [
+  "Lupus ban đỏ hệ thống (SLE)",
+  "Suy gan / Xơ gan",
+  "Suy thận (CKD)",
+  "Suy giáp (Hypothyroidism)",
+  "Cường giáp / Basedow (Graves')",
+  "Đang hóa trị (Chemotherapy)",
+  "Đang xạ trị (Radiation therapy)"
+];
+
+const PRESCRIPTION_OPTIONS = [
+  "Doxycycline / Tetracycline / Minocycline",
+  "Fluoroquinolone (Cipro, Levo, Moxifloxacin)",
+  "Bactrim (TMP-SMX)",
+  "Voriconazole (Vfend)",
+  "Kháng lao (INH, Rifampicin)",
+  "Amiodarone (Cordarone)",
+  "HCTZ / Furosemide",
+  "Sulfonylurea (Glipizide, Glyburide...)",
+  "NSAIDs (Naproxen, Ketoprofen, Piroxicam)",
+  "Lithium / Phenytoin / Carbamazepine",
+  "Chlorpromazine / Haloperidol (Phenothiazine)",
+  "Isotretinoin / Acitretin (mụn, vảy nến)",
+  "Corticosteroid uống/tiêm (Prednison...)",
+  "Cyclosporine",
+  "EGFR inhibitor (Cetuximab, Erlotinib...)"
+];
+
+const SUPPLEMENT_OPTIONS = [
+  "Vitamin B12 liều cao (>500 mcg/ngày)",
+  "Whey protein / Creatine",
+  "Cỏ thánh John (St. John's Wort)",
+  "Tảo biển / Spirulina liều cao",
+  "Povidone-iodine bôi da thường xuyên"
+];
+
 const SKIN_TYPE_OPTIONS = [
   {
     id: "dry",
@@ -492,9 +528,13 @@ export default function WelcomeNameModal() {
   // Survey Questions (Step 4)
   const [budget, setBudget] = useState("");
   const [hasMedical, setHasMedical] = useState("");
+  const [medicalDetail, setMedicalDetail] = useState("");
   const [hasPrescription, setHasPrescription] = useState("");
+  const [prescriptionDetail, setPrescriptionDetail] = useState("");
   const [hasSupplements, setHasSupplements] = useState("");
+  const [supplementsDetail, setSupplementsDetail] = useState("");
   const [hasBloodVessels, setHasBloodVessels] = useState("");
+  const [activeBottomSheet, setActiveBottomSheet] = useState(null); // null | "medical" | "prescription" | "supplements"
 
   // Step 5: Skin Diagnosis
   const [skinType, setSkinType] = useState("");
@@ -580,9 +620,13 @@ export default function WelcomeNameModal() {
       setCitySearch("");
       setBudget("");
       setHasMedical("");
+      setMedicalDetail("");
       setHasPrescription("");
+      setPrescriptionDetail("");
       setHasSupplements("");
+      setSupplementsDetail("");
       setHasBloodVessels("");
+      setActiveBottomSheet(null);
       setSkinType("");
       setSkinSensitivity("");
       return;
@@ -605,21 +649,44 @@ export default function WelcomeNameModal() {
         setSelectedCity(currentUser.city || "");
         setCitySearch("");
         setBudget(currentUser.skinSurvey?.budget || "");
-        setHasMedical(
-          currentUser.skinSurvey?.hasMedicalCondition === "Câu hỏi không phù hợp với tôi"
-            ? "Không"
-            : currentUser.skinSurvey?.hasMedicalCondition || ""
-        );
-        setHasPrescription(
-          currentUser.skinSurvey?.hasPrescriptionMedication === "Câu hỏi không phù hợp với tôi"
-            ? "Không"
-            : currentUser.skinSurvey?.hasPrescriptionMedication || ""
-        );
-        setHasSupplements(
-          currentUser.skinSurvey?.hasSupplements === "Câu hỏi không phù hợp với tôi"
-            ? "Không"
-            : currentUser.skinSurvey?.hasSupplements || ""
-        );
+        
+        const medCond = currentUser.skinSurvey?.hasMedicalCondition || "";
+        if (medCond.startsWith("Có")) {
+          setHasMedical("Có");
+          setMedicalDetail(medCond.replace(/^Có\s*-\s*/, ""));
+        } else if (medCond === "Câu hỏi không phù hợp với tôi") {
+          setHasMedical("Không");
+          setMedicalDetail("");
+        } else {
+          setHasMedical(medCond);
+          setMedicalDetail("");
+        }
+
+        const medPresc = currentUser.skinSurvey?.hasPrescriptionMedication || "";
+        if (medPresc.startsWith("Có")) {
+          setHasPrescription("Có");
+          setPrescriptionDetail(medPresc.replace(/^Có\s*-\s*/, ""));
+        } else if (medPresc === "Câu hỏi không phù hợp với tôi") {
+          setHasPrescription("Không");
+          setPrescriptionDetail("");
+        } else {
+          setHasPrescription(medPresc);
+          setPrescriptionDetail("");
+        }
+
+        const medSupp = currentUser.skinSurvey?.hasSupplements || "";
+        if (medSupp.startsWith("Có")) {
+          setHasSupplements("Có");
+          setSupplementsDetail(medSupp.replace(/^Có\s*-\s*/, ""));
+        } else if (medSupp === "Câu hỏi không phù hợp với tôi") {
+          setHasSupplements("Không");
+          setSupplementsDetail("");
+        } else {
+          setHasSupplements(medSupp);
+          setSupplementsDetail("");
+        }
+
+        setActiveBottomSheet(null);
         setHasBloodVessels(currentUser.skinSurvey?.hasBloodVessels || "");
         setSkinType(currentUser.skinSurvey?.skinType || "");
         setSkinSensitivity(currentUser.skinSurvey?.skinSensitivity || "");
@@ -715,6 +782,80 @@ export default function WelcomeNameModal() {
   const handleStep4Next = () => {
     if (!budget) return;
     setStep(5);
+  };
+
+  const handleSelectMedical = (val) => {
+    if (val === "Có") {
+      setActiveBottomSheet("medical");
+    } else {
+      setHasMedical("Không");
+      setMedicalDetail("");
+      if (activeBottomSheet === "medical") setActiveBottomSheet(null);
+    }
+  };
+
+  const handlePickMedicalOption = (item) => {
+    if (medicalDetail === item && hasMedical === "Có") {
+      setMedicalDetail("");
+      setHasMedical("Không");
+    } else {
+      setMedicalDetail(item);
+      setHasMedical("Có");
+    }
+    setActiveBottomSheet(null);
+  };
+
+  const handleSelectPrescription = (val) => {
+    if (val === "Có") {
+      setActiveBottomSheet("prescription");
+    } else {
+      setHasPrescription("Không");
+      setPrescriptionDetail("");
+      if (activeBottomSheet === "prescription") setActiveBottomSheet(null);
+    }
+  };
+
+  const handlePickPrescriptionOption = (item) => {
+    if (prescriptionDetail === item && hasPrescription === "Có") {
+      setPrescriptionDetail("");
+      setHasPrescription("Không");
+    } else {
+      setPrescriptionDetail(item);
+      setHasPrescription("Có");
+    }
+    setActiveBottomSheet(null);
+  };
+
+  const handleSelectSupplements = (val) => {
+    if (val === "Có") {
+      setActiveBottomSheet("supplements");
+    } else {
+      setHasSupplements("Không");
+      setSupplementsDetail("");
+      if (activeBottomSheet === "supplements") setActiveBottomSheet(null);
+    }
+  };
+
+  const handlePickSupplementsOption = (item) => {
+    if (supplementsDetail === item && hasSupplements === "Có") {
+      setSupplementsDetail("");
+      setHasSupplements("Không");
+    } else {
+      setSupplementsDetail(item);
+      setHasSupplements("Có");
+    }
+    setActiveBottomSheet(null);
+  };
+
+  const handleDismissBottomSheet = () => {
+    if (activeBottomSheet === "medical" && !medicalDetail) {
+      setHasMedical("Không");
+    } else if (activeBottomSheet === "prescription" && !prescriptionDetail) {
+      setHasPrescription("Không");
+    } else if (activeBottomSheet === "supplements" && !supplementsDetail) {
+      setHasSupplements("Không");
+    }
+    setActiveBottomSheet(null);
   };
 
   // Step 5: When selecting skin type
@@ -888,9 +1029,9 @@ export default function WelcomeNameModal() {
       city: selectedCity,
       skinSurvey: {
         budget,
-        hasMedicalCondition: hasMedical || "Không",
-        hasPrescriptionMedication: hasPrescription || "Không",
-        hasSupplements: hasSupplements || "Không",
+        hasMedicalCondition: hasMedical === "Có" && medicalDetail ? `Có - ${medicalDetail}` : (hasMedical || "Không"),
+        hasPrescriptionMedication: hasPrescription === "Có" && prescriptionDetail ? `Có - ${prescriptionDetail}` : (hasPrescription || "Không"),
+        hasSupplements: hasSupplements === "Có" && supplementsDetail ? `Có - ${supplementsDetail}` : (hasSupplements || "Không"),
         hasBloodVessels: hasBloodVessels || "Không",
         skinType,
         skinSensitivity,
@@ -927,9 +1068,9 @@ export default function WelcomeNameModal() {
           budget,
           gender,
           birthDate: birthDateStr,
-          hasMedicalCondition: hasMedical || "Không",
-          hasPrescriptionMedication: hasPrescription || "Không",
-          hasSupplements: hasSupplements || "Không",
+          hasMedicalCondition: hasMedical === "Có" && medicalDetail ? `Có - ${medicalDetail}` : (hasMedical || "Không"),
+          hasPrescriptionMedication: hasPrescription === "Có" && prescriptionDetail ? `Có - ${prescriptionDetail}` : (hasPrescription || "Không"),
+          hasSupplements: hasSupplements === "Có" && supplementsDetail ? `Có - ${supplementsDetail}` : (hasSupplements || "Không"),
           hasBloodVessels: hasBloodVessels || "Không"
         },
         selectedProducts
@@ -1351,16 +1492,26 @@ export default function WelcomeNameModal() {
                   Bạn có đang mắc bệnh lý hoặc đang điều trị bệnh không?
                 </h3>
                 <div className="onboarding-options-list">
-                  {YES_NO_OPTIONS.map((opt) => (
-                    <div
-                      key={opt}
-                      className={`onboarding-choice-card ${hasMedical === opt ? "selected" : ""}`}
-                      onClick={() => setHasMedical(opt)}
-                    >
-                      <span className="onboarding-choice-label">{opt}</span>
-                      <span className="onboarding-radio-circle"></span>
+                  <div
+                    className={`onboarding-choice-card ${hasMedical === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectMedical("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasMedical === "Có" && medicalDetail && (
+                        <span className="onboarding-choice-detail-hint">{medicalDetail}</span>
+                      )}
                     </div>
-                  ))}
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasMedical === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectMedical("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
                 </div>
               </div>
 
@@ -1370,16 +1521,26 @@ export default function WelcomeNameModal() {
                   Bạn có đang dùng thuốc kê đơn nào không?
                 </h3>
                 <div className="onboarding-options-list">
-                  {YES_NO_OPTIONS.map((opt) => (
-                    <div
-                      key={opt}
-                      className={`onboarding-choice-card ${hasPrescription === opt ? "selected" : ""}`}
-                      onClick={() => setHasPrescription(opt)}
-                    >
-                      <span className="onboarding-choice-label">{opt}</span>
-                      <span className="onboarding-radio-circle"></span>
+                  <div
+                    className={`onboarding-choice-card ${hasPrescription === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectPrescription("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasPrescription === "Có" && prescriptionDetail && (
+                        <span className="onboarding-choice-detail-hint">{prescriptionDetail}</span>
+                      )}
                     </div>
-                  ))}
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasPrescription === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectPrescription("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
                 </div>
               </div>
 
@@ -1389,16 +1550,26 @@ export default function WelcomeNameModal() {
                   Bạn có đang dùng thực phẩm chức năng, vitamin liều cao hoặc thảo dược không?
                 </h3>
                 <div className="onboarding-options-list">
-                  {YES_NO_OPTIONS.map((opt) => (
-                    <div
-                      key={opt}
-                      className={`onboarding-choice-card ${hasSupplements === opt ? "selected" : ""}`}
-                      onClick={() => setHasSupplements(opt)}
-                    >
-                      <span className="onboarding-choice-label">{opt}</span>
-                      <span className="onboarding-radio-circle"></span>
+                  <div
+                    className={`onboarding-choice-card ${hasSupplements === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectSupplements("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasSupplements === "Có" && supplementsDetail && (
+                        <span className="onboarding-choice-detail-hint">{supplementsDetail}</span>
+                      )}
                     </div>
-                  ))}
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasSupplements === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectSupplements("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
                 </div>
               </div>
 
@@ -1968,6 +2139,94 @@ export default function WelcomeNameModal() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* ================= BOTTOM SHEET SELECTION MODAL (Medical, Prescriptions, Supplements) ================= */}
+        {activeBottomSheet && (
+          <>
+            <div
+              className="onboarding-sheet-backdrop"
+              onClick={handleDismissBottomSheet}
+            />
+            <div className="onboarding-bottom-sheet">
+              <div
+                className="onboarding-sheet-handle-wrap"
+                onClick={handleDismissBottomSheet}
+                title="Đóng"
+              >
+                <div className="onboarding-sheet-handle"></div>
+              </div>
+
+              {activeBottomSheet === "medical" && (
+                <>
+                  <h4 className="onboarding-sheet-title">
+                    Bạn hiện có đang mắc bệnh lý nào hoặc đang điều trị bệnh không?
+                  </h4>
+                  <div className="onboarding-sheet-list">
+                    {MEDICAL_CONDITION_OPTIONS.map((item) => {
+                      const isSelected = medicalDetail === item;
+                      return (
+                        <div
+                          key={item}
+                          className={`onboarding-sheet-card ${isSelected ? "selected" : ""}`}
+                          onClick={() => handlePickMedicalOption(item)}
+                        >
+                          <span className="onboarding-sheet-label">{item}</span>
+                          <span className="onboarding-sheet-radio"></span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
+              {activeBottomSheet === "prescription" && (
+                <>
+                  <h4 className="onboarding-sheet-title">
+                    Bạn đang dùng thuốc kê đơn nào? (kể cả thuốc dùng ngắn hạn trong 1 tháng gần đây)
+                  </h4>
+                  <div className="onboarding-sheet-list">
+                    {PRESCRIPTION_OPTIONS.map((item) => {
+                      const isSelected = prescriptionDetail === item;
+                      return (
+                        <div
+                          key={item}
+                          className={`onboarding-sheet-card ${isSelected ? "selected" : ""}`}
+                          onClick={() => handlePickPrescriptionOption(item)}
+                        >
+                          <span className="onboarding-sheet-label">{item}</span>
+                          <span className="onboarding-sheet-radio"></span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
+              {activeBottomSheet === "supplements" && (
+                <>
+                  <h4 className="onboarding-sheet-title">
+                    Bạn có đang dùng thực phẩm chức năng, vitamin liều cao hoặc thảo dược không?
+                  </h4>
+                  <div className="onboarding-sheet-list">
+                    {SUPPLEMENT_OPTIONS.map((item) => {
+                      const isSelected = supplementsDetail === item;
+                      return (
+                        <div
+                          key={item}
+                          className={`onboarding-sheet-card ${isSelected ? "selected" : ""}`}
+                          onClick={() => handlePickSupplementsOption(item)}
+                        >
+                          <span className="onboarding-sheet-label">{item}</span>
+                          <span className="onboarding-sheet-radio"></span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          </>
         )}
 
         {/* SKIN TYPE IMAGE INSPECTION LIGHTBOX (Pure image from file, NO text below) */}

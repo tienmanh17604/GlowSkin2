@@ -344,6 +344,163 @@ body.onboarding-scroll-locked {
   background: #ffffff;
 }
 
+.onboarding-choice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+
+.onboarding-choice-detail-hint {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6B4E37;
+  line-height: 1.35;
+}
+
+/* ================= BOTTOM SHEET SELECTION MODAL ================= */
+.onboarding-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 80;
+  animation: fadeInBackdrop 0.25s ease forwards;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.onboarding-bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 82%;
+  background: #ffffff;
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.2);
+  z-index: 85;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.onboarding-sheet-handle-wrap {
+  padding: 12px 0 8px 0;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.onboarding-sheet-handle {
+  width: 42px;
+  height: 4.5px;
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.onboarding-sheet-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.45;
+  margin: 0 20px 14px 20px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.onboarding-sheet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px 20px 24px 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.onboarding-sheet-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.onboarding-sheet-card:hover {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.onboarding-sheet-card.selected {
+  background: #FAF5F0;
+  border-color: #6B4E37;
+  box-shadow: 0 3px 10px rgba(107, 78, 55, 0.12);
+}
+
+.onboarding-sheet-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1.4;
+  text-align: left;
+  padding-right: 12px;
+}
+
+.onboarding-sheet-card.selected .onboarding-sheet-label {
+  color: #6B4E37;
+  font-weight: 600;
+}
+
+.onboarding-sheet-radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.onboarding-sheet-card.selected .onboarding-sheet-radio {
+  border-color: #6B4E37;
+  background: #6B4E37;
+}
+
+.onboarding-sheet-card.selected .onboarding-sheet-radio::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
 /* ================= STEP 2: WHEEL DATE PICKER ================= */
 .onboarding-date-wheel-container {
   position: relative;
