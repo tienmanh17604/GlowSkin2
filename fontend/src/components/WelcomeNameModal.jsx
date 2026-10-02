@@ -1046,9 +1046,6 @@ export default function WelcomeNameModal() {
                   </button>
                 )}
               </div>
-              <p className="onboarding-helper-text">
-                Tên này sẽ xuất hiện trong các câu chào hỏi và cách AI đồng hành cùng bạn.
-              </p>
 
               <div className="onboarding-bottom-action">
                 <button
