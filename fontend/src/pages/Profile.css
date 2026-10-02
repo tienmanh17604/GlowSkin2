@@ -220,7 +220,8 @@
 }
 
 .profile-card-loyalty-pass.vip {
-  background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+  background: linear-gradient(135deg, #8c6239 0%, #a98467 50%, #ba9879 100%);
+  box-shadow: 0 4px 15px rgba(140, 98, 57, 0.25);
 }
 
 .loyalty-header {
@@ -489,22 +490,22 @@
 }
 
 .profile-save-btn {
-  background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+  background: linear-gradient(135deg, #8c6239 0%, #a98467 100%);
   color: #ffffff;
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid rgba(140, 98, 57, 0.35);
   font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   font-weight: 800;
   font-size: 13.5px;
   padding: 12px 42px;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.28);
+  box-shadow: 0 4px 16px rgba(140, 98, 57, 0.25);
   transition: all 0.3s ease;
 }
 
 .profile-save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+  box-shadow: 0 6px 20px rgba(140, 98, 57, 0.38);
   filter: brightness(1.05);
 }
 
