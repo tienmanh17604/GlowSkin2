@@ -35,8 +35,8 @@
 }
 
 .user-menu-avatar-wrap {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 1.5px solid #111111;
   display: flex;
@@ -53,8 +53,8 @@
 }
 
 .user-menu-avatar-svg {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   color: #111111;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .user-menu-display-name {
-  font-size: 13.5px;
+  font-size: 11.5px;
   font-weight: 500; /* Removed bold styling */
   color: #111111;
   letter-spacing: 0.5px;
