@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { analyzeMultiAngleSkinImages, parseAnalysisResponse, computeDiagnosticMetrics } from "../services/analyzeSkin";
@@ -110,47 +110,136 @@ function SkinTypeVisual({ type, label, imageSrc, onScanClick }) {
   );
 }
 
-function WheelColumn({ items, value, onChange, formatLabel }) {
+function WheelColumn({ items, value, onChange, formatLabel, className = "" }) {
   const colRef = useRef(null);
   const isUserScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
-  const ITEM_HEIGHT = 48;
+  const isSilentResetRef = useRef(false);
+  const initializedRef = useRef(false);
+  const prevNRef = useRef(items.length);
 
-  // Sync scroll position when value changes externally or when mounted
+  // Drag to scroll refs for desktop users
+  const isDraggingRef = useRef(false);
+  const startYRef = useRef(0);
+  const startScrollTopRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+
+  const ITEM_HEIGHT = 44;
+  const REPEAT_CYCLES = 40;
+  const MID_CYCLE = 20;
+  const N = items.length;
+
+  const currentIndex = items.indexOf(value) !== -1 ? items.indexOf(value) : 0;
+
+  // Handle initial mount or items length changes (e.g. maxDays changed)
   useEffect(() => {
-    if (!isUserScrollingRef.current && colRef.current) {
-      const index = items.indexOf(value);
-      if (index !== -1) {
-        const targetScrollTop = index * ITEM_HEIGHT;
-        if (Math.abs(colRef.current.scrollTop - targetScrollTop) > 2) {
-          colRef.current.scrollTop = targetScrollTop;
-        }
+    if (!colRef.current || N === 0) return;
+
+    if (!initializedRef.current || prevNRef.current !== N) {
+      prevNRef.current = N;
+      const initialScrollTop = (MID_CYCLE * N + currentIndex) * ITEM_HEIGHT;
+      colRef.current.scrollTop = initialScrollTop;
+      initializedRef.current = true;
+    } else if (!isUserScrollingRef.current && !isDraggingRef.current) {
+      // Sync smoothly if value changed externally
+      const currentScrollTop = colRef.current.scrollTop;
+      const currentRawIndex = Math.round(currentScrollTop / ITEM_HEIGHT);
+      const currentCycle = Math.floor(currentRawIndex / N);
+      const targetScrollTop = (currentCycle * N + currentIndex) * ITEM_HEIGHT;
+
+      if (Math.abs(currentScrollTop - targetScrollTop) > 2) {
+        colRef.current.scrollTo({
+          top: targetScrollTop,
+          behavior: "smooth"
+        });
       }
     }
-  }, [value, items]);
+  }, [value, N, currentIndex]);
+
+  // Window listeners for smooth mouse dragging across whole screen
+  useEffect(() => {
+    const handleWindowMouseMove = (e) => {
+      if (!isDraggingRef.current || !colRef.current) return;
+      const dy = e.clientY - startYRef.current;
+      if (Math.abs(dy) > 3) {
+        hasDraggedRef.current = true;
+      }
+      colRef.current.scrollTop = startScrollTopRef.current - dy;
+    };
+
+    const handleWindowMouseUp = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        if (colRef.current) {
+          const currentScrollTop = colRef.current.scrollTop;
+          const nearestIndex = Math.round(currentScrollTop / ITEM_HEIGHT);
+          colRef.current.scrollTo({
+            top: nearestIndex * ITEM_HEIGHT,
+            behavior: "smooth"
+          });
+        }
+      }
+    };
+
+    window.addEventListener("mousemove", handleWindowMouseMove);
+    window.addEventListener("mouseup", handleWindowMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleWindowMouseMove);
+      window.removeEventListener("mouseup", handleWindowMouseUp);
+    };
+  }, []);
+
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
+    startYRef.current = e.clientY;
+    startScrollTopRef.current = colRef.current ? colRef.current.scrollTop : 0;
+  };
 
   const handleScroll = (e) => {
+    if (isSilentResetRef.current || N === 0) return;
+
     isUserScrollingRef.current = true;
     clearTimeout(scrollTimeoutRef.current);
-    scrollTimeoutRef.current = setTimeout(() => {
-      isUserScrollingRef.current = false;
-    }, 150);
 
     const scrollTop = e.currentTarget.scrollTop;
-    const index = Math.round(scrollTop / ITEM_HEIGHT);
-    const clampedIndex = Math.max(0, Math.min(items.length - 1, index));
-    const selectedItem = items[clampedIndex];
+    const rawIndex = Math.round(scrollTop / ITEM_HEIGHT);
+    const itemIndex = ((rawIndex % N) + N) % N;
+    const selectedItem = items[itemIndex];
 
     if (selectedItem !== undefined && selectedItem !== value) {
       onChange(selectedItem);
     }
+
+    // Debounced silent reset to middle cycle to guarantee infinite loop with 0 edge limits
+    scrollTimeoutRef.current = setTimeout(() => {
+      isUserScrollingRef.current = false;
+      if (!colRef.current || N === 0) return;
+
+      const latestScrollTop = colRef.current.scrollTop;
+      const latestRawIndex = Math.round(latestScrollTop / ITEM_HEIGHT);
+      const currentCycle = Math.floor(latestRawIndex / N);
+
+      // If user wandered away from MID_CYCLE (> 6 cycles away), silently jump back
+      if (Math.abs(currentCycle - MID_CYCLE) > 6) {
+        isSilentResetRef.current = true;
+        const currentItemIdx = ((latestRawIndex % N) + N) % N;
+        const resetScrollTop = (MID_CYCLE * N + currentItemIdx) * ITEM_HEIGHT;
+        colRef.current.scrollTop = resetScrollTop;
+        requestAnimationFrame(() => {
+          isSilentResetRef.current = false;
+        });
+      }
+    }, 120);
   };
 
-  const handleClickItem = (item, index) => {
+  const handleClickItem = (item, rawIndex) => {
+    if (hasDraggedRef.current) return;
     onChange(item);
     if (colRef.current) {
       colRef.current.scrollTo({
-        top: index * ITEM_HEIGHT,
+        top: rawIndex * ITEM_HEIGHT,
         behavior: "smooth"
       });
     }
@@ -159,22 +248,26 @@ function WheelColumn({ items, value, onChange, formatLabel }) {
   return (
     <div
       ref={colRef}
-      className="onboarding-wheel-col"
+      className={`onboarding-wheel-col ${className}`}
       onScroll={handleScroll}
+      onMouseDown={handleMouseDown}
     >
       <div className="onboarding-wheel-list">
-        {items.map((item, idx) => {
-          const isSelected = item === value;
-          return (
-            <div
-              key={item}
-              className={`onboarding-wheel-item ${isSelected ? "active" : ""}`}
-              onClick={() => handleClickItem(item, idx)}
-            >
-              {formatLabel ? formatLabel(item) : item}
-            </div>
-          );
-        })}
+        {Array.from({ length: REPEAT_CYCLES }).map((_, cycle) =>
+          items.map((item, idx) => {
+            const rawIndex = cycle * N + idx;
+            const isSelected = item === value;
+            return (
+              <div
+                key={`${cycle}-${item}`}
+                className={`onboarding-wheel-item ${isSelected ? "active" : ""}`}
+                onClick={() => handleClickItem(item, rawIndex)}
+              >
+                {formatLabel ? formatLabel(item) : item}
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
@@ -388,8 +481,8 @@ export default function WelcomeNameModal() {
   const [gender, setGender] = useState("");
   
   // Date Picker States
-  const [day, setDay] = useState(1);
-  const [month, setMonth] = useState(1);
+  const [day, setDay] = useState(20);
+  const [month, setMonth] = useState(12);
   const [year, setYear] = useState(2000);
 
   // City search & select
@@ -551,7 +644,7 @@ export default function WelcomeNameModal() {
   const maxDays = new Date(year, month, 0).getDate();
   const days = Array.from({ length: maxDays }, (_, i) => i + 1);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
-  const years = Array.from({ length: 65 }, (_, i) => 2018 - i); // 2018 down to 1954
+  const years = Array.from({ length: 76 }, (_, i) => 1950 + i); // 1950 up to 2025
 
   // Clamp day if exceeding max days of month (Hook at top level)
   useEffect(() => {
@@ -1121,6 +1214,7 @@ export default function WelcomeNameModal() {
 
               {/* Day Column */}
               <WheelColumn
+                className="day-col"
                 items={days}
                 value={day}
                 onChange={setDay}
@@ -1129,6 +1223,7 @@ export default function WelcomeNameModal() {
 
               {/* Month Column */}
               <WheelColumn
+                className="month-col"
                 items={months}
                 value={month}
                 onChange={setMonth}
@@ -1137,6 +1232,7 @@ export default function WelcomeNameModal() {
 
               {/* Year Column */}
               <WheelColumn
+                className="year-col"
                 items={years}
                 value={year}
                 onChange={setYear}

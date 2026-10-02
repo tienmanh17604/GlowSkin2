@@ -349,44 +349,48 @@ body.onboarding-scroll-locked {
   position: relative;
   display: flex;
   justify-content: space-between;
-  height: 260px;
+  height: 290px;
   margin: 10px 0 20px;
   overflow: hidden;
   user-select: none;
+  cursor: grab;
 }
 
-/* Gradient Fade Masks for Apple iOS aesthetic */
+.onboarding-date-wheel-container:active {
+  cursor: grabbing;
+}
+
+/* Gradient Fade Masks for smooth roll-off */
 .onboarding-date-wheel-container::before,
 .onboarding-date-wheel-container::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  height: 75px;
+  height: 95px;
   pointer-events: none;
   z-index: 3;
 }
 
 .onboarding-date-wheel-container::before {
   top: 0;
-  background: linear-gradient(to bottom, #ffffff 25%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(to bottom, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
 }
 
 .onboarding-date-wheel-container::after {
   bottom: 0;
-  background: linear-gradient(to top, #ffffff 25%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(to top, #ffffff 20%, rgba(255, 255, 255, 0) 100%);
 }
 
-/* Center Highlight Pill */
+/* Center Highlight Pill - Matches Image 2 soft neutral pill */
 .onboarding-date-wheel-highlight {
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   transform: translateY(-50%);
-  height: 48px;
-  background: #E9DCCF;
-  opacity: 0.65;
+  height: 44px;
+  background: #f1f3f6;
   border-radius: 14px;
   pointer-events: none;
   z-index: 1;
@@ -405,38 +409,50 @@ body.onboarding-scroll-locked {
   -webkit-overflow-scrolling: touch;
 }
 
+.onboarding-wheel-col.day-col {
+  flex: 0.9;
+}
+
+.onboarding-wheel-col.month-col {
+  flex: 1.35;
+}
+
+.onboarding-wheel-col.year-col {
+  flex: 1;
+}
+
 .onboarding-wheel-col::-webkit-scrollbar {
   display: none;
 }
 
 .onboarding-wheel-list {
-  padding: 106px 0; /* Centers active element in 260px container: (260 - 48) / 2 = 106px */
+  padding: 123px 0; /* Centers active 44px item in 290px container: (290 - 44) / 2 = 123px */
 }
 
 .onboarding-wheel-item {
-  height: 48px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 17px;
-  color: #9ca3af;
+  font-size: 18px;
+  color: #94a3b8;
   font-weight: 500;
   cursor: pointer;
-  transition: color 0.15s ease, font-size 0.15s ease;
+  transition: color 0.15s ease, font-size 0.15s ease, font-weight 0.15s ease;
   scroll-snap-align: center;
   scroll-snap-stop: normal;
   box-sizing: border-box;
 }
 
 .onboarding-wheel-item:hover {
-  color: #4b5563;
+  color: #475569;
 }
 
 .onboarding-wheel-item.active {
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 700;
-  color: #111827;
+  color: #1e293b;
 }
 
 /* ================= STEP 3: CITY SEARCH & PILLS ================= */
