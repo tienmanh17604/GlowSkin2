@@ -273,8 +273,13 @@ function VerticalSlider({ count, activeIndex, onChange, color }) {
 export default function Home({ videoReady = false }) {
 
   const navigate = useNavigate();
-  const { currentUser, setIsLoginOpen } = useApp();
+  const { currentUser, setIsLoginOpen, setIsNameModalOpen } = useApp();
   const { setIsCartOpen } = useCart();
+
+  const handleStartSkinAnalysis = (e) => {
+    if (e && typeof e.preventDefault === "function") e.preventDefault();
+    setIsNameModalOpen(true);
+  };
 
   const videoRef = useRef(null);
   const page1Ref = useRef(null);
@@ -541,7 +546,7 @@ export default function Home({ videoReady = false }) {
             <button
               type="button"
               className="nuve-cta-btn"
-              onClick={() => navigate("/your-skin")}
+              onClick={handleStartSkinAnalysis}
             >
               <span>Phân tích da ngay</span>
               <svg
@@ -701,8 +706,17 @@ export default function Home({ videoReady = false }) {
                 key={index}
                 style={getStyle(index)}
                 className={`carousel-3d-card ${isActive ? "is-active" : ""}`}
-                onClick={() => isActive && navigate(item.to)}
-                onKeyDown={(e) => e.key === "Enter" && isActive && navigate(item.to)}
+                onClick={() => {
+                  if (!isActive) return;
+                  if (item.to === "/your-skin") handleStartSkinAnalysis();
+                  else navigate(item.to);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && isActive) {
+                    if (item.to === "/your-skin") handleStartSkinAnalysis();
+                    else navigate(item.to);
+                  }
+                }}
                 role="button"
                 tabIndex={isActive ? 0 : -1}
               >
@@ -1034,7 +1048,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Nhận báo cáo phân tích tổng quan</li>
               <li>✓ Thiết lập lộ trình skincare cơ bản</li>
             </ul>
-            <button className="plan-btn" onClick={() => navigate("/your-skin")}>Bắt đầu ngay</button>
+            <button className="plan-btn" onClick={handleStartSkinAnalysis}>Bắt đầu ngay</button>
           </div>
 
           <div className="pricing-card premium-card">
@@ -1049,7 +1063,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Không giới hạn số lần phân tích</li>
               <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
             </ul>
-            <button className="plan-btn featured" onClick={() => navigate("/your-skin")}>Nâng cấp Premium</button>
+            <button className="plan-btn featured" onClick={handleStartSkinAnalysis}>Nâng cấp Premium</button>
           </div>
 
           <div className="pricing-card">
@@ -1063,7 +1077,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
               <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
             </ul>
-            <button className="plan-btn" onClick={() => navigate("/your-skin")}>Đăng ký ngay</button>
+            <button className="plan-btn" onClick={handleStartSkinAnalysis}>Đăng ký ngay</button>
           </div>
         </div>
       </section>
@@ -1079,7 +1093,7 @@ export default function Home({ videoReady = false }) {
         <div className="cta-content">
           <h2>Sẵn Sàng Đánh Thức<br />Tiềm Năng Làn Da Bạn?</h2>
           <p>Tham gia cùng hơn 100,000+ người dùng thông thái đã sở hữu làn da khỏe đẹp vượt trội cùng GlowSkin.</p>
-          <button className="cta-gradient-btn" onClick={() => navigate("/your-skin")}>
+          <button className="cta-gradient-btn" onClick={handleStartSkinAnalysis}>
             Khám phá làn da ngay
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>

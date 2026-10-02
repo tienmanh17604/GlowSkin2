@@ -721,17 +721,21 @@ export default function WelcomeNameModal() {
   }, [maxDays, day]);
 
   // Guarantee step is always valid (0 to 8), fallback to 0 so it NEVER renders blank!
-  const currentStep = typeof step === "number" && step >= 0 && step <= 8 ? step : 0;
+  const currentStep = typeof step === "number" && step >= 0 && step <= 5 ? step : 0;
 
   const currentPreferredName = nameInput.trim() || currentUser?.preferredName || "bạn";
 
   const handleBack = () => {
-    if (currentStep === 8) {
+    if (currentStep === 2) {
       stopCamera();
       setVideoGuideIndex(2);
-      setStep(7);
-    } else if (currentStep === 7 && videoGuideIndex > 0) {
-      setVideoGuideIndex((prev) => prev - 1);
+      setStep(1);
+    } else if (currentStep === 1) {
+      if (videoGuideIndex > 0) {
+        setVideoGuideIndex((prev) => prev - 1);
+      } else {
+        setStep(0);
+      }
     } else if (currentStep > 0) {
       setStep((prev) => prev - 1);
     }
@@ -741,7 +745,7 @@ export default function WelcomeNameModal() {
     if (videoGuideIndex < 2) {
       setVideoGuideIndex((prev) => prev + 1);
     } else {
-      setStep(8);
+      setStep(2); // Advance to Camera 3-Angle Scanner
     }
   };
 
@@ -781,7 +785,7 @@ export default function WelcomeNameModal() {
   // Step 4: Advance to Step 5 (Skin Diagnosis)
   const handleStep4Next = () => {
     if (!budget) return;
-    setStep(5);
+    setStep(4);
   };
 
   const handleSelectMedical = (val) => {
@@ -875,12 +879,12 @@ export default function WelcomeNameModal() {
       sensitivitySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-    setStep(6);
+    setStep(5);
   };
 
   // Camera stream controls for Step 8
   useEffect(() => {
-    if (isNameModalOpen && step === 8) {
+    if (isNameModalOpen && step === 2) {
       startCamera();
     } else {
       stopCamera();
@@ -1205,591 +1209,166 @@ export default function WelcomeNameModal() {
     }
   };
 
-  if (!isNameModalOpen || !currentUser) return null;
+  if (!isNameModalOpen) return null;
 
   return (
     <div ref={overlayRef} className="onboarding-modal-overlay">
       <div
-        className={`onboarding-modal-card ${currentStep === 7 ? "video-guide-mode" : ""} ${currentStep === 8 ? "camera-mode" : ""} ${currentStep === 6 ? "products-mode" : ""}`}
+        className={`onboarding-modal-card ${currentStep === 0 ? "intro-mode" : ""} ${currentStep === 1 ? "video-guide-mode" : ""} ${currentStep === 2 ? "camera-mode" : ""} ${currentStep === 5 ? "products-mode" : ""}`}
         onWheel={handleCardWheel}
       >
         
-        {/* Top Header: Back Arrow & Sleek Progress Bar (Only for Step 0 to 5) */}
-        {currentStep <= 5 && (
+        {/* Top Header: Back Arrow & Sleek Progress Bar (Only for Step 3 to 5) */}
+        {currentStep >= 3 && currentStep <= 5 && (
           <div className="onboarding-top-nav">
-            {currentStep > 0 ? (
-              <button
-                type="button"
-                className="onboarding-back-btn"
-                onClick={handleBack}
-                aria-label="Quay lại"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </button>
-            ) : (
-              <div className="onboarding-nav-spacer"></div>
-            )}
+            <button
+              type="button"
+              className="onboarding-back-btn"
+              onClick={handleBack}
+              aria-label="Quay lại"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
 
             <div className="onboarding-progress-track">
               <div
                 className="onboarding-progress-fill"
-                style={{ width: `${currentProgress}%` }}
+                style={{ width: `${currentStep === 3 ? 35 : currentStep === 4 ? 70 : 100}%` }}
               ></div>
             </div>
 
-            <div className="onboarding-nav-spacer"></div>
+            <button
+              type="button"
+              className="onboarding-top-close-btn"
+              onClick={() => {
+                stopCamera();
+                setIsNameModalOpen(false);
+              }}
+              aria-label="Đóng"
+            >
+              ✕
+            </button>
           </div>
         )}
 
         {/* Ambient Subtle Glow */}
         <div className="onboarding-ambient-glow"></div>
 
-        {/* ================= STEP 0: TÊN GỌI THÂN MẬT ================= */}
+        {/* ================= STEP 0: MÀN HÌNH GIỚI THIỆU (SKINDEX Ai - 3 BƯỚC) ================= */}
         {currentStep === 0 && (
-          <div className="onboarding-step-view animate-fade">
-            <div className="onboarding-brand">
-              <span className="onboarding-brand-name">GLOWSKIN</span>
-              <span className="onboarding-brand-ai">Ai</span>
+          <div className="onboarding-step-view onboarding-intro-view animate-fade">
+            {/* Subtle Tech Grid Background */}
+            <div className="onboarding-intro-tech-grid" aria-hidden="true">
+              <svg className="onboarding-intro-grid-svg" viewBox="0 0 400 220" preserveAspectRatio="none">
+                <line x1="20" y1="40" x2="380" y2="40" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="20" y1="100" x2="380" y2="100" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="20" y1="160" x2="380" y2="160" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="80" y1="20" x2="80" y2="200" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="180" y1="20" x2="180" y2="200" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="280" y1="20" x2="280" y2="200" stroke="#f1f5f9" strokeWidth="1" />
+                <circle cx="80" cy="40" r="2.5" fill="#cbd5e1" />
+                <circle cx="180" cy="40" r="2.5" fill="#cbd5e1" />
+                <circle cx="280" cy="40" r="2.5" fill="#cbd5e1" />
+                <circle cx="80" cy="100" r="2.5" fill="#cbd5e1" />
+                <circle cx="180" cy="100" r="2.5" fill="#cbd5e1" />
+                <circle cx="280" cy="100" r="2.5" fill="#cbd5e1" />
+                <circle cx="80" cy="160" r="2.5" fill="#cbd5e1" />
+                <circle cx="180" cy="160" r="2.5" fill="#cbd5e1" />
+                <circle cx="280" cy="160" r="2.5" fill="#cbd5e1" />
+              </svg>
             </div>
 
-            <div className="onboarding-header">
-              <p className="onboarding-subtitle">Hãy bắt đầu hành trình mới</p>
-              <h2 className="onboarding-title serif-title">
-                Bạn muốn GlowSkin gọi bạn là gì nào?
-              </h2>
+            {/* Top Close Button */}
+            <div className="onboarding-intro-top-bar">
+              <button
+                type="button"
+                className="onboarding-intro-close-btn"
+                onClick={() => setIsNameModalOpen(false)}
+                title="Đóng"
+                aria-label="Đóng"
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0f172a" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
 
-            <form onSubmit={handleStep0Next} className="onboarding-form">
-              <div className="onboarding-name-input-box">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  className="onboarding-name-input"
-                  placeholder="Ví dụ: Bu, Nhi, Hoàng..."
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  maxLength={35}
-                  required
-                />
-                {nameInput && (
-                  <button
-                    type="button"
-                    className="onboarding-clear-icon"
-                    onClick={() => setNameInput("")}
-                  >
-                    ✕
-                  </button>
-                )}
+            {/* Brand Title: SKINDEX Ai */}
+            <div className="onboarding-intro-brand">
+              <h1 className="onboarding-intro-brand-name">
+                SKINDEX<span className="onboarding-intro-brand-ai">Ai</span>
+              </h1>
+            </div>
+
+            {/* 3 Step Features */}
+            <div className="onboarding-intro-steps-list">
+              {/* Bước 1 */}
+              <div className="onboarding-intro-step-item">
+                <div className="onboarding-intro-step-icon-wrap pink">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f43f5e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 8V5a1 1 0 0 1 1-1h3 M16 4h3a1 1 0 0 1 1 1v3 M20 16v3a1 1 0 0 1-1 1h-3 M8 20H5a1 1 0 0 1-1-1v-3" />
+                    <circle cx="12" cy="10" r="3" fill="#f43f5e" stroke="none" />
+                    <path d="M7 17c0-2.5 2.2-4 5-4s5 1.5 5 4" fill="#f43f5e" stroke="none" />
+                  </svg>
+                </div>
+                <div className="onboarding-intro-step-content">
+                  <h3 className="onboarding-intro-step-title">Bước 1</h3>
+                  <p className="onboarding-intro-step-desc">Chụp ảnh khuôn mặt của bạn</p>
+                </div>
               </div>
 
-              <div className="onboarding-bottom-action">
-                <button
-                  type="submit"
-                  className="onboarding-primary-btn"
-                  disabled={!nameInput.trim()}
-                >
-                  Tiếp tục
-                </button>
+              {/* Bước 2 */}
+              <div className="onboarding-intro-step-item">
+                <div className="onboarding-intro-step-icon-wrap purple">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="4" y="5" width="14" height="16" rx="2" strokeWidth="2" />
+                    <line x1="8" y1="10" x2="13" y2="10" strokeWidth="2" />
+                    <line x1="8" y1="14" x2="14" y2="14" strokeWidth="2" />
+                    <path d="M14 18l5-5 2 2-5 5z" fill="#8b5cf6" stroke="none" />
+                  </svg>
+                </div>
+                <div className="onboarding-intro-step-content">
+                  <h3 className="onboarding-intro-step-title">Bước 2</h3>
+                  <p className="onboarding-intro-step-desc">Điền thông tin loại da, thói quen chăm sóc da của bạn</p>
+                </div>
               </div>
-            </form>
+
+              {/* Bước 3 */}
+              <div className="onboarding-intro-step-item">
+                <div className="onboarding-intro-step-icon-wrap green">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeWidth="2" />
+                    <polyline points="14 2 14 8 20 8" strokeWidth="2" />
+                    <line x1="8" y1="13" x2="14" y2="13" strokeWidth="2" />
+                    <circle cx="16" cy="18" r="4" fill="#10b981" stroke="none" />
+                    <polyline points="14.5 18 15.5 19 17.5 17" stroke="#ffffff" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <div className="onboarding-intro-step-content">
+                  <h3 className="onboarding-intro-step-title">Bước 3</h3>
+                  <p className="onboarding-intro-step-desc">Khám phá các đặc điểm da và gợi ý chu trình cá nhân hoá dành riêng cho bạn</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Start Button */}
+            <div className="onboarding-intro-bottom-action">
+              <button
+                type="button"
+                className="onboarding-intro-start-btn"
+                onClick={() => setStep(1)}
+              >
+                Bắt đầu
+              </button>
+            </div>
           </div>
         )}
 
-        {/* ================= STEP 1: GIỚI TÍNH ================= */}
+        {/* ================= STEP 1: VIDEO HƯỚNG DẪN QUÉT MẶT (Không đeo vật cản và không make up) ================= */}
         {currentStep === 1 && (
-          <div className="onboarding-step-view animate-fade">
-            <div className="onboarding-header">
-              <h2 className="onboarding-title serif-title">
-                Hello {currentPreferredName}, giới tính của bạn là gì?
-              </h2>
-              <p className="onboarding-subtitle">
-                Thông tin này giúp chúng tôi điều chỉnh thói quen để phù hợp với giới tính của bạn.
-              </p>
-            </div>
-
-            <div className="onboarding-options-list">
-              <div
-                className={`onboarding-choice-card ${gender === "Nam" ? "selected" : ""}`}
-                onClick={() => setGender("Nam")}
-              >
-                <span className="onboarding-choice-label">Nam</span>
-                <span className="onboarding-radio-circle"></span>
-              </div>
-
-              <div
-                className={`onboarding-choice-card ${gender === "Nữ" ? "selected" : ""}`}
-                onClick={() => setGender("Nữ")}
-              >
-                <span className="onboarding-choice-label">Nữ</span>
-                <span className="onboarding-radio-circle"></span>
-              </div>
-            </div>
-
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn"
-                disabled={!gender}
-                onClick={handleStep1Next}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 2: NGÀY SINH (WHEEL DATE PICKER) ================= */}
-        {currentStep === 2 && (
-          <div className="onboarding-step-view animate-fade">
-            <div className="onboarding-header">
-              <h2 className="onboarding-title serif-title">
-                {currentPreferredName}, ngày sinh của bạn là ngày nào thế?
-              </h2>
-              <p className="onboarding-subtitle">
-                Thông tin này giúp chúng tôi hiểu rõ hơn về làn da của bạn.
-              </p>
-            </div>
-
-            {/* Apple iOS-grade 3-Column Wheel Date Picker */}
-            <div className="onboarding-date-wheel-container">
-              <div className="onboarding-date-wheel-highlight"></div>
-
-              {/* Day Column */}
-              <WheelColumn
-                className="day-col"
-                items={days}
-                value={day}
-                onChange={setDay}
-                formatLabel={(d) => d}
-              />
-
-              {/* Month Column */}
-              <WheelColumn
-                className="month-col"
-                items={months}
-                value={month}
-                onChange={setMonth}
-                formatLabel={(m) => `tháng ${m}`}
-              />
-
-              {/* Year Column */}
-              <WheelColumn
-                className="year-col"
-                items={years}
-                value={year}
-                onChange={setYear}
-                formatLabel={(y) => y}
-              />
-            </div>
-
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn with-arrow"
-                onClick={handleStep2Next}
-              >
-                <span>Tiếp tục</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 3: THÀNH PHỐ SỐNG ================= */}
-        {currentStep === 3 && (
-          <div className="onboarding-step-view animate-fade">
-            <div className="onboarding-header">
-              <h2 className="onboarding-title serif-title">
-                Bạn đang ở thành phố nào vậy {currentPreferredName}?
-              </h2>
-              <p className="onboarding-subtitle">
-                Thông tin này giúp chúng tôi đề xuất chu trình phù hợp với khí hậu nơi bạn đang sinh sống.
-              </p>
-            </div>
-
-            {/* Search Input Box */}
-            <div className="onboarding-search-box">
-              <svg className="onboarding-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <input
-                type="text"
-                placeholder="Tìm thành phố bạn đang sống"
-                value={citySearch}
-                onChange={(e) => setCitySearch(e.target.value)}
-              />
-              {citySearch && (
-                <button
-                  type="button"
-                  className="onboarding-clear-icon"
-                  onClick={() => setCitySearch("")}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            {/* City Pills List */}
-            <div className="onboarding-cities-scroll">
-              {filteredCities.map((city) => (
-                <button
-                  key={city}
-                  type="button"
-                  className={`onboarding-city-pill ${selectedCity === city ? "selected" : ""}`}
-                  onClick={() => setSelectedCity(city)}
-                >
-                  {city}
-                </button>
-              ))}
-              {filteredCities.length === 0 && (
-                <p className="onboarding-empty-cities">Không tìm thấy thành phố phù hợp</p>
-              )}
-            </div>
-
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn"
-                disabled={!selectedCity}
-                onClick={handleStep3Next}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 4: CHI PHÍ & BỆNH LÝ ================= */}
-        {currentStep === 4 && (
-          <div className="onboarding-step-view animate-fade">
-            <div
-              ref={surveyScrollRef}
-              className={`onboarding-scrollable-survey ${activeBottomSheet ? "survey-frozen" : ""}`}
-            >
-              
-              {/* Question 1: Budget */}
-              <div className="onboarding-survey-section">
-                <h3 className="onboarding-survey-question">
-                  Mức chi phí trung bình cho 1 sản phẩm chăm sóc da của bạn là bao nhiêu?
-                </h3>
-                <div className="onboarding-options-list">
-                  {BUDGET_OPTIONS.map((opt) => (
-                    <div
-                      key={opt}
-                      className={`onboarding-choice-card ${budget === opt ? "selected" : ""}`}
-                      onClick={() => setBudget(opt)}
-                    >
-                      <span className="onboarding-choice-label">{opt}</span>
-                      <span className="onboarding-radio-circle"></span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Question 2: Medical Condition */}
-              <div className="onboarding-survey-section">
-                <h3 className="onboarding-survey-question">
-                  Bạn có đang mắc bệnh lý hoặc đang điều trị bệnh không?
-                </h3>
-                <div className="onboarding-options-list">
-                  <div
-                    className={`onboarding-choice-card ${hasMedical === "Có" ? "selected" : ""}`}
-                    onClick={() => handleSelectMedical("Có")}
-                  >
-                    <div className="onboarding-choice-content">
-                      <span className="onboarding-choice-label">Có</span>
-                      {hasMedical === "Có" && medicalDetail && (
-                        <span className="onboarding-choice-detail-hint">{medicalDetail}</span>
-                      )}
-                    </div>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-
-                  <div
-                    className={`onboarding-choice-card ${hasMedical === "Không" ? "selected" : ""}`}
-                    onClick={() => handleSelectMedical("Không")}
-                  >
-                    <span className="onboarding-choice-label">Không</span>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Question 3: Prescription Drugs */}
-              <div className="onboarding-survey-section">
-                <h3 className="onboarding-survey-question">
-                  Bạn có đang dùng thuốc kê đơn nào không?
-                </h3>
-                <div className="onboarding-options-list">
-                  <div
-                    className={`onboarding-choice-card ${hasPrescription === "Có" ? "selected" : ""}`}
-                    onClick={() => handleSelectPrescription("Có")}
-                  >
-                    <div className="onboarding-choice-content">
-                      <span className="onboarding-choice-label">Có</span>
-                      {hasPrescription === "Có" && prescriptionDetail && (
-                        <span className="onboarding-choice-detail-hint">{prescriptionDetail}</span>
-                      )}
-                    </div>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-
-                  <div
-                    className={`onboarding-choice-card ${hasPrescription === "Không" ? "selected" : ""}`}
-                    onClick={() => handleSelectPrescription("Không")}
-                  >
-                    <span className="onboarding-choice-label">Không</span>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Question 4: Dietary Supplements, High-Dose Vitamins, Herbs */}
-              <div className="onboarding-survey-section">
-                <h3 className="onboarding-survey-question">
-                  Bạn có đang dùng thực phẩm chức năng, vitamin liều cao hoặc thảo dược không?
-                </h3>
-                <div className="onboarding-options-list">
-                  <div
-                    className={`onboarding-choice-card ${hasSupplements === "Có" ? "selected" : ""}`}
-                    onClick={() => handleSelectSupplements("Có")}
-                  >
-                    <div className="onboarding-choice-content">
-                      <span className="onboarding-choice-label">Có</span>
-                      {hasSupplements === "Có" && supplementsDetail && (
-                        <span className="onboarding-choice-detail-hint">{supplementsDetail}</span>
-                      )}
-                    </div>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-
-                  <div
-                    className={`onboarding-choice-card ${hasSupplements === "Không" ? "selected" : ""}`}
-                    onClick={() => handleSelectSupplements("Không")}
-                  >
-                    <span className="onboarding-choice-label">Không</span>
-                    <span className="onboarding-radio-circle"></span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Question 5: Visible Blood Vessels */}
-              <div className="onboarding-survey-section">
-                <h3 className="onboarding-survey-question">
-                  Da mặt của bạn có hiện mạch máu không?
-                </h3>
-                <div className="onboarding-options-list">
-                  {YES_NO_OPTIONS.map((opt) => (
-                    <div
-                      key={opt}
-                      className={`onboarding-choice-card ${hasBloodVessels === opt ? "selected" : ""}`}
-                      onClick={() => setHasBloodVessels(opt)}
-                    >
-                      <span className="onboarding-choice-label">{opt}</span>
-                      <span className="onboarding-radio-circle"></span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn"
-                disabled={!budget}
-                onClick={handleStep4Next}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 5: CHẨN ĐOÁN LOẠI DA & ĐỘ NHẠY CẢM ================= */}
-        {currentStep === 5 && (
-          <div className="onboarding-step-view animate-fade">
-            <div ref={surveyScrollRefStep5} className="onboarding-scrollable-survey">
-              
-              {/* Question 1: Skin Type with Face Cards */}
-              <div className="onboarding-survey-section">
-                <h2 className="onboarding-survey-question-main">
-                  Chọn đáp án phù hợp nhất với bạn?
-                </h2>
-                <div className="onboarding-skin-type-list">
-                  {SKIN_TYPE_OPTIONS.map((opt) => {
-                    const isSelected = skinType === opt.label;
-                    return (
-                      <div
-                        key={opt.id}
-                        className={`onboarding-skin-type-card ${isSelected ? "selected" : ""}`}
-                        onClick={() => handleSelectSkinType(opt.label)}
-                      >
-                        <SkinTypeVisual
-                          type={opt.type}
-                          label={opt.label}
-                          imageSrc={opt.img}
-                          onScanClick={(src) => setPreviewSkinImage(src)}
-                        />
-                        <div className="onboarding-skin-card-bottom">
-                          <span className="onboarding-skin-card-label">{opt.label}</span>
-                          <span className="onboarding-radio-circle"></span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Question 2: Skin Sensitivity */}
-              <div ref={sensitivitySectionRef} className="onboarding-survey-section">
-                <h2 className="onboarding-survey-question-main sensitivity-question">
-                  Da mặt của bạn đã từng bị mẩn đỏ, ngứa rát sau khi sử dụng mỹ phẩm, sản phẩm chăm sóc da mới hoặc khi thay đổi thời tiết chưa?
-                </h2>
-                <div className="onboarding-options-list">
-                  {SKIN_SENSITIVITY_OPTIONS.map((opt) => {
-                    const isSelected = skinSensitivity === opt;
-                    return (
-                      <div
-                        key={opt}
-                        className={`onboarding-choice-card ${isSelected ? "selected" : ""}`}
-                        onClick={() => setSkinSensitivity(opt)}
-                      >
-                        <span className="onboarding-choice-label">{opt}</span>
-                        <span className="onboarding-radio-circle"></span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn"
-                disabled={!skinType}
-                onClick={handleStep5Action}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 6: SẢN PHẨM BẠN ĐANG DÙNG ================= */}
-        {currentStep === 6 && (
-          <div className="onboarding-step-view animate-fade">
-            {/* Top Nav */}
-            <div className="onboarding-header-simple">
-              <button
-                type="button"
-                className="onboarding-back-btn"
-                onClick={() => setStep(5)}
-                aria-label="Quay lại"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </button>
-              <h2 className="onboarding-title-simple">Sản phẩm bạn đang dùng</h2>
-              <div style={{ width: 36 }}></div>
-            </div>
-
-            {/* Search Input */}
-            <div className="onboarding-search-box">
-              <svg className="onboarding-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <input
-                type="text"
-                placeholder="Nhập tên sản phẩm"
-                value={productSearch}
-                onChange={(e) => setProductSearch(e.target.value)}
-              />
-              {productSearch && (
-                <button
-                  type="button"
-                  className="onboarding-clear-icon"
-                  onClick={() => setProductSearch("")}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            {/* Trending Tag */}
-            <div className="onboarding-trending-tag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="2.2">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                <polyline points="17 6 23 6 23 12"></polyline>
-              </svg>
-              <span>Top sản phẩm tìm kiếm</span>
-            </div>
-
-            {/* Products List */}
-            <div className="onboarding-products-scroll-list">
-              {filteredProducts.map((prod) => {
-                const isSelected = selectedProducts.some((p) => p.id === prod.id);
-                return (
-                  <div key={prod.id} className="onboarding-product-card-item">
-                    <img
-                      src={prod.image}
-                      alt={prod.name}
-                      className="onboarding-product-item-img"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&q=80&auto=format&fit=crop";
-                      }}
-                    />
-                    <div className="onboarding-product-item-info">
-                      <div className="onboarding-product-item-name">
-                        <span className="onboarding-product-item-brand">{prod.brand}</span> {prod.name}
-                      </div>
-                      <div className="onboarding-product-item-meta">
-                        {prod.category} • {prod.volume}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className={`onboarding-product-toggle-btn ${isSelected ? "selected" : ""}`}
-                      onClick={() => toggleSelectProduct(prod)}
-                      aria-label={isSelected ? "Bỏ chọn" : "Chọn"}
-                    >
-                      {isSelected ? "✓" : "+"}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Bottom Action */}
-            <div className="onboarding-bottom-action">
-              <button
-                type="button"
-                className="onboarding-primary-btn"
-                onClick={() => {
-                  setVideoGuideIndex(0);
-                  setStep(7);
-                }}
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ================= STEP 7: VIDEO HƯỚNG DẪN QUÉT MẶT ================= */}
-        {currentStep === 7 && (
           <div className="onboarding-video-guide-view animate-fade">
             {/* Top Close Button (Clean white X icon) */}
             <div className="onboarding-guide-top-bar">
@@ -1856,8 +1435,8 @@ export default function WelcomeNameModal() {
           </div>
         )}
 
-        {/* ================= STEP 8: CAMERA CHỤP 3 HƯỚNG MẶT ================= */}
-        {currentStep === 8 && !isSubmitting && (
+        {/* ================= STEP 2: CAMERA CHỤP 3 HƯỚNG MẶT ================= */}
+        {currentStep === 2 && !isSubmitting && (
           <div className="onboarding-camera-view animate-fade">
             {/* Top Bar */}
             <div className="onboarding-camera-top-bar">
@@ -2084,7 +1663,7 @@ export default function WelcomeNameModal() {
                 type="button"
                 className={`onboarding-camera-continue-btn ${!canContinueFromCamera ? "disabled" : ""}`}
                 disabled={!canContinueFromCamera || isSubmitting}
-                onClick={handleFinishOnboarding}
+                onClick={() => { stopCamera(); setStep(3); }}
               >
                 {isSubmitting ? (
                   <span className="onboarding-loading-state">
@@ -2092,10 +1671,330 @@ export default function WelcomeNameModal() {
                     <span>Đang phân tích 3 góc mặt...</span>
                   </span>
                 ) : canContinueFromCamera ? (
-                  "Phân tích da"
+                  "Tiếp tục"
                 ) : (
                   `Chụp đủ 3 góc mặt để tiếp tục (${capturedAnglesCount}/3)`
                 )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ================= STEP 3: MỨC CHI PHÍ & BỆNH LÝ ================= */}
+        {currentStep === 3 && (
+          <div className="onboarding-step-view animate-fade">
+            <div
+              ref={surveyScrollRef}
+              className={`onboarding-scrollable-survey ${activeBottomSheet ? "survey-frozen" : ""}`}
+            >
+              
+              {/* Question 1: Budget */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Mức chi phí trung bình cho 1 sản phẩm chăm sóc da của bạn là bao nhiêu?
+                </h3>
+                <div className="onboarding-options-list">
+                  {BUDGET_OPTIONS.map((opt) => (
+                    <div
+                      key={opt}
+                      className={`onboarding-choice-card ${budget === opt ? "selected" : ""}`}
+                      onClick={() => setBudget(opt)}
+                    >
+                      <span className="onboarding-choice-label">{opt}</span>
+                      <span className="onboarding-radio-circle"></span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Question 2: Medical Condition */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Bạn có đang mắc bệnh lý hoặc đang điều trị bệnh không?
+                </h3>
+                <div className="onboarding-options-list">
+                  <div
+                    className={`onboarding-choice-card ${hasMedical === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectMedical("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasMedical === "Có" && medicalDetail && (
+                        <span className="onboarding-choice-detail-hint">{medicalDetail}</span>
+                      )}
+                    </div>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasMedical === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectMedical("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Question 3: Prescription Drugs */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Bạn có đang dùng thuốc kê đơn nào không?
+                </h3>
+                <div className="onboarding-options-list">
+                  <div
+                    className={`onboarding-choice-card ${hasPrescription === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectPrescription("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasPrescription === "Có" && prescriptionDetail && (
+                        <span className="onboarding-choice-detail-hint">{prescriptionDetail}</span>
+                      )}
+                    </div>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasPrescription === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectPrescription("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Question 4: Dietary Supplements, High-Dose Vitamins, Herbs */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Bạn có đang dùng thực phẩm chức năng, vitamin liều cao hoặc thảo dược không?
+                </h3>
+                <div className="onboarding-options-list">
+                  <div
+                    className={`onboarding-choice-card ${hasSupplements === "Có" ? "selected" : ""}`}
+                    onClick={() => handleSelectSupplements("Có")}
+                  >
+                    <div className="onboarding-choice-content">
+                      <span className="onboarding-choice-label">Có</span>
+                      {hasSupplements === "Có" && supplementsDetail && (
+                        <span className="onboarding-choice-detail-hint">{supplementsDetail}</span>
+                      )}
+                    </div>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+
+                  <div
+                    className={`onboarding-choice-card ${hasSupplements === "Không" ? "selected" : ""}`}
+                    onClick={() => handleSelectSupplements("Không")}
+                  >
+                    <span className="onboarding-choice-label">Không</span>
+                    <span className="onboarding-radio-circle"></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Question 5: Visible Blood Vessels */}
+              <div className="onboarding-survey-section">
+                <h3 className="onboarding-survey-question">
+                  Da mặt của bạn có hiện mạch máu không?
+                </h3>
+                <div className="onboarding-options-list">
+                  {YES_NO_OPTIONS.map((opt) => (
+                    <div
+                      key={opt}
+                      className={`onboarding-choice-card ${hasBloodVessels === opt ? "selected" : ""}`}
+                      onClick={() => setHasBloodVessels(opt)}
+                    >
+                      <span className="onboarding-choice-label">{opt}</span>
+                      <span className="onboarding-radio-circle"></span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            <div className="onboarding-bottom-action">
+              <button
+                type="button"
+                className="onboarding-primary-btn"
+                disabled={!budget}
+                onClick={() => setStep(4)}
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ================= STEP 4: CHỌN DA PHÙ HỢP & ĐỘ NHẠY CẢM ================= */}
+        {currentStep === 4 && (
+          <div className="onboarding-step-view animate-fade">
+            <div ref={surveyScrollRefStep5} className="onboarding-scrollable-survey">
+              
+              {/* Question 1: Skin Type with Face Cards */}
+              <div className="onboarding-survey-section">
+                <h2 className="onboarding-survey-question-main">
+                  Chọn đáp án phù hợp nhất với bạn?
+                </h2>
+                <div className="onboarding-skin-type-list">
+                  {SKIN_TYPE_OPTIONS.map((opt) => {
+                    const isSelected = skinType === opt.label;
+                    return (
+                      <div
+                        key={opt.id}
+                        className={`onboarding-skin-type-card ${isSelected ? "selected" : ""}`}
+                        onClick={() => handleSelectSkinType(opt.label)}
+                      >
+                        <SkinTypeVisual
+                          type={opt.type}
+                          label={opt.label}
+                          imageSrc={opt.img}
+                          onScanClick={(src) => setPreviewSkinImage(src)}
+                        />
+                        <div className="onboarding-skin-card-bottom">
+                          <span className="onboarding-skin-card-label">{opt.label}</span>
+                          <span className="onboarding-radio-circle"></span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Question 2: Skin Sensitivity */}
+              <div ref={sensitivitySectionRef} className="onboarding-survey-section">
+                <h2 className="onboarding-survey-question-main sensitivity-question">
+                  Da mặt của bạn đã từng bị mẩn đỏ, ngứa rát sau khi sử dụng mỹ phẩm, sản phẩm chăm sóc da mới hoặc khi thay đổi thời tiết chưa?
+                </h2>
+                <div className="onboarding-options-list">
+                  {SKIN_SENSITIVITY_OPTIONS.map((opt) => {
+                    const isSelected = skinSensitivity === opt;
+                    return (
+                      <div
+                        key={opt}
+                        className={`onboarding-choice-card ${isSelected ? "selected" : ""}`}
+                        onClick={() => setSkinSensitivity(opt)}
+                      >
+                        <span className="onboarding-choice-label">{opt}</span>
+                        <span className="onboarding-radio-circle"></span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+
+            <div className="onboarding-bottom-action">
+              <button
+                type="button"
+                className="onboarding-primary-btn"
+                disabled={!skinType}
+                onClick={() => { if (!skinSensitivity) { sensitivitySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); return; } setStep(5); }}
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ================= STEP 5: SẢN PHẨM BẠN ĐANG DÙNG ================= */}
+        {currentStep === 5 && (
+          <div className="onboarding-step-view animate-fade">
+            {/* Top Nav */}
+            <div className="onboarding-header-simple">
+              <button
+                type="button"
+                className="onboarding-back-btn"
+                onClick={() => setStep(4)}
+                aria-label="Quay lại"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <h2 className="onboarding-title-simple">Sản phẩm bạn đang dùng</h2>
+              <div style={{ width: 36 }}></div>
+            </div>
+
+            {/* Search Input */}
+            <div className="onboarding-search-box">
+              <svg className="onboarding-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                placeholder="Nhập tên sản phẩm"
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+              />
+              {productSearch && (
+                <button
+                  type="button"
+                  className="onboarding-clear-icon"
+                  onClick={() => setProductSearch("")}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Trending Tag */}
+            <div className="onboarding-trending-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="2.2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              <span>Top sản phẩm tìm kiếm</span>
+            </div>
+
+            {/* Products List */}
+            <div className="onboarding-products-scroll-list">
+              {filteredProducts.map((prod) => {
+                const isSelected = selectedProducts.some((p) => p.id === prod.id);
+                return (
+                  <div key={prod.id} className="onboarding-product-card-item">
+                    <img
+                      src={prod.image}
+                      alt={prod.name}
+                      className="onboarding-product-item-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&q=80&auto=format&fit=crop";
+                      }}
+                    />
+                    <div className="onboarding-product-item-info">
+                      <div className="onboarding-product-item-name">
+                        <span className="onboarding-product-item-brand">{prod.brand}</span> {prod.name}
+                      </div>
+                      <div className="onboarding-product-item-meta">
+                        {prod.category} • {prod.volume}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className={`onboarding-product-toggle-btn ${isSelected ? "selected" : ""}`}
+                      onClick={() => toggleSelectProduct(prod)}
+                      aria-label={isSelected ? "Bỏ chọn" : "Chọn"}
+                    >
+                      {isSelected ? "✓" : "+"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Bottom Action */}
+            <div className="onboarding-bottom-action">
+              <button
+                type="button"
+                className="onboarding-primary-btn"
+                onClick={handleFinishOnboarding}
+              >
+                Tiếp tục
               </button>
             </div>
           </div>

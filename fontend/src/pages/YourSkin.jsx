@@ -284,6 +284,85 @@ export default function YourSkin() {
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState("unlock_single");
 
+  // Clinical Report Cards Accordion State (Matching user reference images 1, 3, 4, 5)
+  const [expandedClinicalItems, setExpandedClinicalItems] = useState({
+    skinType: false,
+    pigmentation: false,
+    acne_inflammatory: false,
+    pores: false,
+    comedones: false,
+    scars: false,
+    filaments: false,
+    uneven_tone: false,
+    barrier: false
+  });
+
+  const toggleClinicalItem = (key) => {
+    setExpandedClinicalItems((prev) => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
+  const [faceCrops, setFaceCrops] = useState({});
+
+  useEffect(() => {
+    if (!displayImage) return;
+    let isCancelled = false;
+    Promise.all([
+      cropFaceZones(displayImage, "cheek"),
+      cropFaceZones(displayImage, "chin"),
+      cropFaceZones(displayImage, "nose"),
+      cropFaceZones(displayImage, "forehead")
+    ]).then(([cheeks, chins, noses, foreheads]) => {
+      if (!isCancelled) {
+        setFaceCrops({
+          cheek: (cheeks || []).map((c) => c.url),
+          chin: (chins || []).map((c) => c.url),
+          nose: (noses || []).map((c) => c.url),
+          forehead: (foreheads || []).map((c) => c.url)
+        });
+      }
+    }).catch((err) => console.warn("Lỗi trích xuất crop da:", err));
+    return () => { isCancelled = true; };
+  }, [displayImage]);
+
+  const pigmentCropList = useMemo(() => {
+    if (faceCrops.chin?.length) return faceCrops.chin;
+    if (faceCrops.cheek?.length) return faceCrops.cheek;
+    return [
+      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=300&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1512290900672-1f55b0a39f60?w=300&q=80&auto=format&fit=crop"
+    ];
+  }, [faceCrops]);
+
+  const scarCropList = useMemo(() => {
+    if (faceCrops.cheek?.length) return faceCrops.cheek;
+    return [
+      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=300&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop"
+    ];
+  }, [faceCrops]);
+
+  const acneCropList = useMemo(() => {
+    if (faceCrops.chin?.length) return faceCrops.chin;
+    return [
+      "https://images.unsplash.com/photo-1512290900672-1f55b0a39f60?w=300&q=80&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop"
+    ];
+  }, [faceCrops]);
+
+  const handleGetPersonalizedRoutine = () => {
+    const el =
+      document.querySelector(".product-recommendations-wrapper") ||
+      document.getElementById("recommended-products-section") ||
+      document.querySelector(".skin-result-feedback-bar");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   const SUBSCRIPTION_PLANS = [
     {
       id: "unlock_single",
@@ -956,17 +1035,8 @@ export default function YourSkin() {
                     className="skin-result-face-img"
                   />
 
-                  {/* Top Bar with Pagination Dots & Close */}
+                  {/* Top Bar with Pagination Dots & Counter */}
                   <div className="skin-result-photo-top-bar">
-                    <button
-                      type="button"
-                      className="skin-result-round-btn skin-result-back-btn"
-                      onClick={() => navigate(-1)}
-                      title="Quay lại"
-                    >
-                      ‹
-                    </button>
-
                     <div className="skin-result-top-center-group">
                       <div className="skin-result-pagination-dots">
                         {angleImages.map((ang, idx) => (
@@ -984,14 +1054,6 @@ export default function YourSkin() {
                       <div className="skin-result-counter-pill">
                         {currentAngleIndex + 1}/{angleImages.length}
                       </div>
-                      <button
-                        type="button"
-                        className="skin-result-round-btn skin-result-close-btn"
-                        onClick={() => navigate("/")}
-                        title="Đóng / Về trang chủ"
-                      >
-                        ✕
-                      </button>
                     </div>
                   </div>
 
@@ -1160,6 +1222,620 @@ export default function YourSkin() {
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* BÊN CẠNH: CÁC THẺ BÁO CÁO LÂM SÀNG (Loại da, Tình trạng da chưa tốt, Tình trạng da tốt, Chu trình chăm sóc) */}
+              <div className="skin-clinical-panel">
+                {/* ================= THẺ CHẨN ĐOÁN LÂM SÀNG (Images 1, 3, 4, 5) ================= */}
+                  <div className="skin-clinical-cards-wrapper">
+                    {/* Thẻ 1: Loại da */}
+                    <div className="skin-report-card">
+                      <div className="skin-report-card-header">
+                        <div className="skin-report-header-title-wrap">
+                          <span className="skin-card-section-icon gold">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M2 17c5-3 15-3 20 0M2 12c5-3 15-3 20 0M12 2v4M10 4h4" />
+                              <circle cx="5" cy="5" r="1.5" fill="#f59e0b" stroke="none" />
+                              <circle cx="19" cy="5" r="1.5" fill="#f59e0b" stroke="none" />
+                            </svg>
+                          </span>
+                          <span className="skin-report-header-title">Loại da</span>
+                        </div>
+                      </div>
+
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("skinType")}
+                        >
+                          <span className="skin-report-row-title">
+                            {displayScan?.skinType || "Da thường"}
+                          </span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.skinType ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.skinType && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Làn da của bạn đang ở trạng thái cân bằng và khá mịn màng.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tuy nhiên, lỗ chân lông có vẻ to hơn một chút.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Vùng chữ T thường có một ít dầu.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Thẻ 2: Tình trạng da chưa tốt (7 mục) */}
+                    <div className="skin-report-card">
+                      <div className="skin-report-card-header">
+                        <div className="skin-report-header-title-wrap">
+                          <span className="skin-card-section-icon red">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <circle cx="12" cy="12" r="9" />
+                              <line x1="15" y1="9" x2="9" y2="15" />
+                              <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                          </span>
+                          <span className="skin-report-header-title">Tình trạng da chưa tốt</span>
+                        </div>
+                      </div>
+
+                      {/* 1. Tăng sắc tố nặng */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("pigmentation")}
+                        >
+                          <span className="skin-report-row-title">Có tình trạng tăng sắc tố nặng</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.pigmentation ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.pigmentation && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-crops-scroll">
+                              {pigmentCropList.map((url, i) => (
+                                <img
+                                  key={i}
+                                  src={url}
+                                  alt="Cận cảnh sắc tố da"
+                                  className="skin-report-crop-img"
+                                  loading="lazy"
+                                />
+                              ))}
+                            </div>
+
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Bạn có 20 nốt tăng sắc tố.</span>
+                              </div>
+                              <div className="skin-report-subheading">Tăng sắc tố da do:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tia UV từ ánh nắng mặt trời.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Thay đổi hormone trong cơ thể.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Quá trình lão hóa da.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Bảo vệ da khỏi ánh nắng mặt trời là ưu tiên hàng đầu.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Sử dụng các hoạt chất an toàn giúp sáng da như: Vitamin C, niacinamide, arbutin, tranexamic, retinol,...</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Thẩm mỹ da: Laser, tiêm PRP, chemical peel, mesotherapy,...</span>
+                              </div>
+
+                              <div className="skin-report-note">
+                                Lưu ý: Trước khi dùng sản phẩm sáng da hoặc thực hiện thẩm mỹ, hãy tham khảo ý kiến bác sĩ da liễu nhé!
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 2. Mụn viêm trung bình */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("acne_inflammatory")}
+                        >
+                          <span className="skin-report-row-title">Có tình trạng mụn viêm trung bình</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.acne_inflammatory ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.acne_inflammatory && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-crops-scroll">
+                              {acneCropList.map((url, i) => (
+                                <img
+                                  key={i}
+                                  src={url}
+                                  alt="Cận cảnh mụn viêm"
+                                  className="skin-report-crop-img"
+                                  loading="lazy"
+                                />
+                              ))}
+                            </div>
+
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Bạn có nốt mụn viêm sưng đỏ, cần được chăm sóc kháng viêm chuyên sâu.</span>
+                              </div>
+                              <div className="skin-report-subheading">Nguyên nhân mụn viêm:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Vi khuẩn C.acnes phát triển mạnh trong cổ nang lông bít tắc.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tuyến bã nhờn tăng tiết quá mức kết hợp tế bào chết.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Làm sạch dịu nhẹ với sữa rửa mặt pH 5.5, tránh chà xát mạnh.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Dùng hoạt chất kháng viêm, giảm sưng: BHA (Salicylic Acid), Benzoyl Peroxide, Kẽm PCA, Tràm trà.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Không tự ý nặn mụn tránh nhiễm trùng và để lại sẹo lõm.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 3. Lỗ chân lông to */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("pores")}
+                        >
+                          <span className="skin-report-row-title">Lỗ chân lông to</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.pores ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.pores && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tuyến dầu hoạt động mạnh làm lỗ chân lông giãn nở ở vùng mũi và hai bên má.</span>
+                              </div>
+                              <div className="skin-report-subheading">Nguyên nhân lỗ chân lông to:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Dầu thừa tích tụ kết hợp bụi bẩn làm phình to cổ nang lông.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Giảm độ đàn hồi và thiếu hụt collagen quanh thành lỗ chân lông.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Làm sạch sâu định kỳ với BHA 2% và mặt nạ đất sét.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Bổ sung Niacinamide 5-10% giúp điều tiết dầu và thu nhỏ cổ nang lông.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Chống nắng bảo vệ cấu trúc collagen quanh lỗ chân lông.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 4. Mụn ẩn - mụn đầu đen nhẹ */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("comedones")}
+                        >
+                          <span className="skin-report-row-title">Có tình trạng Mụn ẩn - mụn đầu đen nhẹ</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.comedones ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.comedones && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Xuất hiện nhân mụn bít tắc dưới da và mụn đầu đen vùng mũi, cằm.</span>
+                              </div>
+                              <div className="skin-report-subheading">Nguyên nhân:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tế bào sừng chết không được đào thải kịp thời gây bít tắc lỗ chân lông.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Bã nhờn bị oxy hóa khi tiếp xúc không khí tạo thành đầu đen.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tẩy tế bào chết hóa học AHA/BHA 2-3 lần/tuần.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Dùng Retinol nồng độ phù hợp để bình thường hóa quá trình sừng hóa da.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Rửa mặt 2 bước (Double Cleansing) kỹ vào buổi tối.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 5. Sẹo nhẹ */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("scars")}
+                        >
+                          <span className="skin-report-row-title">Có tình trạng sẹo nhẹ</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.scars ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.scars && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-crops-scroll">
+                              {scarCropList.map((url, i) => (
+                                <img
+                                  key={i}
+                                  src={url}
+                                  alt="Cận cảnh sẹo da"
+                                  className="skin-report-crop-img"
+                                  loading="lazy"
+                                />
+                              ))}
+                            </div>
+
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Vết tích sẹo thâm nhẹ sau các đợt mụn viêm trước đó, bề mặt da gồ ghề nhẹ.</span>
+                              </div>
+                              <div className="skin-report-subheading">Nguyên nhân hình thành sẹo:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tổn thương lớp hạ bì và thiếu hụt collagen trong quá trình tự lành của da.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Nặn mụn sai cách gây đứt gãy sợi đàn hồi biểu bì.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Thoa serum phục hồi chứa Peptide, Centella Asiatica (Rau má), EGF.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Kết hợp Retinoids tái tạo bề mặt biểu bì và kích thích sinh collagen mới.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Thẩm mỹ da: Lăn kim vi điểm (Microneedling), Laser Fractional CO2.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 6. Sợi bã nhờn rất nhẹ */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("filaments")}
+                        >
+                          <span className="skin-report-row-title">Có tình trạng sợi bã nhờn rất nhẹ</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.filaments ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.filaments && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Sợi bã nhờn tự nhiên tập trung vùng cánh mũi và cằm, không phải mụn.</span>
+                              </div>
+                              <div className="skin-report-subheading">Bản chất sợi bã nhờn:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Là cấu trúc hình ống tự nhiên dẫn dầu từ tuyến bã nhờn lên bề mặt da.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp chăm sóc hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Dầu tẩy trang nhũ hóa kỹ kết hợp BHA làm mềm bã nhờn.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Đắp mặt nạ đất sét 1-2 lần/tuần để hút dầu thừa.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 7. Da không đều màu */}
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("uneven_tone")}
+                        >
+                          <span className="skin-report-row-title">Da không đều màu</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.uneven_tone ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.uneven_tone && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tông màu da phân bổ chưa đồng đều giữa vùng chữ T và hai bên má.</span>
+                              </div>
+                              <div className="skin-report-subheading">Nguyên nhân:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tác động không đồng đều của tia UV ánh nắng mặt trời và thâm sau mụn.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Sử dụng Vitamin C, Niacinamide và Arbutin làm sáng và đều màu da an toàn.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Thoa kem chống nắng quang phổ rộng hàng ngày với chỉ số SPF 50+, PA++++.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Thẻ 3: Tình trạng da tốt */}
+                    <div className="skin-report-card">
+                      <div className="skin-report-card-header">
+                        <div className="skin-report-header-title-wrap">
+                          <span className="skin-card-section-icon green">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                              <polyline points="9 12 11 14 15 10" />
+                            </svg>
+                          </span>
+                          <span className="skin-report-header-title">Tình trạng da tốt</span>
+                        </div>
+                      </div>
+
+                      <div className="skin-report-row">
+                        <div
+                          className="skin-report-row-header"
+                          onClick={() => toggleClinicalItem("barrier")}
+                        >
+                          <span className="skin-report-row-title">Hàng rào bảo vệ da khoẻ</span>
+                          <span className="skin-report-row-chevron">
+                            {expandedClinicalItems.barrier ? (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
+
+                        {expandedClinicalItems.barrier && (
+                          <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-text-block">
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Hàng rào bảo vệ da là lớp màng ngoài cùng, giúp giữ ẩm và ngăn chặn tác nhân gây hại từ môi trường như khói bụi, ô nhiễm, hóa chất.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Khi lớp màng này khỏe mạnh, da bạn được bảo vệ tốt hơn, giảm nguy cơ kích ứng và tổn thương.</span>
+                              </div>
+
+                              <div className="skin-report-subheading">Cách củng cố hàng rào bảo vệ da:</div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Tránh sản phẩm chứa cồn khô và chất tẩy rửa mạnh (như Sodium Lauryl Sulfate, Sodium Laureth Sulfate).</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Dưỡng ẩm thường xuyên với các hoạt chất như Ceramides, Glycerin, Hyaluronic Acid.</span>
+                              </div>
+                              <div className="skin-report-bullet">
+                                <span className="skin-report-arrow-icon">➤</span>
+                                <span>Sử dụng kem chống nắng phổ rộng, SPF từ 30 trở lên, và thêm thành phần chống oxy hóa như vitamin E, niacinamide.</span>
+                              </div>
+                              <div className="skin-report-citation">
+                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Thẻ 4: Chu trình chăm sóc cơ bản */}
+                    <div className="skin-report-card">
+                      <div className="skin-report-card-header">
+                        <div className="skin-report-header-title-wrap">
+                          <span className="skin-card-section-icon purple">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                              <line x1="16" y1="2" x2="16" y2="6" />
+                              <line x1="8" y1="2" x2="8" y2="6" />
+                              <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                          </span>
+                          <span className="skin-report-header-title">Chu trình chăm sóc cơ bản</span>
+                        </div>
+                        <span className="skin-routine-ai-badge">AI đề xuất ✨</span>
+                      </div>
+
+                      <div className="skin-report-routine-box">
+                        <h4 className="skin-report-routine-heading">
+                          Khám phá chu trình do Chuyên gia da liễu thiết kế dành riêng cho bạn
+                        </h4>
+                        <button
+                          type="button"
+                          className="skin-report-routine-btn"
+                          onClick={handleGetPersonalizedRoutine}
+                        >
+                          Nhận chu trình cá nhân hoá
+                        </button>
+                      </div>
+                    </div>
+                  </div>
               </div>
             </div>
     )}

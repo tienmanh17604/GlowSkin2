@@ -7,12 +7,13 @@ import { useCart } from "../context/CartContext";
 
 const NAV_LINKS = [
   { label: "Trang chủ", to: "/" },
+  { label: "Phân tích da", isAnalysis: true },
   { label: "Da của bạn", to: "/your-skin" },
   { label: "Liên hệ", to: "/contact" },
 ];
 
 export default function Navbar() {
-  const { currentUser, setIsLoginOpen } = useApp();
+  const { currentUser, setIsLoginOpen, setIsNameModalOpen } = useApp();
   const { setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -39,6 +40,14 @@ export default function Navbar() {
                 type="button"
                 className="nav-link-btn"
                 onClick={() => setIsCartOpen(true)}
+              >
+                {link.label}
+              </button>
+            ) : link.isAnalysis ? (
+              <button
+                type="button"
+                className="nav-link-btn"
+                onClick={() => setIsNameModalOpen(true)}
               >
                 {link.label}
               </button>
