@@ -124,7 +124,7 @@ function WheelColumn({ items, value, onChange, formatLabel, className = "" }) {
   const startScrollTopRef = useRef(0);
   const hasDraggedRef = useRef(false);
 
-  const ITEM_HEIGHT = 44;
+  const ITEM_HEIGHT = 38;
   const REPEAT_CYCLES = 40;
   const MID_CYCLE = 20;
   const N = items.length;
