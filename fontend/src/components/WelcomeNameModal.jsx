@@ -71,6 +71,12 @@ const SKIN_SENSITIVITY_OPTIONS = [
   "Rất hay gặp"
 ];
 
+const VIDEO_GUIDE_URLS = [
+  "https://res.cloudinary.com/buevamso/video/upload/v1790927641/glowskin/guide-videos/guide_step_1.mp4",
+  "https://res.cloudinary.com/buevamso/video/upload/v1790927642/glowskin/guide-videos/guide_step_2.mp4",
+  "https://res.cloudinary.com/buevamso/video/upload/v1790927644/glowskin/guide-videos/guide_step_3.mp4"
+];
+
 function SkinTypeVisual({ type, label, imageSrc, onScanClick }) {
   const currentSrc = imageSrc || "/images/skin-types/model_base.jpg";
 
@@ -562,9 +568,20 @@ export default function WelcomeNameModal() {
   const handleBack = () => {
     if (currentStep === 8) {
       stopCamera();
+      setVideoGuideIndex(2);
       setStep(7);
+    } else if (currentStep === 7 && videoGuideIndex > 0) {
+      setVideoGuideIndex((prev) => prev - 1);
     } else if (currentStep > 0) {
       setStep((prev) => prev - 1);
+    }
+  };
+
+  const handleVideoGuideNext = () => {
+    if (videoGuideIndex < 2) {
+      setVideoGuideIndex((prev) => prev + 1);
+    } else {
+      setStep(8);
     }
   };
 
@@ -956,7 +973,7 @@ export default function WelcomeNameModal() {
   return (
     <div ref={overlayRef} className="onboarding-modal-overlay">
       <div
-        className={`onboarding-modal-card ${currentStep >= 7 && currentStep <= 8 ? "camera-mode" : ""} ${currentStep === 6 ? "products-mode" : ""}`}
+        className={`onboarding-modal-card ${currentStep === 7 ? "video-guide-mode" : ""} ${currentStep === 8 ? "camera-mode" : ""} ${currentStep === 6 ? "products-mode" : ""}`}
         onWheel={handleCardWheel}
       >
         
@@ -1490,7 +1507,10 @@ export default function WelcomeNameModal() {
               <button
                 type="button"
                 className="onboarding-primary-btn"
-                onClick={() => setStep(7)}
+                onClick={() => {
+                  setVideoGuideIndex(0);
+                  setStep(7);
+                }}
               >
                 Tiếp tục
               </button>
@@ -1501,38 +1521,29 @@ export default function WelcomeNameModal() {
         {/* ================= STEP 7: VIDEO HƯỚNG DẪN QUÉT MẶT ================= */}
         {currentStep === 7 && (
           <div className="onboarding-video-guide-view animate-fade">
-            {/* Top Bar on Video */}
-            <div className="onboarding-camera-top-bar video-top-bar">
+            {/* Top Close Button (Clean white X icon) */}
+            <div className="onboarding-guide-top-bar">
               <button
                 type="button"
-                className="onboarding-camera-nav-btn"
-                onClick={handleBack}
-                aria-label="Quay lại"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="onboarding-camera-nav-btn"
+                className="onboarding-guide-close-btn"
                 onClick={() => {
                   stopCamera();
                   setIsNameModalOpen(false);
                 }}
                 aria-label="Đóng"
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18"></line>
                   <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
             </div>
 
-            {/* Video Player */}
+            {/* Video Player - Divided into 3 scenes */}
             <div className="onboarding-video-guide-media">
               <video
-                src="/5e4d90d4815e8a9dfe57a74765813f7b_720w.mp4"
+                key={videoGuideIndex}
+                src={VIDEO_GUIDE_URLS[videoGuideIndex] || "/guide_step_1.mp4"}
                 autoPlay
                 loop
                 muted
@@ -1560,16 +1571,16 @@ export default function WelcomeNameModal() {
 
               <p className="onboarding-video-guide-text">
                 {videoGuideIndex === 0 && "Không đeo vật cản và không make up khi phân tích"}
-                {videoGuideIndex === 1 && "Đặt khuôn mặt vừa vặn vào khung hình, đủ ánh sáng"}
-                {videoGuideIndex === 2 && "Quay nhẹ đầu theo 3 góc: Chính diện, Bên trái, Bên phải"}
+                {videoGuideIndex === 1 && "Chụp ảnh ở nơi đủ ánh sáng"}
+                {videoGuideIndex === 2 && "Chụp ảnh đúng khoảng cách, không quá xa hoặc quá gần"}
               </p>
 
               <button
                 type="button"
-                className="onboarding-primary-btn"
-                onClick={() => setStep(8)}
+                className="onboarding-guide-action-btn"
+                onClick={handleVideoGuideNext}
               >
-                Tiếp tục
+                {videoGuideIndex === 2 ? "Tôi đã hiểu" : "Tiếp tục"}
               </button>
             </div>
           </div>

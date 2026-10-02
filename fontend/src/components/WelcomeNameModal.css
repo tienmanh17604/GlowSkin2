@@ -911,6 +911,27 @@ body.onboarding-scroll-locked {
 }
 
 /* ================= SPECIAL FULL SCREEN MODAL MODES ================= */
+.onboarding-modal-card.video-guide-mode {
+  padding: 0;
+  background: #000000;
+  border-radius: 36px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 385px;
+  height: 685px;
+  max-height: 94vh;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 480px) {
+  .onboarding-modal-card.video-guide-mode {
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+}
+
 .onboarding-modal-card.camera-mode {
   padding: 0;
   background: #ffffff;
@@ -927,15 +948,52 @@ body.onboarding-scroll-locked {
   color: #111827;
 }
 
-/* ================= STEP 6: VIDEO GUIDE VIEW ================= */
+/* ================= STEP 7: VIDEO GUIDE VIEW ================= */
 .onboarding-video-guide-view {
   position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: #000000;
   overflow: hidden;
+}
+
+.onboarding-guide-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 14px 18px;
+  z-index: 25;
+}
+
+.onboarding-guide-close-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.onboarding-guide-close-btn:hover {
+  transform: scale(1.1);
+  opacity: 0.85;
+}
+
+.onboarding-guide-close-btn svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .onboarding-video-guide-media {
@@ -944,13 +1002,14 @@ body.onboarding-scroll-locked {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background: #000000;
 }
 
 .onboarding-guide-video-player {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center top;
 }
 
 .onboarding-video-guide-card {
@@ -958,10 +1017,10 @@ body.onboarding-scroll-locked {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #ffffff;
+  background: #f8fafc;
   border-radius: 28px 28px 0 0;
-  padding: 22px 24px 26px;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.28);
+  padding: 18px 22px 26px;
+  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.18);
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -971,37 +1030,58 @@ body.onboarding-scroll-locked {
 .onboarding-guide-dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   margin-bottom: 14px;
 }
 
 .onboarding-guide-dot {
-  width: 26px;
-  height: 4px;
-  background: #e5e7eb;
-  border-radius: 4px;
+  width: 28px;
+  height: 3.5px;
+  background: #cbd5e1;
+  border-radius: 999px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.2s ease;
 }
 
 .onboarding-guide-dot.active {
-  background: #E9DCCF;
-  border: 1px solid #d8c7b5;
-  width: 36px;
+  background: #111827;
 }
 
 .onboarding-video-guide-text {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 17px;
+  font-size: 15.5px;
   font-weight: 700;
   text-align: center;
   color: #111827;
-  line-height: 1.4;
-  margin: 0 0 20px 0;
-  min-height: 48px;
+  line-height: 1.42;
+  margin: 0 0 18px 0;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 4px;
+}
+
+.onboarding-guide-action-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #0f172a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-guide-action-btn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
 }
 
 /* ================= STEP 7: 3-ANGLE CAMERA SCANNER ================= */

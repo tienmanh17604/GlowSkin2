@@ -445,11 +445,19 @@ export function parseAnalysisResponse(text) {
   return sections;
 }
 
-const DEFAULT_CLINICAL_GUIDELINE = `--- [Nguồn: Tiêu chuẩn Chuyên khoa Da Liễu Lâm sàng] Hướng dẫn Chẩn đoán & Phác đồ Routine ---
-1. Trứng cá viêm mủ, sưng đỏ: Kháng khuẩn với Benzoyl Peroxide 2.5-5%, kết hợp BHA (Salicylic Acid) 2% làm thông thoáng cổ nang lông.
-2. Thâm mụn sau viêm (PIH) & Tăng sắc tố: Dùng Azelaic Acid 15-20%, Niacinamide 4-10%, kết hợp chống nắng phổ rộng SPF 50+.
-3. Bít tắc sợi bã nhờn, mụn ẩn: BHA 2%, Retinoids (Adapalene/Tretinoin), làm sạch 2 bước dịu nhẹ.
-4. Hàng rào bảo vệ da & Viêm đỏ: Phục hồi với Ceramide, Hyaluronic Acid, Panthenol (B5), tránh cồn khô và hương liệu nồng.`;
+const DEFAULT_CLINICAL_GUIDELINE = `--- [Cơ sở Tri thức Y khoa & Bệnh học Da Liễu GlowSkin (Tích hợp medical_guidelines & skin_disease_knowledge_base)] ---
+[1. BỆNH HỌC & ĐẶC ĐIỂM TỔN THƯƠNG THỰC THỂ (Skin Disease Knowledge Base)]:
+- Trứng Cá (Acne): Viêm nang lông tuyến bã; tổn thương gồm mụn đầu đen, mụn đầu trắng, sẩn viêm đỏ, mụn mủ, bọc nang. Vị trí ưu tiên: trán, mũi, hai má, cằm.
+- Tăng Sắc Tố Sau Viêm (PIH): Dát sắc tố nâu hoặc đỏ thẫm xuất hiện sau tổn thương mụn viêm hoặc cạy nặn. Phân loại theo thượng bì (nông, dễ đáp ứng) và trung bì (sâu, cần thời gian).
+- Rám Má (Melasma): Dát tăng sắc tố màu nâu nhạt đến đen, đối xứng ở má, trán, sống mũi; nhạy cảm mạnh với tia cực tím UV.
+- Viêm Nang Lông (Folliculitis): Sẩn nhỏ đỏ ở nang lông, có thể có vảy tiết hoặc mụn mủ nhỏ.
+- Tổn thương thị giác AI nhận diện: dát, ban đỏ, sẩn, mụn mủ, mụn nước, bọng nước, vảy tiết, thâm nhiễm, tăng/giảm sắc tố, sẹo rỗ/lồi.
+
+[2. PHÁC ĐỒ ĐIỀU TRỊ & HOẠT CHẤT CHUYÊN KHOA (Medical Guidelines)]:
+- Kháng khuẩn & Viêm sưng: Benzoyl Peroxide 2.5% - 5%, Kháng sinh bôi thoa (Clindamycin, Erythromycin), BHA (Salicylic Acid) 1% - 2% làm sạch sâu cổ nang lông.
+- Giảm sừng hóa & Mụn ẩn: Retinoids bôi ngoài da (Adapalene 0.1%, Tretinoin 0.025% - 0.05%), tẩy tế bào chết hóa học định kỳ.
+- Mờ thâm & Sáng da: Azelaic Acid 15% - 20%, Niacinamide 4% - 10%, Vitamin C, Alpha Arbutin, Tranexamic Acid. Chống nắng SPF 50+ PA++++ phổ rộng mỗi ngày.
+- Phục hồi hàng rào bảo vệ da: Ceramide, Hyaluronic Acid, Vitamin B5 (Panthenol), Centella Asiatica (Rau má). Tránh cồn khô và hương liệu nồng khi da nhạy cảm/viêm.`;
 
 let cachedMedicalContext = null;
 
@@ -497,48 +505,39 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
   if (cachedMedicalContext) return cachedMedicalContext;
 
   try {
-    const queries = ["mụn trứng cá viêm mủ ẩn", "sắc tố thâm mụn nám tàn nhang", "lão hóa nếp nhăn căng bóng"];
-    if (query && !queries.includes(query)) {
-      queries.unshift(query);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+    // 1. Thử lấy Context tổng hợp từ Backend (đồng bộ cả medical_guidelines & skin_disease_knowledge_base)
+    try {
+      const unifiedRes = await fetch(`${API_URL}/skin/clinical-context?query=${encodeURIComponent(query)}`, {
+        signal: controller.signal
+      });
+      if (unifiedRes.ok) {
+        const uData = await unifiedRes.json();
+        if (uData.contextText) {
+          clearTimeout(timeoutId);
+          cachedMedicalContext = uData.contextText;
+          return cachedMedicalContext;
+        }
+      }
+    } catch {
+      // Tiếp tục fallback bên dưới nếu endpoint chưa sẵn sàng
     }
 
-    // Tối ưu: Timeout 1 giây để không bị nghẽn nếu Render backend đang ngủ
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 1000);
+    // 2. Fallback tìm kiếm theo endpoint /medical/search
+    const searchRes = await fetch(`${API_URL}/medical/search`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+      signal: controller.signal,
+    }).then((res) => (res.ok ? res.json() : { results: [] })).catch(() => ({ results: [] }));
 
-    const responses = await Promise.all(
-      queries.slice(0, 3).map((q) =>
-        fetch(`${API_URL}/medical/search`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: q }),
-          signal: controller.signal,
-        })
-          .then((res) => (res.ok ? res.json() : { results: [] }))
-          .catch(() => ({ results: [] }))
-      )
-    );
     clearTimeout(timeoutId);
 
-    const fetchedItems = [];
-    for (const data of responses) {
-      if (data.results && data.results.length) {
-        fetchedItems.push(...data.results);
-      }
-    }
-
-    // Deduplicate by ID or title
-    const uniqueMap = new Map();
-    for (const item of fetchedItems) {
-      const key = item.id || item.title;
-      if (!uniqueMap.has(key)) {
-        uniqueMap.set(key, item);
-      }
-    }
-
-    const uniqueResults = Array.from(uniqueMap.values()).slice(0, 5);
-    if (uniqueResults.length) {
-      cachedMedicalContext = uniqueResults
+    if (searchRes.results && searchRes.results.length) {
+      cachedMedicalContext = searchRes.results
+        .slice(0, 4)
         .map((r) => {
           const cleanSource = (r.source || "DATA Y Khoa Da Liễu")
             .replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da Liễu")
@@ -563,39 +562,53 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
   return cachedMedicalContext;
 }
 
-// Ưu tiên gemini-3.5-flash: Tốc độ phản hồi cực nhanh & ổn định
+// Danh sách Model Gemini Native ổn định và tốc độ phản hồi cao
 const CANDIDATE_MODELS = [
-  "gemini-3.5-flash",
-  "gemini-2.5-flash-lite",
-  "gemini-flash-latest",
-  "gemini-3.6-flash",
-  "gemini-3.7-flash",
-  "gemini-2.5-flash"
+  "gemini-3.5-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-3.1-flash-lite",
+  "gemini-flash-latest"
 ];
 
-async function callOpenAI(messages) {
+function extractInlineData(imgStr) {
+  if (!imgStr) return null;
+  const match = imgStr.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
+  if (match) {
+    return {
+      inlineData: {
+        mimeType: match[1],
+        data: match[2],
+      },
+    };
+  }
+  return {
+    inlineData: {
+      mimeType: "image/jpeg",
+      data: imgStr,
+    },
+  };
+}
+
+async function callGeminiNative(parts = []) {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   let lastErrorMessage = "";
 
   for (const model of CANDIDATE_MODELS) {
     try {
-      const response = await fetch("https://generativelanguage.googleapis.com/v1beta/openai/v1/chat/completions", {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model,
-          max_tokens: 4096,
-          messages,
+          contents: [{ parts }],
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        if (data.choices && data.choices[0]?.message?.content) {
-          return data.choices[0].message.content;
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          return text;
         }
       }
 
@@ -617,10 +630,36 @@ async function callOpenAI(messages) {
   throw new Error(lastErrorMessage || "Không thể kết nối đến Gemini AI.");
 }
 
+async function callOpenAI(messages) {
+  // Chuyển đổi định dạng messages OpenAI sang Gemini Native API parts
+  const parts = [];
+  for (const msg of messages) {
+    if (msg.role === "system") {
+      parts.push({ text: `[HƯỚNG DẪN HỆ THỐNG]:\n${msg.content}\n` });
+    } else if (msg.role === "assistant") {
+      parts.push({ text: `[BÁC SĨ CHUYÊN GIA AI]:\n${msg.content}\n` });
+    } else if (msg.role === "user") {
+      if (Array.isArray(msg.content)) {
+        for (const item of msg.content) {
+          if (item.type === "text") {
+            parts.push({ text: item.text });
+          } else if (item.type === "image_url" && item.image_url?.url) {
+            const inline = extractInlineData(item.image_url.url);
+            if (inline) parts.push(inline);
+          }
+        }
+      } else if (typeof msg.content === "string") {
+        parts.push({ text: msg.content });
+      }
+    }
+  }
+  return await callGeminiNative(parts);
+}
+
 function buildVisionMessages(chatHistory, imageDataUrl, medicalContext = "") {
   let promptText = SYSTEM_PROMPT;
   if (medicalContext) {
-    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU:\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
   }
 
   const apiMessages = [{ role: "system", content: promptText }];
@@ -711,11 +750,42 @@ export async function analyzeSkinImage(imageDataUrl) {
   // Tối ưu chạy song song: Nén ảnh và lấy context Y khoa
   const [optimizedImageDataUrl, medicalContext] = await Promise.all([
     compressImageIfNeeded(imageDataUrl, 800, 0.8),
-    fetchMedicalContext("mụn trứng cá viêm da"),
+    fetchMedicalContext("mụn trứng cá viêm da thâm nám"),
   ]);
 
-  const messages = buildVisionMessages([], optimizedImageDataUrl, medicalContext);
-  const content = await callOpenAI(messages);
+  // 1. Thử gọi qua Backend API /api/skin/analyze (đồng bộ cả 2 bộ CSDL Y khoa)
+  try {
+    const backendRes = await fetch(`${API_URL}/skin/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: optimizedImageDataUrl,
+        surveyData: { skinType: "Da hỗn hợp" },
+      }),
+    });
+    if (backendRes.ok) {
+      const bData = await backendRes.json();
+      if (bData.success && bData.content) {
+        console.log("--> Phân tích da thành công qua Backend /api/skin/analyze (Medical Guidelines & Skin Diseases KB)");
+        return { content: bData.content, isDemo: false };
+      }
+    }
+  } catch (backendErr) {
+    console.warn("Backend /api/skin/analyze không phản hồi, fallback Native Gemini API:", backendErr.message);
+  }
+
+  // 2. Fallback: Trực tiếp qua Google Gemini Native API ở Frontend
+  const parts = [];
+  let promptText = SYSTEM_PROMPT;
+  if (medicalContext) {
+    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+  }
+  parts.push({ text: promptText });
+  parts.push({ text: "Hãy quan sát hình ảnh khuôn mặt thực tế của tôi và phân tích da chuẩn y khoa theo đúng quy định." });
+  const inline = extractInlineData(optimizedImageDataUrl);
+  if (inline) parts.push(inline);
+
+  const content = await callGeminiNative(parts);
   return { content, isDemo: false };
 }
 
@@ -749,10 +819,38 @@ export async function analyzeMultiAngleSkinImages({
     };
   }
 
-  // 2. Xây dựng prompt chuyên biệt cho 3 góc chụp
+  // 1. Thử gọi qua Backend /api/skin/analyze trước
+  try {
+    const backendRes = await fetch(`${API_URL}/skin/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        frontImage: optFront,
+        leftImage: optLeft,
+        rightImage: optRight,
+        surveyData,
+        selectedProducts
+      }),
+    });
+    if (backendRes.ok) {
+      const bData = await backendRes.json();
+      if (bData.success && bData.content) {
+        console.log("--> Phân tích da 3 góc thành công qua Backend /api/skin/analyze!");
+        return {
+          content: bData.content,
+          isDemo: false,
+          optimizedImages
+        };
+      }
+    }
+  } catch (backendErr) {
+    console.warn("Backend /api/skin/analyze không phản hồi, fallback Native Gemini API:", backendErr.message);
+  }
+
+  // 2. Fallback: Trực tiếp qua Google Gemini Native API ở Frontend
   let systemPromptText = SYSTEM_PROMPT;
   if (medicalContext) {
-    systemPromptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU:\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+    systemPromptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
   }
 
   let promptInstruction = `Bạn đang nhận được các bức ảnh chụp khuôn mặt thực tế của người dùng từ 3 góc khác nhau:\n`;
@@ -791,27 +889,29 @@ Dựa trên hình ảnh thật từ 3 góc mặt kết hợp chặt chẽ với 
 3. "detectedIssues": Danh sách 2 vấn đề có điểm thấp nhất (ví dụ: ["Lỗ chân lông", "Mụn không viêm"]).
 Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra chẩn đoán Y khoa trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
 
-  const userContent = [{ type: "text", text: promptInstruction }];
-  if (optFront) {
-    userContent.push({ type: "text", text: "📸 ẢNH 1: GÓC CHÍNH DIỆN" });
-    userContent.push({ type: "image_url", image_url: { url: optFront } });
-  }
-  if (optLeft) {
-    userContent.push({ type: "text", text: "📸 ẢNH 2: GÓC NGHIÊNG TRÁI" });
-    userContent.push({ type: "image_url", image_url: { url: optLeft } });
-  }
-  if (optRight) {
-    userContent.push({ type: "text", text: "📸 ẢNH 3: GÓC NGHIÊNG PHẢI" });
-    userContent.push({ type: "image_url", image_url: { url: optRight } });
-  }
-
-  const apiMessages = [
-    { role: "system", content: systemPromptText },
-    { role: "user", content: userContent }
+  const parts = [
+    { text: systemPromptText },
+    { text: promptInstruction }
   ];
 
+  if (optFront) {
+    parts.push({ text: "📸 ẢNH 1: GÓC CHÍNH DIỆN" });
+    const p = extractInlineData(optFront);
+    if (p) parts.push(p);
+  }
+  if (optLeft) {
+    parts.push({ text: "📸 ẢNH 2: GÓC NGHIÊNG TRÁI" });
+    const p = extractInlineData(optLeft);
+    if (p) parts.push(p);
+  }
+  if (optRight) {
+    parts.push({ text: "📸 ẢNH 3: GÓC NGHIÊNG PHẢI" });
+    const p = extractInlineData(optRight);
+    if (p) parts.push(p);
+  }
+
   try {
-    const content = await callOpenAI(apiMessages);
+    const content = await callGeminiNative(parts);
     return {
       content,
       isDemo: false,
@@ -827,6 +927,7 @@ Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nế
     };
   }
 }
+
 
 
 export async function sendFollowUp(chatHistory) {

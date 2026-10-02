@@ -1193,6 +1193,129 @@ function loadLocalSkinDiseaseKnowledge() {
 let localSkinDiseaseData = loadLocalSkinDiseaseKnowledge();
 console.log(`--> Đã nạp Skin Disease Knowledge Base (86 bệnh da liễu, 12 chương) vào bộ nhớ dự phòng.`);
 
+// Helper to flatten all local skin diseases from chapters
+function getAllLocalSkinDiseases() {
+  const list = [];
+  for (const chapter of localSkinDiseaseData.chapters || []) {
+    for (const d of chapter.diseases || []) {
+      list.push({
+        diseaseId: (d.name_vi || "").toLowerCase().replace(/[^a-z0-9]/g, "_"),
+        name_vi: d.name_vi,
+        name_source: d.name_source || d.name_vi,
+        english_alias: d.english_alias || "",
+        category_vi: chapter.category_vi,
+        clinical_visual_features: d.clinical_visual_features || "",
+        ai_note: d.ai_note || "",
+        lesion_features: localSkinDiseaseData.lesion_features_for_vision || []
+      });
+    }
+  }
+  return list;
+}
+
+// Function to build unified clinical context from both medical_guidelines.json and skin_disease_knowledge_base.json
+function getIntegratedClinicalKnowledge({ query = "", skinType = "", category = "" }) {
+  const queryLower = (query || "").toLowerCase();
+  const allDiseases = getAllLocalSkinDiseases();
+  const allGuidelines = localMedicalGuidelines.length ? localMedicalGuidelines : loadLocalMedicalGuidelines();
+
+  // 1. Match relevant diseases from skin_disease_knowledge_base.json
+  const scoredDiseases = allDiseases.map((d) => {
+    let score = 0;
+    const nameLower = (d.name_vi || "").toLowerCase();
+    const aliasLower = (d.english_alias || "").toLowerCase();
+    const featuresLower = (d.clinical_visual_features || "").toLowerCase();
+
+    if (queryLower) {
+      if (nameLower.includes(queryLower)) score += 15;
+      if (aliasLower.includes(queryLower)) score += 12;
+      const qTerms = queryLower.split(/\s+/).filter((t) => t.length > 1);
+      for (const t of qTerms) {
+        if (nameLower.includes(t)) score += 6;
+        if (featuresLower.includes(t)) score += 2;
+      }
+    }
+
+    // Default bonuses for common facial dermatological issues
+    if (nameLower.includes("trứng cá") || aliasLower.includes("acne")) score += 8;
+    if (nameLower.includes("tăng sắc tố") || aliasLower.includes("post-inflammatory")) score += 6;
+    if (nameLower.includes("rám má") || aliasLower.includes("melasma")) score += 6;
+    if (nameLower.includes("viêm nang lông")) score += 4;
+    if (nameLower.includes("viêm da tiếp xúc") || nameLower.includes("viêm da cơ địa")) score += 4;
+
+    return { ...d, score };
+  });
+
+  scoredDiseases.sort((a, b) => b.score - a.score);
+  const matchedDiseases = scoredDiseases.slice(0, 4);
+
+  // 2. Match relevant guidelines from medical_guidelines.json
+  const scoredGuidelines = allGuidelines.map((g) => {
+    let score = 0;
+    const titleLower = (g.title || "").toLowerCase();
+    const contentLower = (g.content || "").toLowerCase();
+
+    if (queryLower) {
+      if (titleLower.includes(queryLower)) score += 15;
+      const qTerms = queryLower.split(/\s+/).filter((t) => t.length > 1);
+      for (const t of qTerms) {
+        if (titleLower.includes(t)) score += 5;
+        if (contentLower.includes(t)) score += 1;
+      }
+    }
+
+    if (titleLower.includes("trứng cá") || titleLower.includes("acnes")) score += 8;
+    if (titleLower.includes("thâm do mụn") || titleLower.includes("sắc tố")) score += 7;
+    if (titleLower.includes("rám má")) score += 6;
+
+    return { ...g, score };
+  });
+
+  scoredGuidelines.sort((a, b) => b.score - a.score);
+  const matchedGuidelines = scoredGuidelines.slice(0, 3);
+
+  // Format clean clinical summary (sanitize Bộ Y Tế strings)
+  const sanitize = (text) =>
+    (text || "")
+      .replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da liễu")
+      .replace(/QĐ-BYT/gi, "Y khoa")
+      .replace(/Quyết\s*định\s*4416(\/QĐ-BYT)?/gi, "Phác đồ Y khoa")
+      .trim();
+
+  let contextStr = `=== TỔNG HỢP KIẾN THỨC Y KHOA DA LIỄU & AI VISION ===\n`;
+
+  contextStr += `\n[1. NHẬN DIỆN THỰC THỂ LÂM SÀNG TỪ BỆNH HỌC DA LIỄU]:\n`;
+  for (const d of matchedDiseases) {
+    contextStr += `* ${d.name_vi} (${d.english_alias || "Da liễu"}): ${sanitize(d.clinical_visual_features).slice(0, 300)}...\n`;
+  }
+
+  contextStr += `\n[2. PHÁC ĐỒ CHẨN ĐOÁN & HOẠT CHẤT ĐIỀU TRỊ CHUYÊN KHOA]:\n`;
+  for (const g of matchedGuidelines) {
+    contextStr += `* [${sanitize(g.title)}]: ${sanitize(g.content).slice(0, 350)}...\n`;
+  }
+
+  return {
+    contextText: contextStr,
+    matchedDiseases: matchedDiseases.map((d) => ({ name: d.name_vi, alias: d.english_alias, chapter: d.category_vi })),
+    matchedGuidelines: matchedGuidelines.map((g) => ({ title: sanitize(g.title) }))
+  };
+}
+
+// GET Unified Clinical Context from both datasets
+app.get("/api/skin/clinical-context", (req, res) => {
+  try {
+    const { query = "", skinType = "" } = req.query;
+    const result = getIntegratedClinicalKnowledge({ query, skinType });
+    res.json({
+      success: true,
+      source: "medical_guidelines.json & skin_disease_knowledge_base.json",
+      ...result
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Lỗi tạo context Y khoa", error: err.message });
+  }
+});
+
 // GET Overview of Skin Disease Knowledge Base
 app.get("/api/skin-diseases/knowledge-base", async (req, res) => {
   try {
@@ -1225,44 +1348,249 @@ app.post("/api/skin-diseases/search", async (req, res) => {
   try {
     const { query, category, lesionFeatures, limit = 10 } = req.body;
 
-    let filter = {};
-    if (category) {
-      filter.category_vi = { $regex: category, $options: "i" };
-    }
+    // 1. Try MongoDB first if connected
+    if (isMongoConnected) {
+      try {
+        let filter = {};
+        if (category) filter.category_vi = { $regex: category, $options: "i" };
+        if (lesionFeatures && Array.isArray(lesionFeatures) && lesionFeatures.length > 0) {
+          filter.lesion_features = { $in: lesionFeatures };
+        }
+        if (query && query.trim()) {
+          const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
+          const regexArr = terms.map(t => new RegExp(t, "i"));
+          const textConditions = [
+            { name_vi: { $in: regexArr } },
+            { english_alias: { $in: regexArr } },
+            { clinical_visual_features: { $in: regexArr } },
+            { category_vi: { $in: regexArr } }
+          ];
+          filter.$or = textConditions;
+        }
 
-    if (lesionFeatures && Array.isArray(lesionFeatures) && lesionFeatures.length > 0) {
-      filter.lesion_features = { $in: lesionFeatures };
-    }
-
-    if (query && query.trim()) {
-      const terms = query.trim().split(/\s+/).filter(w => w.length > 1);
-      const regexArr = terms.map(t => new RegExp(t, "i"));
-
-      const textConditions = [
-        { name_vi: { $in: regexArr } },
-        { english_alias: { $in: regexArr } },
-        { clinical_visual_features: { $in: regexArr } },
-        { category_vi: { $in: regexArr } }
-      ];
-
-      if (filter.$or) {
-        filter.$and = [{ $or: filter.$or }, { $or: textConditions }];
-        delete filter.$or;
-      } else {
-        filter.$or = textConditions;
+        const diseases = await SkinDiseaseKnowledge.find(filter).limit(Number(limit)).lean();
+        if (diseases && diseases.length > 0) {
+          return res.json({
+            success: true,
+            source: "MongoDB Atlas",
+            count: diseases.length,
+            results: diseases
+          });
+        }
+      } catch (dbErr) {
+        console.warn("MongoDB skin-diseases search fallback to local JSON:", dbErr.message);
       }
     }
 
-    const diseases = await SkinDiseaseKnowledge.find(filter).limit(Number(limit)).lean();
+    // 2. Seamless Local JSON Fallback (searching all 12 chapters, 86 diseases)
+    const allLocal = getAllLocalSkinDiseases();
+    let filtered = allLocal;
+    if (category) {
+      filtered = filtered.filter(d => (d.category_vi || "").toLowerCase().includes(category.toLowerCase()));
+    }
+    if (query && query.trim()) {
+      const qLower = query.toLowerCase();
+      const terms = qLower.split(/\s+/).filter(w => w.length > 1);
+      filtered = filtered.filter(d => {
+        const text = `${d.name_vi} ${d.english_alias} ${d.clinical_visual_features}`.toLowerCase();
+        return terms.some(t => text.includes(t));
+      });
+    }
 
-    return res.json({
+    res.json({
       success: true,
-      source: "MongoDB Atlas",
-      count: diseases.length,
-      results: diseases
+      source: "Local JSON Fallback (skin_disease_knowledge_base.json)",
+      count: filtered.slice(0, Number(limit)).length,
+      results: filtered.slice(0, Number(limit))
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Lỗi tìm kiếm cơ sở dữ liệu bệnh da liễu", error: err.message });
+  }
+});
+
+// POST Phân tích da mặt chuyên sâu kết hợp Medical Guidelines, Skin Disease Knowledge Base & Gemini AI
+app.post("/api/skin/analyze", async (req, res) => {
+  try {
+    const { image, frontImage, leftImage, rightImage, surveyData = {}, selectedProducts = [] } = req.body;
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        message: "Chưa cấu hình GEMINI_API_KEY trên backend server (.env)"
+      });
+    }
+
+    // 1. Tích hợp dữ liệu từ medical_guidelines.json & skin_disease_knowledge_base.json
+    const query = [
+      surveyData.skinType || "da hỗn hợp",
+      surveyData.skinSensitivity ? `da ${surveyData.skinSensitivity}` : "",
+      "mụn trứng cá viêm ẩn thâm sẹo lỗ chân lông"
+    ].join(" ");
+
+    const clinical = getIntegratedClinicalKnowledge({ query, skinType: surveyData.skinType });
+
+    // 2. Xây dựng System Instruction & Prompt
+    const systemPrompt = `Bạn là Bác sĩ Chuyên gia Da liễu AI của GlowSkin. Nhiệm vụ: Quan sát cực kỳ kỹ lưỡng và khách quan hình ảnh khuôn mặt thực tế của người dùng để đưa ra chẩn đoán Y khoa chính xác 100% theo đúng những gì nhìn thấy trên ảnh.
+
+QUY TẮC CẤM QUAN TRỌNG: TUYỆT ĐỐI KHÔNG ĐƯỢC XUẤT HIỆN CỤM TỪ "Bộ Y Tế" HOẶC "Bộ Y tế" HOẶC "BYT". Hãy dùng cụm từ "Chuyên khoa Da liễu" hoặc "Tiêu chuẩn Y khoa lâm sàng".
+
+DƯỚI ĐÂY LÀ KIẾN THỨC TÍCH HỢP TỪ CƠ SỞ DỮ LIỆU BỆNH HỌC DA LIỄU VÀ PHÁC ĐỒ Y KHOA:
+${clinical.contextText}
+
+QUY TẮC ĐÁNH GIÁ THỰC TẾ & CHUẨN XÁC:
+1. Đánh giá chi tiết 5 vùng giải phẫu: Trán (forehead), Mắt/Lông mày (eyebrow), Mũi (nose), Má (upper_cheek), Cằm (chin). NẾU VÙNG NÀO SẠCH KHÔNG CÓ MỤN/TỔN THƯƠNG THÌ ĐÁNH GIÁ SẠCH (GREEN), KHÔNG BỊA ĐẶT TỔN THƯƠNG!
+2. Phân định status: "green" (sạch khỏe), "yellow" (dầu nhờn/sợi bã nhờn/lỗ chân lông to/mụn ẩn), "red" (ổ viêm đỏ, mụn mủ, thâm đậm sau viêm).
+3. Đánh giá 6 chỉ số da (thang 1-10): "mun_viem", "mun_khong_viem", "soi_ba_nhon", "seo", "sac_to_da", "lo_chan_long" cùng mảng tọa độ points [{top: %, left: %}].
+
+CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
+===OVERVIEW===
+## Báo cáo Phân tích Da Y Khoa ✨
+1. **Loại da:** (Dầu / Khô / Hỗn hợp / Nhạy cảm / Bình thường)
+2. **Chẩn đoán y khoa chuyên sâu:** (Nhận xét đúng thực trạng quan sát được trong ảnh)
+3. **Đánh giá điểm mạnh và hàng rào bảo vệ da**
+
+===ROUTINE===
+4. **Lộ trình Routine khuyến nghị chuẩn Chuyên khoa** (Sáng & Tối từng bước)
+
+===INGREDIENTS===
+5. **Hoạt chất Y khoa nên dùng & Thành phần nên tránh**
+
+===WARNING===
+6. **Lưu ý kích ứng & Thành phần chống chỉ định**
+
+===JSON_DATA===
+{
+  "score": 75,
+  "averageScore": 7.5,
+  "scoreLabel": "Phân tích Y Khoa & AI Vision",
+  "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "detectedIssues": ["Lỗ chân lông", "Sợi bã nhờn"],
+  "metrics": {
+    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [] },
+    "mun_khong_viem": { "score": 7, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 35, "left": 48, "r": 8 }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 34, "left": 60, "r": 7 }] },
+    "seo": { "score": 8, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [] },
+    "sac_to_da": { "score": 7, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [] },
+    "lo_chan_long": { "score": 6, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 36, "left": 55, "r": 8 }] }
+  },
+  "summary": [
+    { "title": "Phân tích AI Vision", "en": "(Clinical AI Diagnosis)", "desc": "Nhận diện từ ảnh chụp thực tế theo cơ sở tri thức y khoa." }
+  ],
+  "zones": [
+    { "id": "forehead", "title": "Vùng Trán", "condition": "Da tương đối ổn định", "detail": "Không phát hiện ổ viêm lớn", "status": "green" },
+    { "id": "eyebrow", "title": "Vùng Mắt & Lông Mày", "condition": "Bình thường", "detail": "Nền da ẩm tốt", "status": "green" },
+    { "id": "nose", "title": "Vùng Mũi", "condition": "Sợi bã nhờn cánh mũi", "detail": "Cần làm sạch với BHA nhẹ nhàng", "status": "yellow" },
+    { "id": "upper_cheek", "title": "Vùng Má", "condition": "Mịn màng, lỗ chân lông nhẹ", "detail": "Duy trì kem chống nắng", "status": "green" },
+    { "id": "chin", "title": "Vùng Cằm", "condition": "Bình thường", "detail": "Chăm sóc đều đặn", "status": "green" }
+  ]
+}`;
+
+    // 3. Chuẩn bị các parts ảnh và text
+    let userPromptText = `Hãy phân tích hình ảnh khuôn mặt thực tế của người dùng.\n`;
+    if (surveyData && Object.keys(surveyData).length > 0) {
+      userPromptText += `Thông tin người dùng khai báo:\n` +
+        `- Loại da tự nhận định: ${surveyData.skinType || "Da hỗn hợp"}\n` +
+        `- Độ nhạy cảm: ${surveyData.skinSensitivity || "Bình thường"}\n` +
+        `- Bệnh lý/Thuốc điều trị: ${surveyData.hasMedicalCondition || "Không"} / ${surveyData.hasPrescriptionMedication || "Không"}\n` +
+        `- Tình trạng mao mạch/đỏ da: ${surveyData.hasBloodVessels || "Không"}\n`;
+    }
+
+    if (selectedProducts && selectedProducts.length > 0) {
+      userPromptText += `\nCác sản phẩm skincare người dùng đang dùng:\n` +
+        selectedProducts.map((p, i) => `${i + 1}. [${p.brand || "Brand"}] ${p.name} - ${p.category || ""}`).join("\n") +
+        `\n-> Hãy nhận xét xem các sản phẩm này có phù hợp với thực trạng da quan sát được trên ảnh không.`;
+    }
+
+    const parts = [
+      { text: `${systemPrompt}\n\n${userPromptText}` }
+    ];
+
+    const addImagePart = (imgStr, label = "") => {
+      if (!imgStr) return;
+      if (label) parts.push({ text: label });
+      const match = imgStr.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
+      if (match) {
+        parts.push({
+          inlineData: {
+            mimeType: match[1],
+            data: match[2]
+          }
+        });
+      } else {
+        parts.push({
+          inlineData: {
+            mimeType: "image/jpeg",
+            data: imgStr
+          }
+        });
+      }
+    };
+
+    if (frontImage) addImagePart(frontImage, "📸 ẢNH 1: GÓC CHÍNH DIỆN");
+    if (leftImage) addImagePart(leftImage, "📸 ẢNH 2: GÓC NGHIÊNG TRÁI");
+    if (rightImage) addImagePart(rightImage, "📸 ẢNH 3: GÓC NGHIÊNG PHẢI");
+    if (!frontImage && !leftImage && !rightImage && image) {
+      addImagePart(image, "📸 ẢNH KHUÔN MẶT CẦN PHÂN TÍCH");
+    }
+
+    // 4. Gọi Google Gemini Native API qua các candidate models ổn định
+    const candidateModels = [
+      "gemini-3.5-flash-lite",
+      "gemini-2.5-flash",
+      "gemini-3.1-flash-lite",
+      "gemini-flash-latest"
+    ];
+
+    let aiContent = "";
+    let lastError = "";
+
+    for (const model of candidateModels) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const aiRes = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contents: [{ parts }] })
+        });
+
+        if (aiRes.ok) {
+          const data = await aiRes.json();
+          aiContent = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          if (aiContent) {
+            console.log(`[Gemini API] Phân tích da thành công với model ${model}`);
+            break;
+          }
+        } else {
+          const errData = await aiRes.json().catch(() => ({}));
+          const errMsg = errData.error?.message || aiRes.statusText;
+          console.warn(`[Gemini API] Model ${model} returned ${aiRes.status}:`, errMsg);
+          lastError = errMsg;
+        }
+      } catch (callErr) {
+        console.warn(`[Gemini API] Model ${model} fetch exception:`, callErr.message);
+        lastError = callErr.message;
+      }
+    }
+
+    if (!aiContent) {
+      throw new Error(lastError || "Không thể nhận phản hồi từ Gemini Vision API");
+    }
+
+    res.json({
+      success: true,
+      content: aiContent,
+      source: "Gemini AI & Clinical Knowledge Base (medical_guidelines.json + skin_disease_knowledge_base.json)",
+      matchedDiseases: clinical.matchedDiseases,
+      matchedGuidelines: clinical.matchedGuidelines
+    });
+  } catch (err) {
+    console.error("Lỗi phân tích da /api/skin/analyze:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi trong quá trình phân tích da với Gemini AI",
+      error: err.message
+    });
   }
 });
 

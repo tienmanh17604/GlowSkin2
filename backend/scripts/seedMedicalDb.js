@@ -8,9 +8,6 @@ import MedicalGuideline from '../models/MedicalGuideline.js';
 
 dotenv.config();
 
-// Force Google DNS to properly resolve MongoDB Atlas SRV records
-dns.setServers(['8.8.8.8', '8.8.4.4']);
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,7 +28,7 @@ async function seedDatabase() {
   console.log(`\n==================================================`);
   console.log(`Đang kết nối tới MongoDB Atlas...`);
 
-  await mongoose.connect(mongoUri);
+  await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 10000 });
   console.log(`✅ Kết nối MongoDB Atlas thành công!`);
 
   console.log(`\nĐang làm sạch bộ sưu tập (collection) MedicalGuideline cũ...`);
