@@ -1191,6 +1191,9 @@ export default function WelcomeNameModal() {
   const currentProgress = progressMap[currentStep] || 20;
 
   const handleCardWheel = (e) => {
+    // If a bottom sheet is open, ONLY the bottom sheet should scroll, NOT the background survey!
+    if (activeBottomSheet) return;
+
     const activeScrollEl =
       currentStep === 5
         ? surveyScrollRefStep5.current
@@ -1465,7 +1468,10 @@ export default function WelcomeNameModal() {
         {/* ================= STEP 4: CHI PHÍ & BỆNH LÝ ================= */}
         {currentStep === 4 && (
           <div className="onboarding-step-view animate-fade">
-            <div ref={surveyScrollRef} className="onboarding-scrollable-survey">
+            <div
+              ref={surveyScrollRef}
+              className={`onboarding-scrollable-survey ${activeBottomSheet ? "survey-frozen" : ""}`}
+            >
               
               {/* Question 1: Budget */}
               <div className="onboarding-survey-section">
@@ -2147,8 +2153,15 @@ export default function WelcomeNameModal() {
             <div
               className="onboarding-sheet-backdrop"
               onClick={handleDismissBottomSheet}
+              onWheel={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
             />
-            <div className="onboarding-bottom-sheet">
+            <div
+              className="onboarding-bottom-sheet"
+              onWheel={(e) => e.stopPropagation()}
+            >
               <div
                 className="onboarding-sheet-handle-wrap"
                 onClick={handleDismissBottomSheet}

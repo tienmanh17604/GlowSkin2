@@ -359,6 +359,12 @@ body.onboarding-scroll-locked {
   line-height: 1.35;
 }
 
+.onboarding-scrollable-survey.survey-frozen {
+  overflow: hidden !important;
+  touch-action: none;
+  pointer-events: none;
+}
+
 /* ================= BOTTOM SHEET SELECTION MODAL ================= */
 .onboarding-sheet-backdrop {
   position: absolute;
@@ -388,6 +394,8 @@ body.onboarding-scroll-locked {
   z-index: 85;
   display: flex;
   flex-direction: column;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   animation: slideUpSheet 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -432,6 +440,8 @@ body.onboarding-scroll-locked {
   gap: 10px;
   padding: 2px 20px 24px 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   flex-grow: 1;
   -webkit-overflow-scrolling: touch;
 }
