@@ -10,7 +10,8 @@
     "seed": "node scripts/seed.js",
     "seed:medical": "node scripts/seedMedicalDb.js",
     "seed:skin-disease": "node scripts/seedSkinDiseaseKnowledge.js",
-    "seed:all-knowledge": "node scripts/seedMedicalDb.js && node scripts/seedSkinDiseaseKnowledge.js"
+    "seed:training": "node scripts/seedSkinTrainingKnowledge.js",
+    "seed:all-knowledge": "node scripts/seedMedicalDb.js && node scripts/seedSkinDiseaseKnowledge.js && node scripts/seedSkinTrainingKnowledge.js"
   },
   "dependencies": {
     "@payos/node": "^2.0.5",
@@ -22,7 +23,8 @@
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^9.0.3",
-    "pdf-parse": "^2.4.5"
+    "pdf-parse": "^2.4.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

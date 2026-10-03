@@ -19,6 +19,7 @@ import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import MedicalGuideline from "./models/MedicalGuideline.js";
 import SkinDiseaseKnowledge from "./models/SkinDiseaseKnowledge.js";
+import SkinTrainingKnowledge from "./models/SkinTrainingKnowledge.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
@@ -1091,6 +1092,23 @@ function loadLocalMedicalGuidelines() {
 let localMedicalGuidelines = loadLocalMedicalGuidelines();
 console.log(`--> Đã nạp ${localMedicalGuidelines.length} bài hướng dẫn Y Khoa & AI Skincare vào bộ nhớ dự phòng.`);
 
+// Load local training AI skin knowledge dataset as fallback
+const trainingKnowledgePath = path.join(__dirname, "data/training_ai_skin_knowledge.json");
+function loadLocalTrainingKnowledge() {
+  try {
+    if (fs.existsSync(trainingKnowledgePath)) {
+      return JSON.parse(fs.readFileSync(trainingKnowledgePath, "utf-8"));
+    }
+  } catch (e) {
+    console.error("Lỗi nạp training_ai_skin_knowledge.json:", e);
+  }
+  return [];
+}
+
+let localTrainingKnowledge = loadLocalTrainingKnowledge();
+console.log(`--> Đã nạp ${localTrainingKnowledge.length} hồ sơ Training AI Da Liễu vào bộ nhớ.`);
+
+
 // POST Search Medical Guidelines by disease/keyword/category via MongoDB Atlas
 app.post("/api/medical/search", async (req, res) => {
   try {
@@ -1274,6 +1292,39 @@ function getIntegratedClinicalKnowledge({ query = "", skinType = "", category = 
   scoredGuidelines.sort((a, b) => b.score - a.score);
   const matchedGuidelines = scoredGuidelines.slice(0, 3);
 
+  // 3. Match relevant conditions from training_ai_skin_knowledge.json
+  const allTraining = localTrainingKnowledge.length ? localTrainingKnowledge : loadLocalTrainingKnowledge();
+  const scoredTraining = allTraining.map((t) => {
+    let score = 0;
+    const condLower = (t.condition || "").toLowerCase();
+    const catLower = (t.category || "").toLowerCase();
+    const signsLower = (t.visualSigns || "").toLowerCase();
+    const lookalikesLower = (t.lookalikes || "").toLowerCase();
+
+    if (queryLower) {
+      if (condLower.includes(queryLower)) score += 20;
+      if (catLower.includes(queryLower)) score += 15;
+      const qTerms = queryLower.split(/\s+/).filter((w) => w.length > 1);
+      for (const term of qTerms) {
+        if (condLower.includes(term)) score += 8;
+        if (catLower.includes(term)) score += 5;
+        if (signsLower.includes(term)) score += 3;
+        if (lookalikesLower.includes(term)) score += 4;
+      }
+    }
+
+    // Default core bonuses for common facial dermatological issues
+    if (condLower.includes("mụn đầu đen") || condLower.includes("sợi bã nhờn")) score += 6;
+    if (condLower.includes("mụn đầu trắng") || condLower.includes("mụn ẩn")) score += 6;
+    if (condLower.includes("lỗ chân lông")) score += 6;
+    if (condLower.includes("thâm mụn") || condLower.includes("không đều màu")) score += 5;
+
+    return { ...t, score };
+  });
+
+  scoredTraining.sort((a, b) => b.score - a.score);
+  const matchedTraining = scoredTraining.slice(0, 5);
+
   // Format clean clinical summary (sanitize Bộ Y Tế strings)
   const sanitize = (text) =>
     (text || "")
@@ -1289,7 +1340,18 @@ function getIntegratedClinicalKnowledge({ query = "", skinType = "", category = 
     contextStr += `* ${d.name_vi} (${d.english_alias || "Da liễu"}): ${sanitize(d.clinical_visual_features).slice(0, 300)}...\n`;
   }
 
-  contextStr += `\n[2. PHÁC ĐỒ CHẨN ĐOÁN & HOẠT CHẤT ĐIỀU TRỊ CHUYÊN KHOA]:\n`;
+  contextStr += `\n[2. TIÊU CHUẨN THỊ GIÁC & HOẠT CHẤT ĐIỀU TRỊ TỪ BỘ DỮ LIỆU ĐÀO TẠO TRAINING AI]:\n`;
+  for (const t of matchedTraining) {
+    contextStr += `* [${t.category}] ${t.condition}:\n` +
+      `  - Dấu hiệu thị giác: ${t.visualSigns} | Màu sắc: ${t.color} | Bề mặt: ${t.texture} | Kích thước: ${t.typicalSize}\n` +
+      `  - Vùng phân bố: ${t.distribution} | Mức độ viêm: ${t.inflammation}\n` +
+      `  - Nhận diện đặc trưng: ${t.distinctiveFeatures}\n` +
+      `  - Tránh nhầm lẫn với: ${t.lookalikes}\n` +
+      `  - Hoạt chất điều trị khuyên dùng: ${t.recommendedIngredientsRaw}\n` +
+      `  - Hướng dẫn chăm sóc: ${t.careTips}\n\n`;
+  }
+
+  contextStr += `\n[3. PHÁC ĐỒ CHẨN ĐOÁN & HOẠT CHẤT ĐIỀU TRỊ CHUYÊN KHOA]:\n`;
   for (const g of matchedGuidelines) {
     contextStr += `* [${sanitize(g.title)}]: ${sanitize(g.content).slice(0, 350)}...\n`;
   }
@@ -1297,22 +1359,77 @@ function getIntegratedClinicalKnowledge({ query = "", skinType = "", category = 
   return {
     contextText: contextStr,
     matchedDiseases: matchedDiseases.map((d) => ({ name: d.name_vi, alias: d.english_alias, chapter: d.category_vi })),
+    matchedTraining: matchedTraining.map((t) => ({ condition: t.condition, category: t.category })),
     matchedGuidelines: matchedGuidelines.map((g) => ({ title: sanitize(g.title) }))
   };
 }
 
-// GET Unified Clinical Context from both datasets
+// GET Unified Clinical Context from all datasets
 app.get("/api/skin/clinical-context", (req, res) => {
   try {
     const { query = "", skinType = "" } = req.query;
     const result = getIntegratedClinicalKnowledge({ query, skinType });
     res.json({
       success: true,
-      source: "medical_guidelines.json & skin_disease_knowledge_base.json",
+      source: "medical_guidelines.json, skin_disease_knowledge_base.json & Training AI mô tả.xlsx",
       ...result
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Lỗi tạo context Y khoa", error: err.message });
+  }
+});
+
+// GET Training AI Knowledge Base from MongoDB with local fallback
+app.get("/api/skin/training-knowledge", async (req, res) => {
+  try {
+    const { category, condition, search } = req.query;
+    let query = {};
+    if (category) {
+      query.category = { $regex: category, $options: "i" };
+    }
+    if (condition) {
+      query.condition = { $regex: condition, $options: "i" };
+    }
+    if (search) {
+      query.$or = [
+        { condition: { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } },
+        { visualSigns: { $regex: search, $options: "i" } },
+        { distinctiveFeatures: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    let results = [];
+    try {
+      results = await SkinTrainingKnowledge.find(query).sort({ index: 1 }).lean();
+    } catch (e) {
+      console.warn("MongoDB query SkinTrainingKnowledge fallback to local:", e.message);
+    }
+
+    if (!results || results.length === 0) {
+      const all = localTrainingKnowledge.length ? localTrainingKnowledge : loadLocalTrainingKnowledge();
+      results = all.filter((item) => {
+        let match = true;
+        if (category && !item.category.toLowerCase().includes(category.toLowerCase())) match = false;
+        if (condition && !item.condition.toLowerCase().includes(condition.toLowerCase())) match = false;
+        if (search) {
+          const s = search.toLowerCase();
+          const inCond = item.condition.toLowerCase().includes(s);
+          const inCat = item.category.toLowerCase().includes(s);
+          const inSigns = (item.visualSigns || "").toLowerCase().includes(s);
+          if (!inCond && !inCat && !inSigns) match = false;
+        }
+        return match;
+      });
+    }
+
+    res.json({
+      success: true,
+      total: results.length,
+      data: results
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Lỗi truy vấn dữ liệu Training AI", error: err.message });
   }
 });
 
