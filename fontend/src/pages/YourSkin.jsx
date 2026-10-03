@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
-import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics } from "../services/analyzeSkin";
+import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints } from "../services/analyzeSkin";
 import { generateDotsForZones, DIAGNOSTIC_LEGEND } from "../data/skinDiagnosticDots";
 import { cropFaceZones } from "../utils/faceZoneCropper";
 import { removeImageBackground, preloadMediaPipe } from "../utils/backgroundRemoval";
@@ -501,11 +501,25 @@ export default function YourSkin() {
 
   const activePoints = useMemo(() => {
     if (!activeMetric) return [];
-    if (activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
-      return activeMetric.pointsByAngle[angleKey];
+
+    const hasDistinctAnglePhoto =
+      displayScan?.faceAngles &&
+      displayScan.faceAngles[angleKey] &&
+      displayScan.faceAngles[angleKey] !== (displayScan.image || currentImage);
+
+    let raw = [];
+    if (hasDistinctAnglePhoto && activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
+      raw = activeMetric.pointsByAngle[angleKey];
+    } else if (Array.isArray(activeMetric.points) && activeMetric.points.length > 0) {
+      raw = activeMetric.points;
+    } else if (activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
+      raw = activeMetric.pointsByAngle[angleKey];
+    } else {
+      raw = activeMetric.points || [];
     }
-    return activeMetric.points || [];
-  }, [activeMetric, angleKey]);
+
+    return sanitizeFacialPoints(activeMetric.id, raw);
+  }, [activeMetric, angleKey, displayScan, currentImage]);
 
   const targetPoint = useMemo(() => {
     if (!activePoints || !activePoints.length) return null;

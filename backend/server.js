@@ -1560,6 +1560,14 @@ QUY TẮC ĐÁNH GIÁ THỰC TẾ & CHUẨN XÁC:
 2. Phân định status: "green" (sạch khỏe), "yellow" (dầu nhờn/sợi bã nhờn/lỗ chân lông to/mụn ẩn), "red" (ổ viêm đỏ, mụn mủ, thâm đậm sau viêm).
 3. Đánh giá 6 chỉ số da (thang 1-10): "mun_viem", "mun_khong_viem", "soi_ba_nhon", "seo", "sac_to_da", "lo_chan_long" cùng mảng tọa độ points [{top: %, left: %}].
 
+QUY TẮC ĐỊNH VỊ TỌA ĐỘ VÒNG TRÒN GIẢI PHẪU HỌC CHO AI (BẮT BUỘC TUÂN THỦ 100%):
+1. SỢI BÃ NHỜN (soi_ba_nhon): CHỈ ĐƯỢC ĐẶT VÒNG TRÒN Ở MŨI (chóp mũi, cánh mũi, sống mũi top: 45%-52%, left: 45%-55%) hoặc RÃNH CẰM (top: 67%-72%). TUYỆT ĐỐI CẤM ĐẶT VÒNG TRÒN Ở MÔI, MIỆNG, NHÂN TRUNG (top 53%-66%).
+2. LỖ CHÂN LÔNG (lo_chan_long): Đặt ở vùng má kề cánh mũi (top: 48%-56%, left: 36%-44% hoặc left: 56%-64%) hoặc đầu mũi.
+3. MỤN VIÊM (mun_viem): Đặt đúng vị trí nốt mụn sưng đỏ thực tế trên má (top: 48%-62%), trán (top: 25%-35%), cằm (top: 68%-76%).
+4. MỤN KHÔNG VIÊM (mun_khong_viem): Đặt ở trán, má hoặc cằm.
+5. SẮC TỐ DA (sac_to_da) & SẸO (seo): Đặt trên gò má, thái dương, trán.
+Tọa độ phần trăm { top: %, left: % } tính từ mép trên và mép trái của toàn bộ khuôn mặt trong khung hình.
+
 CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
 ===OVERVIEW===
 ## Báo cáo Phân tích Da Y Khoa ✨
@@ -1585,11 +1593,11 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
   "detectedIssues": ["Lỗ chân lông", "Sợi bã nhờn"],
   "metrics": {
     "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [] },
-    "mun_khong_viem": { "score": 7, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 35, "left": 48, "r": 8 }] },
-    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 34, "left": 60, "r": 7 }] },
+    "mun_khong_viem": { "score": 7, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 28.0, "left": 48.0 }, { "top": 52.0, "left": 65.0 }, { "top": 72.0, "left": 50.0 }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 48.0, "left": 50.0 }, { "top": 47.0, "left": 46.5 }, { "top": 47.0, "left": 53.5 }] },
     "seo": { "score": 8, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [] },
-    "sac_to_da": { "score": 7, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [] },
-    "lo_chan_long": { "score": 6, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 36, "left": 55, "r": 8 }] }
+    "sac_to_da": { "score": 7, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 49.0, "left": 33.0 }] },
+    "lo_chan_long": { "score": 6, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 48.5, "left": 42.0 }, { "top": 48.5, "left": 58.0 }] }
   },
   "summary": [
     { "title": "Phân tích AI Vision", "en": "(Clinical AI Diagnosis)", "desc": "Nhận diện từ ảnh chụp thực tế theo cơ sở tri thức y khoa." }

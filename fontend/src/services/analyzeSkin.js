@@ -70,12 +70,12 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
   "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
   "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
   "metrics": {
-    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 42, "left": 48, "r": 9 }] },
-    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 34, "left": 47, "r": 8 }, { "top": 37, "left": 60, "r": 8 }, { "top": 36, "left": 27, "r": 8 }, { "top": 46.5, "left": 65, "r": 9 }] },
-    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 33, "left": 57, "r": 7 }, { "top": 34.5, "left": 63, "r": 8 }, { "top": 32, "left": 61, "r": 7 }, { "top": 35.5, "left": 66, "r": 8 }, { "top": 35, "left": 56, "r": 8 }] },
-    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 43, "left": 68, "r": 8 }] },
-    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 27, "left": 66, "r": 8 }, { "top": 29.5, "left": 63, "r": 7 }, { "top": 37, "left": 65, "r": 8 }, { "top": 43.5, "left": 66, "r": 9 }] },
-    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 33, "left": 52, "r": 8 }, { "top": 35, "left": 55, "r": 8 }, { "top": 38, "left": 46, "r": 8 }, { "top": 40, "left": 54, "r": 8 }] }
+    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 53.0, "left": 35.0, "pointer": true }] },
+    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 28.0, "left": 48.0 }, { "top": 52.0, "left": 65.0 }, { "top": 72.0, "left": 50.0, "pointer": true }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 48.0, "left": 50.0, "pointer": true }, { "top": 47.0, "left": 46.5 }, { "top": 47.0, "left": 53.5 }, { "top": 69.0, "left": 50.0 }] },
+    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 53.0, "left": 66.0, "pointer": true }] },
+    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 49.0, "left": 33.0 }, { "top": 49.0, "left": 67.0, "pointer": true }] },
+    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 48.5, "left": 42.0, "pointer": true }, { "top": 48.5, "left": 58.0 }] }
   },
   "summary": [
     { "title": "Lỗ chân lông to", "en": "(Enlarged Pores)", "desc": "Tập trung vùng chữ T và hai bên má" },
@@ -120,7 +120,54 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
   ]
 }
 
-Chú ý: Thẻ ===JSON_DATA=== phải chứa duy nhất 1 chuỗi JSON hợp lệ. Đầy đủ các trường averageScore (điểm TB trên thang 10, vd 6.7), detectedIssues (mảng chuỗi 2 vấn đề điểm thấp nhất), metrics (chứa 6 chỉ số: mun_viem, mun_khong_viem, soi_ba_nhon, seo, sac_to_da, lo_chan_long với score từ 1 đến 10 và danh sách tọa độ points {top: %, left: %}).`;
+QUY TẮC ĐỊNH VỊ TỌA ĐỘ VÒNG TRÒN GIẢI PHẪU HỌC CHO AI (BẮT BUỘC):
+1. SỢI BÃ NHỜN (soi_ba_nhon): CHỈ ĐƯỢC ĐẶT VÒNG TRÒN Ở MŨI (chóp mũi, cánh mũi, sống mũi top: 45%-52%, left: 45%-55%) hoặc RÃNH CẰM (top: 67%-72%). TUYỆT ĐỐI CẤM ĐẶT VÒNG TRÒN Ở MÔI, MIỆNG, NHÂN TRUNG (top 53%-66%).
+2. LỖ CHÂN LÔNG (lo_chan_long): Đặt ở vùng má kề cánh mũi (top: 48%-56%, left: 36%-44% hoặc left: 56%-64%) hoặc đầu mũi.
+3. MỤN VIÊM (mun_viem): Đặt đúng vị trí nốt mụn sưng đỏ thực tế trên má (top: 48%-62%), trán (top: 25%-35%), cằm (top: 68%-76%).
+4. MỤN KHÔNG VIÊM (mun_khong_viem): Đặt ở trán, má hoặc cằm.
+5. SẮC TỐ DA (sac_to_da) & SẸO (seo): Đặt trên gò má, thái dương, trán.
+Tọa độ phần trăm { top: %, left: % } tính từ mép trên và mép trái của toàn bộ khuôn mặt trong khung hình.`;
+
+export function sanitizeFacialPoints(metricId, points = []) {
+  if (!Array.isArray(points)) return [];
+  return points.map((p, idx) => {
+    let top = Number(p.top);
+    let left = Number(p.left);
+    if (isNaN(top)) top = 50;
+    if (isNaN(left)) left = 50;
+
+    // Safety clamps: Keep within realistic face bounding area
+    top = Math.max(18, Math.min(82, top));
+    left = Math.max(20, Math.min(80, left));
+
+    // STRICT ANATOMICAL RULE FOR SỢI BÃ NHỜN (SEBACEOUS FILAMENTS):
+    // Phân bố chuẩn Y khoa: CHỈ ở vùng mũi (chóp mũi, cánh mũi, sống mũi) hoặc rãnh cằm.
+    // TUYỆT ĐỐI CẤM rơi vào vùng môi/miệng/nhân trung (top 53% - 66%).
+    if (metricId === "soi_ba_nhon") {
+      if (top >= 53 && top <= 66) {
+        // Tự động kéo về chóp mũi/cánh mũi (47% - 50%) hoặc rãnh cằm (68% - 71%)
+        top = top < 60 ? 48.5 : 69.5;
+        if (left < 44) left = 47.0;
+        if (left > 56) left = 53.0;
+      }
+    }
+
+    // STRICT ANATOMICAL RULE FOR LỖ CHÂN LÔNG (PORES):
+    // Lỗ chân lông to ở hai bên má giáp cánh mũi hoặc sống mũi/trán, không ở môi
+    if (metricId === "lo_chan_long") {
+      if (top >= 55 && top <= 66 && left >= 42 && left <= 58) {
+        top = 50.5;
+      }
+    }
+
+    return {
+      ...p,
+      top: Number(top.toFixed(1)),
+      left: Number(left.toFixed(1)),
+      pointer: p.pointer || idx === 0
+    };
+  });
+}
 
 export const DEFAULT_DIAGNOSTIC_METRICS = {
   mun_viem: {
@@ -130,11 +177,11 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     dotColor: "#f472b6",
     pillColor: "#e11d48",
     pointerIndex: 0,
-    points: [{ top: 57.5, left: 51.0, pointer: true }],
+    points: [{ top: 52.0, left: 34.0, pointer: true }, { top: 54.0, left: 66.0 }],
     pointsByAngle: {
-      front: [{ top: 62.5, left: 41.0, pointer: true }, { top: 64.0, left: 58.0 }],
-      left: [{ top: 57.5, left: 51.0, pointer: true }, { top: 75.0, left: 63.0 }],
-      right: [{ top: 56.0, left: 64.0, pointer: true }]
+      front: [{ top: 52.0, left: 34.0, pointer: true }, { top: 54.0, left: 66.0 }],
+      left: [{ top: 52.0, left: 42.0, pointer: true }, { top: 55.0, left: 48.0 }],
+      right: [{ top: 52.0, left: 58.0, pointer: true }, { top: 55.0, left: 52.0 }]
     }
   },
   mun_khong_viem: {
@@ -143,33 +190,29 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     score: 6,
     dotColor: "#eab308",
     pillColor: "#d97706",
-    pointerIndex: 4,
+    pointerIndex: 3,
     points: [
-      { top: 56.4, left: 47.4 },
-      { top: 61.4, left: 27.5 },
-      { top: 63.8, left: 28.3 },
-      { top: 61.4, left: 60.7 },
-      { top: 76.9, left: 64.9, pointer: true }
+      { top: 28.0, left: 48.0 },
+      { top: 52.0, left: 35.0 },
+      { top: 52.0, left: 65.0 },
+      { top: 72.0, left: 50.0, pointer: true }
     ],
     pointsByAngle: {
       front: [
-        { top: 75.0, left: 50.0, pointer: true },
-        { top: 60.0, left: 39.0 },
-        { top: 60.0, left: 61.0 },
-        { top: 33.0, left: 50.0 }
+        { top: 28.0, left: 48.0 },
+        { top: 52.0, left: 35.0 },
+        { top: 52.0, left: 65.0 },
+        { top: 72.0, left: 50.0, pointer: true }
       ],
       left: [
-        { top: 56.4, left: 47.4 },
-        { top: 61.4, left: 27.5 },
-        { top: 63.8, left: 28.3 },
-        { top: 61.4, left: 60.7 },
-        { top: 76.9, left: 64.9, pointer: true }
+        { top: 29.0, left: 45.0 },
+        { top: 51.0, left: 38.0 },
+        { top: 54.0, left: 44.0, pointer: true }
       ],
       right: [
-        { top: 62.0, left: 62.5 },
-        { top: 66.5, left: 58.0 },
-        { top: 54.0, left: 67.0 },
-        { top: 73.5, left: 53.0, pointer: true }
+        { top: 29.0, left: 55.0 },
+        { top: 51.0, left: 62.0 },
+        { top: 54.0, left: 56.0, pointer: true }
       ]
     }
   },
@@ -181,32 +224,33 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#6862b5",
     pointerIndex: 0,
     points: [
-      { top: 56.9, left: 63.6, pointer: true },
-      { top: 55.2, left: 61.8 },
-      { top: 55.8, left: 65.2 },
-      { top: 58.2, left: 62.5 },
-      { top: 58.5, left: 64.5 }
+      { top: 48.0, left: 50.0, pointer: true },
+      { top: 47.0, left: 46.5 },
+      { top: 47.0, left: 53.5 },
+      { top: 45.0, left: 50.0 },
+      { top: 69.0, left: 50.0 }
     ],
     pointsByAngle: {
       front: [
-        { top: 56.5, left: 50.0, pointer: true },
-        { top: 55.0, left: 47.0 },
-        { top: 55.0, left: 53.0 },
-        { top: 52.0, left: 50.0 },
-        { top: 73.0, left: 50.0 }
+        { top: 48.0, left: 50.0, pointer: true },
+        { top: 47.0, left: 46.5 },
+        { top: 47.0, left: 53.5 },
+        { top: 45.0, left: 50.0 },
+        { top: 69.0, left: 50.0 }
       ],
       left: [
-        { top: 56.9, left: 63.6, pointer: true },
-        { top: 55.2, left: 61.8 },
-        { top: 55.8, left: 65.2 },
-        { top: 58.2, left: 62.5 },
-        { top: 58.5, left: 64.5 }
+        { top: 47.5, left: 54.0, pointer: true },
+        { top: 46.0, left: 51.5 },
+        { top: 48.5, left: 56.0 },
+        { top: 49.0, left: 52.0 },
+        { top: 69.0, left: 53.0 }
       ],
       right: [
-        { top: 58.0, left: 54.0, pointer: true },
-        { top: 56.5, left: 51.5 },
-        { top: 56.0, left: 55.5 },
-        { top: 59.5, left: 53.0 }
+        { top: 47.5, left: 46.0, pointer: true },
+        { top: 46.0, left: 48.5 },
+        { top: 48.5, left: 44.0 },
+        { top: 49.0, left: 48.0 },
+        { top: 69.0, left: 47.0 }
       ]
     }
   },
@@ -217,11 +261,11 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     dotColor: "#ef4444",
     pillColor: "#dc2626",
     pointerIndex: 0,
-    points: [{ top: 52.0, left: 66.2, pointer: true }],
+    points: [{ top: 53.0, left: 32.0, pointer: true }, { top: 53.0, left: 68.0 }],
     pointsByAngle: {
-      front: [{ top: 53.0, left: 65.0, pointer: true }, { top: 53.0, left: 35.0 }],
-      left: [{ top: 52.0, left: 66.2, pointer: true }],
-      right: [{ top: 49.0, left: 72.0, pointer: true }]
+      front: [{ top: 53.0, left: 32.0, pointer: true }, { top: 53.0, left: 68.0 }],
+      left: [{ top: 52.0, left: 38.0, pointer: true }],
+      right: [{ top: 52.0, left: 62.0, pointer: true }]
     }
   },
   sac_to_da: {
@@ -230,30 +274,25 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     score: 6,
     dotColor: "#ea580c",
     pillColor: "#e15b32",
-    pointerIndex: 3,
+    pointerIndex: 1,
     points: [
-      { top: 46.5, left: 66.2 },
-      { top: 50.2, left: 63.5 },
-      { top: 60.7, left: 65.3 },
-      { top: 71.1, left: 66.0, pointer: true }
+      { top: 49.0, left: 33.0 },
+      { top: 49.0, left: 67.0, pointer: true },
+      { top: 27.0, left: 50.0 }
     ],
     pointsByAngle: {
       front: [
-        { top: 61.0, left: 64.0, pointer: true },
-        { top: 61.0, left: 36.0 },
-        { top: 32.0, left: 52.0 },
-        { top: 71.0, left: 62.0 }
+        { top: 49.0, left: 33.0 },
+        { top: 49.0, left: 67.0, pointer: true },
+        { top: 27.0, left: 50.0 }
       ],
       left: [
-        { top: 54.0, left: 48.0 },
-        { top: 52.0, left: 66.2 },
-        { top: 63.2, left: 36.2, pointer: true }
+        { top: 48.0, left: 36.0 },
+        { top: 51.0, left: 42.0, pointer: true }
       ],
       right: [
-        { top: 46.5, left: 66.2 },
-        { top: 50.2, left: 63.5 },
-        { top: 60.7, left: 65.3 },
-        { top: 71.1, left: 66.0, pointer: true }
+        { top: 48.0, left: 64.0 },
+        { top: 51.0, left: 58.0, pointer: true }
       ]
     }
   },
@@ -265,28 +304,27 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#16a34a",
     pointerIndex: 0,
     points: [
-      { top: 58.0, left: 52.0, pointer: true },
-      { top: 60.5, left: 55.5 },
-      { top: 62.0, left: 49.0 },
-      { top: 59.0, left: 45.0 }
+      { top: 48.5, left: 42.0, pointer: true },
+      { top: 52.0, left: 40.5 },
+      { top: 48.5, left: 58.0 },
+      { top: 52.0, left: 59.5 }
     ],
     pointsByAngle: {
       front: [
-        { top: 57.0, left: 44.0, pointer: true },
-        { top: 57.0, left: 56.0 },
-        { top: 61.0, left: 43.0 },
-        { top: 61.0, left: 57.0 }
+        { top: 48.5, left: 42.0, pointer: true },
+        { top: 52.0, left: 40.5 },
+        { top: 48.5, left: 58.0 },
+        { top: 52.0, left: 59.5 }
       ],
       left: [
-        { top: 58.0, left: 52.0, pointer: true },
-        { top: 60.5, left: 55.5 },
-        { top: 62.0, left: 49.0 },
-        { top: 59.0, left: 45.0 }
+        { top: 48.5, left: 46.0, pointer: true },
+        { top: 51.5, left: 43.5 },
+        { top: 47.5, left: 52.0 }
       ],
       right: [
-        { top: 58.5, left: 58.5, pointer: true },
-        { top: 61.0, left: 61.5 },
-        { top: 62.0, left: 56.0 }
+        { top: 48.5, left: 54.0, pointer: true },
+        { top: 51.5, left: 56.5 },
+        { top: 47.5, left: 48.0 }
       ]
     }
   }
@@ -300,7 +338,17 @@ export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}) {
       if (parsedJson.metrics[key]) {
         const aiM = parsedJson.metrics[key];
         if (typeof aiM.score === "number") base[key].score = aiM.score;
-        if (Array.isArray(aiM.points) && aiM.points.length > 0) base[key].points = aiM.points;
+        if (Array.isArray(aiM.points) && aiM.points.length > 0) {
+          const sanitized = sanitizeFacialPoints(key, aiM.points);
+          base[key].points = sanitized;
+          if (!aiM.pointsByAngle) {
+            base[key].pointsByAngle = {
+              front: sanitized,
+              left: sanitized,
+              right: sanitized
+            };
+          }
+        }
       }
     }
   } else {
