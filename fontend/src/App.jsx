@@ -16,6 +16,7 @@ import SplashScreen from "./components/SplashScreen";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import YourSkin from "./pages/YourSkin";
+import SkinDiary from "./pages/SkinDiary";
 
 function CartRedirect() {
   const { setIsCartOpen } = useCart();
@@ -71,6 +72,8 @@ export default function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/diary" element={<SkinDiary />} />
+          <Route path="/nhat-ky" element={<Navigate to="/diary" replace />} />
         </Routes>
         <WishlistDrawer />
         <LoginModal />

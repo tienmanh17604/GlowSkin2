@@ -1296,10 +1296,11 @@ export default function WelcomeNameModal() {
               </button>
             </div>
 
-            {/* Brand Title: SKINDEX Ai */}
+            {/* Brand Title: GlowSkin AI */}
             <div className="onboarding-intro-brand">
               <h1 className="onboarding-intro-brand-name">
-                SKINDEX<span className="onboarding-intro-brand-ai">Ai</span>
+                Glow<span className="onboarding-brand-accent">Skin</span>
+                <span className="onboarding-intro-brand-ai">AI</span>
               </h1>
             </div>
 

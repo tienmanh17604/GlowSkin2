@@ -25,7 +25,7 @@ import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudin
 import { PayOS } from "@payos/node";
 import { localDb } from "./services/localDbService.js";
 
-dotenv.config();
+dotenv.config(); // Reloads .env configuration with latest API keys
 
 // Khởi tạo PayOS client
 const payos = new PayOS(

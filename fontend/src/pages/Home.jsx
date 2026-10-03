@@ -599,7 +599,7 @@ export default function Home({ videoReady = false }) {
                 </svg>
               </div>
               <div className="nuve-stat-info">
-                <h3>7 ngày</h3>
+                <h3>28 ngày</h3>
                 <p>lộ trình cá nhân hóa</p>
               </div>
             </div>

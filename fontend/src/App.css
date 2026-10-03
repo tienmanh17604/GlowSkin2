@@ -1541,9 +1541,10 @@ footer h3 {
   font-size: 68px;
   font-weight: 800;
   color: var(--text-h, #1a1a18);
-  line-height: 1.15;
+  line-height: 1.25;
   letter-spacing: -0.02em;
   margin-bottom: 24px;
+  overflow: visible;
 }
 
 .nuve-hero-accent {
@@ -1553,8 +1554,17 @@ footer h3 {
   color: var(--accent, #c39c73);
   background: linear-gradient(90deg, #c39c73 0%, #a0703e 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  line-height: 1.22;
+  padding-bottom: 0.28em;
+  margin-bottom: -0.28em;
+  padding-top: 0.12em;
+  padding-right: 0.2em;
+  padding-left: 0.05em;
+  overflow: visible;
+  vertical-align: baseline;
 }
 
 /* Subtitle styling */
@@ -1702,8 +1712,10 @@ footer h3 {
   font-style: italic;
   color: var(--text-h, #1a1a18);
   margin: 0;
-  line-height: 1.05;
+  line-height: 1.25;
   letter-spacing: -0.01em;
+  overflow: visible;
+  padding-bottom: 2px;
 }
 
 .nuve-stat-info p {
@@ -3448,15 +3460,17 @@ footer h3 {
   top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  background: #704f2d;
+  background: linear-gradient(135deg, #c39c73 0%, #a0703e 100%);
   color: #ffffff;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 6px 14px;
+  letter-spacing: 0.08em;
+  padding: 5px 16px;
   border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 14px rgba(160, 112, 62, 0.4);
 }
 
 .plan-badge {
@@ -3524,33 +3538,70 @@ footer h3 {
 }
 
 .plan-btn {
-  background: transparent;
-  color: #704f2d;
-  border: 1.5px solid #704f2d;
-  padding: 10px 20px;
+  background: linear-gradient(135deg, #c39c73 0%, #a0703e 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 11px 20px;
   border-radius: 99px;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 13px;
   cursor: pointer;
   width: 100%;
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(160, 112, 62, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.02em;
 }
 
 .plan-btn:hover {
-  background: #704f2d;
+  background: linear-gradient(135deg, #d2aa80 0%, #ad7c48 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(160, 112, 62, 0.5);
   color: #ffffff;
+}
+
+.plan-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(160, 112, 62, 0.35);
 }
 
 .plan-btn.featured {
-  background: linear-gradient(135deg, #704f2d, #a98467);
+  background: linear-gradient(135deg, #c39c73 0%, #a0703e 100%);
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(160, 112, 62, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-btn.featured::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 30%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.4) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: plan-cta-shimmer 2.5s infinite linear;
 }
 
 .plan-btn.featured:hover {
-  background: linear-gradient(135deg, #8c6239, #c39c73);
-  box-shadow: 0 8px 20px rgba(195, 156, 115, 0.4);
+  background: linear-gradient(135deg, #d2aa80 0%, #ad7c48 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(160, 112, 62, 0.6);
+}
+
+.plan-btn.featured:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 14px rgba(160, 112, 62, 0.4);
 }
 
 /* --- Final CTA Section --- */

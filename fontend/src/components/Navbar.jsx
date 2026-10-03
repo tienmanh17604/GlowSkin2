@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { label: "Trang chủ", to: "/" },
   { label: "Phân tích da", isAnalysis: true },
   { label: "Da của bạn", to: "/your-skin" },
+  { label: "Nhật ký", to: "/diary" },
   { label: "Liên hệ", to: "/contact" },
 ];
 

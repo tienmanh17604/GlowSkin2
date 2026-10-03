@@ -111,20 +111,155 @@ export function AppProvider({ children }) {
     }
   });
 
+  // Skin Diary (Nhật ký chăm sóc da 28 ngày) - Chỉ lưu ảnh chụp thực tế của người dùng
+  const DEFAULT_DIARY_ENTRIES = [];
+
+  const [skinDiary, setSkinDiary] = useState(() => {
+    try {
+      const session = localStorage.getItem(USER_SESSION_KEY);
+      const user = session ? JSON.parse(session) : null;
+      const userId = user ? (user._id || user.id) : "guest";
+      const key = `glowskin-skin-diary-${userId}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const cleaned = parsed
+          .map((item) => {
+            let photo = item.photo;
+            if (photo && (photo.includes("images.unsplash.com") || photo.includes("sample_acne_analysis_face"))) {
+              photo = null;
+            }
+            let notes = item.notes;
+            if (Array.isArray(notes)) {
+              notes = notes.map((s) => (typeof s === "string" ? s : s?.title || "")).filter(Boolean).join(" • ");
+            } else if (typeof notes === "object" && notes !== null) {
+              notes = notes.title || notes.overview || "Ảnh chụp phân tích da AI Vision";
+            }
+            let score = item.score;
+            if (typeof score === "object" && score !== null) {
+              score = score.averageScore || score.score || 7.0;
+            } else if (typeof score === "number" && score > 10) {
+              score = +(score / 10).toFixed(1);
+            }
+            return { ...item, photo, notes, score };
+          })
+          .filter((item) => item.dateKey !== "2026-10-02" || item.photo);
+        return cleaned;
+      }
+      return DEFAULT_DIARY_ENTRIES;
+    } catch {
+      return DEFAULT_DIARY_ENTRIES;
+    }
+  });
+
+  const saveDiaryEntry = (entry) => {
+    setSkinDiary((prev) => {
+      // Đảm bảo chỉ có 1 bản ghi duy nhất cho mỗi ngày:
+      // Nếu ngày đó chụp/tải ảnh nhiều lần, lần chụp cuối cùng sẽ ghi đè lên ảnh ngày hôm đó
+      const filtered = prev.filter((item) => item.dateKey !== entry.dateKey);
+      let next;
+      if (entry.photo === null && !entry.notes && !entry.routineDone) {
+        next = filtered;
+      } else {
+        const updatedEntry = {
+          ...entry,
+          updatedAt: new Date().toISOString()
+        };
+        next = [updatedEntry, ...filtered];
+      }
+      try {
+        const session = localStorage.getItem(USER_SESSION_KEY);
+        const user = session ? JSON.parse(session) : currentUser;
+        const userId = user ? (user._id || user.id) : "guest";
+        localStorage.setItem(`glowskin-skin-diary-${userId}`, JSON.stringify(next));
+      } catch (e) {
+        console.warn("Lỗi lưu skin diary local:", e);
+      }
+      return next;
+    });
+  };
+
+  const toggleDiaryRoutine = (dateKey) => {
+    setSkinDiary((prev) => {
+      const next = prev.map((item) => {
+        if (item.dateKey === dateKey) {
+          return { ...item, routineDone: !item.routineDone };
+        }
+        return item;
+      });
+      try {
+        const userId = currentUser ? (currentUser._id || currentUser.id) : "guest";
+        localStorage.setItem(`glowskin-skin-diary-${userId}`, JSON.stringify(next));
+      } catch (e) {
+        console.warn("Lỗi cập nhật routine skin diary:", e);
+      }
+      return next;
+    });
+  };
+
   const saveLatestScan = async (scanData) => {
     setLatestScan(scanData);
-    if (currentUser) {
-      const userId = currentUser._id || currentUser.id;
-      const key = `glowskin-latest-scan-${userId}`;
-      try {
-        localStorage.setItem(key, JSON.stringify(scanData));
-      } catch (e) {
-        console.error("Lỗi lưu scan local:", e);
+
+    // Tự động đồng bộ ảnh vừa chụp vào Nhật ký ngày hôm nay
+    // Nếu trong ngày chụp nhiều lần, luôn ghi nhận và lưu lại lần chụp cuối cùng
+    if (scanData?.image) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const dateKey = `${year}-${month}-${day}`;
+      const displayDate = `${day}/${month}/${year}`;
+
+      const cycleStart = new Date(2026, 9, 2);
+      const todayDate = new Date(year, now.getMonth(), now.getDate());
+      const diffDays = Math.floor((todayDate - cycleStart) / (1000 * 60 * 60 * 24)) + 1;
+      const dayIndex = diffDays > 0 ? diffDays : 1;
+
+      let notesText = "Ảnh chụp phân tích da AI Vision";
+      if (typeof scanData.summary === "string" && scanData.summary) {
+        notesText = scanData.summary;
+      } else if (Array.isArray(scanData.summary)) {
+        notesText = scanData.summary.map((s) => (typeof s === "string" ? s : s?.title || "")).filter(Boolean).join(" • ");
+      } else if (scanData.overview && typeof scanData.overview === "string") {
+        notesText = scanData.overview.slice(0, 100) + "...";
       }
 
+      let scoreVal = 7.0;
+      if (typeof scanData.averageScore === "number") {
+        scoreVal = scanData.averageScore;
+      } else if (typeof scanData.score === "number") {
+        scoreVal = scanData.score > 10 ? +(scanData.score / 10).toFixed(1) : scanData.score;
+      }
+
+      saveDiaryEntry({
+        dateKey,
+        displayDate,
+        dayIndex,
+        photo: scanData.image, // Ghi đè bằng ảnh lần quét cuối cùng trong ngày
+        facePhoto: scanData.image,
+        score: scoreVal,
+        notes: notesText,
+        routineDone: true,
+        hasGift: false,
+        lastCapturedAt: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+        updatedAt: new Date().toISOString()
+      });
+    }
+
+    const session = localStorage.getItem(USER_SESSION_KEY);
+    const user = session ? JSON.parse(session) : currentUser;
+    const userId = user ? (user._id || user.id) : "guest";
+    const key = `glowskin-latest-scan-${userId}`;
+    try {
+      localStorage.setItem(key, JSON.stringify(scanData));
+    } catch (e) {
+      console.error("Lỗi lưu scan local:", e);
+    }
+
+    if (user && user._id) {
       // Sync scan data with backend MongoDB API
       try {
-        await fetch(`${API_URL}/users/${userId}/latest-scan`, {
+        await fetch(`${API_URL}/users/${user._id}/latest-scan`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ latestScan: scanData }),
@@ -746,8 +881,11 @@ export function AppProvider({ children }) {
       updatePreferredName,
       latestScan,
       saveLatestScan,
+      skinDiary,
+      saveDiaryEntry,
+      toggleDiaryRoutine,
     }),
-    [users, products, orders, reviews, currentUser, isLoginOpen, isNameModalOpen, isWishlistOpen, wishlist, latestScan]
+    [users, products, orders, reviews, currentUser, isLoginOpen, isNameModalOpen, isWishlistOpen, wishlist, latestScan, skinDiary]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
