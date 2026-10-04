@@ -451,19 +451,16 @@ export default function SkinDiary() {
                             <div className="pre-cycle-icon-circle">-</div>
                           )}
 
-                          {/* Gift Badge */}
-                          {item.hasGift && !isPreCycle && (
-                            <div className="diary-gift-badge">🎁</div>
-                          )}
-
-                          {/* Photo inside slot */}
+                          {/* Photo inside slot with isolated overflow container */}
                           {hasPhoto && (
-                            <img
-                              src={item.photo}
-                              alt={`Ảnh chụp ngày ${item.date}`}
-                              className="diary-card-photo-img"
-                              loading="lazy"
-                            />
+                            <div className="diary-card-photo-wrap">
+                              <img
+                                src={item.photo}
+                                alt={`Ảnh chụp ngày ${item.date}`}
+                                className="diary-card-photo-img"
+                                loading="lazy"
+                              />
+                            </div>
                           )}
 
                           {/* Camera Icon for Today if no photo yet */}
@@ -477,6 +474,11 @@ export default function SkinDiary() {
                               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                               <circle cx="12" cy="13" r="4" />
                             </svg>
+                          )}
+
+                          {/* Gift Badge (unclipped with high z-index) */}
+                          {item.hasGift && !isPreCycle && (
+                            <div className="diary-gift-badge" title="Cột mốc nhận quà">🎁</div>
                           )}
                         </div>
 

@@ -21,26 +21,43 @@ QUY TẮC QUAN SÁT THỰC TẾ & CHẨN ĐOÁN TRUNG THỰC (BẮT BUỘC TUÂN
    - Nền da bình thường, có chút dầu nhờn hoặc mụn cám nhẹ: Đặt điểm từ 72 - 84.
    - Nền da có nhiều ổ viêm đỏ, mụn bọc, mụn mủ rõ rệt: Đặt điểm từ 50 - 70.
 
-4. BỘ DỮ LIỆU ĐÀO TẠO THỊ GIÁC AI (TRAINING AI KNOWLEDGE BASE - 18 TÌNH TRẠNG CHUẨN):
-   - Mụn không viêm:
-     * Mụn đầu trắng (1-2mm, nốt kín không lỗ mở rõ, không mủ. Phân biệt với milia, sợi bã nhờn).
-     * Mụn đầu đen (chấm nâu đen trong lỗ chân lông mở do oxy hóa lipid).
-     * Mụn ẩn (nốt chìm cộm dưới da, sờ lợn cợn, không sưng đỏ).
-   - Mụn viêm:
-     * Mụn sẩn viêm (nốt đỏ <5mm, sưng gồ, đau nhẹ, không thấy mủ rõ).
-     * Mụn mủ (gồ viền đỏ, trung tâm có chóp mủ trắng/vàng).
-     * Mụn bọc & Mụn nang (>5mm, viêm sâu, cứng đau, lan tỏa sâu).
-     * Mụn trứng cá đỏ (Rosacea - đỏ bừng vùng má/mũi kèm giãn mao mạch).
-     * Viêm nang lông (sẩn mụn nhỏ đồng dạng quanh lỗ chân lông/chân lông).
-   - Sợi bã nhờn: Cụm chấm nhỏ vàng nhạt/xám ở cánh mũi, cằm, phẳng, phân bố đều (TUYỆT ĐỐI KHÔNG GỌI LÀ MỤN ĐẦU ĐEN NẾU KHÔNG CÓ NÚT TẮC ĐEN CỨNG).
-   - Lỗ chân lông: Nang lông giãn rộng vùng mũi/má, tăng tiết dầu nhờn.
-   - Sắc tố da: Thâm mụn PIH (nâu)/PIE (đỏ hồng), đốm sạm không đều màu.
-   - Lão hoá & Sẹo: Nếp nhăn động/tĩnh, Sẹo lõm (boxcar/ice-pick/rolling), Sẹo lồi mô xơ gồ.
+4. QUY CHUẨN THỊ GIÁC LÂM SÀNG TỪ BỘ DỮ LIỆU ĐÀO TẠO & HÌNH ẢNH MẪU THỰC TẾ (6 ĐẦU MỤC):
+   [ĐẦU MỤC 1: MỤN KHÔNG VIÊM]
+   - Mụn đầu trắng (Closed Comedones): Nốt sần tròn nhỏ 1–2mm màu trắng ngà hoặc tệp màu da, bề mặt kín nhô nhẹ dạng vòm, KHÔNG CÓ MIỆNG LỖ MỞ, sờ lợn cợn dưới biểu bì. Phân biệt: không có quầng đỏ sưng viêm như mụn mủ; không cứng như hạt kê (milia).
+   - Mụn đầu đen (Open Comedones): Nang lông giãn nở có nút sừng màu nâu sẫm/đen tách biệt ở miệng lỗ chân lông do oxy hóa melanin và bã nhờn ngoài không khí. Xuất hiện rải rác trên cánh mũi, trán, cằm.
+   - Mụn ẩn: Nhân sừng chìm sâu dưới da, làm bề mặt da gồ ghề, lợn cợn khi ánh sáng chiếu xiên, không đỏ, không đau.
 
-5. BẢNG HOẠT CHẤT ĐIỀU TRỊ CHUẨN TỪ BỘ DỮ LIỆU ĐÀO TẠO:
+   [ĐẦU MỤC 2: MỤN VIÊM & NHIỄM TRÙNG NANG LÔNG]
+   - Mụn sẩn viêm (Papules): Nốt gồ đỏ kích thước 2–5mm, sưng nề, bề mặt đỏ tươi/hồng sẫm, chưa có chóp mủ trắng, sờ đau nhẹ.
+   - Mụn mủ (Pustules): Nốt viêm gồ có viền quầng sung huyết đỏ (halo erythema), trung tâm xuất hiện đỉnh chóp mủ hoại tử màu trắng sữa hoặc vàng đục (2–5mm).
+   - Mụn bọc & Mụn nang (Nodules / Cysts): Ổ tổn thương viêm sâu >5mm, sưng to gồ ghề, màu đỏ sẫm hoặc tím bầm, chân mụn ăn sâu hạ bì, đau nhức nhiều, nguy cơ tạo sẹo rỗ nếu cạy nặn.
+   - Mụn trứng cá đỏ (Rosacea): Đỏ bừng lan tỏa đối xứng hai gò má và cánh mũi kèm mạng lưới giãn mao mạch (telangiectasia), da nhạy cảm châm chích.
+   - Viêm nang lông: Sẩn đỏ nhỏ đồng dạng mọc tập trung quanh chân nang lông.
+
+   [ĐẦU MỤC 3: SỢI BÃ NHỜN (SEBACEOUS FILAMENTS)]
+   - Dấu hiệu thị giác thực tế: Cụm chấm nhỏ li ti màu vàng nhạt, xám nhạt hoặc trắng ngà, phân bố dầy đặc và đều đặn dạng mạng lưới mịn trên chóp mũi, cánh mũi và rãnh cằm.
+   - QUY TẮC PHÂN BIỆT SỐNG CÒN: Sợi bã nhờn có bề mặt phẳng hoặc chỉ hơi nhám nhẹ, bã nhờn mềm ẩm dạng ống, KHÔNG PHẢI NÚT TẮC ĐEN CỨNG (mụn đầu đen), và KHÔNG SƯNG ĐỎ (mụn viêm). Tuyệt đối không nhầm lẫn!
+
+   [ĐẦU MỤC 4: LỖ CHÂN LÔNG (ENLARGED PORES)]
+   - Dấu hiệu thị giác thực tế: Các lỗ mở nang lông giãn to (>0.3–0.5mm), tạo kết cấu bề mặt da thô ráp dạng "vỏ cam" (orange peel) tập trung ở vùng má trong kề sát hai bên cánh mũi và vùng chữ T, đi kèm bề mặt tiết dầu bóng nhờn. Không chứa nút sừng cứng đen.
+
+   [ĐẦU MỤC 5: SẮC TỐ DA (PIGMENTATION)]
+   - Thâm đỏ sau viêm (PIE): Đốm dát phẳng màu hồng đỏ hoặc tím đỏ do giãn mao mạch sau khi nốt mụn viêm vừa lành.
+   - Thâm nâu sau viêm (PIH): Đốm dát phẳng màu nâu nhạt đến nâu sẫm do tăng sinh melanin tại vị trí tổn thương mụn cũ.
+   - Nám má (Melasma): Mảng dát sắc tố nâu xám hoặc nâu vàng, ranh giới lượn sóng không đều phân bố đối xứng trên gò má, sống mũi, trán.
+
+   [ĐẦU MỤC 6: LÃO HOÁ DA & SẸO (AGING & SCARS)]
+   - Sẹo rỗ / Sẹo lõm:
+     * Ice-pick: Hố lõm sâu hình nón nhọn <2mm, miệng nhọn như kim châm đâm sâu trung bì.
+     * Boxcar: Hố lõm đáy phẳng hình hộp, bờ thành góc cạnh dốc đứng rõ rệt (1.5–4mm).
+     * Rolling: Vùng da lõm nông nhấp nhô lượn sóng gồ ghề rộng >4mm do xơ sẹo kéo dính hạ bì.
+   - Sẹo lồi: Mô xơ gồ cao hơn bề mặt da, màu hồng hoặc đỏ tím.
+   - Nếp nhăn: Rãnh nhăn nông/sâu khi cử động cơ mặt hoặc khi nghỉ ngơi quanh mắt, rãnh cười và trán.
+
+5. BẢNG HOẠT CHẤT ĐIỀU TRỊ CHUẨN TỪ BỘ DỮ LIỆU ĐÀO TẠO EXCEL:
    - Nhóm mụn & bít tắc: Salicylic acid (BHA), Adapalene, Azelaic acid, Benzoyl peroxide, Niacinamide, Zinc PCA, Retinol.
-   - Nhóm sợi bã nhờn & lỗ chân lông: BHA, Niacinamide, Đất sét (Kaolin), AHA dịu nhẹ.
-   - Nhóm thâm & sắc tố: Azelaic acid, Niacinamide, Vitamin C, Arbutin, Glycolic acid, Tranexamic acid.
+   - Nhóm sợi bã nhờn & lỗ chân lông: BHA, Niacinamide, Mặt nạ đất sét (Kaolin), AHA dịu nhẹ.
+   - Nhóm thâm & sắc tố: Azelaic acid, Niacinamide, Vitamin C, Alpha Arbutin, Glycolic acid, Tranexamic acid.
    - Nhóm phục hồi & chống lão hóa: Ceramide, Hyaluronic Acid, Peptide, Panthenol (B5), Centella Asiatica, Tretinoin/Retinol.
 
 6. QUY TẮC CẤM QUAN TRỌNG:
@@ -128,7 +145,7 @@ QUY TẮC ĐỊNH VỊ TỌA ĐỘ VÒNG TRÒN GIẢI PHẪU HỌC CHO AI (BẮT
 5. SẮC TỐ DA (sac_to_da) & SẸO (seo): Đặt trên gò má, thái dương, trán.
 Tọa độ phần trăm { top: %, left: % } tính từ mép trên và mép trái của toàn bộ khuôn mặt trong khung hình.`;
 
-export function sanitizeFacialPoints(metricId, points = []) {
+export function sanitizeFacialPoints(metricId, points = [], angleKey = "front") {
   if (!Array.isArray(points)) return [];
   return points.map((p, idx) => {
     let top = Number(p.top);
@@ -137,27 +154,89 @@ export function sanitizeFacialPoints(metricId, points = []) {
     if (isNaN(left)) left = 50;
 
     // Safety clamps: Keep within realistic face bounding area
-    top = Math.max(18, Math.min(82, top));
+    top = Math.max(18, Math.min(84, top));
     left = Math.max(20, Math.min(80, left));
 
-    // STRICT ANATOMICAL RULE FOR SỢI BÃ NHỜN (SEBACEOUS FILAMENTS):
-    // Phân bố chuẩn Y khoa: CHỈ ở vùng mũi (chóp mũi, cánh mũi, sống mũi) hoặc rãnh cằm.
-    // TUYỆT ĐỐI CẤM rơi vào vùng môi/miệng/nhân trung (top 53% - 66%).
+    // =========================================================================
+    // XỬ LÝ ĐẶC THÙ CHO ẢNH GÓC NGHIÊNG (ANGLE 2 & ANGLE 3):
+    // =========================================================================
+    if (angleKey === "left") {
+      // Góc nghiêng má phải (người dùng quay sang phải, má phải hướng về camera ở bên trái khung hình)
+      if (metricId === "soi_ba_nhon") {
+        return {
+          ...p,
+          top: Number((55.0 + (idx % 2) * 3.5).toFixed(1)),
+          left: Number((66.0 + (idx % 2) * 3.0).toFixed(1)),
+          pointer: idx === 0
+        };
+      }
+      // Vùng má hiển thị trên ảnh chiếm left: 26% - 50%, top: 48% - 72%
+      // Tuyệt đối CẤM nốt rơi vào mắt (left > 46%, top < 48%) hoặc sống mũi (left > 52%)
+      if (top < 48 || left > 50 || left < 24) {
+        top = 52.0 + (idx % 4) * 4.5;
+        left = 32.0 + (idx % 3) * 5.5;
+      }
+      return {
+        ...p,
+        top: Number(top.toFixed(1)),
+        left: Number(left.toFixed(1)),
+        pointer: p.pointer || idx === 0
+      };
+    }
+
+    if (angleKey === "right") {
+      // Góc nghiêng má trái (người dùng quay sang trái, má trái hướng về camera ở bên phải khung hình)
+      if (metricId === "soi_ba_nhon") {
+        return {
+          ...p,
+          top: Number((55.0 + (idx % 2) * 3.5).toFixed(1)),
+          left: Number((34.0 + (idx % 2) * 3.0).toFixed(1)),
+          pointer: idx === 0
+        };
+      }
+      // Vùng má hiển thị trên ảnh chiếm left: 50% - 74%, top: 48% - 72%
+      if (top < 48 || left < 50 || left > 76) {
+        top = 52.0 + (idx % 4) * 4.5;
+        left = 58.0 + (idx % 3) * 5.5;
+      }
+      return {
+        ...p,
+        top: Number(top.toFixed(1)),
+        left: Number(left.toFixed(1)),
+        pointer: p.pointer || idx === 0
+      };
+    }
+
+    // =========================================================================
+    // QUY TẮC CHO ẢNH CHÍNH DIỆN (FRONT): TUYỆT ĐỐI CẤM KHOANH TRÒN VÀO MẮT & LÔNG MÀY
+    // =========================================================================
+    const inLeftEyeZone = top >= 22 && top <= 44 && left >= 57 && left <= 76;
+    const inRightEyeZone = top >= 22 && top <= 44 && left >= 24 && left <= 43;
+    const inMouthZone = top >= 63 && top <= 76 && left >= 38 && left <= 62;
+
+    if (inLeftEyeZone) {
+      top = 51.5 + (idx % 3) * 3.0;
+      left = 63.5 + (idx % 2) * 3.5;
+    } else if (inRightEyeZone) {
+      top = 51.5 + (idx % 3) * 3.0;
+      left = 34.0 + (idx % 2) * 3.5;
+    } else if (inMouthZone) {
+      top = 73.0 + (idx % 2) * 2.5;
+      left = 48.0 + (idx % 3 - 1) * 3.5;
+    }
+
     if (metricId === "soi_ba_nhon") {
-      if (top >= 53 && top <= 66) {
-        // Tự động kéo về chóp mũi/cánh mũi (47% - 50%) hoặc rãnh cằm (68% - 71%)
-        top = top < 60 ? 48.5 : 69.5;
-        if (left < 44) left = 47.0;
-        if (left > 56) left = 53.0;
+      if (top < 44 || (top > 53 && top < 68) || top > 78 || left < 43 || left > 57) {
+        if (idx === 0) { top = 48.0; left = 50.0; }
+        else if (idx === 1) { top = 47.0; left = 46.5; }
+        else if (idx === 2) { top = 47.0; left = 53.5; }
+        else { top = 71.0; left = 50.0; }
       }
     }
 
-    // STRICT ANATOMICAL RULE FOR LỖ CHÂN LÔNG (PORES):
-    // Lỗ chân lông to ở hai bên má giáp cánh mũi hoặc sống mũi/trán, không ở môi
     if (metricId === "lo_chan_long") {
-      if (top >= 55 && top <= 66 && left >= 42 && left <= 58) {
-        top = 50.5;
-      }
+      if (top < 45 || top > 62) top = 50.0;
+      if (left > 44 && left < 56) left = idx % 2 === 0 ? 41.0 : 59.0;
     }
 
     return {
@@ -180,8 +259,8 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     points: [{ top: 52.0, left: 34.0, pointer: true }, { top: 54.0, left: 66.0 }],
     pointsByAngle: {
       front: [{ top: 52.0, left: 34.0, pointer: true }, { top: 54.0, left: 66.0 }],
-      left: [{ top: 52.0, left: 42.0, pointer: true }, { top: 55.0, left: 48.0 }],
-      right: [{ top: 52.0, left: 58.0, pointer: true }, { top: 55.0, left: 52.0 }]
+      left: [{ top: 54.0, left: 36.0, pointer: true }, { top: 60.0, left: 42.0 }],
+      right: [{ top: 54.0, left: 64.0, pointer: true }, { top: 60.0, left: 58.0 }]
     }
   },
   mun_khong_viem: {
@@ -190,29 +269,31 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     score: 6,
     dotColor: "#eab308",
     pillColor: "#d97706",
-    pointerIndex: 3,
+    pointerIndex: 0,
     points: [
-      { top: 28.0, left: 48.0 },
-      { top: 52.0, left: 35.0 },
-      { top: 52.0, left: 65.0 },
-      { top: 72.0, left: 50.0, pointer: true }
+      { top: 26.0, left: 48.0 },
+      { top: 53.0, left: 36.0 },
+      { top: 54.0, left: 64.0 },
+      { top: 74.0, left: 50.0, pointer: true }
     ],
     pointsByAngle: {
       front: [
-        { top: 28.0, left: 48.0 },
-        { top: 52.0, left: 35.0 },
-        { top: 52.0, left: 65.0 },
-        { top: 72.0, left: 50.0, pointer: true }
+        { top: 26.0, left: 48.0 },
+        { top: 53.0, left: 36.0 },
+        { top: 54.0, left: 64.0 },
+        { top: 74.0, left: 50.0, pointer: true }
       ],
       left: [
-        { top: 29.0, left: 45.0 },
-        { top: 51.0, left: 38.0 },
-        { top: 54.0, left: 44.0, pointer: true }
+        { top: 53.0, left: 34.0, pointer: true },
+        { top: 57.0, left: 41.0 },
+        { top: 63.0, left: 37.0 },
+        { top: 66.0, left: 44.0 }
       ],
       right: [
-        { top: 29.0, left: 55.0 },
-        { top: 51.0, left: 62.0 },
-        { top: 54.0, left: 56.0, pointer: true }
+        { top: 53.0, left: 66.0, pointer: true },
+        { top: 57.0, left: 59.0 },
+        { top: 63.0, left: 63.0 },
+        { top: 66.0, left: 56.0 }
       ]
     }
   },
@@ -239,18 +320,12 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
         { top: 69.0, left: 50.0 }
       ],
       left: [
-        { top: 47.5, left: 54.0, pointer: true },
-        { top: 46.0, left: 51.5 },
-        { top: 48.5, left: 56.0 },
-        { top: 49.0, left: 52.0 },
-        { top: 69.0, left: 53.0 }
+        { top: 55.0, left: 66.0, pointer: true },
+        { top: 57.0, left: 68.0 }
       ],
       right: [
-        { top: 47.5, left: 46.0, pointer: true },
-        { top: 46.0, left: 48.5 },
-        { top: 48.5, left: 44.0 },
-        { top: 49.0, left: 48.0 },
-        { top: 69.0, left: 47.0 }
+        { top: 55.0, left: 34.0, pointer: true },
+        { top: 57.0, left: 32.0 }
       ]
     }
   },
@@ -264,8 +339,8 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     points: [{ top: 53.0, left: 32.0, pointer: true }, { top: 53.0, left: 68.0 }],
     pointsByAngle: {
       front: [{ top: 53.0, left: 32.0, pointer: true }, { top: 53.0, left: 68.0 }],
-      left: [{ top: 52.0, left: 38.0, pointer: true }],
-      right: [{ top: 52.0, left: 62.0, pointer: true }]
+      left: [{ top: 54.0, left: 35.0, pointer: true }],
+      right: [{ top: 54.0, left: 65.0, pointer: true }]
     }
   },
   sac_to_da: {
@@ -276,23 +351,23 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#e15b32",
     pointerIndex: 1,
     points: [
-      { top: 49.0, left: 33.0 },
-      { top: 49.0, left: 67.0, pointer: true },
-      { top: 27.0, left: 50.0 }
+      { top: 52.0, left: 34.0 },
+      { top: 53.5, left: 66.0, pointer: true },
+      { top: 26.0, left: 50.0 }
     ],
     pointsByAngle: {
       front: [
-        { top: 49.0, left: 33.0 },
-        { top: 49.0, left: 67.0, pointer: true },
-        { top: 27.0, left: 50.0 }
+        { top: 52.0, left: 34.0 },
+        { top: 53.5, left: 66.0, pointer: true },
+        { top: 26.0, left: 50.0 }
       ],
       left: [
-        { top: 48.0, left: 36.0 },
-        { top: 51.0, left: 42.0, pointer: true }
+        { top: 52.0, left: 33.0, pointer: true },
+        { top: 58.0, left: 43.0 }
       ],
       right: [
-        { top: 48.0, left: 64.0 },
-        { top: 51.0, left: 58.0, pointer: true }
+        { top: 52.0, left: 67.0, pointer: true },
+        { top: 58.0, left: 57.0 }
       ]
     }
   },
@@ -304,33 +379,192 @@ export const DEFAULT_DIAGNOSTIC_METRICS = {
     pillColor: "#16a34a",
     pointerIndex: 0,
     points: [
-      { top: 48.5, left: 42.0, pointer: true },
-      { top: 52.0, left: 40.5 },
-      { top: 48.5, left: 58.0 },
-      { top: 52.0, left: 59.5 }
+      { top: 49.0, left: 42.0, pointer: true },
+      { top: 49.0, left: 58.0 },
+      { top: 52.5, left: 40.5 },
+      { top: 52.5, left: 59.5 }
     ],
     pointsByAngle: {
       front: [
-        { top: 48.5, left: 42.0, pointer: true },
-        { top: 52.0, left: 40.5 },
-        { top: 48.5, left: 58.0 },
-        { top: 52.0, left: 59.5 }
+        { top: 49.0, left: 42.0, pointer: true },
+        { top: 49.0, left: 58.0 },
+        { top: 52.5, left: 40.5 },
+        { top: 52.5, left: 59.5 }
       ],
       left: [
-        { top: 48.5, left: 46.0, pointer: true },
-        { top: 51.5, left: 43.5 },
-        { top: 47.5, left: 52.0 }
+        { top: 50.0, left: 43.0, pointer: true },
+        { top: 53.0, left: 46.0 }
       ],
       right: [
-        { top: 48.5, left: 54.0, pointer: true },
-        { top: 51.5, left: 56.5 },
-        { top: 47.5, left: 48.0 }
+        { top: 50.0, left: 57.0, pointer: true },
+        { top: 53.0, left: 54.0 }
       ]
     }
   }
 };
 
-export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}) {
+/**
+ * Tự động phân tích ảnh thực tế người dùng bằng Canvas Pixel Vision:
+ * Quét các vùng da má, trán, cằm, mũi để tìm các điểm tổn thương thật (đốm đỏ viêm, thâm sẫm, sợi bã nhờn, lỗ chân lông).
+ * Đảm bảo các vòng tròn khoanh ĐÚNG vị trí khuyết điểm thực tế trên ảnh của người dùng!
+ */
+export async function detectBlemishesFromImagePixels(imageDataUrl, angle = "front") {
+  if (typeof window === "undefined" || !imageDataUrl) return null;
+  return new Promise((resolve) => {
+    try {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        try {
+          const w = 240;
+          const h = Math.round((img.naturalHeight / img.naturalWidth) * 240) || 240;
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d", { willReadFrequently: true });
+          ctx.drawImage(img, 0, 0, w, h);
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const data = imgData.data;
+
+          const candidates = {
+            mun_viem: [],
+            sac_to_da: [],
+            mun_khong_viem: [],
+            soi_ba_nhon: [],
+            lo_chan_long: []
+          };
+
+          for (let y = Math.round(h * 0.18); y < Math.round(h * 0.84); y += 3) {
+            const topPct = (y / h) * 100;
+            for (let x = Math.round(w * 0.22); x < Math.round(w * 0.78); x += 3) {
+              const leftPct = (x / w) * 100;
+
+              // TUYỆT ĐỐI LOẠI BỎ VÙNG MẮT, LÔNG MÀY VÀ MÔI
+              const isEyeRight = topPct >= 22 && topPct <= 44 && leftPct >= 24 && leftPct <= 44;
+              const isEyeLeft = topPct >= 22 && topPct <= 44 && leftPct >= 56 && leftPct <= 76;
+              const isMouth = topPct >= 62 && topPct <= 76 && leftPct >= 38 && leftPct <= 62;
+              if (isEyeRight || isEyeLeft || isMouth) continue;
+
+              const idx = (y * w + x) * 4;
+              const r = data[idx];
+              const g = data[idx + 1];
+              const b = data[idx + 2];
+              const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+              const isSkin = r > 70 && g > 40 && b > 20 && r > g && r > b && (r - g) >= 10;
+              if (!isSkin) continue;
+
+              const redness = r - (g + b) / 2;
+
+              if (angle === "left") {
+                // Góc nghiêng má phải: má quay về phía trước ở left: 24% - 50%, top: 48% - 72%
+                // Vùng mắt và sống mũi xa (left > 50% hoặc top < 48%) -> LOẠI TRỪ 100%
+                if (topPct < 48 || leftPct > 50 || leftPct < 24) {
+                  // Chỉ lấy sợi bã nhờn nếu rơi vào chóp mũi bên phải
+                  if (topPct >= 54 && topPct <= 62 && leftPct >= 64 && leftPct <= 72) {
+                    candidates.soi_ba_nhon.push({ top: topPct, left: leftPct, score: Math.abs(r - g) });
+                  }
+                  continue;
+                }
+                // Vùng má hiển thị rõ: quét mụn sưng đỏ, thâm, mụn không viêm
+                if (redness > 20 && r > 110) {
+                  candidates.mun_viem.push({ top: topPct, left: leftPct, score: redness });
+                }
+                if (brightness < 115 && redness > 8) {
+                  candidates.sac_to_da.push({ top: topPct, left: leftPct, score: 255 - brightness });
+                }
+                candidates.mun_khong_viem.push({ top: topPct, left: leftPct, score: Math.abs(r - b) + (255 - brightness) * 0.4 });
+                if (leftPct >= 36 && leftPct <= 46) {
+                  candidates.lo_chan_long.push({ top: topPct, left: leftPct, score: brightness });
+                }
+                continue;
+              }
+
+              if (angle === "right") {
+                // Góc nghiêng má trái: má quay về phía trước ở left: 50% - 76%, top: 48% - 72%
+                if (topPct < 48 || leftPct < 50 || leftPct > 76) {
+                  if (topPct >= 54 && topPct <= 62 && leftPct >= 28 && leftPct <= 36) {
+                    candidates.soi_ba_nhon.push({ top: topPct, left: leftPct, score: Math.abs(r - g) });
+                  }
+                  continue;
+                }
+                if (redness > 20 && r > 110) {
+                  candidates.mun_viem.push({ top: topPct, left: leftPct, score: redness });
+                }
+                if (brightness < 115 && redness > 8) {
+                  candidates.sac_to_da.push({ top: topPct, left: leftPct, score: 255 - brightness });
+                }
+                candidates.mun_khong_viem.push({ top: topPct, left: leftPct, score: Math.abs(r - b) + (255 - brightness) * 0.4 });
+                if (leftPct >= 54 && leftPct <= 64) {
+                  candidates.lo_chan_long.push({ top: topPct, left: leftPct, score: brightness });
+                }
+                continue;
+              }
+
+              // Góc chính diện (front)
+              // 1. Mụn viêm: Đỏ gồ / sung huyết trên má, cằm, trán
+              if (redness > 24 && r > 115) {
+                candidates.mun_viem.push({ top: topPct, left: leftPct, score: redness });
+              }
+
+              // 2. Sắc tố da / Thâm sẫm PIH: Đốm sậm màu trên nền da má
+              if (brightness < 105 && redness > 8 && topPct >= 46 && topPct <= 65) {
+                candidates.sac_to_da.push({ top: topPct, left: leftPct, score: 255 - brightness });
+              }
+
+              // 3. Sợi bã nhờn: chóp mũi, cánh mũi (top 45-53%, left 46-54%)
+              if (topPct >= 45 && topPct <= 53 && leftPct >= 46 && leftPct <= 54) {
+                candidates.soi_ba_nhon.push({ top: topPct, left: leftPct, score: Math.abs(r - g) });
+              }
+
+              // 4. Lỗ chân lông: hai bên má cạnh mũi
+              if (topPct >= 48 && topPct <= 58 && ((leftPct >= 36 && leftPct <= 44) || (leftPct >= 56 && leftPct <= 64))) {
+                candidates.lo_chan_long.push({ top: topPct, left: leftPct, score: brightness });
+              }
+
+              // 5. Mụn không viêm: trán, má hoặc cằm
+              if ((topPct >= 22 && topPct <= 30 && leftPct >= 42 && leftPct <= 58) || (topPct >= 72 && topPct <= 80 && leftPct >= 45 && leftPct <= 55) || (topPct >= 50 && topPct <= 65 && ((leftPct >= 28 && leftPct <= 42) || (leftPct >= 58 && leftPct <= 72)))) {
+                candidates.mun_khong_viem.push({ top: topPct, left: leftPct, score: Math.abs(r - b) });
+              }
+            }
+          }
+
+          const pickBestPoints = (list, max = 3) => {
+            const sorted = [...list].sort((a, b) => b.score - a.score);
+            const picked = [];
+            for (const pt of sorted) {
+              const tooClose = picked.some(p => Math.hypot(p.top - pt.top, p.left - pt.left) < 6);
+              if (!tooClose) {
+                picked.push({ top: Number(pt.top.toFixed(1)), left: Number(pt.left.toFixed(1)) });
+                if (picked.length >= max) break;
+              }
+            }
+            return picked;
+          };
+
+          const detectedMetrics = {};
+          for (const key of Object.keys(candidates)) {
+            const pts = pickBestPoints(candidates[key], key === "soi_ba_nhon" || key === "lo_chan_long" ? 3 : 2);
+            if (pts.length > 0) {
+              detectedMetrics[key] = pts;
+            }
+          }
+
+          resolve(detectedMetrics);
+        } catch (err) {
+          console.warn("Lỗi pixel vision:", err);
+          resolve(null);
+        }
+      };
+      img.onerror = () => resolve(null);
+      img.src = imageDataUrl;
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}, realVisionPoints = null) {
   const base = JSON.parse(JSON.stringify(DEFAULT_DIAGNOSTIC_METRICS));
 
   if (parsedJson?.metrics) {
@@ -338,16 +572,21 @@ export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}) {
       if (parsedJson.metrics[key]) {
         const aiM = parsedJson.metrics[key];
         if (typeof aiM.score === "number") base[key].score = aiM.score;
-        if (Array.isArray(aiM.points) && aiM.points.length > 0) {
+        if (aiM.pointsByAngle && typeof aiM.pointsByAngle === "object") {
+          base[key].pointsByAngle = {
+            front: sanitizeFacialPoints(key, aiM.pointsByAngle.front || aiM.points || []),
+            left: sanitizeFacialPoints(key, aiM.pointsByAngle.left || []),
+            right: sanitizeFacialPoints(key, aiM.pointsByAngle.right || [])
+          };
+          base[key].points = base[key].pointsByAngle.front;
+        } else if (Array.isArray(aiM.points) && aiM.points.length > 0) {
           const sanitized = sanitizeFacialPoints(key, aiM.points);
           base[key].points = sanitized;
-          if (!aiM.pointsByAngle) {
-            base[key].pointsByAngle = {
-              front: sanitized,
-              left: sanitized,
-              right: sanitized
-            };
-          }
+          base[key].pointsByAngle = {
+            front: sanitized,
+            left: sanitized.map(p => ({ ...p, left: p.left < 50 ? Math.min(65, p.left + 8) : p.left })),
+            right: sanitized.map(p => ({ ...p, left: p.left > 50 ? Math.max(35, p.left - 8) : p.left }))
+          };
         }
       }
     }
@@ -372,6 +611,22 @@ export function computeDiagnosticMetrics(surveyData = {}, parsedJson = {}) {
 
     if (hasVessels || sensitivity === "Thường xuyên" || sensitivity === "Rất hay gặp") {
       base.sac_to_da.score = Math.min(base.sac_to_da.score, 6);
+    }
+  }
+
+  // TÍCH HỢP TỌA ĐỘ THỊ GIÁC QUÉT TỪ PIXEL ẢNH THỰC TẾ CỦA NGƯỜI DÙNG:
+  // Nếu có điểm phát hiện được từ ảnh thật (đốm đỏ viêm, thâm nám, sợi bã nhờn), ưu tiên gán trực tiếp!
+  if (realVisionPoints && typeof realVisionPoints === "object") {
+    for (const key of Object.keys(realVisionPoints)) {
+      if (base[key] && Array.isArray(realVisionPoints[key]) && realVisionPoints[key].length > 0) {
+        const sanitized = sanitizeFacialPoints(key, realVisionPoints[key]);
+        base[key].points = sanitized;
+        base[key].pointsByAngle = {
+          front: sanitized,
+          left: sanitizeFacialPoints(key, sanitized.map(p => ({ ...p, left: p.left < 50 ? Math.min(65, p.left + 8) : p.left }))),
+          right: sanitizeFacialPoints(key, sanitized.map(p => ({ ...p, left: p.left > 50 ? Math.max(35, p.left - 8) : p.left })))
+        };
+      }
     }
   }
 
@@ -425,12 +680,12 @@ const DEMO_ANALYSIS = `===OVERVIEW===
   "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
   "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
   "metrics": {
-    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 42, "left": 48, "r": 9 }] },
-    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 34, "left": 47, "r": 8 }, { "top": 37, "left": 60, "r": 8 }, { "top": 36, "left": 27, "r": 8 }, { "top": 46.5, "left": 65, "r": 9 }] },
-    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 33, "left": 57, "r": 7 }, { "top": 34.5, "left": 63, "r": 8 }, { "top": 32, "left": 61, "r": 7 }, { "top": 35.5, "left": 66, "r": 8 }, { "top": 35, "left": 56, "r": 8 }] },
-    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 43, "left": 68, "r": 8 }] },
-    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 27, "left": 66, "r": 8 }, { "top": 29.5, "left": 63, "r": 7 }, { "top": 37, "left": 65, "r": 8 }, { "top": 43.5, "left": 66, "r": 9 }] },
-    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 33, "left": 52, "r": 8 }, { "top": 35, "left": 55, "r": 8 }, { "top": 38, "left": 46, "r": 8 }, { "top": 40, "left": 54, "r": 8 }] }
+    "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 54.0, "left": 35.0, "r": 9 }, { "top": 55.0, "left": 65.0, "r": 9 }] },
+    "mun_khong_viem": { "score": 6, "label": "Mụn không viêm", "dotColor": "#eab308", "pillColor": "#d97706", "points": [{ "top": 26.0, "left": 48.0, "r": 8 }, { "top": 53.0, "left": 36.0, "r": 8 }, { "top": 54.0, "left": 64.0, "r": 8 }, { "top": 74.0, "left": 50.0, "r": 9 }] },
+    "soi_ba_nhon": { "score": 7, "label": "Sợi bã nhờn", "dotColor": "#8b5cf6", "pillColor": "#6862b5", "points": [{ "top": 48.0, "left": 50.0, "r": 7 }, { "top": 47.0, "left": 46.5, "r": 8 }, { "top": 47.0, "left": 53.5, "r": 7 }, { "top": 72.0, "left": 50.0, "r": 8 }] },
+    "seo": { "score": 7, "label": "Sẹo", "dotColor": "#ef4444", "pillColor": "#dc2626", "points": [{ "top": 53.0, "left": 33.0, "r": 8 }, { "top": 54.0, "left": 67.0, "r": 8 }] },
+    "sac_to_da": { "score": 6, "label": "Sắc tố da", "dotColor": "#ea580c", "pillColor": "#e15b32", "points": [{ "top": 52.0, "left": 34.0, "r": 8 }, { "top": 53.5, "left": 66.0, "r": 7 }, { "top": 26.0, "left": 50.0, "r": 8 }] },
+    "lo_chan_long": { "score": 5, "label": "Lỗ chân lông", "dotColor": "#22c55e", "pillColor": "#16a34a", "points": [{ "top": 49.0, "left": 42.0, "r": 8 }, { "top": 49.0, "left": 58.0, "r": 8 }, { "top": 52.5, "left": 40.5, "r": 8 }, { "top": 52.5, "left": 59.5, "r": 8 }] }
   },
   "summary": [
     { "title": "Lỗ chân lông to", "en": "(Enlarged Pores)", "desc": "Tập trung vùng chữ T và hai bên má" },
@@ -515,19 +770,31 @@ export function parseAnalysisResponse(text) {
   return sections;
 }
 
-const DEFAULT_CLINICAL_GUIDELINE = `--- [Cơ sở Tri thức Y khoa & Bệnh học Da Liễu GlowSkin (Tích hợp medical_guidelines & skin_disease_knowledge_base)] ---
-[1. BỆNH HỌC & ĐẶC ĐIỂM TỔN THƯƠNG THỰC THỂ (Skin Disease Knowledge Base)]:
-- Trứng Cá (Acne): Viêm nang lông tuyến bã; tổn thương gồm mụn đầu đen, mụn đầu trắng, sẩn viêm đỏ, mụn mủ, bọc nang. Vị trí ưu tiên: trán, mũi, hai má, cằm.
-- Tăng Sắc Tố Sau Viêm (PIH): Dát sắc tố nâu hoặc đỏ thẫm xuất hiện sau tổn thương mụn viêm hoặc cạy nặn. Phân loại theo thượng bì (nông, dễ đáp ứng) và trung bì (sâu, cần thời gian).
-- Rám Má (Melasma): Dát tăng sắc tố màu nâu nhạt đến đen, đối xứng ở má, trán, sống mũi; nhạy cảm mạnh với tia cực tím UV.
-- Viêm Nang Lông (Folliculitis): Sẩn nhỏ đỏ ở nang lông, có thể có vảy tiết hoặc mụn mủ nhỏ.
-- Tổn thương thị giác AI nhận diện: dát, ban đỏ, sẩn, mụn mủ, mụn nước, bọng nước, vảy tiết, thâm nhiễm, tăng/giảm sắc tố, sẹo rỗ/lồi.
+const DEFAULT_CLINICAL_GUIDELINE = `--- [Cơ sở Dữ liệu Đào tạo AI & Phân tích Da Liễu GlowSkin (Training AI mô tả.xlsx)] ---
+[TIÊU CHUẨN THỊ GIÁC & PHÂN LOẠI 18 TÌNH TRẠNG DA CHUẨN Y KHOA TỪ BỘ DỮ LIỆU ĐÀO TẠO]:
+1. MỤN KHÔNG VIÊM:
+- Mụn đầu trắng (closed comedones): Nốt nhỏ 1-2mm màu trắng/màu da, không có lỗ mở rõ, không mủ. Phân biệt với milia và sợi bã nhờn. Hoạt chất: Salicylic acid (BHA), Adapalene, Retinol.
+- Mụn đầu đen (open comedones): Chấm nâu đen 1-3mm trong lỗ nang lông mở do oxy hóa lipid và bã nhờn. Tập trung ở mũi, cánh mũi, trán, cằm. Hoạt chất: Salicylic acid, Adapalene, Retinoids.
+- Mụn ẩn: Nốt chìm cộm sần sùi dưới da, không sưng đỏ. Hoạt chất: BHA, Retinoids, Niacinamide, Azelaic Acid.
 
-[2. PHÁC ĐỒ ĐIỀU TRỊ & HOẠT CHẤT CHUYÊN KHOA (Medical Guidelines)]:
-- Kháng khuẩn & Viêm sưng: Benzoyl Peroxide 2.5% - 5%, Kháng sinh bôi thoa (Clindamycin, Erythromycin), BHA (Salicylic Acid) 1% - 2% làm sạch sâu cổ nang lông.
-- Giảm sừng hóa & Mụn ẩn: Retinoids bôi ngoài da (Adapalene 0.1%, Tretinoin 0.025% - 0.05%), tẩy tế bào chết hóa học định kỳ.
-- Mờ thâm & Sáng da: Azelaic Acid 15% - 20%, Niacinamide 4% - 10%, Vitamin C, Alpha Arbutin, Tranexamic Acid. Chống nắng SPF 50+ PA++++ phổ rộng mỗi ngày.
-- Phục hồi hàng rào bảo vệ da: Ceramide, Hyaluronic Acid, Vitamin B5 (Panthenol), Centella Asiatica (Rau má). Tránh cồn khô và hương liệu nồng khi da nhạy cảm/viêm.`;
+2. MỤN VIÊM & NHIỄM TRÙNG NANG LÔNG:
+- Mụn sẩn viêm: Nốt đỏ gồ <5mm, sưng đau nhẹ, không thấy chóp mủ rõ. Hoạt chất: Benzoyl Peroxide, BHA, Azelaic Acid, Adapalene.
+- Mụn mủ: Gồ viền đỏ, trung tâm chứa mủ trắng/vàng 2-5mm. Hoạt chất: Benzoyl Peroxide, Kháng sinh bôi thoa, Azelaic Acid.
+- Mụn bọc & Mụn nang: Nốt viêm sâu >5mm, cứng đau nhiều, lan tỏa sâu hạ bì. Hoạt chất: Adapalene, Benzoyl Peroxide, B5 phục hồi, khám chuyên khoa.
+- Mụn trứng cá đỏ (Rosacea): Đỏ bừng mặt đối xứng ở má/mũi kèm giãn mao mạch. Tránh cồn/hương liệu. Hoạt chất: Azelaic Acid, Niacinamide, Ceramide.
+- Viêm nang lông: Sẩn đỏ nhỏ đồng dạng quanh lỗ chân lông. Hoạt chất: BHA, Benzoyl Peroxide, Zinc PCA.
+
+3. SỢI BÃ NHỜN & LỖ CHÂN LÔNG:
+- Sợi bã nhờn (Sebaceous filaments): Cụm chấm nhỏ xám/vàng nhạt phẳng hoặc hơi nhô ở chóp mũi, cánh mũi, rãnh cằm. Không phải mụn đầu đen! Hoạt chất: BHA 1-2%, Niacinamide, Mặt nạ Kaolin.
+- Lỗ chân lông to (Enlarged pores): Lỗ nang lông mở rộng vùng má kề mũi và chữ T do tăng tiết dầu và giảm đàn hồi. Hoạt chất: Niacinamide 5-10%, BHA, Retinol.
+
+4. SẮC TỐ DA:
+- Da không đều màu: Đốm sạm, vùng da xỉn màu do bức xạ UV. Hoạt chất: Vitamin C, Niacinamide, Alpha Arbutin, Chống nắng SPF 50+.
+- Thâm mụn (PIH/PIE): Vết thâm đỏ hồng hoặc nâu sau tổn thương viêm. Hoạt chất: Azelaic Acid, Tranexamic Acid, Niacinamide, Vitamin C.
+
+5. LÃO HÓA & SẸO:
+- Nếp nhăn: Rãnh nhăn nông động/tĩnh quanh mắt, trán, khóe miệng. Hoạt chất: Retinol/Tretinoin, Peptide, Hyaluronic Acid, Ceramide.
+- Sẹo lõm & Sẹo lồi: Tổn thương cấu trúc collagen sau mụn viêm nặng. Phục hồi với Peptide, Niacinamide, kem chống nắng.`;
 
 let cachedMedicalContext = null;
 
@@ -609,17 +876,10 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
       cachedMedicalContext = searchRes.results
         .slice(0, 4)
         .map((r) => {
-          const cleanSource = (r.source || "DATA Y Khoa Da Liễu")
-            .replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da Liễu")
-            .replace(/QĐ-BYT/gi, "Y khoa")
-            .replace(/Quyết\s*định\s*4416(\/QĐ-BYT)?/gi, "Phác đồ Y khoa");
-          const cleanTitle = (r.title || "")
-            .replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da Liễu")
-            .replace(/QĐ-BYT/gi, "Y khoa");
-          const cleanContent = (r.content || "")
-            .replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da Liễu")
-            .replace(/QĐ-BYT/gi, "Y khoa");
-          return `--- [Nguồn: ${cleanSource}] ${cleanTitle} ---\n${cleanContent}`;
+          if (r.condition) {
+            return `--- [Đào tạo AI: ${r.category} - ${r.condition}] ---\n- Dấu hiệu thị giác: ${r.visualSigns}\n- Đặc trưng: ${r.distinctiveFeatures}\n- Hoạt chất khuyên dùng: ${r.recommendedIngredientsRaw}\n- Hướng dẫn chăm sóc: ${r.careTips}`;
+          }
+          return `--- [${r.title || "Tài liệu Y khoa"}] ---\n${r.content || ""}`;
         })
         .join("\n\n");
       return cachedMedicalContext;

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
-import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints } from "../services/analyzeSkin";
+import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints, detectBlemishesFromImagePixels } from "../services/analyzeSkin";
 import { generateDotsForZones, DIAGNOSTIC_LEGEND } from "../data/skinDiagnosticDots";
 import { cropFaceZones } from "../utils/faceZoneCropper";
 import { removeImageBackground, preloadMediaPipe } from "../utils/backgroundRemoval";
@@ -486,7 +486,7 @@ export default function YourSkin() {
         pillColor: item.pillColor || "#e11d48",
         pointerIndex: item.pointerIndex,
         points: item.points || [],
-        pointsByAngle: item.pointsByAngle || DEFAULT_DIAGNOSTIC_METRICS[key]?.pointsByAngle || {}
+        pointsByAngle: item.pointsByAngle || null
       };
     });
   }, [diagnosticData]);
@@ -499,27 +499,47 @@ export default function YourSkin() {
     );
   }, [diagnosticMetricsList, activeMetricId]);
 
+  const [activeAngleBlemishes, setActiveAngleBlemishes] = useState({});
+
+  useEffect(() => {
+    const activeUrl = angleImages[currentAngleIndex]?.url;
+    if (!activeUrl) return;
+
+    let isSubscribed = true;
+    detectBlemishesFromImagePixels(activeUrl, angleKey).then((detected) => {
+      if (isSubscribed && detected) {
+        setActiveAngleBlemishes((prev) => ({
+          ...prev,
+          [`${currentAngleIndex}_${angleKey}`]: detected
+        }));
+      }
+    });
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [currentAngleIndex, angleImages, angleKey]);
+
   const activePoints = useMemo(() => {
     if (!activeMetric) return [];
 
-    const hasDistinctAnglePhoto =
-      displayScan?.faceAngles &&
-      displayScan.faceAngles[angleKey] &&
-      displayScan.faceAngles[angleKey] !== (displayScan.image || currentImage);
+    // 1. Ưu tiên cao nhất: Tọa độ quét trực tiếp từ ảnh thật của góc hiện tại
+    const currentAngleDetected = activeAngleBlemishes[`${currentAngleIndex}_${angleKey}`];
+    if (currentAngleDetected && currentAngleDetected[activeMetric.id]?.length > 0) {
+      return sanitizeFacialPoints(activeMetric.id, currentAngleDetected[activeMetric.id], angleKey);
+    }
 
     let raw = [];
-    if (hasDistinctAnglePhoto && activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
+    if (activeMetric.pointsByAngle && Array.isArray(activeMetric.pointsByAngle[angleKey]) && activeMetric.pointsByAngle[angleKey].length > 0) {
       raw = activeMetric.pointsByAngle[angleKey];
     } else if (Array.isArray(activeMetric.points) && activeMetric.points.length > 0) {
       raw = activeMetric.points;
-    } else if (activeMetric.pointsByAngle && activeMetric.pointsByAngle[angleKey]) {
-      raw = activeMetric.pointsByAngle[angleKey];
-    } else {
-      raw = activeMetric.points || [];
+    } else if (DEFAULT_DIAGNOSTIC_METRICS[activeMetric.id]?.points) {
+      raw = DEFAULT_DIAGNOSTIC_METRICS[activeMetric.id].points;
     }
 
-    return sanitizeFacialPoints(activeMetric.id, raw);
-  }, [activeMetric, angleKey, displayScan, currentImage]);
+    return sanitizeFacialPoints(activeMetric.id, raw, angleKey);
+  }, [activeMetric, angleKey, activeAngleBlemishes, currentAngleIndex]);
 
   const targetPoint = useMemo(() => {
     if (!activePoints || !activePoints.length) return null;
@@ -873,10 +893,21 @@ export default function YourSkin() {
         angle: -90 + (idx * 360) / detectedZones.length
       }));
 
+      // Quét điểm tổn thương thật từ pixel ảnh
+      const realVisionPoints = await detectBlemishesFromImagePixels(imageDataUrl);
+      const diagResult = computeDiagnosticMetrics(
+        { skinType: "Da hỗn hợp" },
+        parsedData?.jsonData,
+        realVisionPoints
+      );
+
       const newScanData = {
         id: "scan-" + Date.now(),
         date: new Date().toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-        score: parsedData.jsonData?.score || Math.floor(Math.random() * 15) + 72,
+        score: parsedData.jsonData?.score || Math.round((diagResult.averageScore || 7.2) * 10),
+        averageScore: diagResult.averageScore,
+        detectedIssues: diagResult.detectedIssues,
+        metrics: diagResult.metrics,
         scoreLabel: "Phân tích Y Khoa & AI Vision",
         medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
         image: finalImage,
@@ -1095,31 +1126,39 @@ export default function YourSkin() {
                     viewBox="0 0 100 100"
                     preserveAspectRatio="none"
                   >
-                    {/* Dashed Line from Active Badge (bottom-left) to Target Point */}
-                    {targetPoint && (
-                      <line
-                        x1="28%"
-                        y1="93.5%"
-                        x2={`${targetPoint.left}%`}
-                        y2={`${targetPoint.top}%`}
-                        stroke="rgba(255, 255, 255, 0.88)"
-                        strokeWidth="0.32"
-                        strokeDasharray="1.2 1.2"
-                      />
-                    )}
-
                     {/* Accurate Delicate Rings on Actual Blemishes */}
                     {activePoints.map((pt, pIdx) => (
-                      <circle
-                        key={pIdx}
-                        cx={`${pt.left}%`}
-                        cy={`${pt.top}%`}
-                        r="1.3"
-                        stroke={activeMetric.pillColor || activeMetric.dotColor}
-                        strokeWidth="0.32"
-                        fill="none"
-                        className="skin-detection-precise-ring"
-                      />
+                      <g key={pIdx} className="skin-detection-marker-group">
+                        {/* Soft pulsing outer focus ring */}
+                        <circle
+                          cx={`${pt.left}%`}
+                          cy={`${pt.top}%`}
+                          r="2.6"
+                          stroke={activeMetric.pillColor || activeMetric.dotColor}
+                          strokeWidth="0.28"
+                          strokeDasharray="0.9 0.9"
+                          fill="none"
+                          opacity="0.75"
+                          className="skin-detection-pulse-ring"
+                        />
+                        {/* Crisp inner focal ring */}
+                        <circle
+                          cx={`${pt.left}%`}
+                          cy={`${pt.top}%`}
+                          r="1.3"
+                          stroke={activeMetric.pillColor || activeMetric.dotColor}
+                          strokeWidth="0.38"
+                          fill="rgba(255, 255, 255, 0.12)"
+                          className="skin-detection-precise-ring"
+                        />
+                        {/* Micro center dot */}
+                        <circle
+                          cx={`${pt.left}%`}
+                          cy={`${pt.top}%`}
+                          r="0.35"
+                          fill={activeMetric.pillColor || activeMetric.dotColor}
+                        />
+                      </g>
                     ))}
                   </svg>
 

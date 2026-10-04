@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { analyzeMultiAngleSkinImages, parseAnalysisResponse, computeDiagnosticMetrics } from "../services/analyzeSkin";
+import { analyzeMultiAngleSkinImages, parseAnalysisResponse, computeDiagnosticMetrics, detectBlemishesFromImagePixels } from "../services/analyzeSkin";
 import "./WelcomeNameModal.css";
 
 const VIETNAM_CITIES = [
@@ -946,16 +946,41 @@ export default function WelcomeNameModal() {
       return;
     }
 
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+    const viewport = video.parentElement;
+    const viewW = viewport?.clientWidth || 400;
+    const viewH = viewport?.clientHeight || 440;
+    const targetAspect = viewW / viewH;
+    const videoAspect = vw / vh;
+
+    let sx = 0;
+    let sy = 0;
+    let sWidth = vw;
+    let sHeight = vh;
+
+    if (videoAspect > targetAspect) {
+      sWidth = vh * targetAspect;
+      sx = (vw - sWidth) / 2;
+    } else {
+      sHeight = vw / targetAspect;
+      sy = (vh - sHeight) / 2;
+    }
+
+    const outW = 720;
+    const outH = Math.round(outW / targetAspect);
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = outW;
+    canvas.height = outH;
     const ctx = canvas.getContext("2d");
 
     if (facingMode === "user") {
-      ctx.translate(canvas.width, 0);
+      ctx.translate(outW, 0);
       ctx.scale(-1, 1);
+      ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, outW, outH);
+    } else {
+      ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, outW, outH);
     }
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const photoUrl = canvas.toDataURL("image/jpeg", 0.92);
 
     setCapturedFaces((prev) => ({
@@ -1106,6 +1131,9 @@ export default function WelcomeNameModal() {
         angle: zone.angle !== undefined ? zone.angle : -90 + (idx * 360) / detectedZones.length
       }));
 
+      // Quét điểm tổn thương thực tế từ pixel ảnh chụp của người dùng
+      const realVisionPoints = await detectBlemishesFromImagePixels(primaryImage);
+
       const diagResult = computeDiagnosticMetrics(
         {
           skinType,
@@ -1115,7 +1143,8 @@ export default function WelcomeNameModal() {
           hasSupplements: hasSupplements,
           hasBloodVessels: hasBloodVessels
         },
-        parsedData?.jsonData
+        parsedData?.jsonData,
+        realVisionPoints
       );
 
       const finalScanData = {
