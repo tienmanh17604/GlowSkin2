@@ -305,7 +305,7 @@ export default function YourSkin() {
   };
 
   const [faceCrops, setFaceCrops] = useState({});
-  const [pointCrops, setPointCrops] = useState({ acne: [], pigment: [], scars: [] });
+  const [pointCrops, setPointCrops] = useState({ acne: [], pigment: [], scars: [], pores: [], comedones: [], filaments: [] });
 
   useEffect(() => {
     if (!displayImage) return;
@@ -314,6 +314,9 @@ export default function YourSkin() {
     const acnePts = displayScan?.metrics?.mun_viem?.points || [];
     const pigmentPts = displayScan?.metrics?.sac_to_da?.points || [];
     const scarPts = displayScan?.metrics?.seo?.points || [];
+    const porePts = displayScan?.metrics?.lo_chan_long?.points || [];
+    const comedonePts = displayScan?.metrics?.mun_khong_viem?.points || [];
+    const filamentPts = displayScan?.metrics?.soi_ba_nhon?.points || [];
 
     Promise.all([
       cropFaceZones(displayImage, "cheek"),
@@ -322,9 +325,12 @@ export default function YourSkin() {
       cropFaceZones(displayImage, "forehead"),
       acnePts.length ? cropPoints(displayImage, acnePts, "Nốt mụn viêm") : Promise.resolve([]),
       pigmentPts.length ? cropPoints(displayImage, pigmentPts, "Vết sắc tố") : Promise.resolve([]),
-      scarPts.length ? cropPoints(displayImage, scarPts, "Vết sẹo") : Promise.resolve([])
+      scarPts.length ? cropPoints(displayImage, scarPts, "Vết sẹo") : Promise.resolve([]),
+      porePts.length ? cropPoints(displayImage, porePts, "Lỗ chân lông") : Promise.resolve([]),
+      comedonePts.length ? cropPoints(displayImage, comedonePts, "Mụn ẩn / đầu đen") : Promise.resolve([]),
+      filamentPts.length ? cropPoints(displayImage, filamentPts, "Sợi bã nhờn") : Promise.resolve([])
     ])
-      .then(([cheeks, chins, noses, foreheads, acneCrops, pigmentCrops, scarCrops]) => {
+      .then(([cheeks, chins, noses, foreheads, acneCrops, pigmentCrops, scarCrops, poreCrops, comedoneCrops, filamentCrops]) => {
         if (!isCancelled) {
           setFaceCrops({
             cheek: cheeks || [],
@@ -335,7 +341,10 @@ export default function YourSkin() {
           setPointCrops({
             acne: acneCrops || [],
             pigment: pigmentCrops || [],
-            scars: scarCrops || []
+            scars: scarCrops || [],
+            pores: poreCrops || [],
+            comedones: comedoneCrops || [],
+            filaments: filamentCrops || []
           });
         }
       })
@@ -423,6 +432,60 @@ export default function YourSkin() {
 
     return [];
   }, [pointCrops.acne, faceCrops, displayScan]);
+
+  // Danh sách ảnh cận cảnh cho Lỗ chân lông to
+  const poreCropList = useMemo(() => {
+    if (pointCrops.pores?.length) return pointCrops.pores;
+    return [
+      ...(faceCrops.nose || []),
+      ...(faceCrops.cheek || [])
+    ];
+  }, [pointCrops.pores, faceCrops]);
+
+  // Danh sách ảnh cận cảnh cho Mụn ẩn - mụn đầu đen
+  const comedoneCropList = useMemo(() => {
+    if (pointCrops.comedones?.length) return pointCrops.comedones;
+    return [
+      ...(faceCrops.forehead || []),
+      ...(faceCrops.nose || []),
+      ...(faceCrops.chin || [])
+    ];
+  }, [pointCrops.comedones, faceCrops]);
+
+  // Danh sách ảnh cận cảnh cho Sợi bã nhờn
+  const filamentCropList = useMemo(() => {
+    if (pointCrops.filaments?.length) return pointCrops.filaments;
+    return [
+      ...(faceCrops.nose || []),
+      ...(faceCrops.chin || [])
+    ];
+  }, [pointCrops.filaments, faceCrops]);
+
+  // Danh sách ảnh cận cảnh cho Da không đều màu
+  const unevenToneCropList = useMemo(() => {
+    return [
+      ...(faceCrops.forehead || []),
+      ...(faceCrops.cheek || []),
+      ...(faceCrops.chin || [])
+    ];
+  }, [faceCrops]);
+
+  // Danh sách ảnh cận cảnh cho Hàng rào bảo vệ da
+  const barrierCropList = useMemo(() => {
+    return [
+      ...(faceCrops.cheek || []),
+      ...(faceCrops.forehead || [])
+    ];
+  }, [faceCrops]);
+
+  // Danh sách ảnh cận cảnh cho Loại da
+  const skinTypeCropList = useMemo(() => {
+    return [
+      ...(faceCrops.forehead || []),
+      ...(faceCrops.nose || []),
+      ...(faceCrops.cheek || [])
+    ];
+  }, [faceCrops]);
 
   // Xác định vị trí cụ thể của từng tình trạng da trên khuôn mặt (tránh nói chung chung)
   const getSpecificLocation = (type) => {
@@ -1402,6 +1465,24 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.skinType && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-crops-scroll">
+                              {skinTypeCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng khảo sát #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh làn da"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
@@ -1642,6 +1723,24 @@ export default function YourSkin() {
                               <span><strong>Vị trí phát hiện:</strong> Tập trung nhiều nhất tại <strong>{getSpecificLocation("pores")}</strong></span>
                             </div>
 
+                            <div className="skin-report-crops-scroll">
+                              {poreCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng lỗ chân lông #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh lỗ chân lông"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
@@ -1705,6 +1804,24 @@ export default function YourSkin() {
                             <div className="skin-report-location-banner">
                               <span className="skin-report-loc-pin">📍</span>
                               <span><strong>Vị trí phát hiện:</strong> Tập trung chủ yếu tại <strong>{getSpecificLocation("comedones")}</strong></span>
+                            </div>
+
+                            <div className="skin-report-crops-scroll">
+                              {comedoneCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng mụn ẩn #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh mụn ẩn"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
@@ -1855,6 +1972,24 @@ export default function YourSkin() {
                               <span><strong>Vị trí phát hiện:</strong> Tập trung nhiều nhất tại <strong>{getSpecificLocation("filaments")}</strong></span>
                             </div>
 
+                            <div className="skin-report-crops-scroll">
+                              {filamentCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng sợi bã nhờn #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh sợi bã nhờn"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
@@ -1910,6 +2045,24 @@ export default function YourSkin() {
                             <div className="skin-report-location-banner">
                               <span className="skin-report-loc-pin">📍</span>
                               <span><strong>Vị trí phát hiện:</strong> Khác biệt rõ giữa <strong>{getSpecificLocation("uneven_tone")}</strong></span>
+                            </div>
+
+                            <div className="skin-report-crops-scroll">
+                              {unevenToneCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng phân bổ màu #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh sắc độ da"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
@@ -1981,6 +2134,24 @@ export default function YourSkin() {
                             <div className="skin-report-location-banner green">
                               <span className="skin-report-loc-pin">📍</span>
                               <span><strong>Phạm vi đánh giá:</strong> <strong>{getSpecificLocation("barrier")}</strong></span>
+                            </div>
+
+                            <div className="skin-report-crops-scroll">
+                              {barrierCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng biểu bì #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh hàng rào da"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
