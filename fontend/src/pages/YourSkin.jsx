@@ -1415,9 +1415,6 @@ export default function YourSkin() {
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Vùng chữ T thường có một ít dầu.</span>
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1525,9 +1522,6 @@ export default function YourSkin() {
                               <div className="skin-report-note">
                                 Lưu ý: Trước khi dùng sản phẩm sáng da hoặc thực hiện thẩm mỹ, hãy tham khảo ý kiến bác sĩ da liễu nhé!
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1611,9 +1605,6 @@ export default function YourSkin() {
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Không tự ý nặn mụn tránh nhiễm trùng và để lại sẹo lõm.</span>
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1679,9 +1670,6 @@ export default function YourSkin() {
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Chống nắng bảo vệ cấu trúc collagen quanh lỗ chân lông.</span>
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1746,9 +1734,6 @@ export default function YourSkin() {
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Rửa mặt 2 bước (Double Cleansing) kỹ vào buổi tối.</span>
-                              </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
                               </div>
                             </div>
                           </div>
@@ -1833,9 +1818,6 @@ export default function YourSkin() {
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Thẩm mỹ da: Lăn kim vi điểm (Microneedling), Laser Fractional CO2.</span>
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1893,9 +1875,6 @@ export default function YourSkin() {
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Đắp mặt nạ đất sét 1-2 lần/tuần để hút dầu thừa.</span>
                               </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
-                              </div>
                             </div>
                           </div>
                         )}
@@ -1952,9 +1931,6 @@ export default function YourSkin() {
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Thoa kem chống nắng quang phổ rộng hàng ngày với chỉ số SPF 50+, PA++++.</span>
-                              </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
                               </div>
                             </div>
                           </div>
@@ -2029,9 +2005,6 @@ export default function YourSkin() {
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
                                 <span>Sử dụng kem chống nắng phổ rộng, SPF từ 30 trở lên, và thêm thành phần chống oxy hóa như vitamin E, niacinamide.</span>
-                              </div>
-                              <div className="skin-report-citation">
-                                Nguồn phương pháp đề xuất: Fitzpatrick's Therapeutics, 2023
                               </div>
                             </div>
                           </div>
