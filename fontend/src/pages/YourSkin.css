@@ -4179,9 +4179,11 @@
 
 .skin-report-row-title-wrap {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .skin-report-row-title {
@@ -4200,9 +4202,12 @@
   color: #b45309;
   background: #fef3c7;
   border: 1px solid #fde68a;
-  padding: 2.5px 9px;
+  padding: 3px 10px;
   border-radius: 9999px;
-  white-space: nowrap;
+  max-width: 100%;
+  line-height: 1.35;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .skin-report-row-location-tag.green {
