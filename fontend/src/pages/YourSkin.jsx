@@ -1033,18 +1033,18 @@ export default function YourSkin() {
             Báo Cáo Phân Tích Làn Da <span className="gold-text-gradient">Chuyên Sâu</span>
           </h1>
           <p className="gold-page-subtitle">
-            Hệ thống định vị đa vùng chuẩn Y Khoa &amp; Công nghệ AI Gemini Vision {scan ? `| ${scan.date || "Vừa cập nhật"}` : ""}
+            Hệ thống định vị đa vùng chuẩn chuyên sâu &amp; Công nghệ AI Gemini Vision {scan ? `| ${scan.date || "Vừa cập nhật"}` : ""}
           </p>
         </div>
 
         {!currentUser ? (
           <div className="gold-no-scan-box">
-            <div className="gold-badge">🔒 BẢO MẬT DỮ LIỆU Y KHOA CAO CẤP</div>
+            <div className="gold-badge">🔒 BẢO MẬT DỮ LIỆU CAO CẤP</div>
             <h2 className="gold-page-title" style={{ fontSize: "28px", marginTop: "10px" }}>
               Vui lòng đăng nhập để xem Báo cáo Da của bạn
             </h2>
             <p className="gold-page-subtitle" style={{ maxWidth: "560px", margin: "10px auto 24px" }}>
-              Hệ thống định vị đa vùng chuẩn Y khoa lưu trữ và bảo mật riêng dữ liệu phân tích da mặt cho từng tài khoản người dùng.
+              Hệ thống định vị đa vùng chuẩn chuyên sâu lưu trữ và bảo mật riêng dữ liệu phân tích da mặt cho từng tài khoản người dùng.
             </p>
             <button className="gold-action-btn primary" onClick={() => setIsLoginOpen(true)}>
               🔑 Đăng nhập / Đăng ký tài khoản ngay
@@ -1056,7 +1056,7 @@ export default function YourSkin() {
             <div className="gold-upload-icon-circle">✨</div>
             <h3 className="gold-upload-title">Phân tích da mặt AI Vision 2D</h3>
             <p className="gold-upload-subtext">
-              Chụp ảnh với khuôn quét Face ID hoặc tải ảnh lên — AI sẽ hiển thị ảnh 2D toàn màn hình và phân tích đa vùng chuẩn Y Khoa Chuyên Sâu.
+              Chụp ảnh với khuôn quét Face ID hoặc tải ảnh lên — AI sẽ hiển thị ảnh 2D toàn màn hình và phân tích đa vùng chuẩn chuyên sâu.
             </p>
             <div className="gold-upload-buttons-stack">
               <button type="button" className="gold-btn-camera" onClick={startCamera}>
