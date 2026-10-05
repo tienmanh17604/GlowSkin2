@@ -1120,48 +1120,6 @@ export default function YourSkin() {
                     ›
                   </button>
 
-                  {/* SVG HUD Detection Overlay on Face */}
-                  <svg
-                    className="skin-result-hud-svg"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                  >
-                    {/* Accurate Delicate Rings on Actual Blemishes */}
-                    {activePoints.map((pt, pIdx) => (
-                      <g key={pIdx} className="skin-detection-marker-group">
-                        {/* Soft pulsing outer focus ring */}
-                        <circle
-                          cx={`${pt.left}%`}
-                          cy={`${pt.top}%`}
-                          r="2.6"
-                          stroke={activeMetric.pillColor || activeMetric.dotColor}
-                          strokeWidth="0.28"
-                          strokeDasharray="0.9 0.9"
-                          fill="none"
-                          opacity="0.75"
-                          className="skin-detection-pulse-ring"
-                        />
-                        {/* Crisp inner focal ring */}
-                        <circle
-                          cx={`${pt.left}%`}
-                          cy={`${pt.top}%`}
-                          r="1.3"
-                          stroke={activeMetric.pillColor || activeMetric.dotColor}
-                          strokeWidth="0.38"
-                          fill="rgba(255, 255, 255, 0.12)"
-                          className="skin-detection-precise-ring"
-                        />
-                        {/* Micro center dot */}
-                        <circle
-                          cx={`${pt.left}%`}
-                          cy={`${pt.top}%`}
-                          r="0.35"
-                          fill={activeMetric.pillColor || activeMetric.dotColor}
-                        />
-                      </g>
-                    ))}
-                  </svg>
-
                   {/* Active Metric Badge Tag on Bottom-Left */}
                   <div
                     className="skin-result-active-metric-pill"
