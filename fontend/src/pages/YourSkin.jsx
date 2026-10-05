@@ -1257,7 +1257,7 @@ export default function YourSkin() {
                       className="skin-result-btn-consult-ai"
                       onClick={() => handleOpenAiDoctor(zones[0])}
                     >
-                      💬 Chat Trực Tiếp Với Bác Sĩ AI (360 Bài Y Khoa)
+                      💬 Chat Trực Tiếp Với Bác Sĩ AI
                     </button>
                   </div>
                 </div>
@@ -1863,7 +1863,7 @@ export default function YourSkin() {
 
                       <div className="skin-report-routine-box">
                         <h4 className="skin-report-routine-heading">
-                          Khám phá chu trình do Chuyên gia da liễu thiết kế dành riêng cho bạn
+                          Khám phá chu trình do chăm sóc da liễu thiết kế dành riêng cho bạn
                         </h4>
                         <button
                           type="button"
@@ -2017,7 +2017,7 @@ export default function YourSkin() {
                 <div>
                   <h3 className="gold-ai-chat-title">Bác Sĩ AI Skincare GlowSkin</h3>
                   <div className="gold-ai-chat-subtitle">
-                    ✨ Tích hợp 360 Bài Y Khoa &amp; DATA AI ({aiDoctorZone?.title || "Chẩn đoán da"})
+                    ✨ Cố vấn Da Liễu &amp; DATA AI ({aiDoctorZone?.title || "Chẩn đoán da"})
                   </div>
                 </div>
                 <button className="gold-modal-close" onClick={() => setIsAiDoctorOpen(false)}>×</button>
