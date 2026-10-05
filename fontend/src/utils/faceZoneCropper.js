@@ -27,10 +27,10 @@ const ZONE_CROP_BOUNDS = {
     {
       label: "Vùng Trán",
       subLabel: "Cận cảnh da trán & nếp nhăn vi thể",
-      x: 0.24,
-      y: 0.12,
-      w: 0.52,
-      h: 0.24
+      x: 0.22,
+      y: 0.14,
+      w: 0.56,
+      h: 0.22
     }
   ],
   nose: [
@@ -38,37 +38,37 @@ const ZONE_CROP_BOUNDS = {
       label: "Vùng Mũi",
       subLabel: "Sống mũi, đầu mũi & lỗ chân lông",
       x: 0.34,
-      y: 0.38,
+      y: 0.36,
       w: 0.32,
-      h: 0.24
+      h: 0.22
     }
   ],
   cheek: [
     {
       label: "Vùng Má Trái",
       subLabel: "Gò má trái & thâm sau mụn",
-      x: 0.16,
-      y: 0.46,
-      w: 0.28,
-      h: 0.23
+      x: 0.14,
+      y: 0.40,
+      w: 0.30,
+      h: 0.24
     },
     {
       label: "Vùng Má Phải",
       subLabel: "Gò má phải & lỗ chân lông",
       x: 0.56,
-      y: 0.46,
-      w: 0.28,
-      h: 0.23
+      y: 0.40,
+      w: 0.30,
+      h: 0.24
     }
   ],
   chin: [
     {
       label: "Vùng Cằm",
-      subLabel: "Cận cảnh cằm & ổ mụn viêm sưng",
-      x: 0.28,
-      y: 0.66,
-      w: 0.44,
-      h: 0.23
+      subLabel: "Cận cảnh cằm & dưới môi",
+      x: 0.32,
+      y: 0.60,
+      w: 0.36,
+      h: 0.17
     }
   ],
   eyebrow: [
@@ -76,12 +76,75 @@ const ZONE_CROP_BOUNDS = {
       label: "Vùng Mắt & Lông Mày",
       subLabel: "Đuôi mắt, quầng thâm & chân mày",
       x: 0.18,
-      y: 0.28,
+      y: 0.26,
       w: 0.64,
-      h: 0.19
+      h: 0.18
     }
   ]
 };
+
+/**
+ * Cắt ảnh cận cảnh chuẩn xác quanh từng điểm tổn thương cụ thể (top %, left %)
+ * Đảm bảo lấy đúng vị trí mụn viêm / vết thâm thực tế của người dùng
+ */
+export async function cropPoints(imageSrc, points = [], defaultLabel = "Điểm tổn thương") {
+  if (!imageSrc || !points || !points.length) return [];
+
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const naturalW = img.naturalWidth || img.width;
+        const naturalH = img.naturalHeight || img.height;
+        const boxSize = Math.max(120, Math.round(naturalW * 0.24));
+
+        const results = points.map((p, idx) => {
+          const cx = ((p.left || 50) / 100) * naturalW;
+          const cy = ((p.top || 50) / 100) * naturalH;
+
+          const sx = Math.max(0, Math.min(naturalW - boxSize, Math.round(cx - boxSize / 2)));
+          const sy = Math.max(0, Math.min(naturalH - boxSize, Math.round(cy - boxSize / 2)));
+          const sw = Math.min(naturalW - sx, boxSize);
+          const sh = Math.min(naturalH - sy, boxSize);
+
+          const canvas = document.createElement("canvas");
+          const outSize = 480;
+          canvas.width = outSize;
+          canvas.height = outSize;
+          const ctx = canvas.getContext("2d");
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outSize, outSize);
+
+          // Nhận diện tên vùng theo tọa độ điểm
+          let locName = defaultLabel;
+          const topPct = p.top || 50;
+          const leftPct = p.left || 50;
+          if (topPct < 34) locName = "Vùng Trán";
+          else if (topPct > 58 && topPct < 78) locName = "Vùng Cằm";
+          else if (leftPct < 40) locName = "Vùng Má Trái";
+          else if (leftPct > 60) locName = "Vùng Má Phải";
+          else if (topPct >= 34 && topPct <= 58) locName = "Vùng Mũi & Trung tâm";
+
+          return {
+            label: `${locName}`,
+            subLabel: `Nốt tổn thương #${idx + 1}`,
+            url: canvas.toDataURL("image/jpeg", 0.95)
+          };
+        });
+
+        resolve(results);
+      } catch (err) {
+        console.warn("Lỗi khi cắt ảnh điểm tổn thương:", err);
+        resolve([]);
+      }
+    };
+    img.onerror = () => resolve([]);
+    img.src = imageSrc;
+  });
+}
 
 /**
  * Trích xuất ảnh cắt từng vùng khuôn mặt từ ảnh gốc của khách hàng

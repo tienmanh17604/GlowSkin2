@@ -7,7 +7,7 @@ import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
 import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints, detectBlemishesFromImagePixels } from "../services/analyzeSkin";
 import { generateDotsForZones, DIAGNOSTIC_LEGEND } from "../data/skinDiagnosticDots";
-import { cropFaceZones } from "../utils/faceZoneCropper";
+import { cropFaceZones, cropPoints } from "../utils/faceZoneCropper";
 import { removeImageBackground, preloadMediaPipe } from "../utils/backgroundRemoval";
 import FaceImageCropper from "../components/FaceImageCropper";
 import "./YourSkin.css";
@@ -305,53 +305,124 @@ export default function YourSkin() {
   };
 
   const [faceCrops, setFaceCrops] = useState({});
+  const [pointCrops, setPointCrops] = useState({ acne: [], pigment: [], scars: [] });
 
   useEffect(() => {
     if (!displayImage) return;
     let isCancelled = false;
+
+    const acnePts = displayScan?.metrics?.mun_viem?.points || [];
+    const pigmentPts = displayScan?.metrics?.sac_to_da?.points || [];
+    const scarPts = displayScan?.metrics?.seo?.points || [];
+
     Promise.all([
       cropFaceZones(displayImage, "cheek"),
       cropFaceZones(displayImage, "chin"),
       cropFaceZones(displayImage, "nose"),
-      cropFaceZones(displayImage, "forehead")
-    ]).then(([cheeks, chins, noses, foreheads]) => {
-      if (!isCancelled) {
-        setFaceCrops({
-          cheek: (cheeks || []).map((c) => c.url),
-          chin: (chins || []).map((c) => c.url),
-          nose: (noses || []).map((c) => c.url),
-          forehead: (foreheads || []).map((c) => c.url)
-        });
-      }
-    }).catch((err) => console.warn("Lỗi trích xuất crop da:", err));
-    return () => { isCancelled = true; };
-  }, [displayImage]);
+      cropFaceZones(displayImage, "forehead"),
+      acnePts.length ? cropPoints(displayImage, acnePts, "Nốt mụn viêm") : Promise.resolve([]),
+      pigmentPts.length ? cropPoints(displayImage, pigmentPts, "Vết sắc tố") : Promise.resolve([]),
+      scarPts.length ? cropPoints(displayImage, scarPts, "Vết sẹo") : Promise.resolve([])
+    ])
+      .then(([cheeks, chins, noses, foreheads, acneCrops, pigmentCrops, scarCrops]) => {
+        if (!isCancelled) {
+          setFaceCrops({
+            cheek: cheeks || [],
+            chin: chins || [],
+            nose: noses || [],
+            forehead: foreheads || []
+          });
+          setPointCrops({
+            acne: acneCrops || [],
+            pigment: pigmentCrops || [],
+            scars: scarCrops || []
+          });
+        }
+      })
+      .catch((err) => console.warn("Lỗi trích xuất crop da:", err));
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [displayImage, displayScan]);
 
   const pigmentCropList = useMemo(() => {
-    if (faceCrops.chin?.length) return faceCrops.chin;
+    if (pointCrops.pigment?.length) return pointCrops.pigment;
+
+    const rawZones = displayScan?.zones || [];
+    const matchedZone = rawZones.find((z) => {
+      const t = `${z.id || ""} ${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+      return t.includes("sắc tố") || t.includes("thâm") || t.includes("tàn nhang") || t.includes("nám");
+    });
+
+    if (matchedZone) {
+      const zKey = `${matchedZone.id || ""} ${matchedZone.title || ""}`.toLowerCase();
+      if (zKey.includes("má") || zKey.includes("cheek")) {
+        if (faceCrops.cheek?.length) return faceCrops.cheek;
+      }
+      if (zKey.includes("trán") || zKey.includes("forehead")) {
+        if (faceCrops.forehead?.length) return faceCrops.forehead;
+      }
+      if (zKey.includes("cằm") || zKey.includes("chin")) {
+        if (faceCrops.chin?.length) return faceCrops.chin;
+      }
+    }
+
     if (faceCrops.cheek?.length) return faceCrops.cheek;
-    return [
-      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=300&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1512290900672-1f55b0a39f60?w=300&q=80&auto=format&fit=crop"
-    ];
-  }, [faceCrops]);
+    if (faceCrops.forehead?.length) return faceCrops.forehead;
+    if (faceCrops.chin?.length) return faceCrops.chin;
+    return [];
+  }, [pointCrops.pigment, faceCrops, displayScan]);
 
   const scarCropList = useMemo(() => {
+    if (pointCrops.scars?.length) return pointCrops.scars;
     if (faceCrops.cheek?.length) return faceCrops.cheek;
-    return [
-      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=300&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop"
-    ];
-  }, [faceCrops]);
-
-  const acneCropList = useMemo(() => {
     if (faceCrops.chin?.length) return faceCrops.chin;
-    return [
-      "https://images.unsplash.com/photo-1512290900672-1f55b0a39f60?w=300&q=80&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1594125350300-8f77235aef2b?w=300&q=80&auto=format&fit=crop"
-    ];
-  }, [faceCrops]);
+    return [];
+  }, [pointCrops.scars, faceCrops]);
+
+  // Cắt và hiển thị CHÍNH XÁC vị trí nốt mụn viêm trên mặt (không chụp sai xuống cổ)
+  const acneCropList = useMemo(() => {
+    // 1. Ưu tiên cao nhất: Tọa độ điểm mụn viêm thực tế do AI Vision phát hiện
+    if (pointCrops.acne?.length) return pointCrops.acne;
+
+    // 2. Tìm vùng khuôn mặt nào có tổn thương mụn viêm theo kết quả chẩn đoán
+    const rawZones = displayScan?.zones || [];
+    const acneZone = rawZones.find((z) => {
+      const t = `${z.id || ""} ${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+      return (
+        z.status === "red" ||
+        t.includes("mụn viêm") ||
+        t.includes("mụn mủ") ||
+        t.includes("sưng đỏ") ||
+        t.includes("mụn bọc") ||
+        t.includes("ổ viêm")
+      );
+    });
+
+    if (acneZone) {
+      const zKey = `${acneZone.id || ""} ${acneZone.title || ""}`.toLowerCase();
+      if (zKey.includes("má") || zKey.includes("cheek")) {
+        if (faceCrops.cheek?.length) return faceCrops.cheek;
+      }
+      if (zKey.includes("trán") || zKey.includes("forehead")) {
+        if (faceCrops.forehead?.length) return faceCrops.forehead;
+      }
+      if (zKey.includes("mũi") || zKey.includes("nose")) {
+        if (faceCrops.nose?.length) return faceCrops.nose;
+      }
+      if (zKey.includes("cằm") || zKey.includes("chin")) {
+        if (faceCrops.chin?.length) return faceCrops.chin;
+      }
+    }
+
+    // 3. Fallback: Ưu tiên vùng Má (nơi xuất hiện mụn viêm phổ biến nhất), sau đó đến Cằm hoặc Trán
+    if (faceCrops.cheek?.length) return faceCrops.cheek;
+    if (faceCrops.chin?.length) return faceCrops.chin;
+    if (faceCrops.forehead?.length) return faceCrops.forehead;
+
+    return [];
+  }, [pointCrops.acne, faceCrops, displayScan]);
 
   // Xác định vị trí cụ thể của từng tình trạng da trên khuôn mặt (tránh nói chung chung)
   const getSpecificLocation = (type) => {
@@ -1401,15 +1472,21 @@ export default function YourSkin() {
                             </div>
 
                             <div className="skin-report-crops-scroll">
-                              {pigmentCropList.map((url, i) => (
-                                <img
-                                  key={i}
-                                  src={url}
-                                  alt="Cận cảnh sắc tố da"
-                                  className="skin-report-crop-img"
-                                  loading="lazy"
-                                />
-                              ))}
+                              {pigmentCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vùng tổn thương #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh sắc tố da"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
@@ -1489,15 +1566,21 @@ export default function YourSkin() {
                             </div>
 
                             <div className="skin-report-crops-scroll">
-                              {acneCropList.map((url, i) => (
-                                <img
-                                  key={i}
-                                  src={url}
-                                  alt="Cận cảnh mụn viêm"
-                                  className="skin-report-crop-img"
-                                  loading="lazy"
-                                />
-                              ))}
+                              {acneCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vị trí mụn viêm #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh mụn viêm"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
@@ -1705,15 +1788,21 @@ export default function YourSkin() {
                             </div>
 
                             <div className="skin-report-crops-scroll">
-                              {scarCropList.map((url, i) => (
-                                <img
-                                  key={i}
-                                  src={url}
-                                  alt="Cận cảnh sẹo da"
-                                  className="skin-report-crop-img"
-                                  loading="lazy"
-                                />
-                              ))}
+                              {scarCropList.map((item, i) => {
+                                const src = typeof item === "string" ? item : item?.url;
+                                const label = typeof item === "object" ? item?.label : `Vị trí sẹo #${i + 1}`;
+                                return (
+                                  <div key={i} className="skin-report-crop-item">
+                                    <img
+                                      src={src}
+                                      alt={label || "Cận cảnh sẹo da"}
+                                      className="skin-report-crop-img"
+                                      loading="lazy"
+                                    />
+                                    {label && <span className="skin-report-crop-badge">📍 {label}</span>}
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             <div className="skin-report-text-block">
