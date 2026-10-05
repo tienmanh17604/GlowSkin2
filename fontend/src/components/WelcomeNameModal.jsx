@@ -690,9 +690,15 @@ export default function WelcomeNameModal() {
         setHasBloodVessels(currentUser.skinSurvey?.hasBloodVessels || "");
         setSkinType(currentUser.skinSurvey?.skinType || "");
         setSkinSensitivity(currentUser.skinSurvey?.skinSensitivity || "");
+        setSelectedProducts(currentUser.skinSurvey?.selectedProducts || []);
         
-        // Always reset step to 0 when opening for a user!
-        setStep(0);
+        // Nếu mở ở chế độ survey (lúc đăng nhập lần đầu) thì bắt đầu từ Step 3.
+        // Còn khi quét da mặt bình thường ở đây, LUÔN bắt đầu từ Step 0 (Chụp ảnh) và không bao giờ hiện 3 form sau chụp!
+        if (isNameModalOpen === "survey") {
+          setStep(3);
+        } else {
+          setStep(0);
+        }
 
         const timer = setTimeout(() => {
           if (inputRef.current) {
@@ -720,7 +726,7 @@ export default function WelcomeNameModal() {
     }
   }, [maxDays, day]);
 
-  // Guarantee step is always valid (0 to 8), fallback to 0 so it NEVER renders blank!
+  // Guarantee step is always valid (0 to 5), fallback to 0 so it NEVER renders blank!
   const currentStep = typeof step === "number" && step >= 0 && step <= 5 ? step : 0;
 
   const currentPreferredName = nameInput.trim() || currentUser?.preferredName || "bạn";
@@ -736,6 +742,12 @@ export default function WelcomeNameModal() {
       } else {
         setStep(0);
       }
+    } else if (currentStep === 5) {
+      setStep(4);
+    } else if (currentStep === 4) {
+      setStep(3);
+    } else if (currentStep === 3) {
+      setIsNameModalOpen(false);
     } else if (currentStep > 0) {
       setStep((prev) => prev - 1);
     }
@@ -1046,25 +1058,31 @@ export default function WelcomeNameModal() {
     });
   };
 
-  // Finish complete onboarding survey - ONLY WAY TO CLOSE MODAL & NAVIGATE TO RESULT
-  const handleFinishOnboarding = async () => {
-    stopCamera();
+  // Lưu kết quả khảo sát 3 form khi người dùng điền lúc đăng nhập lần đầu
+  const handleSaveSurveyOnly = async () => {
     setIsSubmitting(true);
-    setAiAnalyzingStatus("📸 Đang tối ưu và chuẩn bị 3 góc chụp khuôn mặt...");
     const birthDateStr = `${day}/${month}/${year}`;
+    const effectiveBudget = budget || "Từ 200-300k/sản phẩm.";
+    const effectiveSkinType = skinType || "Da hỗn hợp thiên dầu";
+    const effectiveSkinSensitivity = skinSensitivity || "Bình thường";
+    const effectiveMedical = hasMedical === "Có" && medicalDetail ? `Có - ${medicalDetail}` : (hasMedical || "Không");
+    const effectivePrescription = hasPrescription === "Có" && prescriptionDetail ? `Có - ${prescriptionDetail}` : (hasPrescription || "Không");
+    const effectiveSupplements = hasSupplements === "Có" && supplementsDetail ? `Có - ${supplementsDetail}` : (hasSupplements || "Không");
+    const effectiveBloodVessels = hasBloodVessels || "Không";
+
     const surveyPayload = {
       gender,
       birthDate: birthDateStr,
       city: selectedCity,
       skinSurvey: {
-        budget,
-        hasMedicalCondition: hasMedical === "Có" && medicalDetail ? `Có - ${medicalDetail}` : (hasMedical || "Không"),
-        hasPrescriptionMedication: hasPrescription === "Có" && prescriptionDetail ? `Có - ${prescriptionDetail}` : (hasPrescription || "Không"),
-        hasSupplements: hasSupplements === "Có" && supplementsDetail ? `Có - ${supplementsDetail}` : (hasSupplements || "Không"),
-        hasBloodVessels: hasBloodVessels || "Không",
-        skinType,
-        skinSensitivity,
-        capturedFaces,
+        budget: effectiveBudget,
+        hasMedicalCondition: effectiveMedical,
+        hasPrescriptionMedication: effectivePrescription,
+        hasSupplements: effectiveSupplements,
+        hasBloodVessels: effectiveBloodVessels,
+        skinType: effectiveSkinType,
+        skinSensitivity: effectiveSkinSensitivity,
+        capturedFaces: currentUser?.skinSurvey?.capturedFaces || null,
         selectedProducts
       },
       onboardingCompleted: true
@@ -1072,7 +1090,76 @@ export default function WelcomeNameModal() {
 
     try {
       const id = currentUser?.id || currentUser?._id || currentUser?.email;
-      if (id) {
+      if (id && typeof updateProfile === "function") {
+        await updateProfile(
+          id,
+          currentUser?.name,
+          currentUser?.email,
+          currentUser?.phone,
+          currentUser?.addresses,
+          nameInput.trim() || currentUser?.preferredName,
+          surveyPayload
+        ).catch((err) => console.warn("Lỗi lưu survey profile:", err));
+      }
+
+      const userKey = currentUser?.id || currentUser?._id || currentUser?.email || "user";
+      sessionStorage.setItem(`glowskin_name_prompt_dismissed_${userKey}`, "true");
+      localStorage.setItem(`glowskin_survey_completed_${userKey}`, "true");
+
+      setIsNameModalOpen(false);
+    } catch (err) {
+      console.error("Lỗi lưu thông tin khảo sát:", err);
+      setIsNameModalOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Finish complete onboarding survey - ONLY WAY TO CLOSE MODAL & NAVIGATE TO RESULT
+  const handleFinishOnboarding = async () => {
+    stopCamera();
+    setIsSubmitting(true);
+    setAiAnalyzingStatus("📸 Đang tối ưu và chuẩn bị 3 góc chụp khuôn mặt...");
+    const birthDateStr = currentUser?.birthDate || `${day}/${month}/${year}`;
+    const effectiveSkinType = skinType || currentUser?.skinSurvey?.skinType || "Da hỗn hợp thiên dầu";
+    const effectiveSkinSensitivity = skinSensitivity || currentUser?.skinSurvey?.skinSensitivity || "Bình thường";
+    const effectiveBudget = budget || currentUser?.skinSurvey?.budget || "Từ 200-300k/sản phẩm.";
+    const effectiveGender = gender || currentUser?.gender || "Khác";
+    const effectiveMedical = hasMedical === "Có" && medicalDetail 
+      ? `Có - ${medicalDetail}` 
+      : (hasMedical || currentUser?.skinSurvey?.hasMedicalCondition || "Không");
+    const effectivePrescription = hasPrescription === "Có" && prescriptionDetail 
+      ? `Có - ${prescriptionDetail}` 
+      : (hasPrescription || currentUser?.skinSurvey?.hasPrescriptionMedication || "Không");
+    const effectiveSupplements = hasSupplements === "Có" && supplementsDetail 
+      ? `Có - ${supplementsDetail}` 
+      : (hasSupplements || currentUser?.skinSurvey?.hasSupplements || "Không");
+    const effectiveBloodVessels = hasBloodVessels || currentUser?.skinSurvey?.hasBloodVessels || "Không";
+    const effectiveProducts = (selectedProducts && selectedProducts.length > 0)
+      ? selectedProducts
+      : (currentUser?.skinSurvey?.selectedProducts || []);
+
+    const surveyPayload = {
+      gender: effectiveGender,
+      birthDate: birthDateStr,
+      city: selectedCity || currentUser?.city || "",
+      skinSurvey: {
+        budget: effectiveBudget,
+        hasMedicalCondition: effectiveMedical,
+        hasPrescriptionMedication: effectivePrescription,
+        hasSupplements: effectiveSupplements,
+        hasBloodVessels: effectiveBloodVessels,
+        skinType: effectiveSkinType,
+        skinSensitivity: effectiveSkinSensitivity,
+        capturedFaces,
+        selectedProducts: effectiveProducts
+      },
+      onboardingCompleted: true
+    };
+
+    try {
+      const id = currentUser?.id || currentUser?._id || currentUser?.email;
+      if (id && typeof updateProfile === "function") {
         await updateProfile(
           id,
           currentUser?.name,
@@ -1092,17 +1179,17 @@ export default function WelcomeNameModal() {
         leftImage: capturedFaces?.left,
         rightImage: capturedFaces?.right,
         surveyData: {
-          skinType,
-          skinSensitivity,
-          budget,
-          gender,
+          skinType: effectiveSkinType,
+          skinSensitivity: effectiveSkinSensitivity,
+          budget: effectiveBudget,
+          gender: effectiveGender,
           birthDate: birthDateStr,
-          hasMedicalCondition: hasMedical === "Có" && medicalDetail ? `Có - ${medicalDetail}` : (hasMedical || "Không"),
-          hasPrescriptionMedication: hasPrescription === "Có" && prescriptionDetail ? `Có - ${prescriptionDetail}` : (hasPrescription || "Không"),
-          hasSupplements: hasSupplements === "Có" && supplementsDetail ? `Có - ${supplementsDetail}` : (hasSupplements || "Không"),
-          hasBloodVessels: hasBloodVessels || "Không"
+          hasMedicalCondition: effectiveMedical,
+          hasPrescriptionMedication: effectivePrescription,
+          hasSupplements: effectiveSupplements,
+          hasBloodVessels: effectiveBloodVessels
         },
-        selectedProducts
+        selectedProducts: effectiveProducts
       });
 
       setAiAnalyzingStatus("✨ Đang tổng hợp dữ liệu lâm sàng & lộ trình Routine...");
@@ -1121,7 +1208,7 @@ export default function WelcomeNameModal() {
       // Lấy zones từ AI trả về, nếu không có thì fallback sang template cá nhân hoá
       let detectedZones = parsedData.jsonData?.zones || [];
       if (!detectedZones.length) {
-        const fallbackScan = buildPersonalizedScan(skinType, skinSensitivity, budget, capturedFaces, selectedProducts);
+        const fallbackScan = buildPersonalizedScan(effectiveSkinType, effectiveSkinSensitivity, effectiveBudget, capturedFaces, effectiveProducts);
         detectedZones = fallbackScan.zones;
       }
 
@@ -1136,12 +1223,12 @@ export default function WelcomeNameModal() {
 
       const diagResult = computeDiagnosticMetrics(
         {
-          skinType,
-          skinSensitivity,
-          hasMedicalCondition: hasMedical,
-          hasPrescriptionMedication: hasPrescription,
-          hasSupplements: hasSupplements,
-          hasBloodVessels: hasBloodVessels
+          skinType: effectiveSkinType,
+          skinSensitivity: effectiveSkinSensitivity,
+          hasMedicalCondition: effectiveMedical,
+          hasPrescriptionMedication: effectivePrescription,
+          hasSupplements: effectiveSupplements,
+          hasBloodVessels: effectiveBloodVessels
         },
         parsedData?.jsonData,
         realVisionPoints
@@ -1156,23 +1243,23 @@ export default function WelcomeNameModal() {
         metrics: diagResult.metrics,
         scoreLabel: "Phân tích Y Khoa & AI Vision (3 Góc Mặt)",
         medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
-        skinType: skinType || "Da hỗn hợp thiên dầu",
-        sensitivity: skinSensitivity?.includes("Thường xuyên") || skinSensitivity?.includes("Rất hay gặp") ? "Có" : "Không",
+        skinType: effectiveSkinType || "Da hỗn hợp thiên dầu",
+        sensitivity: effectiveSkinSensitivity?.includes("Thường xuyên") || effectiveSkinSensitivity?.includes("Rất hay gặp") ? "Có" : "Không",
         image: primaryImage,
         faceAngles: {
           front: optImages.front || capturedFaces?.center || null,
           left: optImages.left || capturedFaces?.left || null,
           right: optImages.right || capturedFaces?.right || null
         },
-        usedProducts: selectedProducts || [],
+        usedProducts: effectiveProducts || [],
         aiOverview: parsedData.overview || "Đã hoàn tất phân tích làn da từ 3 góc chụp thực tế.",
         overview: parsedData.overview,
         routine: parsedData.routine,
         ingredients: parsedData.ingredients,
         warning: parsedData.warning,
         summary: parsedData.jsonData?.summary || [
-          { title: skinType || "Da hỗn hợp", en: "(Skin Type)" },
-          { title: `Độ nhạy cảm: ${skinSensitivity || "Bình thường"}`, en: "(Sensitivity)" },
+          { title: effectiveSkinType || "Da hỗn hợp", en: "(Skin Type)" },
+          { title: `Độ nhạy cảm: ${effectiveSkinSensitivity || "Bình thường"}`, en: "(Sensitivity)" },
           { title: "Đã phân tích 3 góc", en: "(3-Angle Vision)" }
         ],
         zones: formattedZones,
@@ -1185,6 +1272,7 @@ export default function WelcomeNameModal() {
 
       const userKey = currentUser?.id || currentUser?._id || currentUser?.email || "user";
       sessionStorage.setItem(`glowskin_name_prompt_dismissed_${userKey}`, "true");
+      localStorage.setItem(`glowskin_survey_completed_${userKey}`, "true");
       
       // Stop camera if running
       stopCamera();
@@ -1194,7 +1282,7 @@ export default function WelcomeNameModal() {
       navigate("/your-skin");
     } catch (err) {
       console.error("Lỗi hoàn thành khảo sát:", err);
-      const fallbackScan = buildPersonalizedScan(skinType, skinSensitivity, budget, capturedFaces, selectedProducts);
+      const fallbackScan = buildPersonalizedScan(effectiveSkinType, effectiveSkinSensitivity, effectiveBudget, capturedFaces, effectiveProducts);
       if (typeof saveLatestScan === "function") {
         await saveLatestScan(fallbackScan);
       }
@@ -1346,7 +1434,7 @@ export default function WelcomeNameModal() {
                 </div>
                 <div className="onboarding-intro-step-content">
                   <h3 className="onboarding-intro-step-title">Bước 1</h3>
-                  <p className="onboarding-intro-step-desc">Chụp ảnh khuôn mặt của bạn</p>
+                  <p className="onboarding-intro-step-desc">Chụp ảnh khuôn mặt của bạn (3 góc chụp)</p>
                 </div>
               </div>
 
@@ -1362,7 +1450,7 @@ export default function WelcomeNameModal() {
                 </div>
                 <div className="onboarding-intro-step-content">
                   <h3 className="onboarding-intro-step-title">Bước 2</h3>
-                  <p className="onboarding-intro-step-desc">Điền thông tin loại da, thói quen chăm sóc da của bạn</p>
+                  <p className="onboarding-intro-step-desc">AI Gemini Vision chẩn đoán đa tầng các vùng da</p>
                 </div>
               </div>
 
@@ -1693,7 +1781,10 @@ export default function WelcomeNameModal() {
                 type="button"
                 className={`onboarding-camera-continue-btn ${!canContinueFromCamera ? "disabled" : ""}`}
                 disabled={!canContinueFromCamera || isSubmitting}
-                onClick={() => { stopCamera(); setStep(3); }}
+                onClick={() => {
+                  stopCamera();
+                  handleFinishOnboarding();
+                }}
               >
                 {isSubmitting ? (
                   <span className="onboarding-loading-state">
@@ -1701,7 +1792,7 @@ export default function WelcomeNameModal() {
                     <span>Đang phân tích 3 góc mặt...</span>
                   </span>
                 ) : canContinueFromCamera ? (
-                  "Tiếp tục"
+                  "Phân tích làn da ngay"
                 ) : (
                   `Chụp đủ 3 góc mặt để tiếp tục (${capturedAnglesCount}/3)`
                 )}
@@ -2022,9 +2113,9 @@ export default function WelcomeNameModal() {
               <button
                 type="button"
                 className="onboarding-primary-btn"
-                onClick={handleFinishOnboarding}
+                onClick={handleSaveSurveyOnly}
               >
-                Tiếp tục
+                Hoàn tất khảo sát
               </button>
             </div>
           </div>

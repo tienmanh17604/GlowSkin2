@@ -57,7 +57,15 @@ export default function LoginModal() {
         if (result.user.role === "admin") {
           navigate("/admin");
         } else {
-          setIsNameModalOpen(true);
+          const userKey = result.user.id || result.user._id || result.user.email;
+          const hasDoneSurvey = Boolean(
+            result.user.onboardingCompleted ||
+            (result.user.skinSurvey?.budget && result.user.skinSurvey?.skinType) ||
+            localStorage.getItem(`glowskin_survey_completed_${userKey}`) === "true"
+          );
+          if (!hasDoneSurvey) {
+            setIsNameModalOpen("survey");
+          }
         }
       } else {
         setError(result.message);
@@ -70,7 +78,7 @@ export default function LoginModal() {
       const result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
         setIsLoginOpen(false);
-        setIsNameModalOpen(true);
+        setIsNameModalOpen("survey");
       } else {
         setError(result.message);
       }

@@ -42,8 +42,14 @@ export default function LoginRegister() {
         if (result.user.role === "admin") {
           navigate("/admin");
         } else {
-          if (!result.user.onboardingCompleted) {
-            setIsNameModalOpen(true);
+          const userKey = result.user.id || result.user._id || result.user.email;
+          const hasDoneSurvey = Boolean(
+            result.user.onboardingCompleted ||
+            (result.user.skinSurvey?.budget && result.user.skinSurvey?.skinType) ||
+            localStorage.getItem(`glowskin_survey_completed_${userKey}`) === "true"
+          );
+          if (!hasDoneSurvey) {
+            setIsNameModalOpen("survey");
           }
           navigate("/");
         }
@@ -57,7 +63,7 @@ export default function LoginRegister() {
       }
       const result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
-        setIsNameModalOpen(true);
+        setIsNameModalOpen("survey");
         navigate("/");
       } else {
         setError(result.message);
