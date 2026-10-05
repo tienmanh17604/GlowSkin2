@@ -4177,12 +4177,62 @@
   background-color: #f8fafc;
 }
 
+.skin-report-row-title-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .skin-report-row-title {
   font-size: 14.5px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.4;
   letter-spacing: -0.15px;
+}
+
+.skin-report-row-location-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 2.5px 9px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.skin-report-row-location-tag.green {
+  color: #047857;
+  background: #d1fae5;
+  border-color: #a7f3d0;
+}
+
+.skin-report-location-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 13.5px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.skin-report-location-banner.green {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.skin-report-loc-pin {
+  font-size: 15px;
+  flex-shrink: 0;
 }
 
 .skin-report-row-chevron {

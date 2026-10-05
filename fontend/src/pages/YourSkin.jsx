@@ -353,6 +353,74 @@ export default function YourSkin() {
     ];
   }, [faceCrops]);
 
+  // Xác định vị trí cụ thể của từng tình trạng da trên khuôn mặt (tránh nói chung chung)
+  const getSpecificLocation = (type) => {
+    const rawZones = displayScan?.zones || [];
+    if (type === "pigmentation") {
+      const matched = rawZones.filter((z) => {
+        const t = `${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+        return t.includes("sắc tố") || t.includes("thâm") || t.includes("tàn nhang") || t.includes("nám");
+      });
+      if (matched.length > 0) return matched.map((z) => z.title).join(", ");
+      if (faceCrops.chin?.length && faceCrops.cheek?.length) return "vùng cằm và hai bên má";
+      if (faceCrops.chin?.length) return "vùng cằm";
+      if (faceCrops.cheek?.length) return "vùng hai bên má";
+      return "vùng cằm và hai bên má";
+    }
+
+    if (type === "acne_inflammatory") {
+      const matched = rawZones.filter((z) => {
+        const t = `${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+        return t.includes("viêm") || t.includes("mụn mủ") || t.includes("mụn bọc") || t.includes("sưng đỏ");
+      });
+      if (matched.length > 0) return matched.map((z) => z.title).join(", ");
+      if (faceCrops.chin?.length) return "vùng cằm và góc hàm";
+      if (faceCrops.cheek?.length) return "vùng hai bên má";
+      return "vùng cằm và hai bên má";
+    }
+
+    if (type === "pores") {
+      const matched = rawZones.filter((z) => {
+        const t = `${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+        return t.includes("lỗ chân lông") || t.includes("bít tắc");
+      });
+      if (matched.length > 0) return matched.map((z) => z.title).join(", ");
+      return "vùng cánh mũi, trán và hai bên má";
+    }
+
+    if (type === "comedones") {
+      const matched = rawZones.filter((z) => {
+        const t = `${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+        return t.includes("mụn ẩn") || t.includes("đầu đen");
+      });
+      if (matched.length > 0) return matched.map((z) => z.title).join(", ");
+      return "vùng trán, cánh mũi và cằm";
+    }
+
+    if (type === "scars") {
+      const matched = rawZones.filter((z) => {
+        const t = `${z.title || ""} ${z.condition || ""} ${z.detail || ""}`.toLowerCase();
+        return t.includes("sẹo") || t.includes("gồ ghề");
+      });
+      if (matched.length > 0) return matched.map((z) => z.title).join(", ");
+      return "vùng hai bên má và góc hàm";
+    }
+
+    if (type === "filaments") {
+      return "vùng đầu mũi, hai cánh mũi và dưới cằm";
+    }
+
+    if (type === "uneven_tone") {
+      return "vùng chữ T (trán, mũi, cằm) và hai bên má";
+    }
+
+    if (type === "barrier") {
+      return "toàn bộ khuôn mặt (trán, má, cằm và quanh miệng)";
+    }
+
+    return "các vùng da trên khuôn mặt";
+  };
+
   const handleGetPersonalizedRoutine = () => {
     const el =
       document.querySelector(".product-recommendations-wrapper") ||
@@ -1306,7 +1374,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("pigmentation")}
                         >
-                          <span className="skin-report-row-title">Có tình trạng tăng sắc tố nặng</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Có tình trạng tăng sắc tố nặng</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("pigmentation")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.pigmentation ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1322,6 +1395,11 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.pigmentation && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Tập trung nhiều nhất tại <strong>{getSpecificLocation("pigmentation")}</strong></span>
+                            </div>
+
                             <div className="skin-report-crops-scroll">
                               {pigmentCropList.map((url, i) => (
                                 <img
@@ -1337,12 +1415,12 @@ export default function YourSkin() {
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Bạn có 20 nốt tăng sắc tố.</span>
+                                <span>Ghi nhận khoảng <strong>20 nốt tăng sắc tố</strong> (thâm sạm / tàn nhang) phân bố tập trung ở <strong>{getSpecificLocation("pigmentation")}</strong>.</span>
                               </div>
                               <div className="skin-report-subheading">Tăng sắc tố da do:</div>
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Tia UV từ ánh nắng mặt trời.</span>
+                                <span>Tia UV từ ánh nắng mặt trời chiếu trực tiếp vào khu vực này.</span>
                               </div>
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
@@ -1350,7 +1428,7 @@ export default function YourSkin() {
                               </div>
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Quá trình lão hóa da.</span>
+                                <span>Quá trình lão hóa da và thâm sau mụn.</span>
                               </div>
 
                               <div className="skin-report-subheading">Phương pháp điều trị hiệu quả:</div>
@@ -1384,7 +1462,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("acne_inflammatory")}
                         >
-                          <span className="skin-report-row-title">Có tình trạng mụn viêm trung bình</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Có tình trạng mụn viêm trung bình</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("acne_inflammatory")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.acne_inflammatory ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1400,6 +1483,11 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.acne_inflammatory && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Tập trung tại <strong>{getSpecificLocation("acne_inflammatory")}</strong></span>
+                            </div>
+
                             <div className="skin-report-crops-scroll">
                               {acneCropList.map((url, i) => (
                                 <img
@@ -1415,7 +1503,7 @@ export default function YourSkin() {
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Bạn có nốt mụn viêm sưng đỏ, cần được chăm sóc kháng viêm chuyên sâu.</span>
+                                <span>Phát hiện các nốt mụn viêm sưng đỏ, cương mủ tập trung ở <strong>{getSpecificLocation("acne_inflammatory")}</strong>, cần được chăm sóc kháng viêm chuyên sâu.</span>
                               </div>
                               <div className="skin-report-subheading">Nguyên nhân mụn viêm:</div>
                               <div className="skin-report-bullet">
@@ -1454,7 +1542,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("pores")}
                         >
-                          <span className="skin-report-row-title">Lỗ chân lông to</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Lỗ chân lông to</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("pores")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.pores ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1470,10 +1563,15 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.pores && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Tập trung nhiều nhất tại <strong>{getSpecificLocation("pores")}</strong></span>
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Tuyến dầu hoạt động mạnh làm lỗ chân lông giãn nở ở vùng mũi và hai bên má.</span>
+                                <span>Tuyến dầu hoạt động mạnh làm cổ nang lông giãn nở to rõ rệt tại <strong>{getSpecificLocation("pores")}</strong>.</span>
                               </div>
                               <div className="skin-report-subheading">Nguyên nhân lỗ chân lông to:</div>
                               <div className="skin-report-bullet">
@@ -1512,7 +1610,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("comedones")}
                         >
-                          <span className="skin-report-row-title">Có tình trạng Mụn ẩn - mụn đầu đen nhẹ</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Có tình trạng Mụn ẩn - mụn đầu đen nhẹ</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("comedones")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.comedones ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1528,10 +1631,15 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.comedones && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Tập trung chủ yếu tại <strong>{getSpecificLocation("comedones")}</strong></span>
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Xuất hiện nhân mụn bít tắc dưới da và mụn đầu đen vùng mũi, cằm.</span>
+                                <span>Xuất hiện nhân mụn bít tắc dưới da và mụn đầu đen oxy hóa tại <strong>{getSpecificLocation("comedones")}</strong>.</span>
                               </div>
                               <div className="skin-report-subheading">Nguyên nhân:</div>
                               <div className="skin-report-bullet">
@@ -1570,7 +1678,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("scars")}
                         >
-                          <span className="skin-report-row-title">Có tình trạng sẹo nhẹ</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Có tình trạng sẹo nhẹ</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("scars")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.scars ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1586,6 +1699,11 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.scars && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Ghi nhận tại <strong>{getSpecificLocation("scars")}</strong></span>
+                            </div>
+
                             <div className="skin-report-crops-scroll">
                               {scarCropList.map((url, i) => (
                                 <img
@@ -1601,7 +1719,7 @@ export default function YourSkin() {
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Vết tích sẹo thâm nhẹ sau các đợt mụn viêm trước đó, bề mặt da gồ ghề nhẹ.</span>
+                                <span>Vết tích sẹo thâm nhẹ sau các đợt mụn viêm trước đó, bề mặt da gồ ghề nhẹ tại <strong>{getSpecificLocation("scars")}</strong>.</span>
                               </div>
                               <div className="skin-report-subheading">Nguyên nhân hình thành sẹo:</div>
                               <div className="skin-report-bullet">
@@ -1640,7 +1758,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("filaments")}
                         >
-                          <span className="skin-report-row-title">Có tình trạng sợi bã nhờn rất nhẹ</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Có tình trạng sợi bã nhờn rất nhẹ</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("filaments")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.filaments ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1656,10 +1779,15 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.filaments && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Tập trung nhiều nhất tại <strong>{getSpecificLocation("filaments")}</strong></span>
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Sợi bã nhờn tự nhiên tập trung vùng cánh mũi và cằm, không phải mụn.</span>
+                                <span>Sợi bã nhờn sinh lý tự nhiên tập trung tại <strong>{getSpecificLocation("filaments")}</strong> (đây là cấu trúc tự nhiên của tuyến dầu, không phải mụn viêm).</span>
                               </div>
                               <div className="skin-report-subheading">Bản chất sợi bã nhờn:</div>
                               <div className="skin-report-bullet">
@@ -1690,7 +1818,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("uneven_tone")}
                         >
-                          <span className="skin-report-row-title">Da không đều màu</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Da không đều màu</span>
+                            <span className="skin-report-row-location-tag">
+                              📍 {getSpecificLocation("uneven_tone")}
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.uneven_tone ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1706,10 +1839,15 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.uneven_tone && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Vị trí phát hiện:</strong> Khác biệt rõ giữa <strong>{getSpecificLocation("uneven_tone")}</strong></span>
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Tông màu da phân bổ chưa đồng đều giữa vùng chữ T và hai bên má.</span>
+                                <span>Tông màu da phân bổ chưa đồng đều, có độ lệch sắc tố rõ rệt giữa <strong>{getSpecificLocation("uneven_tone")}</strong>.</span>
                               </div>
                               <div className="skin-report-subheading">Nguyên nhân:</div>
                               <div className="skin-report-bullet">
@@ -1754,7 +1892,12 @@ export default function YourSkin() {
                           className="skin-report-row-header"
                           onClick={() => toggleClinicalItem("barrier")}
                         >
-                          <span className="skin-report-row-title">Hàng rào bảo vệ da khoẻ</span>
+                          <div className="skin-report-row-title-wrap">
+                            <span className="skin-report-row-title">Hàng rào bảo vệ da khoẻ</span>
+                            <span className="skin-report-row-location-tag green">
+                              📍 Toàn khuôn mặt
+                            </span>
+                          </div>
                           <span className="skin-report-row-chevron">
                             {expandedClinicalItems.barrier ? (
                               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1770,10 +1913,15 @@ export default function YourSkin() {
 
                         {expandedClinicalItems.barrier && (
                           <div className="skin-report-row-detail animate-fade-in">
+                            <div className="skin-report-location-banner green">
+                              <span className="skin-report-loc-pin">📍</span>
+                              <span><strong>Phạm vi đánh giá:</strong> <strong>{getSpecificLocation("barrier")}</strong></span>
+                            </div>
+
                             <div className="skin-report-text-block">
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
-                                <span>Hàng rào bảo vệ da là lớp màng ngoài cùng, giúp giữ ẩm và ngăn chặn tác nhân gây hại từ môi trường như khói bụi, ô nhiễm, hóa chất.</span>
+                                <span>Kiểm tra trên <strong>{getSpecificLocation("barrier")}</strong>: Hàng rào bảo vệ da là lớp màng ngoài cùng, giúp giữ ẩm và ngăn chặn tác nhân gây hại từ môi trường như khói bụi, ô nhiễm, hóa chất.</span>
                               </div>
                               <div className="skin-report-bullet">
                                 <span className="skin-report-arrow-icon">➤</span>
