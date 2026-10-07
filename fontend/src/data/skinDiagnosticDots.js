@@ -1,4 +1,4 @@
-// Hệ thống điểm phân tích da vi thể (Micro-diagnostic Dots) chuẩn Y Khoa & AI Vision
+// Hệ thống điểm phân tích da vi thể (Micro-diagnostic Dots) chuẩn Da Liễu & AI Vision
 // Chỉ hiển thị các ĐIỂM NỔI BẬT (2-3 điểm/vùng), không làm rối mặt khách.
 // MÀU SẮC ĐIỂM CHẤM TỰ ĐỘNG KHỚP 100% VỚI MÀU PHÂN TÍCH VÙNG DA ĐÃ ĐƯỢC AI ĐÁNH GIÁ:
 // 🟢 Xanh: Nền da khỏe, thông thoáng, hàng rào lipid ổn định

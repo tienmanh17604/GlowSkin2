@@ -1211,7 +1211,7 @@ app.get("/api/skin/clinical-context", (req, res) => {
       ...result
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Lỗi tạo context Y khoa từ dữ liệu Excel", error: err.message });
+    res.status(500).json({ success: false, message: "Lỗi tạo dữ liệu da liễu từ dữ liệu Excel", error: err.message });
   }
 });
 
@@ -1432,9 +1432,9 @@ app.post("/api/skin/analyze", async (req, res) => {
     const clinical = getIntegratedClinicalKnowledge({ query, skinType: surveyData.skinType });
 
     // 2. Xây dựng System Instruction & Prompt
-    const systemPrompt = `Bạn là Bác sĩ Chuyên gia Da liễu AI của GlowSkin. Nhiệm vụ: Quan sát cực kỳ kỹ lưỡng và khách quan hình ảnh khuôn mặt thực tế của người dùng để đưa ra chẩn đoán Y khoa chính xác 100% theo đúng những gì nhìn thấy trên ảnh.
+    const systemPrompt = `Bạn là Cố vấn Da liễu AI của GlowSkin. Nhiệm vụ: Quan sát cực kỳ kỹ lưỡng và khách quan hình ảnh khuôn mặt thực tế của người dùng để đưa ra đánh giá da liễu chính xác 100% theo đúng những gì nhìn thấy trên ảnh.
 
-QUY TẮC CẤM QUAN TRỌNG: TUYỆT ĐỐI KHÔNG ĐƯỢC XUẤT HIỆN CỤM TỪ "Bộ Y Tế" HOẶC "Bộ Y tế" HOẶC "BYT". Hãy dùng cụm từ "Chuyên khoa Da liễu" hoặc "Tiêu chuẩn Y khoa lâm sàng".
+QUY TẮC CẤM TUYỆT ĐỐI: KHÔNG ĐƯỢC PHÉP SỬ DỤNG CÁC TỪ: "y khoa", "chuyên gia", "y tế", "Bộ Y Tế", "BYT" TRONG BẤT KỲ ĐÁNH GIÁ HAY CÂU TRẢ LỜI NÀO. Hãy dùng các từ thay thế như "da liễu", "khoa học làn da", "chăm sóc da", "chu trình da", "cố vấn da".
 
 DƯỚI ĐÂY LÀ KIẾN THỨC TÍCH HỢP TỪ BỘ DỮ LIỆU ĐÀO TẠO THỊ GIÁC AI (TRAINING AI - EXCEL):
 ${clinical.contextText}
@@ -1464,16 +1464,16 @@ Tọa độ phần trăm { top: %, left: % } tính từ mép trên và mép trá
 
 CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
 ===OVERVIEW===
-## Báo cáo Phân tích Da Y Khoa ✨
+## Báo cáo Phân tích Làn Da Khoa Học ✨
 1. **Loại da:** (Dầu / Khô / Hỗn hợp / Nhạy cảm / Bình thường)
-2. **Chẩn đoán y khoa chuyên sâu:** (Nhận xét đúng thực trạng quan sát được trong ảnh sau khi đối chiếu với bộ ảnh mẫu đào tạo)
+2. **Đánh giá da liễu chuyên sâu:** (Nhận xét đúng thực trạng quan sát được trong ảnh sau khi đối chiếu với bộ ảnh mẫu đào tạo)
 3. **Đánh giá điểm mạnh và hàng rào bảo vệ da**
 
 ===ROUTINE===
-4. **Lộ trình Routine khuyến nghị chuẩn Chuyên khoa** (Sáng & Tối từng bước)
+4. **Lộ trình Routine khuyến nghị chuẩn Da liễu** (Sáng & Tối từng bước)
 
 ===INGREDIENTS===
-5. **Hoạt chất Y khoa nên dùng & Thành phần nên tránh**
+5. **Hoạt chất da liễu nên dùng & Thành phần nên tránh**
 
 ===WARNING===
 6. **Lưu ý kích ứng & Thành phần chống chỉ định**
@@ -1482,8 +1482,8 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
 {
   "score": 75,
   "averageScore": 7.5,
-  "scoreLabel": "Phân tích Y Khoa & AI Vision",
-  "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "scoreLabel": "Phân tích Da Liễu & AI Vision",
+  "medicalReference": "Tiêu chuẩn Chăm Sóc Da Liễu",
   "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
   "metrics": {
     "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [] },
@@ -1613,9 +1613,18 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC ĐỦ CÁC THẺ SAU):
       throw new Error(lastError || "Không thể nhận phản hồi từ Gemini Vision API");
     }
 
+    const cleanAiContent = (aiContent || "")
+      .replace(/Bộ\s*Y\s*[tT]ế/gi, "chuyên khoa da liễu")
+      .replace(/QĐ-BYT/gi, "da liễu")
+      .replace(/QĐ\s*4416(\/QĐ-BYT)?/gi, "phác đồ da liễu")
+      .replace(/Quyết\s*định\s*4416(\/QĐ-BYT)?/gi, "phác đồ da liễu")
+      .replace(/y\s*khoa/gi, "da liễu")
+      .replace(/chuyên\s*gia/gi, "cố vấn da")
+      .replace(/y\s*tế/gi, "chăm sóc da");
+
     res.json({
       success: true,
-      content: aiContent,
+      content: cleanAiContent,
       source: "Gemini AI & Skin Training Knowledge (Training AI mô tả.xlsx)",
       matchedTraining: clinical.matchedTraining
     });

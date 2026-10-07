@@ -183,7 +183,7 @@ export default function SkinAnalysis() {
       const successMsg = {
         id: Date.now(),
         role: "assistant",
-        content: `🎉 Chúc mừng bạn đã nâng cấp thành công gói hội viên **Premium (VIP)** của GlowSkin! Bạn đã được mở khóa số lượt quét da AI không giới hạn, kết nối chuyên gia da liễu và các đặc quyền giảm giá mua sắm. Hãy chọn ảnh hoặc mở camera để bắt đầu phân tích da mặt ngay bây giờ!`,
+        content: `🎉 Chúc mừng bạn đã nâng cấp thành công gói hội viên **Premium (VIP)** của GlowSkin! Bạn đã được mở khóa số lượt quét da AI không giới hạn, kết nối tư vấn da liễu và các đặc quyền giảm giá mua sắm. Hãy chọn ảnh hoặc mở camera để bắt đầu phân tích da mặt ngay bây giờ!`,
       };
       setMessages([successMsg]);
       
@@ -384,8 +384,8 @@ export default function SkinAnalysis() {
         id: "scan-" + Date.now(),
         date: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) + ", " + new Date().toLocaleDateString("vi-VN"),
         score: jsonRes.score || 72,
-        scoreLabel: jsonRes.scoreLabel || "Phân tích Y Khoa & AI Vision",
-        medicalReference: jsonRes.medicalReference || "Tiêu chuẩn Chuyên Khoa Da Liễu",
+        scoreLabel: jsonRes.scoreLabel || "Phân tích Da Liễu & AI Vision",
+        medicalReference: jsonRes.medicalReference || "Tiêu chuẩn Chăm Sóc Da Liễu",
         image: dataUrl,
         aiOverview: parsed.overview,
         routine: parsed.routine,
@@ -713,7 +713,7 @@ export default function SkinAnalysis() {
             <span className="analyze-chat-avatar">✦</span>
             <div>
               <h2>GlowSkin AI</h2>
-              <p>Chuyên gia phân tích da mặt</p>
+              <p>Cố vấn phân tích da mặt</p>
             </div>
           </div>
 
@@ -856,7 +856,7 @@ export default function SkinAnalysis() {
             <div className="pricing-tag-wrapper">
               <span className="pricing-tag">✦ Gói hội viên</span>
             </div>
-            <h2 className="pricing-title">Sở Hữu Làn Da Đẹp Chuẩn Chuyên Gia</h2>
+            <h2 className="pricing-title">Sở Hữu Làn Da Đẹp Khoa Học</h2>
             <p className="pricing-subtitle">
               Tài khoản thường giới hạn 1 lần quét da. Hãy nâng cấp hội viên để mở khóa toàn bộ tính năng phân tích da chuyên sâu.
             </p>
@@ -901,10 +901,10 @@ export default function SkinAnalysis() {
                 <span className="plan-badge">Chuyên nghiệp</span>
                 <h3 className="plan-name">Professional</h3>
                 <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ tháng</span></div>
-                <p className="plan-desc">Phù hợp cho các chuyên gia da liễu hoặc spa chăm sóc khách hàng.</p>
+                <p className="plan-desc">Phù hợp cho các cơ sở spa hoặc trung tâm chăm sóc khách hàng.</p>
                 <ul className="plan-features">
                   <li>✓ Đầy đủ tính năng gói Premium</li>
-                  <li>✓ Báo cáo phân tích chuẩn y khoa PDF</li>
+                  <li>✓ Báo cáo phân tích chuyên sâu PDF</li>
                   <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
                   <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
                 </ul>

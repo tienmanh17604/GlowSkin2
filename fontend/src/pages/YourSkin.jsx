@@ -23,8 +23,8 @@ export const DEFAULT_DEMO_SCAN = {
   metrics: DEFAULT_DIAGNOSTIC_METRICS,
   skinType: "Da hỗn hợp thiên dầu",
   sensitivity: "Có",
-  scoreLabel: "Phân tích Y Khoa & AI Vision",
-  medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  scoreLabel: "Phân tích Da Liễu & AI Vision",
+  medicalReference: "Tiêu chuẩn Chăm Sóc Da Liễu",
   image: "https://res.cloudinary.com/buevamso/image/upload/v1784045582/glowskin/showcase/sample_acne_analysis_face.jpg",
   aiOverview: "Da hỗn hợp thiên dầu — vùng chữ T tăng tiết bã nhờn, lỗ chân lông bít tắc nhẹ kèm thâm mụn sau viêm (PIH). Căn cứ theo phác đồ chuyên khoa da liễu.",
   routine: "**Routine Sáng & Tối Khuyến Nghị:**\n- **Sáng:** Sữa rửa mặt pH 5.5 dịu nhẹ → Toner cân bằng → Serum Niacinamide 5% / Vitamin C → Kem dưỡng ẩm phục hồi → Kem chống nắng SPF 50+\n- **Tối:** Tẩy trang dạng nước/dầu → Sữa rửa mặt → BHA 2% (3 lần/tuần) → Kem dưỡng khóa ẩm Ceramide",
@@ -98,11 +98,14 @@ function cleanTextForUser(text) {
   clean = clean.replace(/```[\s\S]*?```/g, "");
   clean = clean.replace(/\{[\s\S]*?"zones"[\s\S]*?\}/g, "");
   clean = clean.replace(/===(OVERVIEW|ROUTINE|INGREDIENTS|WARNING|JSON_DATA)===/g, "");
-  // Khử sạch 100% từ khóa Bộ Y Tế theo yêu cầu
-  clean = clean.replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da liễu");
-  clean = clean.replace(/QĐ-BYT/gi, "Y khoa");
-  clean = clean.replace(/QĐ\s*4416\/QĐ-BYT/gi, "Phác đồ Y khoa lâm sàng");
-  clean = clean.replace(/Quyết\s*định\s*4416\/QĐ-BYT/gi, "Phác đồ Y khoa lâm sàng");
+  // Khử sạch 100% các từ khóa cấm: y khoa, chuyên gia, y tế
+  clean = clean.replace(/Bộ\s*Y\s*[tT]ế/gi, "chuyên khoa da liễu");
+  clean = clean.replace(/QĐ-BYT/gi, "da liễu");
+  clean = clean.replace(/QĐ\s*4416\/QĐ-BYT/gi, "phác đồ da liễu");
+  clean = clean.replace(/Quyết\s*định\s*4416\/QĐ-BYT/gi, "phác đồ da liễu");
+  clean = clean.replace(/y\s*khoa/gi, "da liễu");
+  clean = clean.replace(/chuyên\s*gia/gi, "cố vấn da");
+  clean = clean.replace(/y\s*tế/gi, "chăm sóc da");
   return clean.trim();
 }
 
@@ -131,11 +134,11 @@ function formatChatMessage(rawText) {
 
 const ALL_SUGGESTION_POOLS = [
   { id: "active_ingredients", label: "💡 Hoạt chất trị mụn & thâm", prompt: (title) => `Tư vấn hoạt chất trị mụn và thâm tốt nhất cho ${title || "vùng da này"}` },
-  { id: "routine_am_pm", label: "💡 Routine Sáng & Tối", prompt: () => `Gợi ý Routine chăm sóc da sáng và tối chuẩn Y khoa` },
+  { id: "routine_am_pm", label: "💡 Routine Sáng & Tối", prompt: () => `Gợi ý Routine chăm sóc da sáng và tối chuẩn da liễu` },
   { id: "avoid_ingredients", label: "💡 Thành phần nên tránh", prompt: () => `Các thành phần nào dễ gây kích ứng cần tránh đối với làn da này?` },
   { id: "sunscreen", label: "☀️ Kem chống nắng phù hợp", prompt: () => `Tư vấn loại kem chống nắng phù hợp nhất cho tình trạng da của tôi` },
   { id: "acne_marks", label: "✨ Phục hồi da & Mờ thâm", prompt: (title) => `Cách phục hồi màng bảo vệ da và làm mờ vệt thâm ở ${title || "vùng da này"}` },
-  { id: "moisturizer", label: "💧 Kem dưỡng ẩm phục hồi", prompt: () => `Gợi ý kem dưỡng ẩm phục hồi dịu nhẹ theo phác đồ Y khoa chuyên sâu` },
+  { id: "moisturizer", label: "💧 Kem dưỡng ẩm phục hồi", prompt: () => `Gợi ý kem dưỡng ẩm phục hồi dịu nhẹ theo phác đồ da liễu chuyên sâu` },
   { id: "lifestyle", label: "🥗 Ăn uống & Sinh hoạt", prompt: () => `Chế độ ăn uống và thói quen sinh hoạt giúp giảm mụn hiệu quả` },
 ];
 
@@ -604,10 +607,10 @@ export default function YourSkin() {
       badge: "Chuyên nghiệp",
       price: "249.000đ",
       period: "/ tháng",
-      desc: "Phù hợp cho người muốn theo dõi dài hạn hoặc kết nối chuyên gia da liễu.",
+      desc: "Phù hợp cho người muốn theo dõi dài hạn hoặc kết nối tư vấn da liễu.",
       features: [
         "Đầy đủ tính năng gói Premium",
-        "Báo cáo phân tích chuẩn y khoa PDF",
+        "Báo cáo phân tích chuyên sâu PDF",
         "Kết nối tư vấn 1-1 với bác sĩ da liễu",
         "Công cụ quản lý hồ sơ da chuyên sâu"
       ],
@@ -1001,7 +1004,7 @@ export default function YourSkin() {
 
       // 2. Chạy song song siêu tốc:
       // - Xóa nền chuẩn Studio bằng Remove.bg (cho đường viền tóc, má, cổ mịn màng 100%, không bị răng cưa)
-      // - Gemini 2.5 Vision phân tích chuẩn đoán Y khoa (chỉ ~1.2s)
+      // - Gemini 2.5 Vision phân tích da liễu (chỉ ~1.2s)
       const [cutoutImage, skinRes] = await Promise.all([
         fetch(`${API_URL}/skin/remove-background`, {
           method: "POST",
@@ -1110,8 +1113,8 @@ export default function YourSkin() {
         averageScore: diagResult.averageScore,
         detectedIssues: diagResult.detectedIssues,
         metrics: diagResult.metrics,
-        scoreLabel: "Phân tích Y Khoa & AI Vision",
-        medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
+        scoreLabel: "Phân tích Da Liễu & AI Vision",
+        medicalReference: "Tiêu chuẩn Chăm Sóc Da Liễu",
         image: finalImage,
         zones: formattedZones,
         aiOverview: parsedData.overview || parsedOverview,
@@ -1143,7 +1146,7 @@ export default function YourSkin() {
     const initialGreeting = {
       id: Date.now(),
       role: "assistant",
-      content: `🩺 **Bác sĩ AI GlowSkin (Tích hợp Dữ Liệu Y Khoa Chuyên Sâu):**\n\nChào bạn! Tôi đã tiếp nhận chẩn đoán vùng **${targetZone?.title || "Khuôn mặt"}** (*${targetZone?.condition || "Cần chăm sóc"}*).\n\nDựa trên dữ liệu Y khoa chuyên sâu (**Mụn, Sắc Tố, Lão Hóa**), bạn cần tư vấn về **hoạt chất điều trị**, **thứ tự Routine** hay **lưu ý tác dụng phụ** cho vùng da này?`
+      content: `🩺 **Trợ lý AI GlowSkin (Tích hợp Dữ Liệu Chăm Sóc Da Chuyên Sâu):**\n\nChào bạn! Tôi đã tiếp nhận phân tích vùng **${targetZone?.title || "Khuôn mặt"}** (*${targetZone?.condition || "Cần chăm sóc"}*).\n\nDựa trên dữ liệu khoa học làn da (**Mụn, Sắc Tố, Lão Hóa**), bạn cần tư vấn về **hoạt chất chăm sóc**, **thứ tự Routine** hay **lưu ý tác dụng phụ** cho vùng da này?`
     };
     setChatMessages([initialGreeting]);
   };
@@ -1171,12 +1174,12 @@ export default function YourSkin() {
       const aiRes = await sendFollowUp(updatedHistory);
       let botContent = aiRes.content;
       if (imagesToSend.length && (!aiRes.content || aiRes.isDemo)) {
-        botContent = `📸 **Bác sĩ AI đã tiếp nhận ${imagesToSend.length} hình ảnh của bạn:**\n\n- **Đánh giá hình ảnh:** Hệ thống AI Vision đã ghi nhận bộ ${imagesToSend.length} hình ảnh vừa được tải lên (tình trạng da ở các vị trí khác nhau / nhãn sản phẩm skincare).\n- **Khuyến nghị Y Khoa Chuyên Sâu:**\n  1. Duy trì làm sạch dịu nhẹ với sữa rửa mặt cân bằng pH (5.5).\n  2. Tùy thuộc tình trạng mụn/thâm hiển thị trong các ảnh: Ưu tiên Niacinamide 5% hoặc Azelaic Acid 20% thoa mỏng vùng cần điều trị.\n  3. Nếu có hình ảnh nhãn sản phẩm: Kiểm tra nồng độ BHA/AHA tránh gây kích ứng hoặc quá tải làn da.\n\nBạn có muốn Bác sĩ AI phân tích cụ thể từng hình ảnh hoặc gợi ý Routine phù hợp không?`;
+        botContent = `📸 **Trợ lý AI đã tiếp nhận ${imagesToSend.length} hình ảnh của bạn:**\n\n- **Đánh giá hình ảnh:** Hệ thống AI Vision đã ghi nhận bộ ${imagesToSend.length} hình ảnh vừa được tải lên (tình trạng da ở các vị trí khác nhau / nhãn sản phẩm skincare).\n- **Khuyến nghị Chăm Sóc Da Chuyên Sâu:**\n  1. Duy trì làm sạch dịu nhẹ với sữa rửa mặt cân bằng pH (5.5).\n  2. Tùy thuộc tình trạng mụn/thâm hiển thị trong các ảnh: Ưu tiên Niacinamide 5% hoặc Azelaic Acid 20% thoa mỏng vùng cần điều trị.\n  3. Nếu có hình ảnh nhãn sản phẩm: Kiểm tra nồng độ BHA/AHA tránh gây kích ứng hoặc quá tải làn da.\n\nBạn có muốn Trợ lý AI phân tích cụ thể từng hình ảnh hoặc gợi ý Routine phù hợp không?`;
       }
       const botMsgObj = {
         id: Date.now() + 1,
         role: "assistant",
-        content: botContent || "Đã xảy ra sự cố khi kết nối Bác sĩ AI. Vui lòng thử lại!"
+        content: botContent || "Đã xảy ra sự cố khi kết nối Trợ lý AI. Vui lòng thử lại!"
       };
       setChatMessages((prev) => [...prev, botMsgObj]);
     } catch (err) {
@@ -2278,7 +2281,7 @@ export default function YourSkin() {
               <button className="gold-modal-close" onClick={() => setSelectedZone(null)}>×</button>
               
               <div className="gold-modal-header-badge">
-                <div className="gold-badge" style={{ marginBottom: "6px" }}>🩺 CHẨN ĐOÁN CHI TIẾT CHUẨN Y KHOA</div>
+                <div className="gold-badge" style={{ marginBottom: "6px" }}>✨ PHÂN TÍCH CHI TIẾT LÀN DA</div>
                 <h3 className="gold-modal-title">{selectedZone.title}</h3>
               </div>
 
@@ -2316,7 +2319,7 @@ export default function YourSkin() {
                 </div>
               </div>
 
-              {/* TÌNH TRẠNG & PHÂN TÍCH Y KHOA CHI TIẾT */}
+              {/* TÌNH TRẠNG & PHÂN TÍCH CHI TIẾT */}
               <div className="gold-zone-info-box">
                 <p className="gold-modal-cond">
                   <span className="gold-zone-status-dot-inline">
@@ -2326,7 +2329,7 @@ export default function YourSkin() {
                 </p>
                 {selectedZone.detail && (
                   <div className="gold-modal-desc">
-                    <strong>Phân tích AI &amp; Chuẩn Y khoa:</strong> {selectedZone.detail}
+                    <strong>Phân tích AI &amp; Khoa học làn da:</strong> {selectedZone.detail}
                   </div>
                 )}
               </div>
@@ -2338,7 +2341,7 @@ export default function YourSkin() {
                   style={{ width: "100%", justifyContent: "center" }}
                   onClick={() => handleOpenAiDoctor(selectedZone)}
                 >
-                  💬 Chat với Chuyên Gia AI để tư vấn hoạt chất điều trị
+                  💬 Chat với Cố Vấn AI để tư vấn hoạt chất điều trị
                 </button>
               </div>
             </div>
@@ -2392,7 +2395,7 @@ export default function YourSkin() {
                   <div className="gold-chat-msg-row assistant">
                     <div className="gold-msg-icon">🩺</div>
                     <div className="gold-msg-bubble assistant gold-typing-bubble">
-                      <span>Đang tra cứu dữ liệu Y Khoa &amp; Phân tích...</span>
+                      <span>Đang tra cứu dữ liệu da liễu &amp; Phân tích...</span>
                       <div className="gold-typing-dots">
                         <span /><span /><span />
                       </div>
@@ -2571,7 +2574,7 @@ export default function YourSkin() {
               </div>
               <h2 className="pricing-title">Mở Khóa Báo Cáo Da &amp; Lộ Trình Cá Nhân Hóa</h2>
               <p className="pricing-subtitle">
-                Lựa chọn gói mở khóa hoặc đăng ký hội viên để xem toàn diện 6 chỉ số da và nhận chu trình chăm sóc chuẩn Y khoa.
+                Lựa chọn gói mở khóa hoặc đăng ký hội viên để xem toàn diện 6 chỉ số da và nhận chu trình chăm sóc chuẩn da liễu.
               </p>
 
               <div className="pricing-cards-grid-row">

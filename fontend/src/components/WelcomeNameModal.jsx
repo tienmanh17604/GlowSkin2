@@ -338,7 +338,7 @@ function buildPersonalizedScan(skinTypeChoice, sensitivityChoice, budgetChoice) 
     ];
   } else if (isOily) {
     score = 68;
-    overview = "Da thừa dầu, bóng nhờn — tuyến bã nhờn tăng tiết mạnh, lỗ chân lông giãn nở kèm nguy cơ bít tắc hình thành mụn ẩn, mụn viêm. Cần cân bằng lượng dầu - nước chuẩn y khoa.";
+    overview = "Da thừa dầu, bóng nhờn — tuyến bã nhờn tăng tiết mạnh, lỗ chân lông giãn nở kèm nguy cơ bít tắc hình thành mụn ẩn, mụn viêm. Cần cân bằng lượng dầu - nước chuẩn da liễu.";
     routine = "**Routine Sáng & Tối Khuyến Nghị:**\n- **Sáng:** Gel rửa mặt BHA/Zinc làm sạch sâu → Toner cân bằng kiềm dầu → Serum Niacinamide 10% kiểm soát bã nhờn → Gel dưỡng mỏng nhẹ Oil-Free → Kem chống nắng kiềm dầu mỏng mịn\n- **Tối:** Nước tẩy trang Micellar sạch sâu → Gel rửa mặt dịu nhẹ → BHA 2% Salicylic Acid (3 lần/tuần) → Gel dưỡng phục hồi mỏng nhẹ";
     ingredients = "**Thành phần khuyên dùng & nên tránh:**\n- **Nên dùng:** Niacinamide, BHA (Salicylic Acid), Kẽm PCA (Zinc), Tràm trà (Tea Tree), HA dạng lỏng nhẹ.\n- **Nên tránh:** Dầu khoáng bí tắc (Mineral Oil), Bơ hạt mỡ đặc (Shea Butter), Cồn khô kích ứng tuyến nhờn.";
     warning = "**Lưu ý chuyên khoa:** Không rửa mặt quá 2 lần/ngày bằng chất tẩy rửa mạnh vì sẽ kích thích tuyến bã nhờn bù trừ tiết nhiều dầu hơn.";
@@ -408,8 +408,8 @@ function buildPersonalizedScan(skinTypeChoice, sensitivityChoice, budgetChoice) 
     metrics: diagResult.metrics,
     skinType: skinTypeChoice || "Da hỗn hợp",
     sensitivity: (sensitivityChoice?.includes("Thường xuyên") || sensitivityChoice?.includes("Rất hay gặp")) ? "Có" : "Không",
-    scoreLabel: "Phân tích Y Khoa & AI Vision",
-    medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
+    scoreLabel: "Phân tích Da Liễu & AI Vision",
+    medicalReference: "Tiêu chuẩn Chăm Sóc Da Liễu",
     image: primaryImage,
     faceAngles: {
       front: capturedFaces?.center || null,
@@ -1241,8 +1241,8 @@ export default function WelcomeNameModal() {
         averageScore: diagResult.averageScore,
         detectedIssues: diagResult.detectedIssues,
         metrics: diagResult.metrics,
-        scoreLabel: "Phân tích Y Khoa & AI Vision (3 Góc Mặt)",
-        medicalReference: "Tiêu chuẩn Chuyên Khoa Da Liễu",
+        scoreLabel: "Phân tích Da Liễu & AI Vision (3 Góc Mặt)",
+        medicalReference: "Tiêu chuẩn Chăm Sóc Da Liễu",
         skinType: effectiveSkinType || "Da hỗn hợp thiên dầu",
         sensitivity: effectiveSkinSensitivity?.includes("Thường xuyên") || effectiveSkinSensitivity?.includes("Rất hay gặp") ? "Có" : "Không",
         image: primaryImage,

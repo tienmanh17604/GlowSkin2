@@ -661,7 +661,7 @@ export default function SkinDiary() {
                     type="button"
                     className="diary-action-btn-circle trend"
                     onClick={() => navigate("/your-skin")}
-                    title="Xem bản đồ chẩn đoán da Y Khoa"
+                    title="Xem bản đồ chẩn đoán da"
                   >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
@@ -691,7 +691,7 @@ export default function SkinDiary() {
                   type="button"
                   className="diary-fab-doctor"
                   onClick={() => navigate("/your-skin")}
-                  title="Tư vấn Chuyên gia & Phân tích da AI"
+                  title="Tư vấn Cố vấn & Phân tích da AI"
                   aria-label="Tư vấn Bác sĩ Da Liễu"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -851,7 +851,7 @@ export default function SkinDiary() {
                 type="button"
                 className="diary-fab-doctor"
                 onClick={() => navigate("/your-skin")}
-                title="Tư vấn Chuyên gia & Phân tích da AI"
+                title="Tư vấn Cố vấn & Phân tích da AI"
                 aria-label="Tư vấn Bác sĩ Da Liễu"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -902,7 +902,7 @@ export default function SkinDiary() {
                   navigate("/your-skin");
                 }}
               >
-                🔬 Xem Báo Cáo Phân Tích Y Khoa Đa Vùng
+                🔬 Xem Báo Cáo Phân Tích Đa Vùng
               </button>
               <button
                 type="button"

@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Da liễu AI của GlowSkin. Nhiệm vụ: Quan sát cực kỳ kỹ lưỡng và khách quan hình ảnh khuôn mặt thực tế của người dùng để đưa ra chẩn đoán Y khoa chính xác 100% theo đúng những gì nhìn thấy trên ảnh.
+const SYSTEM_PROMPT = `Bạn là Cố vấn Da liễu AI của GlowSkin. Nhiệm vụ: Quan sát cực kỳ kỹ lưỡng và khách quan hình ảnh khuôn mặt thực tế của người dùng để đưa ra đánh giá da liễu chính xác 100% theo đúng những gì nhìn thấy trên ảnh.
 
 QUY TẮC QUAN SÁT THỰC TẾ & CHẨN ĐOÁN TRUNG THỰC (BẮT BUỘC TUÂN THỦ):
 1. ĐÁNH GIÁ CHÍNH XÁC TỪNG VÙNG DỰA TRÊN ẢNH THẬT (KHÔNG ĐƯỢC TỰ BỊA ĐẶT TỔN THƯƠNG):
@@ -60,21 +60,22 @@ QUY TẮC QUAN SÁT THỰC TẾ & CHẨN ĐOÁN TRUNG THỰC (BẮT BUỘC TUÂN
    - Nhóm thâm & sắc tố: Azelaic acid, Niacinamide, Vitamin C, Alpha Arbutin, Glycolic acid, Tranexamic acid.
    - Nhóm phục hồi & chống lão hóa: Ceramide, Hyaluronic Acid, Peptide, Panthenol (B5), Centella Asiatica, Tretinoin/Retinol.
 
-6. QUY TẮC CẤM QUAN TRỌNG:
-   - TUYỆT ĐỐI KHÔNG ĐƯỢC XUẤT HIỆN CỤM TỪ "Bộ Y Tế" HOẶC "Bộ Y tế" HOẶC "BYT". Hãy dùng cụm từ "Chuyên khoa Da liễu" hoặc "Tiêu chuẩn Y khoa lâm sàng".
+6. QUY TẮC CẤM TUYỆT ĐỐI:
+   - TUYỆT ĐỐI CẤM SỬ DỤNG CÁC TỪ: "y khoa", "chuyên gia", "y tế", "Bộ Y Tế", "BYT" TRONG BẤT KỲ ĐÁNH GIÁ, BÁO CÁO HOẶC TRẢ LỜI NÀO.
+   - Hãy dùng các từ thay thế như "da liễu", "khoa học làn da", "chăm sóc da", "chu trình da", "cố vấn da".
 
 CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
 ===OVERVIEW===
-## Báo cáo Phân tích Da Y Khoa ✨
+## Báo cáo Phân tích Làn Da Khoa Học ✨
 1. **Loại da:** (Dầu / Khô / Hỗn hợp / Nhạy cảm / Bình thường)
-2. **Chẩn đoán y khoa chuyên sâu:** (Nhận xét đúng thực trạng thực tế quan sát được trong ảnh)
+2. **Đánh giá da liễu chuyên sâu:** (Nhận xét đúng thực trạng thực tế quan sát được trong ảnh)
 3. **Đánh giá điểm mạnh và hàng rào bảo vệ da**
 
 ===ROUTINE===
-4. **Lộ trình Routine khuyến nghị chuẩn Chuyên khoa** (Sáng & Tối từng bước phù hợp đúng loại da của người dùng)
+4. **Lộ trình Routine khuyến nghị chuẩn Da liễu** (Sáng & Tối từng bước phù hợp đúng loại da của người dùng)
 
 ===INGREDIENTS===
-5. **Hoạt chất Y khoa nên dùng & Thành phần nên tránh**
+5. **Hoạt chất da liễu nên dùng & Thành phần nên tránh**
 
 ===WARNING===
 6. **Lưu ý kích ứng & Thành phần chống chỉ định**
@@ -83,8 +84,8 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
 {
   "score": 67,
   "averageScore": 6.7,
-  "scoreLabel": "Phân tích Y Khoa & AI Vision",
-  "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "scoreLabel": "Phân tích Da Liễu & AI Vision",
+  "medicalReference": "Tiêu chuẩn Chăm Sóc Da Liễu",
   "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
   "metrics": {
     "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 53.0, "left": 35.0, "pointer": true }] },
@@ -103,7 +104,7 @@ CẤU TRÚC PHẢN HỒI (BẮT BUỘC GIỮ ĐÚNG CÁC THẺ SAU ĐÂY):
       "id": "forehead", 
       "title": "Vùng Trán", 
       "condition": "Mô tả ngắn 1 dòng tình trạng thực tế của trán trong ảnh", 
-      "detail": "Lời khuyên và đánh giá chi tiết chuẩn y khoa", 
+      "detail": "Lời khuyên và đánh giá chi tiết chuẩn da liễu", 
       "status": "green" 
     },
     { 
@@ -676,8 +677,8 @@ const DEMO_ANALYSIS = `===OVERVIEW===
 {
   "score": 67,
   "averageScore": 6.7,
-  "scoreLabel": "Phân tích Y Khoa & AI Vision",
-  "medicalReference": "Tiêu chuẩn Chuyên Khoa Da Liễu",
+  "scoreLabel": "Phân tích Da Liễu & AI Vision",
+  "medicalReference": "Tiêu chuẩn Chăm Sóc Da Liễu",
   "detectedIssues": ["Lỗ chân lông", "Mụn không viêm"],
   "metrics": {
     "mun_viem": { "score": 9, "label": "Mụn viêm", "dotColor": "#f472b6", "pillColor": "#e11d48", "points": [{ "top": 54.0, "left": 35.0, "r": 9 }, { "top": 55.0, "left": 65.0, "r": 9 }] },
@@ -771,7 +772,7 @@ export function parseAnalysisResponse(text) {
 }
 
 const DEFAULT_CLINICAL_GUIDELINE = `--- [Cơ sở Dữ liệu Đào tạo AI & Phân tích Da Liễu GlowSkin (Training AI mô tả.xlsx)] ---
-[TIÊU CHUẨN THỊ GIÁC & PHÂN LOẠI 18 TÌNH TRẠNG DA CHUẨN Y KHOA TỪ BỘ DỮ LIỆU ĐÀO TẠO]:
+[TIÊU CHUẨN THỊ GIÁC & PHÂN LOẠI 18 TÌNH TRẠNG DA CHUẨN KHOA HỌC TỪ BỘ DỮ LIỆU ĐÀO TẠO]:
 1. MỤN KHÔNG VIÊM:
 - Mụn đầu trắng (closed comedones): Nốt nhỏ 1-2mm màu trắng/màu da, không có lỗ mở rõ, không mủ. Phân biệt với milia và sợi bã nhờn. Hoạt chất: Salicylic acid (BHA), Adapalene, Retinol.
 - Mụn đầu đen (open comedones): Chấm nâu đen 1-3mm trong lỗ nang lông mở do oxy hóa lipid và bã nhờn. Tập trung ở mũi, cánh mũi, trán, cằm. Hoạt chất: Salicylic acid, Adapalene, Retinoids.
@@ -879,13 +880,13 @@ async function fetchMedicalContext(query = "mụn trứng cá thâm nám lão h�
           if (r.condition) {
             return `--- [Đào tạo AI: ${r.category} - ${r.condition}] ---\n- Dấu hiệu thị giác: ${r.visualSigns}\n- Đặc trưng: ${r.distinctiveFeatures}\n- Hoạt chất khuyên dùng: ${r.recommendedIngredientsRaw}\n- Hướng dẫn chăm sóc: ${r.careTips}`;
           }
-          return `--- [${r.title || "Tài liệu Y khoa"}] ---\n${r.content || ""}`;
+          return `--- [${r.title || "Tài liệu Da liễu"}] ---\n${r.content || ""}`;
         })
         .join("\n\n");
       return cachedMedicalContext;
     }
   } catch (err) {
-    console.warn("Dùng tài liệu y khoa tiêu chuẩn tích hợp:", err.message);
+    console.warn("Dùng tài liệu da liễu tiêu chuẩn tích hợp:", err.message);
   }
 
   cachedMedicalContext = DEFAULT_CLINICAL_GUIDELINE;
@@ -967,7 +968,7 @@ async function callOpenAI(messages) {
     if (msg.role === "system") {
       parts.push({ text: `[HƯỚNG DẪN HỆ THỐNG]:\n${msg.content}\n` });
     } else if (msg.role === "assistant") {
-      parts.push({ text: `[BÁC SĨ CHUYÊN GIA AI]:\n${msg.content}\n` });
+      parts.push({ text: `[CỐ VẤN DA LIỄU AI]:\n${msg.content}\n` });
     } else if (msg.role === "user") {
       if (Array.isArray(msg.content)) {
         for (const item of msg.content) {
@@ -989,7 +990,7 @@ async function callOpenAI(messages) {
 function buildVisionMessages(chatHistory, imageDataUrl, medicalContext = "") {
   let promptText = SYSTEM_PROMPT;
   if (medicalContext) {
-    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN ĐÁNH GIÁ VÀ CHĂM SÓC DA LIỄU (TÍCH HỢP TỪ GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn da liễu trên để đưa ra đánh giá và lời khuyên chuẩn xác nhất.`;
   }
 
   const apiMessages = [{ role: "system", content: promptText }];
@@ -1041,30 +1042,33 @@ export function cleanAiText(text) {
   clean = clean.replace(/\{[\s\S]*?"zones"[\s\S]*?\}/g, "");
   clean = clean.replace(/===(OVERVIEW|ROUTINE|INGREDIENTS|WARNING|JSON_DATA)===/g, "");
 
-  // Strict sanitization: ensure no mention of Bộ Y Tế or QĐ-BYT slips through
-  clean = clean.replace(/Bộ\s*Y\s*[tT]ế/gi, "Chuyên khoa Da liễu");
-  clean = clean.replace(/QĐ-BYT/gi, "Y khoa");
-  clean = clean.replace(/QĐ\s*4416(\/QĐ-BYT)?/gi, "Phác đồ Y khoa");
-  clean = clean.replace(/Quyết\s*định\s*4416(\/QĐ-BYT)?/gi, "Phác đồ Y khoa");
+  // Khử sạch 100% các từ khóa cấm: y khoa, chuyên gia, y tế
+  clean = clean.replace(/Bộ\s*Y\s*[tT]ế/gi, "chuyên khoa da liễu");
+  clean = clean.replace(/QĐ-BYT/gi, "da liễu");
+  clean = clean.replace(/QĐ\s*4416(\/QĐ-BYT)?/gi, "phác đồ da liễu");
+  clean = clean.replace(/Quyết\s*định\s*4416(\/QĐ-BYT)?/gi, "phác đồ da liễu");
+  clean = clean.replace(/y\s*khoa/gi, "da liễu");
+  clean = clean.replace(/chuyên\s*gia/gi, "cố vấn da");
+  clean = clean.replace(/y\s*tế/gi, "chăm sóc da");
   
   return clean.trim();
 }
 
-const CHAT_SYSTEM_PROMPT = `Bạn là Bác sĩ Chuyên gia Skincare AI của GlowSkin. Nhiệm vụ: Giải đáp thắc mắc, phân tích hình ảnh mỹ phẩm/tuýp thuốc/bảng thành phần và tư vấn chuyên sâu về làn da cho người dùng dựa trên các phác đồ Chuyên khoa Da liễu & Tiêu chuẩn Y khoa Lâm sàng.
-QUY TẮC CẤM QUAN TRỌNG: TUYỆT ĐỐI KHÔNG ĐƯỢC XUẤT HIỆN CỤM TỪ "Bộ Y Tế" HOẶC "Bộ Y tế" HOẶC "BYT" TRONG BẤT KỲ CÂU TRẢ LỜI NÀO.
+const CHAT_SYSTEM_PROMPT = `Bạn là Trợ lý Cố vấn Skincare AI của GlowSkin. Nhiệm vụ: Giải đáp thắc mắc, phân tích hình ảnh mỹ phẩm/tuýp kem/bảng thành phần và tư vấn chuyên sâu về làn da cho người dùng dựa trên khoa học làn da & phác đồ chăm sóc da liễu.
+QUY TẮC CẤM TUYỆT ĐỐI: KHÔNG ĐƯỢC PHÉP SỬ DỤNG CÁC TỪ: "y khoa", "chuyên gia", "y tế", "Bộ Y Tế", "BYT" TRONG BẤT KỲ CÂU TRẢ LỜI NÀO. Hãy dùng các từ thay thế như "da liễu", "khoa học làn da", "chăm sóc da", "chu trình da", "cố vấn da".
 
 QUY TẮC QUÉT HÌNH ẢNH SẢN PHẨM & ĐỌC HOẠT CHẤT (KHI CÓ ẢNH ĐÍNH KÈM):
-1. NHẬN DIỆN VÀ ĐỌC HOẠT CHẤT TRÊN BAO BÌ/TUÝP THUỐC:
+1. NHẬN DIỆN VÀ ĐỌC HOẠT CHẤT TRÊN BAO BÌ/TUÝP KEM:
    - Hãy sử dụng AI Vision quan sát kỹ hình ảnh nhãn hiệu, tuýp cream/gel, bao bì hoặc bảng thành phần (ingredients) trong ảnh người dùng gửi.
    - Đọc chính xác tên sản phẩm và các hoạt chất active chính xuất hiện trong ảnh (ví dụ: Klenzit MS / Klenzit-C / Derma Forte / Megaduo / Differin / BHA / Niacinamide / Benzoyl Peroxide / Azelaic Acid / Hydroquinone / Tretinoin / Adapalene / Retinol...).
 
-2. ĐỐI CHIẾU VỚI NỀN DỮ LIỆU Y KHOA:
-   - Nêu rõ công dụng tác dụng y khoa của các hoạt chất vừa nhận diện được.
-   - Đánh giá xem sản phẩm/hoạt chất này CÓ PHÙ HỢP với tình trạng da người dùng (mụn ẩn, mụn viêm, thâm mụn PIH, da dầu/khô/nhạy cảm...) theo hướng dẫn chuyên khoa da liễu hay không.
+2. ĐỐI CHIẾU VỚI CƠ SỞ DỮ LIỆU KHOA HỌC LÀN DA:
+   - Nêu rõ công dụng tác dụng khoa học của các hoạt chất vừa nhận diện được.
+   - Đánh giá xem sản phẩm/hoạt chất này CÓ PHÙ HỢP với tình trạng da người dùng (mụn ẩn, mụn viêm, thâm mụn PIH, da dầu/khô/nhạy cảm...) theo hướng dẫn chăm sóc da liễu hay không.
 
 3. KHUYẾN NGHỊ VÀ HƯỚNG DẪN SỬ DỤNG CHI TIẾT:
    - Xác nhận rõ ràng: "Sản phẩm trong ảnh của bạn là **[Tên sản phẩm/Hoạt chất]**".
-   - Cho biết CÓ NÊN DÙNG KHÔNG và lý do y khoa.
+   - Cho biết CÓ NÊN DÙNG KHÔNG và lý do khoa học.
    - Hướng dẫn cách dùng: Tần suất (số lần/tuần), thứ tự thoa trong Routine, và các lưu ý chống chỉ định/kích ứng nếu có.
 
 - Trả lời bằng tiếng Việt tự nhiên, chuyên nghiệp, rõ ràng và mạch lạc.
@@ -1077,13 +1081,13 @@ export async function analyzeSkinImage(imageDataUrl) {
     return { content: DEMO_ANALYSIS, isDemo: true };
   }
 
-  // Tối ưu chạy song song: Nén ảnh và lấy context Y khoa
+  // Tối ưu chạy song song: Nén ảnh và lấy context da liễu
   const [optimizedImageDataUrl, medicalContext] = await Promise.all([
     compressImageIfNeeded(imageDataUrl, 800, 0.8),
     fetchMedicalContext("mụn trứng cá viêm da thâm nám"),
   ]);
 
-  // 1. Thử gọi qua Backend API /api/skin/analyze (đồng bộ cả 2 bộ CSDL Y khoa)
+  // 1. Thử gọi qua Backend API /api/skin/analyze (đồng bộ cả 2 bộ CSDL da liễu)
   try {
     const backendRes = await fetch(`${API_URL}/skin/analyze`, {
       method: "POST",
@@ -1108,10 +1112,10 @@ export async function analyzeSkinImage(imageDataUrl) {
   const parts = [];
   let promptText = SYSTEM_PROMPT;
   if (medicalContext) {
-    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+    promptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN ĐÁNH GIÁ VÀ CHĂM SÓC DA LIỄU (TÍCH HỢP TỪ GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn da liễu trên để đưa ra đánh giá và lời khuyên chuẩn xác nhất.`;
   }
   parts.push({ text: promptText });
-  parts.push({ text: "Hãy quan sát hình ảnh khuôn mặt thực tế của tôi và phân tích da chuẩn y khoa theo đúng quy định." });
+  parts.push({ text: "Hãy quan sát hình ảnh khuôn mặt thực tế của tôi và phân tích da chuẩn khoa học theo đúng quy định." });
   const inline = extractInlineData(optimizedImageDataUrl);
   if (inline) parts.push(inline);
 
@@ -1180,7 +1184,7 @@ export async function analyzeMultiAngleSkinImages({
   // 2. Fallback: Trực tiếp qua Google Gemini Native API ở Frontend
   let systemPromptText = SYSTEM_PROMPT;
   if (medicalContext) {
-    systemPromptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN KHOA DA LIỄU (TÍCH HỢP TỪ MEDICAL GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn Y khoa trên để đưa ra chẩn đoán và lời khuyên chuẩn xác nhất.`;
+    systemPromptText += `\n\nDƯỚI ĐÂY LÀ HƯỚNG DẪN ĐÁNH GIÁ VÀ CHĂM SÓC DA LIỄU (TÍCH HỢP TỪ GUIDELINES & SKIN DISEASE KNOWLEDGE BASE):\n${medicalContext}\n\nHãy căn cứ vào hướng dẫn da liễu trên để đưa ra đánh giá và lời khuyên chuẩn xác nhất.`;
   }
 
   let promptInstruction = `Bạn đang nhận được các bức ảnh chụp khuôn mặt thực tế của người dùng từ 3 góc khác nhau:\n`;
@@ -1208,7 +1212,7 @@ ${selectedProducts.map((p, idx) => `${idx + 1}. [${p.brand || "Brand"}] ${p.name
 
   promptInstruction += `\n\nQUY ĐỊNH ĐÁNH GIÁ 6 CHỈ SỐ DA (THANG ĐIỂM 1-10) & ĐIỂM TRUNG BÌNH:
 Dựa trên hình ảnh thật từ 3 góc mặt kết hợp chặt chẽ với dữ liệu khảo sát (loại da, độ nhạy cảm, tình trạng hiện mạch máu, bệnh lý/thuốc), bạn BẮT BUỘC trả về đầy đủ trong khối JSON_DATA:
-1. "metrics": gồm 6 chỉ số da chuẩn y khoa:
+1. "metrics": gồm 6 chỉ số da chuẩn da liễu:
    - "mun_viem" (Mụn viêm): điểm từ 1-10 và danh sách tọa độ points [{top: %, left: %}]
    - "mun_khong_viem" (Mụn không viêm): điểm từ 1-10 và points
    - "soi_ba_nhon" (Sợi bã nhờn): điểm từ 1-10 và points (ưu tiên vùng mũi, cằm)
@@ -1217,7 +1221,7 @@ Dựa trên hình ảnh thật từ 3 góc mặt kết hợp chặt chẽ với 
    - "lo_chan_long" (Lỗ chân lông): điểm từ 1-10 và points
 2. "averageScore": Trung bình cộng 6 chỉ số trên (làm tròn 1 chữ số thập phân, ví dụ: 6.7).
 3. "detectedIssues": Danh sách 2 vấn đề có điểm thấp nhất (ví dụ: ["Lỗ chân lông", "Mụn không viêm"]).
-Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra chẩn đoán Y khoa trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
+Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nếu da sạch. Đưa ra đánh giá da liễu trung thực 100% kèm khối JSON_DATA theo đúng quy chuẩn.`;
 
   const parts = [
     { text: systemPromptText },

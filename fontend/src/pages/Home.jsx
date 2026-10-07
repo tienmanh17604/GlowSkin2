@@ -1070,10 +1070,10 @@ export default function Home({ videoReady = false }) {
             <span className="plan-badge">Chuyên nghiệp</span>
             <h3 className="plan-name">Professional</h3>
             <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ tháng</span></div>
-            <p className="plan-desc">Phù hợp cho các chuyên gia da liễu hoặc spa chăm sóc khách hàng.</p>
+            <p className="plan-desc">Phù hợp cho các cơ sở spa hoặc trung tâm chăm sóc khách hàng.</p>
             <ul className="plan-features">
               <li>✓ Đầy đủ tính năng gói Premium</li>
-              <li>✓ Báo cáo phân tích chuẩn y khoa PDF</li>
+              <li>✓ Báo cáo phân tích chuyên sâu PDF</li>
               <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
               <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
             </ul>

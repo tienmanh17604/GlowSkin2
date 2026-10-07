@@ -1,5 +1,5 @@
 // faceZoneCropper.js - Trích xuất ảnh cận cảnh từng vùng da mặt (Trán, Mũi, Má, Cằm, Mắt/Mày)
-// Tự động cắt ảnh từ chân dung khách hàng để hiển thị trực quan cạnh chẩn đoán Y khoa
+// Tự động cắt ảnh từ chân dung khách hàng để hiển thị trực quan cạnh phân tích da liễu
 
 const cropCache = new Map();
 

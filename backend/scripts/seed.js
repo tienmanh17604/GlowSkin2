@@ -108,7 +108,7 @@ const DEFAULT_PRODUCTS = [
     ingredients: ["Glycerin", "Niacinamide", "Panthenol"],
     image: getUnsplashImage(2, false),
     hoverImage: getUnsplashImage(2, true),
-    description: "Sữa rửa mặt dịu lành được chuyên gia khuyên dùng cho da nhạy cảm, giúp làm sạch sâu mà vẫn dưỡng ẩm.",
+    description: "Sữa rửa mặt dịu lành được khuyên dùng cho da nhạy cảm, giúp làm sạch sâu mà vẫn dưỡng ẩm.",
     stock: 80,
   },
   {
