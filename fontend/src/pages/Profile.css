@@ -438,7 +438,8 @@
   }
 }
 
-.profile-input-group input {
+.profile-input-group input,
+.profile-input-group select {
   padding: 12px 14px;
   border-radius: 8px;
   border: 1px solid #e1deda;
@@ -452,14 +453,16 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .profile-input-group input {
+  .profile-input-group input,
+  .profile-input-group select {
     background-color: #15161c;
     border-color: #2d2e38;
     color: #ffffff;
   }
 }
 
-.profile-input-group input:focus {
+.profile-input-group input:focus,
+.profile-input-group select:focus {
   border-color: var(--accent);
   outline: none;
   box-shadow: 0 0 0 3px rgba(195, 156, 115, 0.1);

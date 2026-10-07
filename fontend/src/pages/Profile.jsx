@@ -27,6 +27,9 @@ export default function Profile() {
   const [preferredName, setPreferredName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [city, setCity] = useState("");
   
   const [saveStatus, setSaveStatus] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -67,6 +70,9 @@ export default function Profile() {
       setPreferredName(currentUser.preferredName || "");
       setEmail(currentUser.email || "");
       setPhone(currentUser.phone || "");
+      setGender(currentUser.gender || "");
+      setBirthDate(currentUser.birthDate || "");
+      setCity(currentUser.city || "");
     }
   }, [currentUser]);
 
@@ -105,7 +111,15 @@ export default function Profile() {
       }
     }
 
-    const result = await updateProfile(currentUser.id, fullName, email.trim(), phone.trim(), currentUser.addresses, preferredName.trim());
+    const result = await updateProfile(
+      currentUser.id,
+      fullName,
+      email.trim(),
+      phone.trim(),
+      currentUser.addresses,
+      preferredName.trim(),
+      { gender, birthDate: birthDate.trim(), city: city.trim() }
+    );
     if (preferredName.trim() !== (currentUser.preferredName || "")) {
       await updatePreferredName(preferredName.trim());
     }
@@ -309,6 +323,36 @@ export default function Profile() {
                         onChange={(e) => setPhone(e.target.value)}
                         required
                         placeholder="+84..."
+                      />
+                    </div>
+                    <div className="profile-input-group">
+                      <label>Giới tính</label>
+                      <select
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <option value="">Chọn giới tính</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                      </select>
+                    </div>
+                    <div className="profile-input-group">
+                      <label>Ngày sinh (Ngày/Tháng/Năm)</label>
+                      <input
+                        type="text"
+                        value={birthDate}
+                        onChange={(e) => setBirthDate(e.target.value)}
+                        placeholder="Ví dụ: 20/12/2000"
+                      />
+                    </div>
+                    <div className="profile-input-group">
+                      <label>Tỉnh / Thành phố</label>
+                      <input
+                        type="text"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="Ví dụ: Hà Nội, TP Hồ Chí Minh..."
                       />
                     </div>
                     <div className="profile-input-group" style={{ gridColumn: "1 / -1" }}>
