@@ -4,7 +4,7 @@ import { useApp } from "../context/AppContext";
 import "./UserMenu.css";
 
 export default function UserMenu() {
-  const { currentUser, logout, openUpgradeModal } = useApp();
+  const { currentUser, logout } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -90,27 +90,6 @@ export default function UserMenu() {
               </div>
             </button>
 
-
-            {currentUser.membership !== "VIP" && currentUser.membership !== "Premium" && (
-              <button
-                type="button"
-                className="user-menu-item user-menu-item--upgrade"
-                onClick={() => {
-                  openUpgradeModal("Premium");
-                  setIsOpen(false);
-                }}
-              >
-                <div className="user-menu-item-icon" style={{ color: "#d4af37" }}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                </div>
-                <div className="user-menu-item-text">
-                  <strong style={{ color: "#a07553" }}>Nâng cấp Hội viên Premium</strong>
-                  <span>Mở khóa toàn bộ chỉ số da chuyên sâu</span>
-                </div>
-              </button>
-            )}
 
             {currentUser.role === "admin" && (
               <button
