@@ -18,6 +18,7 @@ import Order from "./models/Order.js";
 import Review from "./models/Review.js";
 import Message from "./models/Message.js";
 import SkinTrainingKnowledge from "./models/SkinTrainingKnowledge.js";
+import MembershipTransaction from "./models/MembershipTransaction.js";
 import { sendOrderNotifications, sendOrderStatusUpdateNotification } from "./services/notificationService.js";
 import { sendTelegramChatMessage, startTelegramBotPolling, processTelegramMessageUpdate, registerTelegramWebhook } from "./services/telegramBotService.js";
 import { uploadImage, uploadVideo, deleteFromCloudinary } from "./config/cloudinary.js";
@@ -737,12 +738,39 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
     const origin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer).origin : null);
     const baseUrl = process.env.FRONTEND_URL || origin || "http://localhost:5173";
 
+    // Lookup user details
+    const localUser = localDb.findUserById(userId);
+    const userName = localUser?.name || localUser?.preferredName || "Khách hàng";
+    const userEmail = localUser?.email || "";
+    const userPhone = localUser?.phone || "";
+
+    // Save initial transaction record as PENDING
+    const txData = {
+      orderCode,
+      userId,
+      userName,
+      userEmail,
+      userPhone,
+      plan: membership === "VIP" ? "Professional" : "Premium",
+      amount: Number(amount),
+      paymentMethod: "PayOS (VietQR)",
+      status: "PENDING"
+    };
+    localDb.saveMembershipTransaction(txData);
+    if (isMongoConnected) {
+      try {
+        await MembershipTransaction.create(txData);
+      } catch (e) {
+        console.warn("Mongo save transaction error:", e.message);
+      }
+    }
+
     const paymentLinkData = {
       orderCode,
       amount,
       description: `GlowSkin Upgrade ${membership}`,
-      returnUrl: `${baseUrl}/analyze?paymentStatus=success&membership=${membership}&userId=${userId}`,
-      cancelUrl: `${baseUrl}/analyze?paymentStatus=cancel&userId=${userId}`,
+      returnUrl: `${baseUrl}/your-skin?paymentStatus=success&membership=${membership}&userId=${userId}&orderCode=${orderCode}`,
+      cancelUrl: `${baseUrl}/your-skin?paymentStatus=cancel&userId=${userId}&orderCode=${orderCode}`,
     };
 
     const paymentLink = await payos.paymentRequests.create(paymentLinkData);
@@ -753,11 +781,161 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
   }
 });
 
+// POST Verify membership payment callback
+app.post("/api/payments/verify-membership-payment", async (req, res) => {
+  try {
+    const { orderCode, userId, membership } = req.body;
+    if (!orderCode) {
+      return res.status(400).json({ message: "Thiếu orderCode" });
+    }
+
+    // Update transaction status to PAID
+    localDb.updateMembershipTransactionStatus(orderCode, "PAID");
+    if (isMongoConnected) {
+      try {
+        await MembershipTransaction.findOneAndUpdate(
+          { orderCode: Number(orderCode) },
+          { $set: { status: "PAID" } }
+        );
+      } catch (e) {
+        console.warn("Mongo update tx status error:", e.message);
+      }
+    }
+
+    // Update user membership
+    if (userId && membership) {
+      localDb.updateUser(userId, { membership });
+      if (isMongoConnected) {
+        try {
+          await User.findOneAndUpdate({ id: userId }, { $set: { membership } });
+        } catch (e) {
+          console.warn("Mongo update user membership error:", e.message);
+        }
+      }
+    }
+
+    res.json({ success: true, message: "Xác thực thanh toán nâng cấp thành công!" });
+  } catch (error) {
+    console.error("Lỗi xác thực thanh toán hội viên:", error);
+    res.status(500).json({ message: "Lỗi xác thực thanh toán", error: error.message });
+  }
+});
+
+// GET all membership upgrade transactions (Admin & Dashboard)
+app.get("/api/membership-transactions", async (req, res) => {
+  try {
+    if (isMongoConnected) {
+      const txs = await MembershipTransaction.find().sort({ createdAt: -1 });
+      if (txs && txs.length > 0) {
+        return res.json(txs);
+      }
+    }
+  } catch (error) {
+    console.warn("MongoDB transactions query failed, using localDb:", error.message);
+  }
+  const localTxs = localDb.getMembershipTransactions();
+  res.json(localTxs);
+});
+
+// POST record new membership upgrade transaction
+app.post("/api/membership-transactions", async (req, res) => {
+  try {
+    const txData = req.body;
+    const savedLocal = localDb.saveMembershipTransaction(txData);
+
+    if (isMongoConnected) {
+      try {
+        const mongoTx = new MembershipTransaction(txData);
+        await mongoTx.save();
+      } catch (e) {
+        console.warn("MongoDB save transaction error:", e.message);
+      }
+    }
+
+    // If marked as PAID, upgrade the user
+    if (txData.status === "PAID" && txData.userId) {
+      const newMembership = txData.plan === "Professional" ? "VIP" : "Premium";
+      localDb.updateUser(txData.userId, { membership: newMembership });
+      if (isMongoConnected) {
+        try {
+          await User.findOneAndUpdate({ id: txData.userId }, { $set: { membership: newMembership } });
+        } catch (e) {}
+      }
+    }
+
+    res.status(201).json(savedLocal);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi lưu giao dịch", error: error.message });
+  }
+});
+
+// PUT update membership transaction status
+app.put("/api/membership-transactions/:id/status", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const updatedLocal = localDb.updateMembershipTransactionStatus(id, status);
+
+    if (isMongoConnected) {
+      try {
+        await MembershipTransaction.findOneAndUpdate(
+          { $or: [{ _id: id }, { orderCode: Number(id) }, { id }] },
+          { $set: { status } }
+        );
+      } catch (e) {
+        console.warn("MongoDB update tx status error:", e.message);
+      }
+    }
+
+    if (!updatedLocal) {
+      return res.status(404).json({ message: "Không tìm thấy giao dịch" });
+    }
+
+    // If approved to PAID, also upgrade the user's membership
+    if (status === "PAID" && updatedLocal.userId) {
+      const newMembership = updatedLocal.plan === "Professional" ? "VIP" : "Premium";
+      localDb.updateUser(updatedLocal.userId, { membership: newMembership });
+      if (isMongoConnected) {
+        try {
+          await User.findOneAndUpdate({ id: updatedLocal.userId }, { $set: { membership: newMembership } });
+        } catch (e) {}
+      }
+    }
+
+    res.json(updatedLocal);
+  } catch (error) {
+    res.status(500).json({ message: "Lỗi cập nhật trạng thái giao dịch", error: error.message });
+  }
+});
+
 // POST PayOS webhook (xác nhận thanh toán thành công)
 app.post("/api/payments/payos-webhook", async (req, res) => {
   try {
     const webhookData = payos.webhooks.verify(req.body);
     console.log("PayOS Webhook:", webhookData);
+
+    if (webhookData && webhookData.orderCode) {
+      const updatedTx = localDb.updateMembershipTransactionStatus(webhookData.orderCode, "PAID");
+      if (isMongoConnected) {
+        try {
+          await MembershipTransaction.findOneAndUpdate(
+            { orderCode: Number(webhookData.orderCode) },
+            { $set: { status: "PAID" } }
+          );
+        } catch (e) {}
+      }
+      if (updatedTx && updatedTx.userId) {
+        const newMembership = updatedTx.plan === "Professional" ? "VIP" : "Premium";
+        localDb.updateUser(updatedTx.userId, { membership: newMembership });
+        if (isMongoConnected) {
+          try {
+            await User.findOneAndUpdate({ id: updatedTx.userId }, { $set: { membership: newMembership } });
+          } catch (e) {}
+        }
+      }
+    }
+
     res.json({ success: true });
   } catch (error) {
     console.error("Lỗi PayOS webhook:", error);

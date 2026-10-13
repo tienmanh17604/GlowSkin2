@@ -1,0 +1,80 @@
+[
+  {
+    "id": "SUB_1712850123",
+    "orderCode": 1712850123,
+    "userId": "u2",
+    "userName": "Nguyễn Khánh Nhi",
+    "userEmail": "user@glowskin.com",
+    "userPhone": "0912345678",
+    "plan": "Premium",
+    "amount": 99000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PAID",
+    "createdAt": "2026-10-12T09:30:00.000Z"
+  },
+  {
+    "id": "SUB_1712841456",
+    "orderCode": 1712841456,
+    "userId": "u3",
+    "userName": "Trần Thị Mai Phương",
+    "userEmail": "phuong.tran@gmail.com",
+    "userPhone": "0987654321",
+    "plan": "Professional",
+    "amount": 249000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PAID",
+    "createdAt": "2026-10-11T14:15:00.000Z"
+  },
+  {
+    "id": "SUB_1712832789",
+    "orderCode": 1712832789,
+    "userId": "u4",
+    "userName": "Lê Hoàng Yến",
+    "userEmail": "yen.le@gmail.com",
+    "userPhone": "0903123456",
+    "plan": "Premium",
+    "amount": 99000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PAID",
+    "createdAt": "2026-10-10T16:45:00.000Z"
+  },
+  {
+    "id": "SUB_1712824112",
+    "orderCode": 1712824112,
+    "userId": "u5",
+    "userName": "Vũ Minh Anh",
+    "userEmail": "minhanh.vu@gmail.com",
+    "userPhone": "0934567890",
+    "plan": "Professional",
+    "amount": 249000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PAID",
+    "createdAt": "2026-10-09T11:20:00.000Z"
+  },
+  {
+    "id": "SUB_1712815435",
+    "orderCode": 1712815435,
+    "userId": "u6",
+    "userName": "Hoàng Thu Thảo",
+    "userEmail": "thuthao.hoang@gmail.com",
+    "userPhone": "0978901234",
+    "plan": "Premium",
+    "amount": 99000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PAID",
+    "createdAt": "2026-10-08T20:10:00.000Z"
+  },
+  {
+    "id": "SUB_1712806758",
+    "orderCode": 1712806758,
+    "userId": "u7",
+    "userName": "Đặng Quốc Hưng",
+    "userEmail": "quochung.dang@gmail.com",
+    "userPhone": "0965432109",
+    "plan": "Premium",
+    "amount": 99000,
+    "paymentMethod": "PayOS (VietQR)",
+    "status": "PENDING",
+    "createdAt": "2026-10-13T19:05:00.000Z"
+  }
+]

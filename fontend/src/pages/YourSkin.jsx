@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
@@ -186,8 +186,9 @@ function getZone2DCoordinates(zone, idx) {
 }
 
 export default function YourSkin() {
-  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, openLoginModal, products, openUpgradeModal } = useApp();
+  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, openLoginModal, products, openUpgradeModal, updateUserMembership } = useApp();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (!currentUser) {
@@ -195,6 +196,33 @@ export default function YourSkin() {
       navigate("/", { replace: true });
     }
   }, [currentUser, navigate, openLoginModal]);
+
+  // Handle PayOS return redirect for membership upgrade
+  useEffect(() => {
+    const paymentStatus = searchParams.get("paymentStatus");
+    const orderCode = searchParams.get("orderCode");
+    const membership = searchParams.get("membership");
+    const userId = searchParams.get("userId");
+
+    if (paymentStatus === "success" && orderCode) {
+      fetch(`${API_URL}/payments/verify-membership-payment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderCode, userId, membership }),
+      }).catch(console.error);
+
+      if (userId && membership) {
+        updateUserMembership(userId, membership);
+      }
+      setIsUnlocked(true);
+      alert(`🎉 Chúc mừng bạn đã thanh toán nâng cấp thành công gói ${membership}! Toàn bộ báo cáo và tính năng chuyên sâu đã được mở khóa.`);
+      searchParams.delete("paymentStatus");
+      searchParams.delete("orderCode");
+      searchParams.delete("membership");
+      searchParams.delete("userId");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams, updateUserMembership]);
 
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);

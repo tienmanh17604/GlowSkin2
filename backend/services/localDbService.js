@@ -242,5 +242,42 @@ export const localDb = {
     const filtered = reviews.filter((r) => String(r._id) !== String(id) && String(r.id) !== String(id));
     writeJson("reviews.json", filtered);
     return target;
+  },
+
+  // Membership Transactions (Lịch sử chuyển khoản & Nâng cấp gói)
+  getMembershipTransactions: () => {
+    return readJson("membership_transactions.json", []);
+  },
+
+  saveMembershipTransaction: (txData) => {
+    const txs = localDb.getMembershipTransactions();
+    const newTx = {
+      id: txData.id || "SUB_" + (txData.orderCode || Date.now()),
+      orderCode: txData.orderCode || Date.now() % 1000000000,
+      userId: txData.userId,
+      userName: txData.userName || "Khách hàng",
+      userEmail: txData.userEmail || "",
+      userPhone: txData.userPhone || "",
+      plan: txData.plan || "Premium",
+      amount: Number(txData.amount) || 99000,
+      paymentMethod: txData.paymentMethod || "PayOS (VietQR)",
+      status: txData.status || "PAID",
+      createdAt: txData.createdAt || new Date().toISOString()
+    };
+    txs.unshift(newTx);
+    writeJson("membership_transactions.json", txs);
+    return newTx;
+  },
+
+  updateMembershipTransactionStatus: (id, status) => {
+    const txs = localDb.getMembershipTransactions();
+    const index = txs.findIndex(
+      (t) => String(t.id) === String(id) || String(t._id) === String(id) || String(t.orderCode) === String(id)
+    );
+    if (index === -1) return null;
+    txs[index].status = status;
+    txs[index].updatedAt = new Date().toISOString();
+    writeJson("membership_transactions.json", txs);
+    return txs[index];
   }
 };

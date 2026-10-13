@@ -48,6 +48,105 @@ export default function AdminDashboard() {
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+  // States & Effects for Membership Upgrade Transactions & Revenue Management
+  const [membershipTransactions, setMembershipTransactions] = useState([]);
+  const [txFilterPlan, setTxFilterPlan] = useState("all"); // "all" | "Premium" | "Professional"
+  const [txFilterStatus, setTxFilterStatus] = useState("all"); // "all" | "PAID" | "PENDING" | "CANCELLED"
+  const [txSearch, setTxSearch] = useState("");
+  const [isTxLoading, setIsTxLoading] = useState(false);
+
+  const fetchMembershipTransactions = async () => {
+    setIsTxLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/membership-transactions`);
+      if (res.ok) {
+        const data = await res.json();
+        setMembershipTransactions(data);
+      }
+    } catch (err) {
+      console.error("Lỗi tải danh sách giao dịch nâng cấp:", err);
+    } finally {
+      setIsTxLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMembershipTransactions();
+  }, []);
+
+  const handleUpdateTxStatus = async (txId, newStatus) => {
+    try {
+      const res = await fetch(`${API_URL}/membership-transactions/${txId}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setMembershipTransactions((prev) =>
+          prev.map((t) =>
+            t.id === txId || t._id === txId || t.orderCode === txId ? { ...t, status: newStatus } : t
+          )
+        );
+        const target = membershipTransactions.find(
+          (t) => t.id === txId || t._id === txId || t.orderCode === txId
+        );
+        if (target && target.userId && newStatus === "PAID") {
+          const planMembership = target.plan === "Professional" ? "VIP" : "Premium";
+          updateUserMembership(target.userId, planMembership);
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi cập nhật trạng thái:", err);
+    }
+  };
+
+  // Calculate Upgrade Revenue Statistics
+  const upgradeStats = useMemo(() => {
+    const paidTxs = membershipTransactions.filter((t) => t.status === "PAID");
+    const totalUpgradeRevenue = paidTxs.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+
+    const premiumTxs = paidTxs.filter((t) => t.plan === "Premium");
+    const premiumRevenue = premiumTxs.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+    const premiumCount = premiumTxs.length;
+
+    const proTxs = paidTxs.filter((t) => t.plan === "Professional" || t.plan === "VIP");
+    const proRevenue = proTxs.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+    const proCount = proTxs.length;
+
+    const pendingTxs = membershipTransactions.filter((t) => t.status === "PENDING");
+    const pendingRevenue = pendingTxs.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+    const pendingCount = pendingTxs.length;
+
+    return {
+      totalUpgradeRevenue,
+      paidCount: paidTxs.length,
+      premiumRevenue,
+      premiumCount,
+      proRevenue,
+      proCount,
+      pendingCount,
+      pendingRevenue,
+      totalCount: membershipTransactions.length,
+    };
+  }, [membershipTransactions]);
+
+  // Filtered Membership Transactions
+  const filteredTransactions = useMemo(() => {
+    return membershipTransactions.filter((t) => {
+      if (txFilterPlan !== "all" && t.plan !== txFilterPlan) return false;
+      if (txFilterStatus !== "all" && t.status !== txFilterStatus) return false;
+      if (txSearch.trim()) {
+        const query = txSearch.trim().toLowerCase();
+        const code = String(t.orderCode || t.id || "").toLowerCase();
+        const name = String(t.userName || "").toLowerCase();
+        const email = String(t.userEmail || "").toLowerCase();
+        const phone = String(t.userPhone || "").toLowerCase();
+        return code.includes(query) || name.includes(query) || email.includes(query) || phone.includes(query);
+      }
+      return true;
+    });
+  }, [membershipTransactions, txFilterPlan, txFilterStatus, txSearch]);
+
   const fetchSessions = async () => {
     try {
       const res = await fetch(`${API_URL}/chats`);
@@ -397,10 +496,24 @@ export default function AdminDashboard() {
           <aside className="admin-sidebar">
             <button
               type="button"
+              className={`admin-tab-btn ${activeTab === "overview" ? "admin-tab-btn--active" : ""}`}
+              onClick={() => setActiveTab("overview")}
+            >
+              📊 Tổng quan
+            </button>
+            <button
+              type="button"
               className={`admin-tab-btn ${activeTab === "members" ? "admin-tab-btn--active" : ""}`}
               onClick={() => setActiveTab("members")}
             >
               👥 Khách hàng & Hội viên
+            </button>
+            <button
+              type="button"
+              className={`admin-tab-btn ${activeTab === "upgrade_history" ? "admin-tab-btn--active" : ""}`}
+              onClick={() => setActiveTab("upgrade_history")}
+            >
+              👑 Lịch sử & Doanh thu Nâng cấp
             </button>
             <button
               type="button"
@@ -426,6 +539,19 @@ export default function AdminDashboard() {
                     <div className="admin-stat-info">
                       <span className="admin-stat-label">Doanh thu (Đã giao)</span>
                       <span className="admin-stat-value">{formatPrice(stats.totalSales)}</span>
+                    </div>
+                  </div>
+
+                  <div className="admin-stat-card" style={{ borderLeft: "4px solid #d4af37" }}>
+                    <div className="admin-stat-icon">👑</div>
+                    <div className="admin-stat-info">
+                      <span className="admin-stat-label">Doanh thu Gói Nâng cấp</span>
+                      <span className="admin-stat-value" style={{ color: "#a07553" }}>
+                        {formatPrice(upgradeStats.totalUpgradeRevenue)}
+                      </span>
+                      <span style={{ fontSize: "11.5px", color: "#888" }}>
+                        ({upgradeStats.paidCount} lượt đã thanh toán)
+                      </span>
                     </div>
                   </div>
 
@@ -730,6 +856,223 @@ export default function AdminDashboard() {
                           </tr>
                         );
                       })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TAB UPGRADE HISTORY & REVENUE MANAGEMENT */}
+            {activeTab === "upgrade_history" && (
+              <div>
+                <div className="admin-content-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+                  <div>
+                    <h2>👑 Quản lý Doanh thu &amp; Lịch sử Chuyển khoản Gói Nâng cấp</h2>
+                    <p style={{ fontSize: "13.5px", color: "#777", marginTop: "4px" }}>
+                      Theo dõi toàn bộ dòng tiền và giao dịch nâng cấp tài khoản Premium / Professional qua cổng PayOS VietQR
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="admin-refresh-btn"
+                    onClick={fetchMembershipTransactions}
+                    disabled={isTxLoading}
+                  >
+                    {isTxLoading ? "Đang tải..." : "🔄 Làm mới dữ liệu"}
+                  </button>
+                </div>
+
+                {/* KPI Stat Cards */}
+                <div className="upgrade-stats-grid">
+                  <div className="upgrade-stat-card upgrade-stat-card--total">
+                    <div className="stat-card-icon">💰</div>
+                    <div className="stat-card-details">
+                      <span className="stat-card-title">Tổng Doanh Thu Nâng Cấp</span>
+                      <span className="stat-card-number">{formatPrice(upgradeStats.totalUpgradeRevenue)}</span>
+                      <span className="stat-card-sub">Thực thu từ {upgradeStats.paidCount} giao dịch thành công</span>
+                    </div>
+                  </div>
+
+                  <div className="upgrade-stat-card upgrade-stat-card--premium">
+                    <div className="stat-card-icon">⭐</div>
+                    <div className="stat-card-details">
+                      <span className="stat-card-title">Gói Premium (99.000đ)</span>
+                      <span className="stat-card-number">{formatPrice(upgradeStats.premiumRevenue)}</span>
+                      <span className="stat-card-sub">{upgradeStats.premiumCount} gói đã kích hoạt</span>
+                    </div>
+                  </div>
+
+                  <div className="upgrade-stat-card upgrade-stat-card--pro">
+                    <div className="stat-card-icon">💎</div>
+                    <div className="stat-card-details">
+                      <span className="stat-card-title">Gói Professional (249.000đ)</span>
+                      <span className="stat-card-number">{formatPrice(upgradeStats.proRevenue)}</span>
+                      <span className="stat-card-sub">{upgradeStats.proCount} gói đã kích hoạt</span>
+                    </div>
+                  </div>
+
+                  <div className="upgrade-stat-card upgrade-stat-card--pending">
+                    <div className="stat-card-icon">⏳</div>
+                    <div className="stat-card-details">
+                      <span className="stat-card-title">Đang Chờ Thanh Toán</span>
+                      <span className="stat-card-number">{upgradeStats.pendingCount} đơn</span>
+                      <span className="stat-card-sub">{formatPrice(upgradeStats.pendingRevenue)} chờ chuyển khoản</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filter and Search Bar */}
+                <div className="upgrade-filters-card">
+                  <div className="upgrade-search-wrap">
+                    <span className="search-icon">🔍</span>
+                    <input
+                      type="text"
+                      className="upgrade-search-input"
+                      placeholder="Tìm theo Mã đơn, Tên khách hàng, Email, SĐT..."
+                      value={txSearch}
+                      onChange={(e) => setTxSearch(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="upgrade-filter-controls">
+                    <div className="filter-group">
+                      <label>Gói dịch vụ:</label>
+                      <select
+                        className="upgrade-filter-select"
+                        value={txFilterPlan}
+                        onChange={(e) => setTxFilterPlan(e.target.value)}
+                      >
+                        <option value="all">Tất cả gói</option>
+                        <option value="Premium">Premium (99.000đ)</option>
+                        <option value="Professional">Professional (249.000đ)</option>
+                      </select>
+                    </div>
+
+                    <div className="filter-group">
+                      <label>Trạng thái thanh toán:</label>
+                      <select
+                        className="upgrade-filter-select"
+                        value={txFilterStatus}
+                        onChange={(e) => setTxFilterStatus(e.target.value)}
+                      >
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="PAID">Đã thanh toán (Thành công)</option>
+                        <option value="PENDING">Chờ thanh toán (Đang chờ)</option>
+                        <option value="CANCELLED">Đã hủy</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Transactions Table */}
+                <div className="table-responsive" style={{ marginTop: "20px" }}>
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Mã đơn / OrderCode</th>
+                        <th>Khách hàng</th>
+                        <th>Gói nâng cấp</th>
+                        <th>Số tiền</th>
+                        <th>Phương thức</th>
+                        <th>Thời gian chuyển</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredTransactions.length === 0 ? (
+                        <tr>
+                          <td colSpan="8" style={{ textAlign: "center", padding: "40px", color: "#888" }}>
+                            Không tìm thấy giao dịch chuyển khoản nào phù hợp với bộ lọc.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredTransactions.map((tx) => {
+                          const isPaid = tx.status === "PAID";
+                          const isPending = tx.status === "PENDING";
+                          const isCancelled = tx.status === "CANCELLED";
+
+                          const formattedDate = tx.createdAt
+                            ? new Date(tx.createdAt).toLocaleString("vi-VN", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                              })
+                            : "Vừa xong";
+
+                          return (
+                            <tr key={tx.id || tx._id || tx.orderCode}>
+                              <td>
+                                <span className="tx-code-badge">
+                                  #{tx.orderCode || tx.id}
+                                </span>
+                              </td>
+                              <td>
+                                <div>
+                                  <strong style={{ display: "block", color: "#2b231c" }}>{tx.userName || "Khách hàng"}</strong>
+                                  <span style={{ fontSize: "12px", color: "#666" }}>{tx.userEmail}</span>
+                                  {tx.userPhone && (
+                                    <span style={{ display: "block", fontSize: "11.5px", color: "#888" }}>SĐT: {tx.userPhone}</span>
+                                  )}
+                                </div>
+                              </td>
+                              <td>
+                                <span className={`tx-plan-badge ${tx.plan === "Professional" || tx.plan === "VIP" ? "pro" : "premium"}`}>
+                                  {tx.plan === "Professional" || tx.plan === "VIP" ? "Professional (249k)" : "Premium (99k)"}
+                                </span>
+                              </td>
+                              <td>
+                                <strong style={{ color: "#a07553", fontSize: "15px" }}>
+                                  {formatPrice(tx.amount || (tx.plan === "Professional" ? 249000 : 99000))}
+                                </strong>
+                              </td>
+                              <td>
+                                <span className="tx-gateway-badge">
+                                  🏦 {tx.paymentMethod || "PayOS (VietQR)"}
+                                </span>
+                              </td>
+                              <td>
+                                <span style={{ fontSize: "12.5px", color: "#555" }}>{formattedDate}</span>
+                              </td>
+                              <td>
+                                <select
+                                  className={`tx-status-select ${tx.status?.toLowerCase() || "paid"}`}
+                                  value={tx.status}
+                                  onChange={(e) => handleUpdateTxStatus(tx.id || tx._id || tx.orderCode, e.target.value)}
+                                >
+                                  <option value="PAID">✅ Đã thanh toán</option>
+                                  <option value="PENDING">⏳ Chờ thanh toán</option>
+                                  <option value="CANCELLED">❌ Đã hủy</option>
+                                </select>
+                              </td>
+                              <td>
+                                {isPending && (
+                                  <button
+                                    type="button"
+                                    className="tx-quick-approve-btn"
+                                    onClick={() => handleUpdateTxStatus(tx.id || tx._id || tx.orderCode, "PAID")}
+                                    title="Xác nhận đã nhận tiền và nâng cấp ngay"
+                                  >
+                                    Duyệt ngay
+                                  </button>
+                                )}
+                                {isPaid && (
+                                  <span style={{ fontSize: "12px", color: "#166534", fontWeight: "700" }}>
+                                    ✓ Hoàn tất
+                                  </span>
+                                )}
+                                {isCancelled && (
+                                  <span style={{ fontSize: "12px", color: "#991b1b" }}>
+                                    Đã đóng
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
