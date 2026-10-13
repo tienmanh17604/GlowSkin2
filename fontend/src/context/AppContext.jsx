@@ -68,6 +68,17 @@ export function AppProvider({ children }) {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [upgradeModalPlan, setUpgradeModalPlan] = useState("Premium");
+
+  const openUpgradeModal = (plan = "Premium") => {
+    setUpgradeModalPlan(plan);
+    setIsUpgradeModalOpen(true);
+  };
+
+  const closeUpgradeModal = () => {
+    setIsUpgradeModalOpen(false);
+  };
 
   // Global Wishlist/Favorites State — scoped per user
   // Xóa toàn bộ dữ liệu sản phẩm yêu thích cũ theo yêu cầu
@@ -862,6 +873,12 @@ export function AppProvider({ children }) {
       setIsNameModalOpen,
       isWishlistOpen,
       setIsWishlistOpen,
+      isUpgradeModalOpen,
+      setIsUpgradeModalOpen,
+      upgradeModalPlan,
+      setUpgradeModalPlan,
+      openUpgradeModal,
+      closeUpgradeModal,
       login,
       logout,
       register,
@@ -885,7 +902,7 @@ export function AppProvider({ children }) {
       saveDiaryEntry,
       toggleDiaryRoutine,
     }),
-    [users, products, orders, reviews, currentUser, isLoginOpen, isNameModalOpen, isWishlistOpen, wishlist, latestScan, skinDiary]
+    [users, products, orders, reviews, currentUser, isLoginOpen, isNameModalOpen, isWishlistOpen, isUpgradeModalOpen, upgradeModalPlan, wishlist, latestScan, skinDiary]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

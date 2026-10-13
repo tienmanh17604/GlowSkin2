@@ -11,6 +11,7 @@ import CartDrawer from "./components/CartDrawer";
 import WishlistDrawer from "./components/WishlistDrawer";
 import LoginModal from "./components/LoginModal";
 import WelcomeNameModal from "./components/WelcomeNameModal";
+import UpgradeModal from "./components/UpgradeModal";
 import ChatWidget from "./components/ChatWidget";
 import SplashScreen from "./components/SplashScreen";
 import Contact from "./pages/Contact";
@@ -78,6 +79,7 @@ export default function App() {
         <WishlistDrawer />
         <LoginModal />
         <WelcomeNameModal />
+        <UpgradeModal />
         {!showSplash && <ChatWidget />}
       </BrowserRouter>
     </CartProvider>

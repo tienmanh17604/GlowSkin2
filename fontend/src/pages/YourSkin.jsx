@@ -186,7 +186,7 @@ function getZone2DCoordinates(zone, idx) {
 }
 
 export default function YourSkin() {
-  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, products } = useApp();
+  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, products, openUpgradeModal } = useApp();
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);
   const [selectedDotFilter, setSelectedDotFilter] = useState("all"); // "all" | "red" | "yellow" | "green"
@@ -620,8 +620,12 @@ export default function YourSkin() {
   ];
 
   const handleSelectPlan = (plan) => {
-    setIsUnlocked(true);
     setIsPricingModalOpen(false);
+    if (plan.id === "unlock_single") {
+      setIsUnlocked(true);
+    } else {
+      openUpgradeModal(plan.name || "Premium");
+    }
   };
 
   const angleImages = useMemo(() => {

@@ -273,7 +273,7 @@ function VerticalSlider({ count, activeIndex, onChange, color }) {
 export default function Home({ videoReady = false }) {
 
   const navigate = useNavigate();
-  const { currentUser, setIsLoginOpen, setIsNameModalOpen } = useApp();
+  const { currentUser, setIsLoginOpen, setIsNameModalOpen, openUpgradeModal } = useApp();
   const { setIsCartOpen } = useCart();
 
   const handleStartSkinAnalysis = (e) => {
@@ -1063,7 +1063,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Không giới hạn số lần phân tích</li>
               <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
             </ul>
-            <button className="plan-btn featured" onClick={handleStartSkinAnalysis}>Nâng cấp Premium</button>
+            <button className="plan-btn featured" onClick={() => openUpgradeModal("Premium")}>Nâng cấp Premium</button>
           </div>
 
           <div className="pricing-card">
@@ -1077,7 +1077,7 @@ export default function Home({ videoReady = false }) {
               <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
               <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
             </ul>
-            <button className="plan-btn" onClick={handleStartSkinAnalysis}>Đăng ký ngay</button>
+            <button className="plan-btn" onClick={() => openUpgradeModal("Professional")}>Đăng ký ngay</button>
           </div>
         </div>
       </section>

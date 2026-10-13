@@ -1,0 +1,505 @@
+/* UPGRADE MODAL - LUXURY GLOWSKIN AESTHETIC */
+
+.upgrade-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(18, 19, 24, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 16px;
+  animation: upgradeFadeIn 0.25s ease-out forwards;
+}
+
+@keyframes upgradeFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.upgrade-modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(160, 117, 83, 0.15);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: upgradeScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  scrollbar-width: thin;
+}
+
+@keyframes upgradeScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Close button */
+.upgrade-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 117, 83, 0.2);
+  background: #fdfbf9;
+  color: #736454;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upgrade-modal-close:hover {
+  background: #a07553;
+  color: #ffffff;
+  border-color: #a07553;
+  transform: rotate(90deg);
+}
+
+/* Header */
+.upgrade-modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.upgrade-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f7efe7 0%, #ebdcd0 100%);
+  color: #8b6038;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  border: 1px solid rgba(160, 117, 83, 0.25);
+}
+
+.upgrade-badge-pill .sparkle {
+  color: #c4823f;
+}
+
+.upgrade-modal-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #2b231c;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.upgrade-modal-desc {
+  font-size: 14px;
+  color: #736454;
+  line-height: 1.5;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Plan Tabs */
+.upgrade-plan-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.upgrade-plan-tab {
+  position: relative;
+  background: #fdfbf9;
+  border: 2px solid #ecdcd0;
+  border-radius: 16px;
+  padding: 16px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.upgrade-plan-tab:hover {
+  border-color: #c4a484;
+  background: #fffdfb;
+}
+
+.upgrade-plan-tab.active {
+  border-color: #a07553;
+  background: #fcf8f4;
+  box-shadow: 0 4px 18px rgba(160, 117, 83, 0.15);
+}
+
+.tab-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #c39c73 0%, #a0703e 100%);
+  color: #ffffff;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(160, 112, 62, 0.28);
+}
+
+.tab-tag.pro {
+  background: linear-gradient(135deg, #7c6858 0%, #544436 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(84, 68, 54, 0.25);
+}
+
+.tab-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2b231c;
+  margin-bottom: 4px;
+}
+
+.tab-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #a07553;
+}
+
+.tab-price span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8c7e72;
+}
+
+/* Plan Details Section */
+.upgrade-plan-details {
+  background: #faf6f2;
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px solid #ebdcd0;
+  margin-bottom: 20px;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed #dfcebe;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.details-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b6038;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.details-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #2b231c;
+  margin-top: 2px;
+}
+
+.details-price-wrap {
+  text-align: right;
+}
+
+.details-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: #a07553;
+}
+
+.details-period {
+  font-size: 13px;
+  color: #8c7e72;
+  margin-left: 2px;
+}
+
+.upgrade-features-list .features-headline {
+  font-size: 13px;
+  font-weight: 700;
+  color: #554433;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.upgrade-features-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upgrade-features-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #44372c;
+  line-height: 1.4;
+}
+
+.upgrade-features-list .check-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #a07553;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Account Info & Payment Methods */
+.upgrade-account-info {
+  background: #fdfbf9;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #ebdcd0;
+  margin-bottom: 20px;
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.account-label {
+  color: #736454;
+  font-weight: 500;
+}
+
+.account-value {
+  color: #2b231c;
+  font-weight: 700;
+}
+
+.membership-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.membership-pill.free {
+  background: #ece8e4;
+  color: #685b50;
+}
+
+.membership-pill.premium {
+  background: #fae6cb;
+  color: #a0631b;
+}
+
+.membership-pill.vip {
+  background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+  color: #3b2a00;
+}
+
+/* Payment Summary (PayOS only) */
+.upgrade-payment-summary {
+  margin-top: 14px;
+  border-top: 1px solid #ebdcd0;
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.5px solid #ecdcd0;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.payment-summary-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f7efe7;
+  color: #a07553;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.payment-summary-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-summary-info .summary-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2b231c;
+}
+
+.payment-summary-info .summary-sub {
+  font-size: 11.5px;
+  color: #806e5d;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.vietqr-pill {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  background: #0066b2;
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+
+/* Not Logged In Alert */
+.upgrade-not-logged-in-alert {
+  display: flex;
+  gap: 12px;
+  background: #fff8eb;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.alert-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.alert-content strong {
+  display: block;
+  font-size: 13.5px;
+  color: #9a3412;
+  margin-bottom: 4px;
+}
+
+.alert-content p {
+  font-size: 12.5px;
+  color: #7c2d12;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Alerts */
+.upgrade-alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  animation: upgradeFadeIn 0.2s ease;
+}
+
+.upgrade-alert.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.upgrade-alert.success {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  font-weight: 600;
+}
+
+/* Action Buttons */
+.upgrade-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upgrade-btn-submit {
+  width: 100%;
+  padding: 15px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #a07553 0%, #83593b 100%);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(160, 117, 83, 0.3);
+}
+
+.upgrade-btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b08360 0%, #906242 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(160, 117, 83, 0.4);
+}
+
+.upgrade-btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.upgrade-btn-submit.disabled,
+.upgrade-btn-submit:disabled {
+  background: #c7beba;
+  color: #ffffff;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.upgrade-guarantee-note {
+  text-align: center;
+  font-size: 11.5px;
+  color: #9c8e82;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 540px) {
+  .upgrade-modal-dialog {
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+  .upgrade-modal-title {
+    font-size: 22px;
+  }
+  .upgrade-plan-tabs {
+    grid-template-columns: 1fr;
+  }
+}

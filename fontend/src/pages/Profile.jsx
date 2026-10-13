@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import "./Profile.css";
 
 export default function Profile() {
-  const { currentUser, orders, updateProfile, updatePreferredName, wishlist, logout } = useApp();
+  const { currentUser, orders, updateProfile, updatePreferredName, wishlist, logout, openUpgradeModal } = useApp();
   const { setIsCartOpen } = useCart();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -240,8 +240,12 @@ export default function Profile() {
                 <p className="loyalty-subtext">
                   Nhận thêm 100 điểm nữa để nâng hạng lên SILVER
                 </p>
-                <div className="loyalty-footer-link">
-                  <span>Xem tất cả quyền lợi</span>
+                <div
+                  className="loyalty-footer-link"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => openUpgradeModal("Premium")}
+                >
+                  <span>Nâng cấp &amp; Xem tất cả quyền lợi</span>
                   <span className="arrow-btn">&gt;</span>
                 </div>
               </div>
