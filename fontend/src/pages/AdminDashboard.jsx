@@ -1067,7 +1067,12 @@ export default function AdminDashboard() {
                               </td>
                               <td>
                                 <span className={`tx-plan-badge ${tx.plan === "Professional" || tx.plan === "VIP" ? "pro" : "premium"}`}>
-                                  {tx.plan === "Professional" || tx.plan === "VIP" ? "Professional (249k)" : "Premium (99k)"}
+                                  <span className="tx-plan-badge-icon">
+                                    {tx.plan === "Professional" || tx.plan === "VIP" ? "💎" : "⭐"}
+                                  </span>
+                                  <span className="tx-plan-badge-title">
+                                    {tx.plan === "Professional" || tx.plan === "VIP" ? "Professional" : "Premium"}
+                                  </span>
                                 </span>
                               </td>
                               <td>
