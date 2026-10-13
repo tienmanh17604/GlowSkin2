@@ -186,7 +186,16 @@ function getZone2DCoordinates(zone, idx) {
 }
 
 export default function YourSkin() {
-  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, products, openUpgradeModal } = useApp();
+  const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, openLoginModal, products, openUpgradeModal } = useApp();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!currentUser) {
+      openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
+      navigate("/", { replace: true });
+    }
+  }, [currentUser, navigate, openLoginModal]);
+
   const [activeZoneId, setActiveZoneId] = useState(null);
   const [selectedZone, setSelectedZone] = useState(null);
   const [selectedDotFilter, setSelectedDotFilter] = useState("all"); // "all" | "red" | "yellow" | "green"
@@ -278,7 +287,6 @@ export default function YourSkin() {
   const displayScan = scan || DEFAULT_DEMO_SCAN;
   const displayImage = currentImage || displayScan?.image;
 
-  const navigate = useNavigate();
   const [resultViewMode, setResultViewMode] = useState("preview"); // "preview" (matching Screenshot 3) | "advanced_2d"
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [currentAngleIndex, setCurrentAngleIndex] = useState(0);

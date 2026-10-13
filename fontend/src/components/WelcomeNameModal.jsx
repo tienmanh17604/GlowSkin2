@@ -494,11 +494,19 @@ export default function WelcomeNameModal() {
     currentUser,
     isNameModalOpen,
     setIsNameModalOpen,
+    openLoginModal,
     updatePreferredName,
     updateProfile,
     saveLatestScan
   } = useApp();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isNameModalOpen && !currentUser) {
+      setIsNameModalOpen(false);
+      openLoginModal?.("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
+    }
+  }, [isNameModalOpen, currentUser, setIsNameModalOpen, openLoginModal]);
 
   // Wizard Step:
   // 0: Preferred Name input
@@ -1337,7 +1345,7 @@ export default function WelcomeNameModal() {
     }
   };
 
-  if (!isNameModalOpen) return null;
+  if (!isNameModalOpen || !currentUser) return null;
 
   return (
     <div ref={overlayRef} className="onboarding-modal-overlay">

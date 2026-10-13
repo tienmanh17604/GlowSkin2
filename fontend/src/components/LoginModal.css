@@ -240,3 +240,37 @@
   color: #8c6239;
   font-weight: 700;
 }
+
+/* Notice Banner */
+.login-modal-notice-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff8eb;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  line-height: 1.45;
+  text-align: left;
+  animation: fadeInNotice 0.25s ease-out;
+}
+
+@keyframes fadeInNotice {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-modal-notice-banner .notice-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}

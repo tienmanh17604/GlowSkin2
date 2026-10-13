@@ -66,6 +66,17 @@ export function AppProvider({ children }) {
   });
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [loginMessage, setLoginMessage] = useState("");
+
+  const openLoginModal = (message = "") => {
+    setLoginMessage(message);
+    setIsLoginOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginOpen(false);
+    setLoginMessage("");
+  };
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
@@ -869,6 +880,10 @@ export function AppProvider({ children }) {
       currentUser,
       isLoginOpen,
       setIsLoginOpen,
+      loginMessage,
+      setLoginMessage,
+      openLoginModal,
+      closeLoginModal,
       isNameModalOpen,
       setIsNameModalOpen,
       isWishlistOpen,

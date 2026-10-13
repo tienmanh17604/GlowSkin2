@@ -6,7 +6,7 @@ import "./LoginModal.css";
 
 export default function LoginModal() {
   const navigate = useNavigate();
-  const { isLoginOpen, setIsLoginOpen, setIsNameModalOpen, login, register } = useApp();
+  const { isLoginOpen, setIsLoginOpen, loginMessage, closeLoginModal, setIsNameModalOpen, login, register } = useApp();
 
   const [activeTab, setActiveTab] = useState("login"); // "login" | "register"
   const [formData, setFormData] = useState({
@@ -88,12 +88,12 @@ export default function LoginModal() {
 
 
   return (
-    <div className="login-modal-overlay" onClick={() => setIsLoginOpen(false)}>
+    <div className="login-modal-overlay" onClick={closeLoginModal}>
       <div className="login-modal-card" onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
           className="login-modal-close-btn"
-          onClick={() => setIsLoginOpen(false)}
+          onClick={closeLoginModal}
           aria-label="Đóng"
         >
           ✕
@@ -106,6 +106,13 @@ export default function LoginModal() {
           <h2>GlowSkin AI</h2>
           <p>Phân tích làn da & Đề xuất mỹ phẩm thông minh</p>
         </div>
+
+        {loginMessage && (
+          <div className="login-modal-notice-banner">
+            <span className="notice-icon">🔒</span>
+            <span className="notice-text">{loginMessage}</span>
+          </div>
+        )}
 
         <form className="login-modal-form" onSubmit={handleSubmit}>
           {error && <div className="login-modal-error">{error}</div>}

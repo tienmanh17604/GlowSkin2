@@ -14,7 +14,7 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
-  const { currentUser, setIsLoginOpen, setIsNameModalOpen } = useApp();
+  const { currentUser, setIsLoginOpen, openLoginModal, setIsNameModalOpen } = useApp();
   const { setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -48,13 +48,25 @@ export default function Navbar() {
               <button
                 type="button"
                 className="nav-link-btn"
-                onClick={() => setIsNameModalOpen(true)}
+                onClick={() => {
+                  if (!currentUser) {
+                    openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
+                    return;
+                  }
+                  setIsNameModalOpen(true);
+                }}
               >
                 {link.label}
               </button>
             ) : link.to ? (
               <Link
                 to={link.to}
+                onClick={(e) => {
+                  if (link.to === "/your-skin" && !currentUser) {
+                    e.preventDefault();
+                    openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
+                  }
+                }}
                 className={isActive(link.to) ? "nav-link-active" : ""}
               >
                 {link.label}

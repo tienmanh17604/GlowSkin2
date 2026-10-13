@@ -273,11 +273,15 @@ function VerticalSlider({ count, activeIndex, onChange, color }) {
 export default function Home({ videoReady = false }) {
 
   const navigate = useNavigate();
-  const { currentUser, setIsLoginOpen, setIsNameModalOpen, openUpgradeModal } = useApp();
+  const { currentUser, setIsLoginOpen, openLoginModal, setIsNameModalOpen, openUpgradeModal } = useApp();
   const { setIsCartOpen } = useCart();
 
   const handleStartSkinAnalysis = (e) => {
     if (e && typeof e.preventDefault === "function") e.preventDefault();
+    if (!currentUser) {
+      openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
+      return;
+    }
     setIsNameModalOpen(true);
   };
 
