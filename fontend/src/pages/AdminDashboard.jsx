@@ -165,11 +165,11 @@ export default function AdminDashboard() {
     };
   }, [membershipTransactions]);
 
-  // Filtered Membership Transactions
+  // Filtered Membership Transactions - Chỉ lấy các giao dịch đã thanh toán thành công
   const filteredTransactions = useMemo(() => {
     return membershipTransactions.filter((t) => {
+      if (t.status !== "PAID") return false;
       if (txFilterPlan !== "all" && t.plan !== txFilterPlan) return false;
-      if (txFilterStatus !== "all" && t.status !== txFilterStatus) return false;
       if (txSearch.trim()) {
         const query = txSearch.trim().toLowerCase();
         const code = String(t.orderCode || t.id || "").toLowerCase();
@@ -180,7 +180,7 @@ export default function AdminDashboard() {
       }
       return true;
     });
-  }, [membershipTransactions, txFilterPlan, txFilterStatus, txSearch]);
+  }, [membershipTransactions, txFilterPlan, txSearch]);
 
   const fetchSessions = async () => {
     try {
@@ -934,36 +934,36 @@ export default function AdminDashboard() {
                   <div className="upgrade-stat-card upgrade-stat-card--total">
                     <div className="stat-card-icon">💰</div>
                     <div className="stat-card-details">
-                      <span className="stat-card-title">Tổng Doanh Thu Nâng Cấp</span>
+                      <span className="stat-card-title">Tổng Doanh Thu</span>
                       <span className="stat-card-number">{formatPrice(upgradeStats.totalUpgradeRevenue)}</span>
-                      <span className="stat-card-sub">Thực thu từ {upgradeStats.paidCount} giao dịch thành công</span>
+                      <span className="stat-card-sub">{upgradeStats.paidCount} đơn đã thanh toán</span>
                     </div>
                   </div>
 
                   <div className="upgrade-stat-card upgrade-stat-card--premium">
                     <div className="stat-card-icon">⭐</div>
                     <div className="stat-card-details">
-                      <span className="stat-card-title">Gói Premium (99.000đ)</span>
+                      <span className="stat-card-title">Gói Premium</span>
                       <span className="stat-card-number">{formatPrice(upgradeStats.premiumRevenue)}</span>
-                      <span className="stat-card-sub">{upgradeStats.premiumCount} gói đã kích hoạt</span>
+                      <span className="stat-card-sub">{upgradeStats.premiumCount} gói kích hoạt (99k)</span>
                     </div>
                   </div>
 
                   <div className="upgrade-stat-card upgrade-stat-card--pro">
                     <div className="stat-card-icon">💎</div>
                     <div className="stat-card-details">
-                      <span className="stat-card-title">Gói Professional (249.000đ)</span>
+                      <span className="stat-card-title">Gói Professional</span>
                       <span className="stat-card-number">{formatPrice(upgradeStats.proRevenue)}</span>
-                      <span className="stat-card-sub">{upgradeStats.proCount} gói đã kích hoạt</span>
+                      <span className="stat-card-sub">{upgradeStats.proCount} gói kích hoạt (249k)</span>
                     </div>
                   </div>
 
                   <div className="upgrade-stat-card upgrade-stat-card--pending">
-                    <div className="stat-card-icon">⏳</div>
+                    <div className="stat-card-icon">📈</div>
                     <div className="stat-card-details">
-                      <span className="stat-card-title">Đang Chờ Thanh Toán</span>
-                      <span className="stat-card-number">{upgradeStats.pendingCount} đơn</span>
-                      <span className="stat-card-sub">{formatPrice(upgradeStats.pendingRevenue)} chờ chuyển khoản</span>
+                      <span className="stat-card-title">Tổng Lượt Kích Hoạt</span>
+                      <span className="stat-card-number">{upgradeStats.paidCount} lượt</span>
+                      <span className="stat-card-sub">Hội viên VIP & Premium</span>
                     </div>
                   </div>
                 </div>
@@ -994,20 +994,6 @@ export default function AdminDashboard() {
                         <option value="Professional">Professional (249.000đ)</option>
                       </select>
                     </div>
-
-                    <div className="filter-group">
-                      <label>Trạng thái thanh toán:</label>
-                      <select
-                        className="upgrade-filter-select"
-                        value={txFilterStatus}
-                        onChange={(e) => setTxFilterStatus(e.target.value)}
-                      >
-                        <option value="all">Tất cả trạng thái</option>
-                        <option value="PAID">Đã thanh toán (Thành công)</option>
-                        <option value="PENDING">Chờ thanh toán (Đang chờ)</option>
-                        <option value="CANCELLED">Đã hủy</option>
-                      </select>
-                    </div>
                   </div>
                 </div>
 
@@ -1016,38 +1002,27 @@ export default function AdminDashboard() {
                   <table className="admin-table">
                     <thead>
                       <tr>
-                        <th>Mã đơn / OrderCode</th>
+                        <th style={{ width: "110px" }}>Mã đơn</th>
                         <th>Khách hàng</th>
-                        <th>Gói nâng cấp</th>
-                        <th>Số tiền</th>
-                        <th>Phương thức</th>
-                        <th>Thời gian chuyển</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
+                        <th style={{ width: "130px" }}>Gói nâng cấp</th>
+                        <th style={{ width: "105px" }}>Số tiền</th>
+                        <th style={{ width: "140px" }}>Cổng thanh toán</th>
+                        <th style={{ width: "105px" }}>Thời gian</th>
+                        <th style={{ width: "135px", textAlign: "center" }}>Trạng thái</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredTransactions.length === 0 ? (
                         <tr>
-                          <td colSpan="8" style={{ textAlign: "center", padding: "40px", color: "#888" }}>
+                          <td colSpan="7" style={{ textAlign: "center", padding: "40px", color: "#888" }}>
                             Không tìm thấy giao dịch chuyển khoản nào phù hợp với bộ lọc.
                           </td>
                         </tr>
                       ) : (
                         filteredTransactions.map((tx) => {
-                          const isPaid = tx.status === "PAID";
-                          const isPending = tx.status === "PENDING";
-                          const isCancelled = tx.status === "CANCELLED";
-
-                          const formattedDate = tx.createdAt
-                            ? new Date(tx.createdAt).toLocaleString("vi-VN", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "2-digit",
-                                minute: "2-digit"
-                              })
-                            : "Vừa xong";
+                          const dateObj = tx.createdAt ? new Date(tx.createdAt) : null;
+                          const timeStr = dateObj ? dateObj.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "";
+                          const dateStr = dateObj ? dateObj.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) : "Vừa xong";
 
                           return (
                             <tr key={tx.id || tx._id || tx.orderCode}>
@@ -1058,10 +1033,10 @@ export default function AdminDashboard() {
                               </td>
                               <td>
                                 <div>
-                                  <strong style={{ display: "block", color: "#2b231c" }}>{tx.userName || "Khách hàng"}</strong>
-                                  <span style={{ fontSize: "12px", color: "#666" }}>{tx.userEmail}</span>
+                                  <strong style={{ display: "block", color: "#2b231c", fontSize: "13px" }}>{tx.userName || "Khách hàng"}</strong>
+                                  <span style={{ fontSize: "11.5px", color: "#666" }}>{tx.userEmail}</span>
                                   {tx.userPhone && (
-                                    <span style={{ display: "block", fontSize: "11.5px", color: "#888" }}>SĐT: {tx.userPhone}</span>
+                                    <span style={{ display: "block", fontSize: "11px", color: "#888" }}>SĐT: {tx.userPhone}</span>
                                   )}
                                 </div>
                               </td>
@@ -1076,7 +1051,7 @@ export default function AdminDashboard() {
                                 </span>
                               </td>
                               <td>
-                                <strong style={{ color: "#a07553", fontSize: "15px" }}>
+                                <strong style={{ color: "#a07553", fontSize: "14px", whiteSpace: "nowrap" }}>
                                   {formatPrice(tx.amount || (tx.plan === "Professional" ? 249000 : 99000))}
                                 </strong>
                               </td>
@@ -1086,40 +1061,15 @@ export default function AdminDashboard() {
                                 </span>
                               </td>
                               <td>
-                                <span style={{ fontSize: "12.5px", color: "#555" }}>{formattedDate}</span>
+                                <div style={{ lineHeight: "1.3", whiteSpace: "nowrap" }}>
+                                  <strong style={{ color: "#2b231c", fontSize: "12px", display: "block" }}>{timeStr}</strong>
+                                  <span style={{ color: "#777", fontSize: "11px", display: "block" }}>{dateStr}</span>
+                                </div>
                               </td>
-                              <td>
-                                <select
-                                  className={`tx-status-select ${tx.status?.toLowerCase() || "paid"}`}
-                                  value={tx.status}
-                                  onChange={(e) => handleUpdateTxStatus(tx.id || tx._id || tx.orderCode, e.target.value)}
-                                >
-                                  <option value="PAID">✅ Đã thanh toán</option>
-                                  <option value="PENDING">⏳ Chờ thanh toán</option>
-                                  <option value="CANCELLED">❌ Đã hủy</option>
-                                </select>
-                              </td>
-                              <td>
-                                {isPending && (
-                                  <button
-                                    type="button"
-                                    className="tx-quick-approve-btn"
-                                    onClick={() => handleUpdateTxStatus(tx.id || tx._id || tx.orderCode, "PAID")}
-                                    title="Xác nhận đã nhận tiền và nâng cấp ngay"
-                                  >
-                                    Duyệt ngay
-                                  </button>
-                                )}
-                                {isPaid && (
-                                  <span style={{ fontSize: "12px", color: "#166534", fontWeight: "700" }}>
-                                    ✓ Hoàn tất
-                                  </span>
-                                )}
-                                {isCancelled && (
-                                  <span style={{ fontSize: "12px", color: "#991b1b" }}>
-                                    Đã đóng
-                                  </span>
-                                )}
+                              <td style={{ textAlign: "center", whiteSpace: "nowrap" }}>
+                                <span className="tx-status-badge-paid">
+                                  <span className="tx-status-dot"></span> Đã thanh toán
+                                </span>
                               </td>
                             </tr>
                           );

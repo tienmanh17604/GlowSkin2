@@ -92,8 +92,8 @@
 /* Sidebar and Main Content layout */
 .admin-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 30px;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px;
 }
 
 @media (max-width: 992px) {
@@ -147,7 +147,8 @@
   background-color: white;
   border: 1px solid rgba(195, 156, 115, 0.12);
   border-radius: 24px;
-  padding: 32px;
+  padding: 28px;
+  min-width: 0;
   box-shadow: 0 4px 25px rgba(169, 132, 103, 0.05);
 }
 
@@ -227,30 +228,36 @@
 .table-responsive {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border-radius: 16px;
-  border: 1px solid rgba(195, 156, 115, 0.12);
+  border: 1px solid rgba(195, 156, 115, 0.15);
+  box-shadow: 0 4px 16px rgba(140, 98, 57, 0.04);
 }
 
 .admin-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
 }
 
 .admin-table th {
-  background-color: rgba(245, 240, 232, 0.5);
-  padding: 16px 20px;
+  background-color: #faf6f0;
+  padding: 14px 16px;
   font-weight: 700;
   color: #8c6239;
-  border-bottom: 1px solid rgba(195, 156, 115, 0.12);
+  border-bottom: 1px solid rgba(195, 156, 115, 0.18);
+  white-space: nowrap;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
 }
 
 .admin-table td {
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(245, 240, 232, 0.4);
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.6);
   vertical-align: middle;
-  color: #444;
+  color: #333;
 }
 
 .admin-table tr:last-child td {
@@ -1202,21 +1209,34 @@
 
 .upgrade-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
   margin-bottom: 24px;
+}
+
+@media (max-width: 1200px) {
+  .upgrade-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .upgrade-stats-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .upgrade-stat-card {
   background: #ffffff;
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  gap: 12px;
   border: 1px solid rgba(195, 156, 115, 0.2);
   box-shadow: 0 4px 16px rgba(140, 98, 57, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
 }
 
 .upgrade-stat-card:hover {
@@ -1242,57 +1262,67 @@
 }
 
 .upgrade-stat-card .stat-card-icon {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1;
   background: #faf6f0;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 12px;
   flex-shrink: 0;
 }
 
 .upgrade-stat-card .stat-card-details {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .upgrade-stat-card .stat-card-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+  color: #78716c;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .upgrade-stat-card .stat-card-number {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   color: #2b231c;
   font-family: "Plus Jakarta Sans", sans-serif;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .upgrade-stat-card .stat-card-sub {
-  font-size: 12px;
-  color: #888;
+  font-size: 11.5px;
+  color: #8c827a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Upgrade Filters */
 .upgrade-filters-card {
   background: #ffffff;
   border-radius: 14px;
-  padding: 16px 20px;
+  padding: 12px 16px;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
   justify-content: space-between;
   border: 1px solid rgba(195, 156, 115, 0.2);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
 }
 
 .upgrade-search-wrap {
@@ -1301,11 +1331,11 @@
   background: #faf6f0;
   border: 1px solid rgba(195, 156, 115, 0.25);
   border-radius: 10px;
-  padding: 8px 14px;
+  padding: 8px 12px;
   flex: 1;
-  min-width: 260px;
-  max-width: 440px;
-  gap: 10px;
+  min-width: 220px;
+  max-width: 360px;
+  gap: 8px;
 }
 
 .upgrade-search-wrap .search-icon {
@@ -1318,38 +1348,40 @@
   background: transparent;
   outline: none;
   width: 100%;
-  font-size: 13.5px;
+  font-size: 13px;
   color: #333;
 }
 
 .upgrade-filter-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .upgrade-filter-controls .filter-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .upgrade-filter-controls label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #666;
+  white-space: nowrap;
 }
 
 .upgrade-filter-select {
   border: 1px solid rgba(195, 156, 115, 0.3);
   border-radius: 8px;
-  padding: 7px 12px;
-  font-size: 13px;
+  padding: 6px 10px;
+  font-size: 12.5px;
   background: #ffffff;
   color: #333;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .upgrade-filter-select:focus {
@@ -1359,26 +1391,26 @@
 
 /* Badges inside Upgrade History Table */
 .tx-code-badge {
-  font-family: monospace;
-  font-size: 12.5px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11.5px;
   font-weight: 700;
   background: #fdfbf7;
   color: #7c5835;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
   display: inline-block;
   border: 1px solid rgba(195, 156, 115, 0.3);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   white-space: nowrap;
 }
 
 .tx-plan-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
+  gap: 5px;
+  padding: 4px 10px;
   border-radius: 999px;
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -1410,7 +1442,7 @@
 }
 
 .tx-plan-badge-icon {
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1;
 }
 
@@ -1420,13 +1452,13 @@
 }
 
 .tx-gateway-badge {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   color: #475569;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1435,14 +1467,17 @@
 
 /* Status selector styled dropdown */
 .tx-status-select {
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 4px 8px;
+  font-size: 11px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
   outline: none;
   transition: all 0.2s;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 124px;
 }
 
 .tx-status-select.paid {
@@ -1469,12 +1504,13 @@
   color: white;
   border: none;
   border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 5px 10px;
+  font-size: 11.5px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .tx-quick-approve-btn:hover {
@@ -1482,4 +1518,28 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(22, 163, 74, 0.35);
 }
+
+/* Static Paid Badge */
+.tx-status-badge-paid {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tx-status-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
 
