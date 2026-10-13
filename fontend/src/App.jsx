@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useSearchParams, useLocation } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { CartProvider, useCart } from "./context/CartContext";
 import { AppProvider, useApp } from "./context/AppContext";
@@ -35,6 +35,61 @@ function LoginRedirect() {
   return <Navigate to="/" replace />;
 }
 
+function AnalyzeRedirect() {
+  const location = useLocation();
+  return <Navigate to={`/your-skin${location.search}`} replace />;
+}
+
+function GlobalPaymentReturnHandler() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { updateUserMembership, currentUser } = useApp();
+
+  useEffect(() => {
+    const paymentStatus = searchParams.get("paymentStatus");
+    const status = searchParams.get("status");
+    const code = searchParams.get("code");
+    const orderCode = searchParams.get("orderCode");
+    const membership = searchParams.get("membership") || "Premium";
+    const userId = searchParams.get("userId") || currentUser?.id || currentUser?._id;
+
+    // PayOS trả về paymentStatus=success HOẶC status=PAID HOẶC code=00
+    const isSuccess = paymentStatus === "success" || status === "PAID" || code === "00";
+
+    if (isSuccess && orderCode) {
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      fetch(`${API_URL}/payments/verify-membership-payment`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderCode,
+          userId,
+          membership,
+          userName: currentUser?.name || currentUser?.preferredName || "",
+          userEmail: currentUser?.email || ""
+        }),
+      }).catch(console.error);
+
+      if (userId && membership) {
+        updateUserMembership(userId, membership);
+      }
+
+      alert(`🎉 Chúc mừng bạn đã thanh toán nâng cấp thành công gói ${membership}! Hệ thống đã kích hoạt toàn bộ tính năng cao cấp.`);
+
+      searchParams.delete("paymentStatus");
+      searchParams.delete("status");
+      searchParams.delete("code");
+      searchParams.delete("orderCode");
+      searchParams.delete("membership");
+      searchParams.delete("userId");
+      searchParams.delete("cancel");
+      searchParams.delete("id");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams, updateUserMembership, currentUser]);
+
+  return null;
+}
+
 export default function App() {
   const [showSplash, setShowSplash] = useState(() => {
     return !sessionStorage.getItem("hasSeenSplash");
@@ -62,10 +117,11 @@ export default function App() {
         />
       )}
       <BrowserRouter>
+        <GlobalPaymentReturnHandler />
         <Routes>
           <Route path="/" element={<Home videoReady={videoReady} />} />
           <Route path="/your-skin" element={<YourSkin />} />
-          <Route path="/analyze" element={<Navigate to="/your-skin" replace />} />
+          <Route path="/analyze" element={<AnalyzeRedirect />} />
           <Route path="/products" element={<Navigate to="/" replace />} />
           <Route path="/products/:productId" element={<Navigate to="/" replace />} />
           <Route path="/cart" element={<Navigate to="/" replace />} />

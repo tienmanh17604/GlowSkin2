@@ -71,6 +71,9 @@ export default function UpgradeModal() {
         body: JSON.stringify({
           amount: currentPlanData.amount,
           userId: currentUser.id || currentUser._id,
+          userName: currentUser.name || currentUser.preferredName || "Khách hàng",
+          userEmail: currentUser.email || "",
+          userPhone: currentUser.phone || "",
           membership: currentPlanData.membershipCode,
         }),
       });

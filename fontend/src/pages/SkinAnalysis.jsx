@@ -215,8 +215,11 @@ export default function SkinAnalysis() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount,
-          userId: currentUser.id,
-          membership: "VIP",
+          userId: currentUser.id || currentUser._id,
+          userName: currentUser.name || currentUser.preferredName || "Khách hàng",
+          userEmail: currentUser.email || "",
+          userPhone: currentUser.phone || "",
+          membership: level === "Professional" ? "VIP" : "Premium",
         }),
       });
       

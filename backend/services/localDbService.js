@@ -269,14 +269,41 @@ export const localDb = {
     return newTx;
   },
 
-  updateMembershipTransactionStatus: (id, status) => {
+  updateMembershipTransactionStatus: (id, status, extraData = {}) => {
     const txs = localDb.getMembershipTransactions();
+    const cleanId = String(id).trim();
     const index = txs.findIndex(
-      (t) => String(t.id) === String(id) || String(t._id) === String(id) || String(t.orderCode) === String(id)
+      (t) => String(t.id) === cleanId || String(t._id) === cleanId || String(t.orderCode) === cleanId
     );
-    if (index === -1) return null;
+    if (index === -1) {
+      const planName = extraData.plan || (extraData.membership === "VIP" ? "Professional" : "Premium");
+      const amt = Number(extraData.amount) || (planName === "Professional" ? 249000 : 99000);
+      const newTx = {
+        id: "SUB_" + cleanId,
+        orderCode: Number(cleanId) || Date.now() % 1000000000,
+        userId: extraData.userId || "",
+        userName: extraData.userName || "Khách hàng",
+        userEmail: extraData.userEmail || "",
+        userPhone: extraData.userPhone || "",
+        plan: planName,
+        amount: amt,
+        paymentMethod: extraData.paymentMethod || "PayOS (VietQR)",
+        status: status || "PAID",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      txs.unshift(newTx);
+      writeJson("membership_transactions.json", txs);
+      return newTx;
+    }
     txs[index].status = status;
     txs[index].updatedAt = new Date().toISOString();
+    if (extraData.userName && (!txs[index].userName || txs[index].userName === "Khách hàng")) {
+      txs[index].userName = extraData.userName;
+    }
+    if (extraData.userEmail && !txs[index].userEmail) txs[index].userEmail = extraData.userEmail;
+    if (extraData.userPhone && !txs[index].userPhone) txs[index].userPhone = extraData.userPhone;
+    if (extraData.userId && !txs[index].userId) txs[index].userId = extraData.userId;
     writeJson("membership_transactions.json", txs);
     return txs[index];
   }

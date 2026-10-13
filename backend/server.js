@@ -369,6 +369,31 @@ app.put("/api/users/:id/membership", async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy người dùng" });
     }
 
+    // Ghi nhận giao dịch nâng cấp vào lịch sử & doanh thu nếu được nâng cấp lên Premium hoặc VIP
+    if (membership === "Premium" || membership === "VIP") {
+      const planName = membership === "VIP" ? "Professional" : "Premium";
+      const amt = planName === "Professional" ? 249000 : 99000;
+      const orderCode = Date.now() % 1000000000;
+      const txData = {
+        orderCode,
+        userId: updatedLocal.id || updatedLocal._id,
+        userName: updatedLocal.name || updatedLocal.preferredName || "Khách hàng",
+        userEmail: updatedLocal.email || "",
+        userPhone: updatedLocal.phone || "",
+        plan: planName,
+        amount: amt,
+        paymentMethod: "Cập nhật tài khoản",
+        status: "PAID",
+        createdAt: new Date().toISOString()
+      };
+      localDb.saveMembershipTransaction(txData);
+      if (isMongoConnected) {
+        try {
+          await MembershipTransaction.create(txData);
+        } catch (e) {}
+      }
+    }
+
     const { password: _, ...safeUser } = updatedLocal;
     res.json(safeUser);
   } catch (error) {
@@ -729,10 +754,61 @@ app.post("/api/payments/create-payos-url", async (req, res) => {
   }
 });
 
+// Helper: Tự động đối soát và đồng bộ các giao dịch PENDING với cổng thanh toán PayOS
+async function syncPendingMembershipTransactions() {
+  const transactions = localDb.getMembershipTransactions();
+  let updatedCount = 0;
+
+  for (const tx of transactions) {
+    if (tx.status === "PENDING" && tx.orderCode) {
+      try {
+        const payosInfo = await payos.paymentRequests.get(Number(tx.orderCode));
+        if (payosInfo && (payosInfo.status === "PAID" || (payosInfo.amountPaid && payosInfo.amountPaid >= (tx.amount || 99000)))) {
+          console.log(`--> [PayOS Sync] Phát hiện giao dịch #${tx.orderCode} đã thanh toán thành công! Tự động kích hoạt...`);
+          localDb.updateMembershipTransactionStatus(tx.orderCode, "PAID");
+          
+          if (isMongoConnected) {
+            try {
+              await MembershipTransaction.findOneAndUpdate(
+                { orderCode: Number(tx.orderCode) },
+                { $set: { status: "PAID" } }
+              );
+            } catch (e) {}
+          }
+
+          if (tx.userId) {
+            const planMembership = tx.plan === "Professional" || tx.plan === "VIP" ? "VIP" : "Premium";
+            localDb.updateUser(tx.userId, { membership: planMembership });
+            if (isMongoConnected) {
+              try {
+                await User.findOneAndUpdate(
+                  { $or: [{ id: tx.userId }, { _id: tx.userId }] },
+                  { $set: { membership: planMembership } }
+                );
+              } catch (e) {}
+            }
+          }
+          updatedCount++;
+        } else if (payosInfo && payosInfo.status === "CANCELLED") {
+          localDb.updateMembershipTransactionStatus(tx.orderCode, "CANCELLED");
+        }
+      } catch (err) {
+        // Order code có thể là dữ liệu demo hoặc chưa khởi tạo trên PayOS
+      }
+    }
+  }
+  return updatedCount;
+}
+
+// Chạy nền định kỳ mỗi 15 giây để tự động đồng bộ trạng thái thanh toán từ PayOS
+setInterval(() => {
+  syncPendingMembershipTransactions().catch(() => {});
+}, 15000);
+
 // POST PayOS URL for membership upgrade
 app.post("/api/payments/create-membership-payos-url", async (req, res) => {
   try {
-    const { amount, userId, membership } = req.body;
+    const { amount, userId, membership, userName: inputName, userEmail: inputEmail, userPhone: inputPhone } = req.body;
     const orderCode = Date.now() % 1000000000;
 
     const origin = req.headers.origin || (req.headers.referer ? new URL(req.headers.referer).origin : null);
@@ -740,14 +816,14 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
 
     // Lookup user details
     const localUser = localDb.findUserById(userId);
-    const userName = localUser?.name || localUser?.preferredName || "Khách hàng";
-    const userEmail = localUser?.email || "";
-    const userPhone = localUser?.phone || "";
+    const userName = inputName || localUser?.name || localUser?.preferredName || "Khách hàng";
+    const userEmail = inputEmail || localUser?.email || "";
+    const userPhone = inputPhone || localUser?.phone || "";
 
     // Save initial transaction record as PENDING
     const txData = {
       orderCode,
-      userId,
+      userId: userId || localUser?.id || localUser?._id,
       userName,
       userEmail,
       userPhone,
@@ -784,18 +860,35 @@ app.post("/api/payments/create-membership-payos-url", async (req, res) => {
 // POST Verify membership payment callback
 app.post("/api/payments/verify-membership-payment", async (req, res) => {
   try {
-    const { orderCode, userId, membership } = req.body;
+    const { orderCode, userId, membership, userName, userEmail } = req.body;
     if (!orderCode) {
       return res.status(400).json({ message: "Thiếu orderCode" });
     }
 
-    // Update transaction status to PAID
-    localDb.updateMembershipTransactionStatus(orderCode, "PAID");
+    // Check with PayOS if available
+    try {
+      const payosInfo = await payos.paymentRequests.get(Number(orderCode));
+      if (payosInfo && payosInfo.status === "PAID") {
+        console.log(`--> [Verify Payment] PayOS xác nhận order #${orderCode} đã thanh toán`);
+      }
+    } catch (e) {}
+
+    // Update transaction status to PAID (or auto-create if missing)
+    localDb.updateMembershipTransactionStatus(orderCode, "PAID", {
+      userId,
+      userName,
+      userEmail,
+      membership,
+      plan: membership === "VIP" ? "Professional" : "Premium",
+      amount: membership === "VIP" ? 249000 : 99000
+    });
+
     if (isMongoConnected) {
       try {
         await MembershipTransaction.findOneAndUpdate(
           { orderCode: Number(orderCode) },
-          { $set: { status: "PAID" } }
+          { $set: { status: "PAID" } },
+          { upsert: true }
         );
       } catch (e) {
         console.warn("Mongo update tx status error:", e.message);
@@ -803,11 +896,15 @@ app.post("/api/payments/verify-membership-payment", async (req, res) => {
     }
 
     // Update user membership
-    if (userId && membership) {
-      localDb.updateUser(userId, { membership });
+    const planMembership = membership === "VIP" || membership === "Professional" ? "VIP" : "Premium";
+    if (userId) {
+      localDb.updateUser(userId, { membership: planMembership });
       if (isMongoConnected) {
         try {
-          await User.findOneAndUpdate({ id: userId }, { $set: { membership } });
+          await User.findOneAndUpdate(
+            { $or: [{ id: userId }, { _id: userId }] },
+            { $set: { membership: planMembership } }
+          );
         } catch (e) {
           console.warn("Mongo update user membership error:", e.message);
         }
@@ -821,9 +918,24 @@ app.post("/api/payments/verify-membership-payment", async (req, res) => {
   }
 });
 
+// POST Manual Trigger Sync with PayOS API
+app.post("/api/membership-transactions/sync-payos", async (req, res) => {
+  try {
+    const updatedCount = await syncPendingMembershipTransactions();
+    const allTxs = localDb.getMembershipTransactions();
+    res.json({ success: true, updatedCount, transactions: allTxs });
+  } catch (error) {
+    console.error("Lỗi đồng bộ PayOS:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 // GET all membership upgrade transactions (Admin & Dashboard)
 app.get("/api/membership-transactions", async (req, res) => {
   try {
+    // Tự động kiểm tra nhanh các đơn PENDING với PayOS trước khi trả về
+    await syncPendingMembershipTransactions();
+
     if (isMongoConnected) {
       const txs = await MembershipTransaction.find().sort({ createdAt: -1 });
       if (txs && txs.length > 0) {

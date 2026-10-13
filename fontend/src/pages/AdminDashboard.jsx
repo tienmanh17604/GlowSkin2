@@ -55,8 +55,8 @@ export default function AdminDashboard() {
   const [txSearch, setTxSearch] = useState("");
   const [isTxLoading, setIsTxLoading] = useState(false);
 
-  const fetchMembershipTransactions = async () => {
-    setIsTxLoading(true);
+  const fetchMembershipTransactions = async (showLoading = true) => {
+    if (showLoading) setIsTxLoading(true);
     try {
       const res = await fetch(`${API_URL}/membership-transactions`);
       if (res.ok) {
@@ -66,13 +66,48 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error("Lỗi tải danh sách giao dịch nâng cấp:", err);
     } finally {
+      if (showLoading) setIsTxLoading(false);
+    }
+  };
+
+  const handleSyncPayOS = async () => {
+    setIsTxLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/membership-transactions/sync-payos`, { method: "POST" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.transactions) {
+          setMembershipTransactions(data.transactions);
+        }
+        if (data.updatedCount > 0) {
+          alert(`⚡ Đồng bộ thành công! Đã phát hiện và kích hoạt ${data.updatedCount} giao dịch chuyển khoản mới.`);
+        } else {
+          alert("✓ Đã đối soát xong với PayOS! Toàn bộ giao dịch đều ở trạng thái mới nhất.");
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi đồng bộ PayOS:", err);
+    } finally {
       setIsTxLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMembershipTransactions();
+    fetchMembershipTransactions(false);
+
+    // Tự động kiểm tra và cập nhật giao dịch/doanh thu mỗi 6 giây (Real-time polling)
+    const interval = setInterval(() => {
+      fetchMembershipTransactions(false);
+    }, 6000);
+    return () => clearInterval(interval);
   }, []);
+
+  // Fetch ngay khi admin bấm chuyển tab sang lịch sử nâng cấp
+  useEffect(() => {
+    if (activeTab === "upgrade_history") {
+      fetchMembershipTransactions(true);
+    }
+  }, [activeTab]);
 
   const handleUpdateTxStatus = async (txId, newStatus) => {
     try {
@@ -872,14 +907,26 @@ export default function AdminDashboard() {
                       Theo dõi toàn bộ dòng tiền và giao dịch nâng cấp tài khoản Premium / Professional qua cổng PayOS VietQR
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    className="admin-refresh-btn"
-                    onClick={fetchMembershipTransactions}
-                    disabled={isTxLoading}
-                  >
-                    {isTxLoading ? "Đang tải..." : "🔄 Làm mới dữ liệu"}
-                  </button>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <button
+                      type="button"
+                      className="admin-refresh-btn"
+                      style={{ background: "#8c6239", color: "#fff", borderColor: "#8c6239" }}
+                      onClick={handleSyncPayOS}
+                      disabled={isTxLoading}
+                      title="Kiểm tra trực tiếp với cổng PayOS VietQR xem khách hàng đã chuyển khoản chưa"
+                    >
+                      {isTxLoading ? "Đang đồng bộ..." : "⚡ Đối soát PayOS VietQR"}
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-refresh-btn"
+                      onClick={() => fetchMembershipTransactions(true)}
+                      disabled={isTxLoading}
+                    >
+                      {isTxLoading ? "Đang tải..." : "🔄 Làm mới"}
+                    </button>
+                  </div>
                 </div>
 
                 {/* KPI Stat Cards */}
