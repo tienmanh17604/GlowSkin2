@@ -19,6 +19,7 @@ export default function AdminDashboard() {
     updateProduct,
     deleteProduct,
     updateUserMembership,
+    refreshUsers,
     deleteUser,
     updateOrderStatus,
     deleteReview,
@@ -79,10 +80,13 @@ export default function AdminDashboard() {
         if (data.transactions) {
           setMembershipTransactions(data.transactions);
         }
+        if (refreshUsers) {
+          await refreshUsers();
+        }
         if (data.updatedCount > 0) {
           alert(`⚡ Đồng bộ thành công! Đã phát hiện và kích hoạt ${data.updatedCount} giao dịch chuyển khoản mới.`);
         } else {
-          alert("✓ Đã đối soát xong với PayOS! Toàn bộ giao dịch đều ở trạng thái mới nhất.");
+          alert("✓ Đã đối soát xong với PayOS! Toàn bộ giao dịch và cấp độ hội viên đều ở trạng thái mới nhất.");
         }
       }
     } catch (err) {
@@ -94,18 +98,24 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchMembershipTransactions(false);
+    if (refreshUsers) refreshUsers();
 
     // Tự động kiểm tra và cập nhật giao dịch/doanh thu mỗi 6 giây (Real-time polling)
     const interval = setInterval(() => {
       fetchMembershipTransactions(false);
+      if (refreshUsers) refreshUsers();
     }, 6000);
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch ngay khi admin bấm chuyển tab sang lịch sử nâng cấp
+  // Fetch ngay khi admin chuyển tab
   useEffect(() => {
     if (activeTab === "upgrade_history") {
       fetchMembershipTransactions(true);
+      if (refreshUsers) refreshUsers();
+    } else if (activeTab === "members" || activeTab === "overview") {
+      if (refreshUsers) refreshUsers();
+      fetchMembershipTransactions(false);
     }
   }, [activeTab]);
 

@@ -67,7 +67,14 @@ function GlobalPaymentReturnHandler() {
           userName: currentUser?.name || currentUser?.preferredName || "",
           userEmail: currentUser?.email || ""
         }),
-      }).catch(console.error);
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.membership) {
+            updateUserMembership(userId, data.membership);
+          }
+        })
+        .catch(console.error);
 
       if (userId && membership) {
         updateUserMembership(userId, membership);

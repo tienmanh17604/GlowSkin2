@@ -298,6 +298,9 @@ export const localDb = {
     }
     txs[index].status = status;
     txs[index].updatedAt = new Date().toISOString();
+    if (extraData.amount) txs[index].amount = Number(extraData.amount);
+    if (extraData.plan) txs[index].plan = extraData.plan;
+    if (extraData.payosTransactions) txs[index].payosTransactions = extraData.payosTransactions;
     if (extraData.userName && (!txs[index].userName || txs[index].userName === "Khách hàng")) {
       txs[index].userName = extraData.userName;
     }

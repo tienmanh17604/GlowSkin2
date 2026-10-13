@@ -20,7 +20,7 @@
     "membership": "Premium",
     "addresses": [],
     "createdAt": "2026-09-30T00:00:00.000Z",
-    "updatedAt": "2026-10-13T16:21:55.107Z",
+    "updatedAt": "2026-10-13T17:03:27.386Z",
     "gender": "Nữ",
     "birthDate": "20/12/2000",
     "city": "Bến Tre",
@@ -48,10 +48,11 @@
     "email": "test1@glowskin.com",
     "password": "123456",
     "role": "user",
-    "membership": "Free",
+    "membership": "VIP",
     "addresses": [],
     "createdAt": "2026-09-30T00:00:00.000Z",
-    "onboardingCompleted": false
+    "onboardingCompleted": false,
+    "updatedAt": "2026-10-13T17:03:27.413Z"
   },
   {
     "id": "u4",
@@ -60,11 +61,11 @@
     "email": "test2@glowskin.com",
     "password": "123456",
     "role": "user",
-    "membership": "Free",
+    "membership": "Premium",
     "addresses": [],
     "createdAt": "2026-09-30T00:00:00.000Z",
     "onboardingCompleted": true,
-    "updatedAt": "2026-09-30T07:14:08.812Z",
+    "updatedAt": "2026-10-13T17:03:27.436Z",
     "gender": "Nam",
     "birthDate": "1/1/2000",
     "city": "Bà Rịa-Vũng Tàu",
@@ -99,10 +100,11 @@
     "email": "test3@glowskin.com",
     "password": "123456",
     "role": "user",
-    "membership": "Free",
+    "membership": "VIP",
     "addresses": [],
     "createdAt": "2026-09-30T00:00:00.000Z",
-    "onboardingCompleted": false
+    "onboardingCompleted": false,
+    "updatedAt": "2026-10-13T17:03:27.456Z"
   },
   {
     "id": "6a47f07a70d8eb2f518ddd51",

@@ -691,23 +691,72 @@ export function AppProvider({ children }) {
 
   // User & Membership management
   const updateUserMembership = async (userId, newMembership) => {
+    const cleanId = String(userId || "").trim();
     // Optimistic UI update
     setUsers((prev) =>
-      prev.map((u) => (u.id === userId ? { ...u, membership: newMembership } : u))
+      prev.map((u) => {
+        if (
+          String(u.id) === cleanId ||
+          String(u._id) === cleanId ||
+          (currentUser?.email && u.email && u.email.toLowerCase() === currentUser.email.toLowerCase())
+        ) {
+          return { ...u, membership: newMembership };
+        }
+        return u;
+      })
     );
 
-    if (currentUser && currentUser.id === userId) {
-      setCurrentUser((prev) => (prev ? { ...prev, membership: newMembership } : null));
+    if (
+      currentUser &&
+      (String(currentUser.id) === cleanId ||
+        String(currentUser._id) === cleanId ||
+        (cleanId && currentUser.email && cleanId.toLowerCase() === currentUser.email.toLowerCase()))
+    ) {
+      const updatedUser = { ...currentUser, membership: newMembership };
+      setCurrentUser(updatedUser);
+      try {
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updatedUser));
+      } catch (e) {}
     }
 
     try {
-      await fetch(`${API_URL}/users/${userId}/membership`, {
+      await fetch(`${API_URL}/users/${encodeURIComponent(cleanId)}/membership`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ membership: newMembership }),
       });
     } catch (err) {
       console.error("Lỗi khi cập nhật hạng thành viên ở backend:", err);
+    }
+  };
+
+  const refreshUsers = async () => {
+    try {
+      const userRes = await fetch(`${API_URL}/users`);
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        if (userData && Array.isArray(userData)) {
+          setUsers(userData);
+          if (currentUser) {
+            const currentMatch = userData.find(
+              (u) =>
+                (currentUser.id && u.id === currentUser.id) ||
+                (currentUser._id && (u._id === currentUser._id || u.id === currentUser._id)) ||
+                (currentUser.email && u.email?.toLowerCase() === currentUser.email.toLowerCase())
+            );
+            if (currentMatch && currentMatch.membership !== currentUser.membership) {
+              const updatedUser = { ...currentUser, membership: currentMatch.membership };
+              setCurrentUser(updatedUser);
+              try {
+                localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updatedUser));
+              } catch (e) {}
+            }
+          }
+          return userData;
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi khi làm mới danh sách người dùng:", err);
     }
   };
 
@@ -901,6 +950,7 @@ export function AppProvider({ children }) {
       updateProduct,
       deleteProduct,
       updateUserMembership,
+      refreshUsers,
       deleteUser,
       updateOrderStatus,
       placeOrder,
