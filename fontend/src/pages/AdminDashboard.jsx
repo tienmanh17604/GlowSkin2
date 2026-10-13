@@ -56,6 +56,10 @@ export default function AdminDashboard() {
   const [txSearch, setTxSearch] = useState("");
   const [isTxLoading, setIsTxLoading] = useState(false);
 
+  // States for Member Management Search & Filter
+  const [memberSearch, setMemberSearch] = useState("");
+  const [memberFilterTier, setMemberFilterTier] = useState("all");
+
   const fetchMembershipTransactions = async (showLoading = true) => {
     if (showLoading) setIsTxLoading(true);
     try {
@@ -191,6 +195,21 @@ export default function AdminDashboard() {
       return true;
     });
   }, [membershipTransactions, txFilterPlan, txSearch]);
+
+  // Filtered Users for Member Management tab
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      if (memberFilterTier !== "all" && u.membership !== memberFilterTier) return false;
+      if (memberSearch.trim()) {
+        const query = memberSearch.trim().toLowerCase();
+        const name = String(u.name || "").toLowerCase();
+        const email = String(u.email || "").toLowerCase();
+        const phone = String(u.phone || "").toLowerCase();
+        return name.includes(query) || email.includes(query) || phone.includes(query);
+      }
+      return true;
+    });
+  }, [users, memberFilterTier, memberSearch]);
 
   const fetchSessions = async () => {
     try {
@@ -788,8 +807,59 @@ export default function AdminDashboard() {
             {/* TAB MEMBERSHIPS */}
             {activeTab === "members" && (
               <div>
-                <div className="admin-content-header">
-                  <h2>Quản lý tài khoản & Cấp độ hội viên</h2>
+                <div className="admin-content-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+                  <div>
+                    <h2>👥 Quản lý tài khoản &amp; Cấp độ hội viên</h2>
+                    <p style={{ fontSize: "13.5px", color: "#777", marginTop: "4px" }}>
+                      Xem thông tin tài khoản, email, số điện thoại và nâng cấp/hạ cấp bậc thành viên.
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    <span style={{ fontSize: "13px", color: "#666", fontWeight: "600" }}>
+                      Hiển thị: <strong>{filteredUsers.length}</strong> / {users.length} tài khoản
+                    </span>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      style={{ padding: "6px 12px", fontSize: "12.5px" }}
+                      onClick={async () => {
+                        if (refreshUsers) await refreshUsers();
+                      }}
+                      title="Làm mới lại danh sách tài khoản từ máy chủ"
+                    >
+                      🔄 Đồng bộ lại
+                    </button>
+                  </div>
+                </div>
+
+                {/* Search & Filter Bar */}
+                <div className="upgrade-filters-card" style={{ marginBottom: "18px" }}>
+                  <div className="upgrade-search-wrap">
+                    <span className="search-icon">🔍</span>
+                    <input
+                      type="text"
+                      className="upgrade-search-input"
+                      placeholder="Tìm theo Tên khách hàng, Email, SĐT..."
+                      value={memberSearch}
+                      onChange={(e) => setMemberSearch(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="upgrade-filter-controls">
+                    <div className="filter-group">
+                      <label>Cấp độ:</label>
+                      <select
+                        className="upgrade-filter-select"
+                        value={memberFilterTier}
+                        onChange={(e) => setMemberFilterTier(e.target.value)}
+                      >
+                        <option value="all">Tất cả hội viên ({users.length})</option>
+                        <option value="Premium">⭐ Premium ({users.filter(u => u.membership === "Premium").length})</option>
+                        <option value="VIP">💎 VIP ({users.filter(u => u.membership === "VIP").length})</option>
+                        <option value="Free">Free ({users.filter(u => u.membership === "Free").length})</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="table-responsive">
@@ -798,6 +868,7 @@ export default function AdminDashboard() {
                       <tr>
                         <th>Tên khách hàng</th>
                         <th>Email đăng ký</th>
+                        <th>Số điện thoại</th>
                         <th>Vai trò</th>
                         <th>Cấp độ membership</th>
                         <th>Nâng cấp / Thay đổi</th>
@@ -805,102 +876,111 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {users.map((u) => {
-                        let badgeClass = "user-badge--free";
-                        if (u.membership === "Premium") badgeClass = "user-badge--premium";
-                        if (u.membership === "VIP") badgeClass = "user-badge--vip";
-                        const isSelf = currentUser && (currentUser.id === u.id || currentUser._id === u._id);
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: "center", padding: "40px", color: "#888" }}>
+                            Không tìm thấy tài khoản người dùng nào phù hợp với bộ lọc.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredUsers.map((u) => {
+                          let badgeClass = "user-badge--free";
+                          if (u.membership === "Premium") badgeClass = "user-badge--premium";
+                          if (u.membership === "VIP") badgeClass = "user-badge--vip";
+                          const isSelf = currentUser && (currentUser.id === u.id || currentUser._id === u._id);
 
-                        return (
-                          <tr key={u.id || u._id}>
-                            <td style={{ fontWeight: "700" }}>{u.name}</td>
-                            <td>{u.email}</td>
-                            <td>
-                              <span style={{
-                                textTransform: "capitalize",
-                                color: u.role === "admin" ? "#dc2626" : "#555",
-                                fontWeight: u.role === "admin" ? "700" : "normal"
-                              }}>
-                                {u.role}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`user-badge ${badgeClass}`}>
-                                {u.membership}
-                              </span>
-                            </td>
-                            <td>
-                              <select
-                                className="membership-select"
-                                value={u.membership}
-                                onChange={(e) => updateUserMembership(u.id || u._id, e.target.value)}
-                              >
-                                <option value="Free">Free Member</option>
-                                <option value="Premium">Premium Member</option>
-                                <option value="VIP">VIP Member</option>
-                              </select>
-                            </td>
-                            <td>
-                              {!isSelf ? (
-                                confirmDeleteUserId === (u._id || u.id) ? (
-                                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          return (
+                            <tr key={u.id || u._id}>
+                              <td style={{ fontWeight: "700", color: "#2b231c" }}>{u.name}</td>
+                              <td>{u.email}</td>
+                              <td style={{ color: "#666", fontSize: "12.5px" }}>{u.phone || "—"}</td>
+                              <td>
+                                <span style={{
+                                  textTransform: "capitalize",
+                                  color: u.role === "admin" ? "#dc2626" : "#555",
+                                  fontWeight: u.role === "admin" ? "700" : "normal"
+                                }}>
+                                  {u.role}
+                                </span>
+                              </td>
+                              <td>
+                                <span className={`user-badge ${badgeClass}`}>
+                                  {u.membership}
+                                </span>
+                              </td>
+                              <td>
+                                <select
+                                  className="membership-select"
+                                  value={u.membership}
+                                  onChange={(e) => updateUserMembership(u.id || u._id, e.target.value)}
+                                >
+                                  <option value="Free">Free Member</option>
+                                  <option value="Premium">Premium Member</option>
+                                  <option value="VIP">VIP Member</option>
+                                </select>
+                              </td>
+                              <td>
+                                {!isSelf ? (
+                                  confirmDeleteUserId === (u._id || u.id) ? (
+                                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                      <button
+                                        type="button"
+                                        onClick={async () => {
+                                          const targetUserId = u._id || u.id;
+                                          const res = await deleteUser(targetUserId);
+                                          setConfirmDeleteUserId(null);
+                                          if (res && !res.success) {
+                                            alert(res.message);
+                                          }
+                                        }}
+                                        style={{
+                                          background: "#dc2626",
+                                          color: "white",
+                                          border: "none",
+                                          borderRadius: "6px",
+                                          padding: "5px 10px",
+                                          fontSize: "12px",
+                                          fontWeight: "700",
+                                          cursor: "pointer"
+                                        }}
+                                      >
+                                        ⚠️ Xác nhận
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => setConfirmDeleteUserId(null)}
+                                        style={{
+                                          background: "#6b7280",
+                                          color: "white",
+                                          border: "none",
+                                          borderRadius: "6px",
+                                          padding: "5px 8px",
+                                          fontSize: "12px",
+                                          cursor: "pointer"
+                                        }}
+                                      >
+                                        Hủy
+                                      </button>
+                                    </div>
+                                  ) : (
                                     <button
                                       type="button"
-                                      onClick={async () => {
-                                        const targetUserId = u._id || u.id;
-                                        const res = await deleteUser(targetUserId);
-                                        setConfirmDeleteUserId(null);
-                                        if (res && !res.success) {
-                                          alert(res.message);
-                                        }
-                                      }}
-                                      style={{
-                                        background: "#dc2626",
-                                        color: "white",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        padding: "5px 10px",
-                                        fontSize: "12px",
-                                        fontWeight: "700",
-                                        cursor: "pointer"
-                                      }}
+                                      className="btn-icon btn-icon--delete"
+                                      title="Xóa tài khoản khách hàng"
+                                      onClick={() => setConfirmDeleteUserId(u._id || u.id)}
+                                      style={{ padding: "6px 12px", fontSize: "12.5px" }}
                                     >
-                                      ⚠️ Xác nhận
+                                      🗑️ Xóa
                                     </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => setConfirmDeleteUserId(null)}
-                                      style={{
-                                        background: "#6b7280",
-                                        color: "white",
-                                        border: "none",
-                                        borderRadius: "6px",
-                                        padding: "5px 8px",
-                                        fontSize: "12px",
-                                        cursor: "pointer"
-                                      }}
-                                    >
-                                      Hủy
-                                    </button>
-                                  </div>
+                                  )
                                 ) : (
-                                  <button
-                                    type="button"
-                                    className="btn-icon btn-icon--delete"
-                                    title="Xóa tài khoản khách hàng"
-                                    onClick={() => setConfirmDeleteUserId(u._id || u.id)}
-                                    style={{ padding: "6px 12px", fontSize: "12.5px" }}
-                                  >
-                                    🗑️ Xóa
-                                  </button>
-                                )
-                              ) : (
-                                <span style={{ fontSize: "12px", color: "#999", fontStyle: "italic" }}>(Tài khoản của bạn)</span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                                  <span style={{ fontSize: "12px", color: "#999", fontStyle: "italic" }}>(Tài khoản của bạn)</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
