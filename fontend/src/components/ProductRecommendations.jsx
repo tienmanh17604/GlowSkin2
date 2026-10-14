@@ -185,27 +185,29 @@ export default function ProductRecommendations({
 
   return (
     <section className={`product-rec ${compact ? "product-rec--compact" : ""}`}>
-      <div className="product-rec-header">
-        <div>
-          <h2>{title}</h2>
-          {subtitle && <p className="product-rec-subtitle">{subtitle}</p>}
-        </div>
-
-        {profile && (
-          <div className="product-rec-tags">
-            {profile.skinTypes.map((type) => (
-              <span key={type} className="product-tag product-tag--skin">
-                {SKIN_TYPES[type]?.emoji} {SKIN_TYPES[type]?.label}
-              </span>
-            ))}
-            {profile.concerns.slice(0, 3).map((c) => (
-              <span key={c} className="product-tag product-tag--concern">
-                {CONCERNS[c]?.emoji} {CONCERNS[c]?.label}
-              </span>
-            ))}
+      {(title || subtitle || profile) && (
+        <div className="product-rec-header">
+          <div>
+            {title && <h2>{title}</h2>}
+            {subtitle && <p className="product-rec-subtitle">{subtitle}</p>}
           </div>
-        )}
-      </div>
+
+          {profile && (
+            <div className="product-rec-tags">
+              {profile.skinTypes.map((type) => (
+                <span key={type} className="product-tag product-tag--skin">
+                  {SKIN_TYPES[type]?.emoji} {SKIN_TYPES[type]?.label}
+                </span>
+              ))}
+              {profile.concerns.slice(0, 3).map((c) => (
+                <span key={c} className="product-tag product-tag--concern">
+                  {CONCERNS[c]?.emoji} {CONCERNS[c]?.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="product-grid">
         {products.map((product, index) => (
@@ -213,7 +215,13 @@ export default function ProductRecommendations({
             key={product.id}
             className={`product-card beauty-box-card ${product.hoverImage ? "has-hover-image" : ""}`}
             style={{ animationDelay: `${index * 0.08}s` }}
-            onClick={() => handleOpenDetail(product)}
+            onClick={() => {
+              if (product.link) {
+                window.open(product.link, "_blank", "noopener,noreferrer");
+              } else {
+                handleOpenDetail(product);
+              }
+            }}
           >
             <div className="product-card-image">
               <img
@@ -243,10 +251,32 @@ export default function ProductRecommendations({
                 {wishlist[product.id] ? "♥" : "♡"}
               </button>
 
-              {/* Gradient "Xem nhanh" button on hover */}
-              <div className="quick-view-btn-gradient">
-                <span>Xem nhanh</span>
+              {/* Gradient "Xem nhanh" hoặc "Mở Shopee" button on hover */}
+              <div className="quick-view-btn-gradient" style={product.link ? { background: "linear-gradient(135deg, #ee4d2d 0%, #ff7337 100%)", color: "#fff" } : {}}>
+                <span>{product.link ? "🛒 Mở liên kết Shopee ↗" : "Xem nhanh"}</span>
               </div>
+
+              {product.link && (
+                <span className="product-shopee-badge" style={{
+                  position: "absolute",
+                  top: "12px",
+                  left: "12px",
+                  background: "linear-gradient(135deg, #ee4d2d, #ff5722)",
+                  color: "#fff",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  letterSpacing: "0.5px",
+                  boxShadow: "0 2px 8px rgba(238, 77, 45, 0.4)",
+                  zIndex: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px"
+                }}>
+                  Shopee ↗
+                </span>
+              )}
 
               {product.matchScore && (
                 <span className="product-match-tag">
@@ -269,21 +299,17 @@ export default function ProductRecommendations({
               <h3 
                 className="product-namecentered" 
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/products/${product.id}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (product.link) {
+                    window.open(product.link, "_blank", "noopener,noreferrer");
+                  } else {
+                    navigate(`/products/${product.id}`);
+                  }
+                }}
               >
                 {product.name}
               </h3>
-              <p 
-                className="product-pricecentered" 
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/products/${product.id}`)}
-              >
-                {formatPrice(product.price)}
-              </p>
-              <div className="product-ratingcentered">
-                <StarRating rating={product.rating} />
-                <span className="reviews-count">({product.reviews || 0})</span>
-              </div>
             </div>
           </article>
         ))}
@@ -519,7 +545,38 @@ export default function ProductRecommendations({
                     </div>
                   )}
 
-                  <div className="product-modal-actions" style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "16px" }}>
+                  <div className="product-modal-actions" style={{ display: "flex", gap: "10px", alignItems: "center", marginTop: "16px", flexWrap: "wrap" }}>
+                    {selectedProduct.link && (
+                      <a
+                        href={selectedProduct.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="checkout-btn"
+                        style={{
+                          flex: "1 1 100%",
+                          height: "46px",
+                          borderRadius: "99px",
+                          background: "linear-gradient(135deg, #ee4d2d 0%, #ff5722 100%)",
+                          color: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          textDecoration: "none",
+                          fontWeight: "700",
+                          fontSize: "14.5px",
+                          boxShadow: "0 4px 14px rgba(238, 77, 45, 0.35)",
+                          cursor: "pointer"
+                        }}
+                      >
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        MUA TRỰC TIẾP TRÊN SHOPEE CHÍNH HÃNG ↗
+                      </a>
+                    )}
                     <button
                       type="button"
                       className="checkout-btn checkout-btn--primary"

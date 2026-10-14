@@ -58,6 +58,27 @@ let isMongoConnected = false;
 // Do not buffer commands indefinitely when MongoDB is disconnected
 mongoose.set("bufferCommands", false);
 
+const syncProductsToMongo = async () => {
+  try {
+    const localProducts = localDb.getProducts();
+    if (localProducts && localProducts.length > 0) {
+      const validIds = localProducts.map((p) => p.id);
+      // Xóa toàn bộ sản phẩm cũ không nằm trong danh sách mới
+      await Product.deleteMany({ id: { $nin: validIds } });
+      for (const prod of localProducts) {
+        await Product.findOneAndUpdate(
+          { id: prod.id },
+          { $set: prod },
+          { upsert: true }
+        );
+      }
+      console.log(`--> Đã xóa sản phẩm cũ và đồng bộ ${localProducts.length} sản phẩm mới lên MongoDB Atlas! ✅`);
+    }
+  } catch (err) {
+    console.warn("Lỗi khi tự động đồng bộ sản phẩm lên MongoDB Atlas:", err.message);
+  }
+};
+
 mongoose
   .connect(MONGODB_URI, {
     serverSelectionTimeoutMS: 3000,
@@ -66,6 +87,7 @@ mongoose
   .then(() => {
     isMongoConnected = true;
     console.log("--> Đã kết nối MongoDB Atlas thành công! ✅");
+    syncProductsToMongo();
   })
   .catch((err) => {
     isMongoConnected = false;
@@ -76,6 +98,7 @@ mongoose
 mongoose.connection.on("connected", () => {
   isMongoConnected = true;
   console.log("--> MongoDB connection established.");
+  syncProductsToMongo();
 });
 mongoose.connection.on("disconnected", () => {
   isMongoConnected = false;

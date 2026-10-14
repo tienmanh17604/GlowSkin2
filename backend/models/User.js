@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema(
     },
     membership: {
       type: String,
-      enum: ["Free", "VIP"],
+      enum: ["Free", "VIP", "Premium"],
       default: "Free",
     },
     addresses: {

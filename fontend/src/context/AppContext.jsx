@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, useMemo } from "react";
 
+import tonerProducts from "../data/products.json";
+
 const AppContext = createContext(null);
 
 const USERS_KEY = "glowskin-users";
@@ -21,19 +23,28 @@ export function AppProvider({ children }) {
     }
   });
 
-  // Products state (with stock)
+  // Products state (with stock) - Danh sách các sản phẩm Toner từ Toner.xlsx
   const [products, setProducts] = useState(() => {
     try {
-      const saved = localStorage.getItem(PRODUCTS_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.length > 0) return parsed;
-      }
-      return [];
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(tonerProducts));
+      return tonerProducts;
     } catch {
-      return [];
+      return tonerProducts;
     }
   });
+
+  // Đồng bộ danh sách sản phẩm từ backend API nếu có kết nối
+  useEffect(() => {
+    fetch(`${API_URL}/products`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+          localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Orders state
   const [orders, setOrders] = useState(() => {

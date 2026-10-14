@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { label: "Trang chủ", to: "/" },
   { label: "Phân tích da", isAnalysis: true },
   { label: "Da của bạn", to: "/your-skin" },
+  { label: "Sản phẩm", to: "/products" },
   { label: "Nhật ký", to: "/diary" },
   { label: "Liên hệ", to: "/contact" },
 ];
@@ -61,12 +62,6 @@ export default function Navbar() {
             ) : link.to ? (
               <Link
                 to={link.to}
-                onClick={(e) => {
-                  if (link.to === "/your-skin" && !currentUser) {
-                    e.preventDefault();
-                    openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
-                  }
-                }}
                 className={isActive(link.to) ? "nav-link-active" : ""}
               >
                 {link.label}
@@ -79,7 +74,6 @@ export default function Navbar() {
       </ul>
 
       <div className="nav-actions">
-
         {!currentUser ? (
           <button
             type="button"

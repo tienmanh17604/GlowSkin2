@@ -226,29 +226,39 @@ export default function Profile() {
               </div>
 
               {/* Membership Loyalty Card */}
-              <div className={`profile-card-loyalty-pass ${currentUser.membership.toLowerCase()}`}>
-                <div className="loyalty-header">
-                  <span>{currentUser.membership.toUpperCase()}</span>
-                  <span>0 HSVPoint</span>
-                </div>
-                <div className="loyalty-progress-wrap">
-                  <div className="loyalty-progress-track">
-                    <div className="loyalty-progress-fill" style={{ width: "20%" }}></div>
-                    <div className="loyalty-progress-crown">👑</div>
+              {(() => {
+                const rawMembership = currentUser?.membership || "Free";
+                const mType = String(rawMembership).toUpperCase().trim();
+                const isVip = mType === "VIP" || mType.includes("VIP");
+                const isPremium = mType === "PREMIUM" || mType.includes("PREMIUM") || mType === "PROFESSIONAL" || mType.includes("PRO");
+                const progressWidth = isVip ? "100%" : isPremium ? "50%" : "0%";
+                const passClass = isVip ? "vip" : isPremium ? "premium" : "free";
+
+                return (
+                  <div className={`profile-card-loyalty-pass ${passClass}`}>
+                    <div className="loyalty-header">
+                      <span>{rawMembership.toUpperCase()}</span>
+                    </div>
+                    <div className="loyalty-progress-wrap">
+                      <div className="loyalty-progress-track">
+                        <div
+                          className="loyalty-progress-fill"
+                          style={{ width: progressWidth, transition: "width 0.5s ease" }}
+                        ></div>
+                        <div className="loyalty-progress-crown">👑</div>
+                      </div>
+                    </div>
+                    <div
+                      className="loyalty-footer-link"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => openUpgradeModal(isVip ? "VIP" : "Premium")}
+                    >
+                      <span>{isVip ? "Xem tất cả quyền lợi" : "Nâng cấp & Xem tất cả quyền lợi"}</span>
+                      <span className="arrow-btn">&gt;</span>
+                    </div>
                   </div>
-                </div>
-                <p className="loyalty-subtext">
-                  Nhận thêm 100 điểm nữa để nâng hạng lên SILVER
-                </p>
-                <div
-                  className="loyalty-footer-link"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => openUpgradeModal("Premium")}
-                >
-                  <span>Nâng cấp &amp; Xem tất cả quyền lợi</span>
-                  <span className="arrow-btn">&gt;</span>
-                </div>
-              </div>
+                );
+              })()}
             </div>
 
             {/* Sidebar Navigation Options */}

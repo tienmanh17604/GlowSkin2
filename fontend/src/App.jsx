@@ -129,9 +129,9 @@ export default function App() {
           <Route path="/" element={<Home videoReady={videoReady} />} />
           <Route path="/your-skin" element={<YourSkin />} />
           <Route path="/analyze" element={<AnalyzeRedirect />} />
-          <Route path="/products" element={<Navigate to="/" replace />} />
-          <Route path="/products/:productId" element={<Navigate to="/" replace />} />
-          <Route path="/cart" element={<Navigate to="/" replace />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:productId" element={<ProductDetail />} />
+          <Route path="/cart" element={<Navigate to="/products" replace />} />
           <Route path="/login" element={<LoginRedirect />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/contact" element={<Contact />} />
@@ -139,6 +139,7 @@ export default function App() {
           <Route path="/diary" element={<SkinDiary />} />
           <Route path="/nhat-ky" element={<Navigate to="/diary" replace />} />
         </Routes>
+        <CartDrawer />
         <WishlistDrawer />
         <LoginModal />
         <WelcomeNameModal />

@@ -230,6 +230,34 @@ export default function ProductDetail() {
                   </button>
                 </div>
 
+                {product.link && (
+                  <a
+                    href={product.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="detail-action-btn"
+                    style={{
+                      background: "linear-gradient(135deg, #ee4d2d 0%, #ff5722 100%)",
+                      color: "white",
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      fontWeight: "700",
+                      boxShadow: "0 4px 14px rgba(238, 77, 45, 0.35)",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    MUA TRÊN SHOPEE ↗
+                  </a>
+                )}
+
                 <button 
                   type="button" 
                   className="detail-action-btn btn-add-cart"

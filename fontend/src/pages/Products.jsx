@@ -154,13 +154,6 @@ export default function Products() {
     <div className="products-page">
       <Navbar />
 
-      {/* Hero section */}
-      <div className="products-hero">
-        <h1>Gợi ý sản phẩm skincare</h1>
-        <Link to="/analyze" className="products-cta">
-          ✨ Phân tích da để gợi ý riêng cho bạn
-        </Link>
-      </div>
 
       {/* 2-Column Beauty Box Shopping Layout */}
       <div className="products-layout-container">
@@ -185,6 +178,32 @@ export default function Products() {
                   ×
                 </button>
               )}
+            </div>
+          </div>
+
+          {/* Category Filter */}
+          <div className="filter-section">
+            <h3 className="filter-section-title">Loại sản phẩm</h3>
+            <div className="category-filter-list">
+              <button
+                type="button"
+                className={`category-item-btn ${category === "" ? "category-item-btn--active" : ""}`}
+                onClick={() => setCategory("")}
+              >
+                <span>Tất cả</span>
+                <span className="cat-count">{products.length}</span>
+              </button>
+              {Object.entries(CATEGORIES).map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`category-item-btn ${category === key ? "category-item-btn--active" : ""}`}
+                  onClick={() => setCategory(category === key ? "" : key)}
+                >
+                  <span>{label}</span>
+                  <span className="cat-count">{categoryCounts[key] || 0}</span>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -237,68 +256,6 @@ export default function Products() {
                 <span className="checkbox-custom"></span>
                 <span className="filter-label-text">Trên 2.000.000đ</span>
               </label>
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="filter-section">
-            <h3 className="filter-section-title">Loại sản phẩm</h3>
-            <div className="category-filter-list">
-              <button
-                type="button"
-                className={`category-item-btn ${category === "" ? "category-item-btn--active" : ""}`}
-                onClick={() => setCategory("")}
-              >
-                <span>Tất cả</span>
-                <span className="cat-count">{products.length}</span>
-              </button>
-              {Object.entries(CATEGORIES).map(([key, label]) => (
-                <button
-                  key={key}
-                  type="button"
-                  className={`category-item-btn ${category === key ? "category-item-btn--active" : ""}`}
-                  onClick={() => setCategory(category === key ? "" : key)}
-                >
-                  <span>{label}</span>
-                  <span className="cat-count">{categoryCounts[key] || 0}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Dropdown Filters (Skin Type, Concern) for Advanced Selection */}
-          <div className="filter-section">
-            <h3 className="filter-section-title">Lọc nâng cao</h3>
-            <div className="dropdown-filter-group">
-              <div className="filter-dropdown">
-                <label>Loại da</label>
-                <select
-                  value={skinType}
-                  onChange={(e) => setSkinType(e.target.value)}
-                >
-                  <option value="">Tất cả loại da</option>
-                  {Object.entries(SKIN_TYPES).map(([key, { label, emoji }]) => (
-                    <option key={key} value={key}>
-                      {emoji} {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="filter-dropdown">
-                <label>Mối quan tâm</label>
-                <select
-                  value={concern}
-                  onChange={(e) => setConcern(e.target.value)}
-                >
-                  <option value="">Tất cả mối quan tâm</option>
-                  {Object.entries(CONCERNS).map(([key, { label, emoji }]) => (
-                    <option key={key} value={key}>
-                      {emoji} {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
           </div>
 

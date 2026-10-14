@@ -224,6 +224,11 @@
   box-shadow: 0 4px 15px rgba(140, 98, 57, 0.25);
 }
 
+.profile-card-loyalty-pass.premium {
+  background: linear-gradient(135deg, #5c4436 0%, #7d5e49 50%, #9e7a61 100%);
+  box-shadow: 0 4px 15px rgba(92, 68, 54, 0.25);
+}
+
 .loyalty-header {
   display: flex;
   justify-content: space-between;
@@ -247,6 +252,8 @@
   background-color: #ffffff;
   height: 100%;
   border-radius: 4px;
+  position: relative;
+  z-index: 1;
 }
 
 .loyalty-progress-crown {
@@ -254,6 +261,7 @@
   top: -8px;
   right: -2px;
   font-size: 11px;
+  z-index: 2;
 }
 
 .loyalty-subtext {

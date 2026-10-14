@@ -200,12 +200,10 @@ export default function YourSkin() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  // Không bắt buộc đăng nhập mới xem được báo cáo, khách vẫn xem được báo cáo mẫu
   useEffect(() => {
-    if (!currentUser) {
-      openLoginModal("Chỉ có tài khoản mới được phân tích da. Vui lòng đăng nhập hoặc đăng ký để tiếp tục!");
-      navigate("/", { replace: true });
-    }
-  }, [currentUser, navigate, openLoginModal]);
+    // Không chặn xem báo cáo
+  }, [currentUser]);
 
   // Handle PayOS return redirect for membership upgrade
   useEffect(() => {
@@ -243,7 +241,7 @@ export default function YourSkin() {
   const [usedChipIds, setUsedChipIds] = useState([]);
 
   // Direct Photo Upload & Camera Workflow States
-  const [currentImage, setCurrentImage] = useState(() => latestScan?.image || null);
+  const [currentImage, setCurrentImage] = useState(() => latestScan?.image || DEFAULT_DEMO_SCAN.image);
   const [selectedAngle, setSelectedAngle] = useState("front");
   const [cropModalImage, setCropModalImage] = useState(null); // Ảnh chờ người dùng cắt và căn chỉnh
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -1294,39 +1292,44 @@ export default function YourSkin() {
           </p>
         </div>
 
-        {!currentUser ? (
-          <div className="gold-no-scan-box">
-            <div className="gold-badge">🔒 BẢO MẬT DỮ LIỆU CAO CẤP</div>
-            <h2 className="gold-page-title" style={{ fontSize: "28px", marginTop: "10px" }}>
-              Vui lòng đăng nhập để xem Báo cáo Da của bạn
-            </h2>
-            <p className="gold-page-subtitle" style={{ maxWidth: "560px", margin: "10px auto 24px" }}>
-              Hệ thống định vị đa vùng chuẩn chuyên sâu lưu trữ và bảo mật riêng dữ liệu phân tích da mặt cho từng tài khoản người dùng.
-            </p>
-            <button className="gold-action-btn primary" onClick={() => setIsLoginOpen(true)}>
-              🔑 Đăng nhập / Đăng ký tài khoản ngay
+        {!currentUser && (
+          <div style={{
+            maxWidth: "620px",
+            margin: "0 auto 20px auto",
+            padding: "10px 18px",
+            background: "rgba(217, 119, 6, 0.08)",
+            border: "1px solid rgba(217, 119, 6, 0.25)",
+            borderRadius: "12px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            fontSize: "13px",
+            color: "#856404",
+            gap: "10px"
+          }}>
+            <span>💡 Bạn đang xem báo cáo mẫu. Hãy đăng nhập để lưu kết quả phân tích riêng của bạn.</span>
+            <button
+              type="button"
+              onClick={() => setIsLoginOpen(true)}
+              style={{
+                background: "#8c6239",
+                color: "white",
+                border: "none",
+                borderRadius: "99px",
+                padding: "6px 16px",
+                fontSize: "12px",
+                fontWeight: "700",
+                cursor: "pointer",
+                whiteSpace: "nowrap"
+              }}
+            >
+              Đăng nhập
             </button>
           </div>
-        ) : !currentImage && !isAnalyzing ? (
-          /* STATE 1: UPLOAD PORTAL BEFORE PHOTO IS CAPTURED */
-          <div className="gold-start-upload-card">
-            <div className="gold-upload-icon-circle">✨</div>
-            <h3 className="gold-upload-title">Phân tích da mặt AI Vision 2D</h3>
-            <p className="gold-upload-subtext">
-              Chụp ảnh với khuôn quét Face ID hoặc tải ảnh lên — AI sẽ hiển thị ảnh 2D toàn màn hình và phân tích đa vùng chuẩn chuyên sâu.
-            </p>
-            <div className="gold-upload-buttons-stack">
-              <button type="button" className="gold-btn-camera" onClick={startCamera}>
-                📷 Mở camera (Khuôn Face ID)
-              </button>
-              <button type="button" className="gold-btn-file" onClick={() => fileInputRef.current?.click()}>
-                🖼️ Chọn ảnh từ máy
-              </button>
-            </div>
-          </div>
-        ) : (
-          /* STATE 2: SKIN ANALYSIS RESULT SCREEN */
-          <div className="skin-result-screen-wrapper">
+        )}
+
+        {/* Luôn hiển thị giao diện Báo Cáo Phân Tích Làn Da Chuyên Sâu */}
+        <div className="skin-result-screen-wrapper">
             {/* ================= SCREENSHOT 3 VIEW ================= */}
             <div className="skin-result-phone-frame">
                 {/* TOP PHOTO CAROUSEL */}
@@ -2271,8 +2274,6 @@ export default function YourSkin() {
                   </div>
               </div>
             </div>
-    )}
-
 
         {/* WEBCAM CAPTURE MODAL */}
         {isCameraOpen && (

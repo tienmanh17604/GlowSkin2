@@ -1,0 +1,399 @@
+[
+  {
+    "id": "hada-labo-gokujyun-premium",
+    "name": "Nước dưỡng ẩm cao cấp, dưỡng da căng mượt Hada Labo Gokujyun Premium Hydrating Lotion 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 280000,
+    "rating": 5,
+    "reviews": 268,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal",
+      "sensitive"
+    ],
+    "concerns": [
+      "dehydration",
+      "dullness",
+      "aging"
+    ],
+    "ingredients": [
+      "Hyaluronic Acid",
+      "Super Hyaluronic Acid",
+      "Nano Hyaluronic Acid",
+      "Fermented Hyaluronic Acid",
+      "Hydroxyethyl Urea"
+    ],
+    "image": "/products/hada-labo-gokujyun-premium.webp",
+    "hoverImage": "/products/hada-labo-gokujyun-premium.webp",
+    "images": [
+      "/products/hada-labo-gokujyun-premium.webp"
+    ],
+    "description": "Nước dưỡng ẩm cao cấp Hada Labo Gokujyun Premium Hydrating Lotion chứa hệ dưỡng ẩm sâu gồm 5 loại Hyaluronic Acid tinh khiết giúp thẩm thấu sâu, phục hồi độ ẩm đàn hồi, cho làn da luôn căng mướt, mịn màng suốt cả ngày dài. Không cồn, không hương liệu, không chất tạo màu, an toàn lành tính.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-%E1%BA%A9m-cao-c%E1%BA%A5p-d%C6%B0%E1%BB%A1ng-da-c%C4%83ng-m%C6%B0%E1%BB%A3t-Hada-Labo-Gokujyun-Premium-Hydrating-Lotion-170ml-i.95753434.6592049320?extraParams=%7B%22display_model_id%22%3A45982223578%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949054/glowskin_products/hada-labo-gokujyun-premium.webp"
+  },
+  {
+    "id": "hada-labo-pro-aging-retinol-b3",
+    "name": "Nước dưỡng cải thiện dấu hiệu lão hóa Hada Labo Pro-Aging Retinol B3 Lotion 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 320000,
+    "rating": 5,
+    "reviews": 195,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal"
+    ],
+    "concerns": [
+      "aging",
+      "dehydration"
+    ],
+    "ingredients": [
+      "Retinol",
+      "Vitamin B3 (Niacinamide)",
+      "Collagen thủy phân",
+      "Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-pro-aging-retinol-b3.webp",
+    "hoverImage": "/products/hada-labo-pro-aging-retinol-b3.webp",
+    "images": [
+      "/products/hada-labo-pro-aging-retinol-b3.webp"
+    ],
+    "description": "Nước dưỡng cải thiện dấu hiệu lão hóa Hada Labo Pro-Aging Retinol B3 Lotion kết hợp Retinol và Niacinamide giúp làm mờ nếp nhăn, tăng độ săn chắc và cải thiện độ đàn hồi của da.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-c%E1%BA%A3i-thi%E1%BB%87n-d%E1%BA%A5u-hi%E1%BB%87u-l%C3%A3o-h%C3%B3a-Hada-Labo-Pro-Aging-Retinol-B3-Lotion-170ml-i.95753434.24722522215?extraParams=%7B%22display_model_id%22%3A226196795409%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949055/glowskin_products/hada-labo-pro-aging-retinol-b3.webp"
+  },
+  {
+    "id": "hada-labo-perfect-white-tranexamic",
+    "name": "Nước dưỡng trắng da tối ưu Hada Labo Perfect White Tranexamic Acid Lotion 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 280000,
+    "rating": 5,
+    "reviews": 210,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal",
+      "sensitive"
+    ],
+    "concerns": [
+      "dark_spots",
+      "dullness"
+    ],
+    "ingredients": [
+      "Tranexamic Acid",
+      "Vitamin C",
+      "Vitamin E",
+      "Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-perfect-white-tranexamic.webp",
+    "hoverImage": "/products/hada-labo-perfect-white-tranexamic.webp",
+    "images": [
+      "/products/hada-labo-perfect-white-tranexamic.webp"
+    ],
+    "description": "Nước dưỡng trắng da tối ưu Hada Labo Perfect White Tranexamic Acid Lotion hỗ trợ ức chế sự hình thành hắc sắc tố melanin, làm mờ thâm nám và dưỡng da trắng mịn tự nhiên.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-tr%E1%BA%AFng-da-t%E1%BB%91i-%C6%B0u-Hada-Labo-Perfect-White-Tranexamic-Acid-Lotion-170ml-i.95753434.20676190835?extraParams=%7B%22display_model_id%22%3A231249937961%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949057/glowskin_products/hada-labo-perfect-white-tranexamic.webp"
+  },
+  {
+    "id": "hada-labo-advanced-nourish-oily-skin",
+    "name": "Nước dưỡng ẩm tối ưu Hada Labo Advanced Nourish Lotion dùng cho da dầu 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 280000,
+    "rating": 5,
+    "reviews": 175,
+    "skinTypes": [
+      "oily",
+      "combination"
+    ],
+    "concerns": [
+      "dehydration",
+      "pores"
+    ],
+    "ingredients": [
+      "Hyaluronic Acid",
+      "Super Hyaluronic Acid",
+      "Nano Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-advanced-nourish-oily-skin.webp",
+    "hoverImage": "/products/hada-labo-advanced-nourish-oily-skin.webp",
+    "images": [
+      "/products/hada-labo-advanced-nourish-oily-skin.webp"
+    ],
+    "description": "Nước dưỡng ẩm tối ưu Hada Labo Advanced Nourish Lotion phiên bản dành riêng cho da dầu và hỗn hợp thiên dầu, thẩm thấu nhanh tức thì, không gây bóng nhờn hay bí tắc lỗ chân lông.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-%E1%BA%A9m-t%E1%BB%91i-%C6%B0u-Hada-Labo-Advanced-Nourish-Lotion-d%C3%B9ng-cho-da-d%E1%BA%A7u-170ml-i.95753434.1566957408?extraParams=%7B%22display_model_id%22%3A21399250284%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949058/glowskin_products/hada-labo-advanced-nourish-oily-skin.webp"
+  },
+  {
+    "id": "hada-labo-shirojyun-premium-whitening",
+    "name": "Nước dưỡng trắng cao cấp, cải thiện thâm nám, tàn nhang Hada Labo Shirojyun Premium Whitening Lotion 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 320000,
+    "rating": 5,
+    "reviews": 230,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal",
+      "sensitive"
+    ],
+    "concerns": [
+      "dark_spots",
+      "dullness"
+    ],
+    "ingredients": [
+      "Tranexamic Acid",
+      "Dipotassium Glycyrrhizate",
+      "Vitamin C",
+      "Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-shirojyun-premium-whitening.webp",
+    "hoverImage": "/products/hada-labo-shirojyun-premium-whitening.webp",
+    "images": [
+      "/products/hada-labo-shirojyun-premium-whitening.webp"
+    ],
+    "description": "Nước dưỡng trắng cao cấp Hada Labo Shirojyun Premium Whitening Lotion chuyên sâu cho da sạm nám, tàn nhang, phục hồi sắc tố da tươi sáng rạng rỡ.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-tr%E1%BA%AFng-cao-c%E1%BA%A5p-c%E1%BA%A3i-thi%E1%BB%87n-th%C3%A2m-n%C3%A1m-t%C3%A0n-nhang-Hada-Labo-Shirojyun-Premium-Whitening-Lotion-170ml-i.95753434.22287188075?extraParams=%7B%22display_model_id%22%3A222311883967%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949060/glowskin_products/hada-labo-shirojyun-premium-whitening.webp"
+  },
+  {
+    "id": "hada-labo-acne-care-calming",
+    "name": "Nước dưỡng ẩm Hada Labo Acne Care Calming Lotion dành cho da dầu mụn, da nhạy cảm 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 290000,
+    "rating": 5,
+    "reviews": 142,
+    "skinTypes": [
+      "oily",
+      "combination",
+      "sensitive"
+    ],
+    "concerns": [
+      "acne",
+      "pores",
+      "dehydration"
+    ],
+    "ingredients": [
+      "Chiết xuất Ý Dĩ (Hatomugi)",
+      "Rau Diếp Cá",
+      "Cúc La Mã",
+      "Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-acne-care-calming.webp",
+    "hoverImage": "/products/hada-labo-acne-care-calming.webp",
+    "images": [
+      "/products/hada-labo-acne-care-calming.webp"
+    ],
+    "description": "Nước dưỡng ẩm Hada Labo Acne Care Calming Lotion làm dịu nốt mụn sưng đỏ, kháng viêm và bảo vệ hàng rào độ ẩm tự nhiên cho làn da mụn nhạy cảm.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-%E1%BA%A9m-Hada-Labo-Acne-Care-Calming-Lotion-d%C3%A0nh-cho-da-d%E1%BA%A7u-m%E1%BB%A5n-da-nh%E1%BA%A1y-c%E1%BA%A3m-170ml-i.95753434.14372049699?extraParams=%7B%22display_model_id%22%3A58610419210%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949061/glowskin_products/hada-labo-acne-care-calming.webp"
+  },
+  {
+    "id": "hada-labo-advanced-nourish-dry-skin",
+    "name": "Nước dưỡng ẩm tối ưu Hada Labo Advanced Nourish Lotion dùng cho da thường và da khô 170ml",
+    "brand": "Hada Labo",
+    "category": "toner",
+    "price": 280000,
+    "rating": 5,
+    "reviews": 184,
+    "skinTypes": [
+      "dry",
+      "normal"
+    ],
+    "concerns": [
+      "dehydration"
+    ],
+    "ingredients": [
+      "Hyaluronic Acid",
+      "Super Hyaluronic Acid",
+      "Nano Hyaluronic Acid"
+    ],
+    "image": "/products/hada-labo-advanced-nourish-dry-skin.webp",
+    "hoverImage": "/products/hada-labo-advanced-nourish-dry-skin.webp",
+    "images": [
+      "/products/hada-labo-advanced-nourish-dry-skin.webp"
+    ],
+    "description": "Nước dưỡng ẩm tối ưu Hada Labo Advanced Nourish Lotion phiên bản dành cho da thường và da khô, tăng cường dưỡng chất dưỡng ẩm sâu giúp làn da ẩm mượt căng mọng suốt 24 giờ.",
+    "stock": 100,
+    "link": "https://shopee.vn/N%C6%B0%E1%BB%9Bc-d%C6%B0%E1%BB%A1ng-%E1%BA%A9m-t%E1%BB%91i-%C6%B0u-Hada-Labo-Advanced-Nourish-Lotion-d%C3%B9ng-cho-da-th%C6%B0%E1%BB%9Dng-v%C3%A0-da-kh%C3%B4-170ml-i.95753434.1566947800?extraParams=%7B%22display_model_id%22%3A60443119415%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949062/glowskin_products/hada-labo-advanced-nourish-dry-skin.webp"
+  },
+  {
+    "id": "co-mem-active-toner-rau-ma",
+    "name": "Active Toner Dưỡng Ẩm Ngừa Mụn Rau Má Dành Cho Da Mụn Da Dầu Nhạy Cảm Cỏ Mềm 150ml",
+    "brand": "Cỏ Mềm",
+    "category": "toner",
+    "price": 220000,
+    "rating": 5,
+    "reviews": 168,
+    "skinTypes": [
+      "oily",
+      "combination",
+      "sensitive"
+    ],
+    "concerns": [
+      "acne",
+      "pores",
+      "dehydration"
+    ],
+    "ingredients": [
+      "Chiết xuất Rau má",
+      "Tinh dầu Tràm trà",
+      "Niacinamide",
+      "BHA"
+    ],
+    "image": "/products/co-mem-active-toner-rau-ma.webp",
+    "hoverImage": "/products/co-mem-active-toner-rau-ma.webp",
+    "images": [
+      "/products/co-mem-active-toner-rau-ma.webp"
+    ],
+    "description": "Active Toner Rau Má Cỏ Mềm làm sạch bã nhờn sâu trong lỗ chân lông, làm dịu vùng da mụn và cấp ẩm dịu nhẹ, lành tính chuẩn mỹ phẩm thiên nhiên.",
+    "stock": 100,
+    "link": "https://shopee.vn/Active-Toner-D%C6%B0%E1%BB%A1ng-%E1%BA%A8m-Ng%E1%BB%ABa-M%E1%BB%A5n-Rau-M%C3%A1-D%C3%A0nh-Cho-Da-M%E1%BB%A5n-Da-D%E1%BA%A7u-Nh%E1%BA%A1y-C%E1%BA%A3m-C%E1%BB%8F-M%E1%BB%81m-150ml-i.134371556.18852122597?extraParams=%7B%22display_model_id%22%3A164683272799%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949063/glowskin_products/co-mem-active-toner-rau-ma.webp"
+  },
+  {
+    "id": "co-mem-toner-so-ri-vitamin-c",
+    "name": "Toner Sáng Da Mờ Nám Tàn Nhang Vitamin C Chiết Xuất Sơ Ri Cỏ Mềm 150ml",
+    "brand": "Cỏ Mềm",
+    "category": "toner",
+    "price": 240000,
+    "rating": 5,
+    "reviews": 156,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal"
+    ],
+    "concerns": [
+      "dark_spots",
+      "dullness"
+    ],
+    "ingredients": [
+      "Chiết xuất Quả Sơ ri Acerola",
+      "Vitamin C",
+      "Niacinamide",
+      "Hyaluronic Acid"
+    ],
+    "image": "/products/co-mem-toner-so-ri-vitamin-c.webp",
+    "hoverImage": "/products/co-mem-toner-so-ri-vitamin-c.webp",
+    "images": [
+      "/products/co-mem-toner-so-ri-vitamin-c.webp"
+    ],
+    "description": "Toner Sáng Da Mờ Nám Tàn Nhang Cỏ Mềm giàu hàm lượng Vitamin C tự nhiên từ quả Sơ ri, giúp nuôi dưỡng làn da sáng hồng, đều màu và rạng rỡ.",
+    "stock": 100,
+    "link": "https://shopee.vn/Toner-S%C3%A1ng-Da-M%E1%BB%9D-N%C3%A1m-T%C3%A0n-Nhang-Vitamin-C-Chi%E1%BA%BFt-Xu%E1%BA%A5t-S%C6%A1-Ri-C%E1%BB%8F-M%E1%BB%81m-150ml-i.134371556.29510273240?extraParams=%7B%22display_model_id%22%3A233186112582%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949065/glowskin_products/co-mem-toner-so-ri-vitamin-c.webp"
+  },
+  {
+    "id": "co-mem-active-toner-to-tam",
+    "name": "Active Toner Tơ Tằm Dưỡng Ẩm Cho Da Cỏ Mềm 150ml",
+    "brand": "Cỏ Mềm",
+    "category": "toner",
+    "price": 220000,
+    "rating": 5,
+    "reviews": 112,
+    "skinTypes": [
+      "dry",
+      "normal",
+      "sensitive"
+    ],
+    "concerns": [
+      "dehydration"
+    ],
+    "ingredients": [
+      "Protein Tơ tằm thủy phân",
+      "Hyaluronic Acid",
+      "Betaine"
+    ],
+    "image": "/products/co-mem-active-toner-to-tam.webp",
+    "hoverImage": "/products/co-mem-active-toner-to-tam.webp",
+    "images": [
+      "/products/co-mem-active-toner-to-tam.webp"
+    ],
+    "description": "Active Toner Tơ Tằm Cỏ Mềm bổ sung các axit amin quý từ kén tơ tằm thiên nhiên, khóa ẩm mượt mà và làm mềm mại làn da khô ráp.",
+    "stock": 100,
+    "link": "https://shopee.vn/Active-Toner-T%C6%A1-T%E1%BA%B1m-D%C6%B0%E1%BB%A1ng-%E1%BA%A8m-Cho-Da-C%E1%BB%8F-M%E1%BB%81m-150ml-i.134371556.16301467772?extraParams=%7B%22display_model_id%22%3A160063765152%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949066/glowskin_products/co-mem-active-toner-to-tam.webp"
+  },
+  {
+    "id": "co-mem-toner-sam-1700",
+    "name": "Toner Nước Cân Bằng Da Sâm 1700 Cấp Ẩm Bổ Sung Dưỡng Chất Và Ngừa Lão Hoá Da Cỏ Mềm 150ml",
+    "brand": "Cỏ Mềm",
+    "category": "toner",
+    "price": 320000,
+    "rating": 5,
+    "reviews": 189,
+    "skinTypes": [
+      "dry",
+      "combination",
+      "normal"
+    ],
+    "concerns": [
+      "aging",
+      "dehydration",
+      "dullness"
+    ],
+    "ingredients": [
+      "Chiết xuất Sâm Lai Châu 1700",
+      "Niacinamide",
+      "Peptide",
+      "Adenosine"
+    ],
+    "image": "/products/co-mem-toner-sam-1700.webp",
+    "hoverImage": "/products/co-mem-toner-sam-1700.webp",
+    "images": [
+      "/products/co-mem-toner-sam-1700.webp"
+    ],
+    "description": "Toner Nước Cân Bằng Da Sâm 1700 Cỏ Mềm ứng dụng chiết xuất Sâm Lai Châu quý giá giàu saponin giúp đẩy lùi các dấu hiệu lão hóa, tái sinh làn da căng tràn sức sống.",
+    "stock": 100,
+    "link": "https://shopee.vn/Toner-N%C6%B0%E1%BB%9Bc-C%C3%A2n-B%E1%BA%B1ng-Da-S%C3%A2m-1700-C%E1%BA%A5p-%E1%BA%A8m-B%E1%BB%95-Sung-D%C6%B0%E1%BB%A1ng-Ch%E1%BA%A5t-V%C3%A0-Ng%E1%BB%ABa-L%C3%A3o-Ho%C3%A1-Da-C%E1%BB%8F-M%E1%BB%81m-150ml-i.134371556.19181701306?extraParams=%7B%22display_model_id%22%3A138672790231%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949068/glowskin_products/co-mem-toner-sam-1700.webp"
+  },
+  {
+    "id": "emmie-toner-aha-bha-pha",
+    "name": "Toner tẩy tế bào chết Emmie 12% AHA BHA PHA Cải Thiện Bề Mặt Da Hỗ Trợ Giảm Mụn Bổ Sung Pionin Chai 140ml",
+    "brand": "Emmié by Happy Skin",
+    "category": "toner",
+    "price": 340000,
+    "rating": 5,
+    "reviews": 204,
+    "skinTypes": [
+      "oily",
+      "combination"
+    ],
+    "concerns": [
+      "acne",
+      "pores"
+    ],
+    "ingredients": [
+      "AHA 10%",
+      "BHA",
+      "PHA",
+      "Pionin",
+      "Chiết xuất Cúc Xu Xi"
+    ],
+    "image": "/products/emmie-toner-aha-bha-pha.png",
+    "hoverImage": "/products/emmie-toner-aha-bha-pha.png",
+    "images": [
+      "/products/emmie-toner-aha-bha-pha.png"
+    ],
+    "description": "Toner tẩy tế bào chết hóa học Emmié 12% AHA BHA PHA làm sạch sâu lỗ chân lông, giải phóng tế bào sừng già cỗi, gom cồi mụn và mang lại làn da láng mịn.",
+    "stock": 100,
+    "link": "https://shopee.vn/DATE-T10-2027-Toner-t%E1%BA%A9y-t%E1%BA%BF-b%C3%A0o-ch%E1%BA%BFt-Emmie-12-AHA-BHA-PHA-C%E1%BA%A3i-Thi%E1%BB%87n-B%E1%BB%81-M%E1%BA%B7t-Da-H%E1%BB%97-Tr%E1%BB%A3-Gi%E1%BA%A3m-M%E1%BB%A5n-B%E1%BB%95-Sung-Pionin-Chai-140ml-i.52045633.18886003378?extraParams=%7B%22display_model_id%22%3A29434291124%2C%22model_selection_logic%22%3A3%7D",
+    "cloudinaryImage": "https://res.cloudinary.com/buevamso/image/upload/v1791949141/glowskin_products/emmie-toner-aha-bha-pha.png"
+  }
+]
