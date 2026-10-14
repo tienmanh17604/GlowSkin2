@@ -112,9 +112,16 @@ mongoose.connection.on("disconnected", () => {
 app.get("/api/products", async (req, res) => {
   try {
     if (isMongoConnected) {
-      const products = await Product.find().sort({ createdAt: -1 });
+      const products = await Product.find();
       if (products && products.length > 0) {
-        return res.json(products);
+        const localProducts = localDb.getProducts();
+        const orderMap = new Map(localProducts.map((p, idx) => [p.id, idx]));
+        const sortedProducts = [...products].sort((a, b) => {
+          const idxA = orderMap.has(a.id) ? orderMap.get(a.id) : 999;
+          const idxB = orderMap.has(b.id) ? orderMap.get(b.id) : 999;
+          return idxA - idxB;
+        });
+        return res.json(sortedProducts);
       }
     }
   } catch (error) {

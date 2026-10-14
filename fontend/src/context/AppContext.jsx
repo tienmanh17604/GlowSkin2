@@ -39,8 +39,22 @@ export function AppProvider({ children }) {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
-          setProducts(data);
-          localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data));
+          // Luôn cố định đúng thứ tự 12 Toner chuẩn theo tonerProducts, tránh nhảy giao diện
+          const orderMap = new Map(tonerProducts.map((p, idx) => [p.id, idx]));
+          const sortedData = [...data].sort((a, b) => {
+            const indexA = orderMap.has(a.id) ? orderMap.get(a.id) : 999;
+            const indexB = orderMap.has(b.id) ? orderMap.get(b.id) : 999;
+            return indexA - indexB;
+          });
+
+          // Hòa trộn an toàn với dữ liệu chuẩn để bảo toàn đầy đủ thông tin (ảnh, mô tả, liên kết)
+          const mergedData = sortedData.map((prod) => {
+            const local = tonerProducts.find((p) => p.id === prod.id);
+            return local ? { ...local, ...prod, image: local.image, hoverImage: local.hoverImage, images: local.images, link: local.link || prod.link } : prod;
+          });
+
+          setProducts(mergedData);
+          localStorage.setItem(PRODUCTS_KEY, JSON.stringify(mergedData));
         }
       })
       .catch(() => {});
