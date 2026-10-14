@@ -335,7 +335,12 @@ export function AppProvider({ children }) {
           if (prodRes.ok) {
             const prodData = await prodRes.json();
             if (prodData && prodData.length > 0) {
-              setProducts(prodData);
+              setProducts((prev) =>
+                prev.map((p) => {
+                  const remote = prodData.find((r) => r.id === p.id);
+                  return remote && typeof remote.stock === "number" ? { ...p, stock: remote.stock } : p;
+                })
+              );
               success = true;
             }
           }
@@ -863,7 +868,14 @@ export function AppProvider({ children }) {
         const prodRes = await fetch(`${API_URL}/products`);
         if (prodRes.ok) {
           const prodData = await prodRes.json();
-          setProducts(prodData);
+          if (Array.isArray(prodData)) {
+            setProducts((prev) =>
+              prev.map((p) => {
+                const remote = prodData.find((r) => r.id === p.id);
+                return remote ? { ...p, rating: remote.rating ?? p.rating, reviews: remote.reviews ?? p.reviews } : p;
+              })
+            );
+          }
         }
         return { success: true, review: savedReview };
       }
@@ -887,7 +899,14 @@ export function AppProvider({ children }) {
         const prodRes = await fetch(`${API_URL}/products`);
         if (prodRes.ok) {
           const prodData = await prodRes.json();
-          setProducts(prodData);
+          if (Array.isArray(prodData)) {
+            setProducts((prev) =>
+              prev.map((p) => {
+                const remote = prodData.find((r) => r.id === p.id);
+                return remote ? { ...p, rating: remote.rating ?? p.rating, reviews: remote.reviews ?? p.reviews } : p;
+              })
+            );
+          }
         }
         return { success: true };
       }
