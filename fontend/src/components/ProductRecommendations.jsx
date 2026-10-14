@@ -215,7 +215,13 @@ export default function ProductRecommendations({
             key={product.id}
             className={`product-card beauty-box-card ${product.hoverImage ? "has-hover-image" : ""}`}
             style={{ animationDelay: `${index * 0.08}s` }}
-            onClick={() => handleOpenDetail(product)}
+            onClick={() => {
+              if (product.link) {
+                window.open(product.link, "_blank", "noopener,noreferrer");
+              } else {
+                handleOpenDetail(product);
+              }
+            }}
           >
             <div className="product-card-image">
               <img
@@ -245,10 +251,39 @@ export default function ProductRecommendations({
                 {wishlist[product.id] ? "♥" : "♡"}
               </button>
 
-              {/* Gradient "Xem nhanh" button on hover */}
-              <div className="quick-view-btn-gradient">
-                <span>Xem nhanh</span>
+              {/* Gradient "Mua ngay trên Shopee" button on hover */}
+              <div 
+                className="quick-view-btn-gradient" 
+                style={{ 
+                  background: "linear-gradient(135deg, #ee4d2d 0%, #ff5722 100%)", 
+                  color: "#fff",
+                  boxShadow: "0 4px 12px rgba(238, 77, 45, 0.4)"
+                }}
+              >
+                <span>🛒 Mua ngay trên Shopee ↗</span>
               </div>
+
+              {product.link && (
+                <span className="product-shopee-badge" style={{
+                  position: "absolute",
+                  top: "12px",
+                  left: "12px",
+                  background: "linear-gradient(135deg, #ee4d2d, #ff5722)",
+                  color: "#fff",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: "700",
+                  letterSpacing: "0.5px",
+                  boxShadow: "0 2px 8px rgba(238, 77, 45, 0.4)",
+                  zIndex: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px"
+                }}>
+                  Shopee ↗
+                </span>
+              )}
 
               {product.matchScore && (
                 <span className="product-match-tag">
@@ -273,7 +308,11 @@ export default function ProductRecommendations({
                 style={{ cursor: "pointer" }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/products/${product.id}`);
+                  if (product.link) {
+                    window.open(product.link, "_blank", "noopener,noreferrer");
+                  } else {
+                    navigate(`/products/${product.id}`);
+                  }
                 }}
               >
                 {product.name}

@@ -47,10 +47,18 @@ export function AppProvider({ children }) {
             return indexA - indexB;
           });
 
-          // Hòa trộn an toàn với dữ liệu chuẩn để bảo toàn đầy đủ thông tin (ảnh, mô tả, liên kết)
+          // Hòa trộn an toàn với dữ liệu chuẩn để bảo toàn 100% link Shopee, hình ảnh và thông tin chi tiết
           const mergedData = sortedData.map((prod) => {
             const local = tonerProducts.find((p) => p.id === prod.id);
-            return local ? { ...local, ...prod, image: local.image, hoverImage: local.hoverImage, images: local.images, link: local.link || prod.link } : prod;
+            if (local) {
+              return {
+                ...prod,
+                ...local,
+                link: local.link, // Tuyệt đối giữ nguyên link Shopee chính xác
+                stock: typeof prod.stock === "number" ? prod.stock : local.stock,
+              };
+            }
+            return prod;
           });
 
           setProducts(mergedData);
