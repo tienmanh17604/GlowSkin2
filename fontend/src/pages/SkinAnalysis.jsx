@@ -398,7 +398,7 @@ export default function SkinAnalysis() {
           { title: "Phân tích AI Vision", en: "(AI Vision Diagnosis)", desc: "Nhận diện tình trạng từ ảnh khuôn mặt thực tế." }
         ],
         severity: jsonRes.severity || {
-          recommendation: "Cần điều trị tích cực và bảo vệ da theo Tiêu chuẩn Chuyên khoa Da liễu."
+          recommendation: "Cần chăm sóc tích cực và bảo vệ da theo lộ trình khoa học."
         },
         zones: (jsonRes.zones && jsonRes.zones.length) ? jsonRes.zones : defaultZones,
       };

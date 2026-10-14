@@ -2416,7 +2416,7 @@ export default function WelcomeNameModal() {
               </div>
 
               <div className="onboarding-ai-medical-badge">
-                🩺 Tiêu chuẩn Chuyên Khoa Da Liễu • Phân tích chính xác 100% theo ảnh thật
+                Phân tích chính xác 100% theo ảnh thật
               </div>
             </div>
           </div>
