@@ -4,6 +4,13 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import dns from "dns";
+
+// Fix querySrv ECONNREFUSED on Windows/ISP by using public DNS (Google & Cloudflare)
+try {
+  dns.setServers(["8.8.8.8", "1.1.1.1", "8.8.4.4"]);
+} catch (e) {
+  console.warn("Không thể cấu hình DNS:", e.message);
+}
 import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
@@ -58,49 +65,66 @@ let isMongoConnected = false;
 // Do not buffer commands indefinitely when MongoDB is disconnected
 mongoose.set("bufferCommands", false);
 
+let hasLoggedConnect = false;
+
 const syncProductsToMongo = async () => {
   try {
     const localProducts = localDb.getProducts();
     if (localProducts && localProducts.length > 0) {
       const validIds = localProducts.map((p) => p.id);
-      // Xóa toàn bộ sản phẩm cũ không nằm trong danh sách mới
-      await Product.deleteMany({ id: { $nin: validIds } });
+      const deleteResult = await Product.deleteMany({ id: { $nin: validIds } });
+      let insertedCount = 0;
+      let modifiedCount = 0;
       for (const prod of localProducts) {
-        await Product.findOneAndUpdate(
+        const res = await Product.updateOne(
           { id: prod.id },
           { $set: prod },
           { upsert: true }
         );
+        if (res.upsertedCount > 0) insertedCount++;
+        else if (res.modifiedCount > 0) modifiedCount++;
       }
-      console.log(`--> Đã xóa sản phẩm cũ và đồng bộ ${localProducts.length} sản phẩm mới lên MongoDB Atlas! ✅`);
+      // Chỉ thông báo khi thực sự có sản phẩm mới hoặc thay đổi
+      if (insertedCount > 0 || modifiedCount > 0 || deleteResult.deletedCount > 0) {
+        console.log(`\x1b[32m--> [Sản Phẩm Mới] Đã đồng bộ lên MongoDB Atlas (Thêm mới: ${insertedCount}, Cập nhật: ${modifiedCount}, Xóa: ${deleteResult.deletedCount}) ✅\x1b[0m`);
+      }
     }
   } catch (err) {
     console.warn("Lỗi khi tự động đồng bộ sản phẩm lên MongoDB Atlas:", err.message);
   }
 };
 
+const handleMongoSuccess = () => {
+  if (!hasLoggedConnect) {
+    hasLoggedConnect = true;
+    isMongoConnected = true;
+    console.log("\x1b[32m--> MongoDB connection established.\x1b[0m");
+    console.log("\x1b[32m--> Đã kết nối MongoDB Atlas thành công! ✅\x1b[0m");
+    syncProductsToMongo();
+  }
+};
+
 mongoose
   .connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 3000,
-    connectTimeoutMS: 3000,
+    serverSelectionTimeoutMS: 10000,
+    connectTimeoutMS: 10000,
   })
   .then(() => {
-    isMongoConnected = true;
-    console.log("--> Đã kết nối MongoDB Atlas thành công! ✅");
-    syncProductsToMongo();
+    handleMongoSuccess();
   })
   .catch((err) => {
+    hasLoggedConnect = false;
     isMongoConnected = false;
     console.warn("--> ⚠️ Chưa kết nối được MongoDB Atlas (Vui lòng whitelist IP trên Atlas Network Access nếu cần):", err.message);
     console.log("--> 💡 Đang kích hoạt chế độ CSDL Cục Bộ (Local JSON Storage) để Đăng Nhập, Đăng Ký, Sản Phẩm hoạt động bình thường tức thì!");
   });
 
 mongoose.connection.on("connected", () => {
-  isMongoConnected = true;
-  console.log("--> MongoDB connection established.");
-  syncProductsToMongo();
+  handleMongoSuccess();
 });
+
 mongoose.connection.on("disconnected", () => {
+  hasLoggedConnect = false;
   isMongoConnected = false;
   console.warn("--> MongoDB disconnected. Using Local JSON fallback.");
 });
@@ -1481,7 +1505,6 @@ function loadLocalTrainingKnowledge() {
 }
 
 let localTrainingKnowledge = loadLocalTrainingKnowledge();
-console.log(`--> Đã nạp ${localTrainingKnowledge.length} hồ sơ Training AI Da Liễu từ file Excel mới nhất vào bộ nhớ.`);
 
 // POST Search Training / Medical Knowledge via MongoDB Atlas or Local JSON (Excel dataset)
 app.post("/api/medical/search", async (req, res) => {

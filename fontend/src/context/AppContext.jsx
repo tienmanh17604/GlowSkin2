@@ -12,6 +12,33 @@ const USER_SESSION_KEY = "glowskin-currentuser";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+// Helper ghi dữ liệu an toàn vào localStorage, chống lỗi QuotaExceededError làm trắng trang
+export const safeLocalStorageSet = (key, value) => {
+  try {
+    const serialized = typeof value === "string" ? value : JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+  } catch (err) {
+    console.warn(`[LocalStorage] Vượt hạn mức hoặc không thể lưu '${key}':`, err.message);
+    if (err && (err.name === "QuotaExceededError" || err.code === 22 || err.number === -2147024882)) {
+      try {
+        // Tự động giải phóng các cache dung lượng lớn không cần thiết để giữ an toàn cho app
+        localStorage.removeItem(USERS_KEY);
+        localStorage.removeItem(PRODUCTS_KEY);
+        localStorage.removeItem(ORDERS_KEY);
+        localStorage.removeItem(REVIEWS_KEY);
+      } catch {}
+    }
+  }
+};
+
+// Dọn dẹp ngay nếu localStorage trước đó đã bị phình to do lưu toàn bộ users/scans
+try {
+  const usersRaw = localStorage.getItem(USERS_KEY);
+  if (usersRaw && usersRaw.length > 300000) {
+    localStorage.removeItem(USERS_KEY);
+  }
+} catch (e) {}
+
 export function AppProvider({ children }) {
   // Users state
   const [users, setUsers] = useState(() => {
@@ -128,7 +155,7 @@ export function AppProvider({ children }) {
     const key = `glowskin-wishlist-${currentUser._id || currentUser.id}`;
     setWishlist((prev) => {
       const updated = { ...prev, [productId]: !prev[productId] };
-      localStorage.setItem(key, JSON.stringify(updated));
+      safeLocalStorageSet(key, updated);
       return updated;
     });
   };
@@ -393,25 +420,31 @@ export function AppProvider({ children }) {
 
   // Sync state to localStorage (as backup/fallback)
   useEffect(() => {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    // Chỉ lưu backup danh sách users nếu dữ liệu gọn nhẹ (< 200KB), tránh làm tràn quota 5MB
+    try {
+      const dataStr = JSON.stringify(users);
+      if (dataStr.length < 200000) {
+        safeLocalStorageSet(USERS_KEY, dataStr);
+      }
+    } catch {}
   }, [users]);
 
   useEffect(() => {
-    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    safeLocalStorageSet(PRODUCTS_KEY, products);
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    safeLocalStorageSet(ORDERS_KEY, orders);
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+    safeLocalStorageSet(REVIEWS_KEY, reviews);
   }, [reviews]);
 
   // Sync scan & wishlist state when currentUser changes
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(currentUser));
+      safeLocalStorageSet(USER_SESSION_KEY, currentUser);
       const userId = currentUser._id || currentUser.id;
 
       // Fetch user-specific scan from MongoDB server, fallback to local storage
@@ -549,7 +582,7 @@ export function AppProvider({ children }) {
       if (data.success) {
         const mergedUser = { ...currentUser, ...data.user, preferredName: cleanPreferred, ...extraFields };
         setCurrentUser(mergedUser);
-        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(mergedUser));
+        safeLocalStorageSet(USER_SESSION_KEY, mergedUser);
         setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? mergedUser : u)));
         return { success: true, user: mergedUser };
       }
@@ -559,7 +592,7 @@ export function AppProvider({ children }) {
       const cleanPreferred = preferredName !== undefined ? preferredName.trim() : (currentUser?.preferredName || "");
       const updated = { ...currentUser, name, email, phone, addresses, preferredName: cleanPreferred, ...extraFields };
       setCurrentUser(updated);
-      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
+      safeLocalStorageSet(USER_SESSION_KEY, updated);
       setUsers((prev) => prev.map((u) => (u.id === id || u._id === id ? updated : u)));
       return { success: true, user: updated };
     }
@@ -578,12 +611,7 @@ export function AppProvider({ children }) {
       preferredName: cleanName,
     };
     setCurrentUser(updated);
-
-    try {
-      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(updated));
-    } catch (e) {
-      console.error("Lỗi lưu session:", e);
-    }
+    safeLocalStorageSet(USER_SESSION_KEY, updated);
 
     // Also update in users array
     setUsers((prev) =>
@@ -628,7 +656,7 @@ export function AppProvider({ children }) {
         if (data && data.user) {
           const finalMerged = { ...currentUser, ...data.user, preferredName: cleanName };
           setCurrentUser(finalMerged);
-          localStorage.setItem(USER_SESSION_KEY, JSON.stringify(finalMerged));
+          safeLocalStorageSet(USER_SESSION_KEY, finalMerged);
           return { success: true, user: finalMerged };
         }
       }
