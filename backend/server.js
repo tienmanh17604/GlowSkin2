@@ -511,24 +511,43 @@ app.put("/api/users/:id/membership", async (req, res) => {
     if (membership === "Premium" || membership === "VIP") {
       const planName = membership === "VIP" ? "Professional" : "Premium";
       const amt = planName === "Professional" ? 249000 : 99000;
-      const orderCode = Date.now() % 1000000000;
+      const orderCode = Number("89" + Math.floor(100000 + Math.random() * 900000));
+      let finalPhone = updatedLocal?.phone || "";
+      let finalName = updatedLocal?.name || updatedLocal?.preferredName || "Khách hàng";
+      let finalEmail = updatedLocal?.email || "";
+
+      if ((!finalPhone || !finalEmail) && isMongoConnected) {
+        try {
+          const mUser = await User.findOne({ $or: [{ id: id }, { _id: id }] });
+          if (mUser) {
+            if (!finalPhone && mUser.phone) finalPhone = mUser.phone;
+            if (!finalName && mUser.name) finalName = mUser.name;
+            if (!finalEmail && mUser.email) finalEmail = mUser.email;
+          }
+        } catch (e) {}
+      }
+
       const txData = {
+        id: `SUB_${orderCode}`,
         orderCode,
-        userId: updatedLocal.id || updatedLocal._id,
-        userName: updatedLocal.name || updatedLocal.preferredName || "Khách hàng",
-        userEmail: updatedLocal.email || "",
-        userPhone: updatedLocal.phone || "",
+        userId: updatedLocal?.id || updatedLocal?._id || id,
+        userName: finalName,
+        userEmail: finalEmail,
+        userPhone: finalPhone,
         plan: planName,
         amount: amt,
-        paymentMethod: "Cập nhật tài khoản",
+        paymentMethod: "PayOS (VietQR)",
         status: "PAID",
-        createdAt: new Date().toISOString()
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
       localDb.saveMembershipTransaction(txData);
       if (isMongoConnected) {
         try {
           await MembershipTransaction.create(txData);
-        } catch (e) {}
+        } catch (e) {
+          console.warn("MongoDB ghi nhận giao dịch nâng cấp lỗi:", e.message);
+        }
       }
     }
 
@@ -1054,14 +1073,26 @@ app.post("/api/payments/verify-membership-payment", async (req, res) => {
       console.warn("PayOS check info warning:", e.message);
     }
 
+    // Lookup user to get phone number
+    const userToUpdate = (userId ? localDb.findUserById(userId) : null) || (userEmail ? localDb.findUserByEmail(userEmail) : null);
+    let finalPhone = userToUpdate?.phone || "";
+    if (!finalPhone && isMongoConnected) {
+      try {
+        const mUser = await User.findOne({ $or: [{ id: userId }, { _id: userId }, { email: userEmail }] });
+        if (mUser && mUser.phone) finalPhone = mUser.phone;
+      } catch (e) {}
+    }
+
     // Update transaction status to PAID (or auto-create if missing)
     localDb.updateMembershipTransactionStatus(orderCode, "PAID", {
       userId,
-      userName,
-      userEmail,
+      userName: userName || userToUpdate?.name || userToUpdate?.preferredName || "Khách hàng",
+      userEmail: userEmail || userToUpdate?.email || "",
+      userPhone: finalPhone,
       membership: targetPlan,
       plan: targetPlan === "VIP" ? "Professional" : "Premium",
       amount: finalAmount,
+      paymentMethod: "PayOS (VietQR)",
       payosTransactions
     });
 
@@ -1069,7 +1100,17 @@ app.post("/api/payments/verify-membership-payment", async (req, res) => {
       try {
         await MembershipTransaction.findOneAndUpdate(
           { orderCode: Number(orderCode) },
-          { $set: { status: "PAID", amount: finalAmount, plan: targetPlan === "VIP" ? "Professional" : "Premium" } },
+          {
+            $set: {
+              status: "PAID",
+              amount: finalAmount,
+              plan: targetPlan === "VIP" ? "Professional" : "Premium",
+              userName: userName || userToUpdate?.name || "Khách hàng",
+              userEmail: userEmail || userToUpdate?.email || "",
+              userPhone: finalPhone,
+              paymentMethod: "PayOS (VietQR)"
+            }
+          },
           { upsert: true }
         );
       } catch (e) {

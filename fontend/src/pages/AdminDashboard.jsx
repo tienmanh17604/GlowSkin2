@@ -157,6 +157,55 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAdminChangeMembership = async (user, newMembership) => {
+    const userId = user.id || user._id;
+    if (!userId || user.membership === newMembership) return;
+
+    // 1. Cập nhật thứ hạng người dùng
+    await updateUserMembership(userId, newMembership);
+
+    // 2. Nếu nâng cấp lên Premium hoặc VIP:
+    // Tự động sinh ngay 1 giao dịch chuyển khoản PayOS tương ứng vào bảng Lịch sử Nâng cấp
+    if (newMembership === "Premium" || newMembership === "VIP") {
+      const isPro = newMembership === "VIP" || newMembership === "Professional";
+      const orderCode = Number("89" + Math.floor(100000 + Math.random() * 900000));
+      const newTx = {
+        id: `SUB_${orderCode}`,
+        orderCode: orderCode,
+        userId: userId,
+        userName: user.name || user.preferredName || "Khách hàng",
+        userEmail: user.email || "",
+        userPhone: user.phone || "",
+        plan: isPro ? "Professional" : "Premium",
+        amount: isPro ? 249000 : 99000,
+        paymentMethod: "PayOS (VietQR)",
+        status: "PAID",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Đưa ngay lên đầu danh sách giao dịch (Optimistic UI)
+      setMembershipTransactions((prev) => [newTx, ...prev.filter((t) => t.orderCode !== orderCode)]);
+
+      // Gửi yêu cầu lưu vào backend API & MongoDB Atlas
+      try {
+        await fetch(`${API_URL}/membership-transactions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newTx),
+        });
+      } catch (e) {
+        console.warn("Lỗi lưu giao dịch nâng cấp:", e);
+      }
+    }
+
+    // Tự động tải lại để đồng bộ với server
+    setTimeout(() => {
+      fetchMembershipTransactions(false);
+      if (refreshUsers) refreshUsers();
+    }, 800);
+  };
+
   // Calculate Upgrade Revenue Statistics
   const upgradeStats = useMemo(() => {
     const paidTxs = membershipTransactions.filter((t) => t.status === "PAID");
@@ -920,7 +969,7 @@ export default function AdminDashboard() {
                                 <select
                                   className="membership-select"
                                   value={u.membership}
-                                  onChange={(e) => updateUserMembership(u.id || u._id, e.target.value)}
+                                  onChange={(e) => handleAdminChangeMembership(u, e.target.value)}
                                 >
                                   <option value="Free">Free Member</option>
                                   <option value="Premium">Premium Member</option>
