@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
-import { analyzeSkinImage, sendFollowUp, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints, detectBlemishesFromImagePixels } from "../services/analyzeSkin";
+import { analyzeSkinImage, sendFollowUp, generateSmartClinicalReply, parseAnalysisResponse, compressImageIfNeeded, DEFAULT_DIAGNOSTIC_METRICS, computeDiagnosticMetrics, sanitizeFacialPoints, detectBlemishesFromImagePixels } from "../services/analyzeSkin";
 import { generateDotsForZones, DIAGNOSTIC_LEGEND } from "../data/skinDiagnosticDots";
 import { cropFaceZones, cropPoints } from "../utils/faceZoneCropper";
 import { removeImageBackground, preloadMediaPipe } from "../utils/backgroundRemoval";
@@ -113,10 +113,13 @@ function formatChatMessage(rawText) {
   const text = cleanTextForUser(rawText);
   if (!text) return null;
   return text.split("\n").map((line, i) => {
-    if (/^[-*_ ]{3,}$/.test(line.trim())) {
+    const trimmed = line.trim();
+    if (/^[-*_ ]{3,}$/.test(trimmed)) {
       return <hr key={i} style={{ border: "none", borderTop: "1px solid rgba(212, 175, 55, 0.2)", margin: "10px 0" }} />;
     }
-    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    const isHeading = /^#{1,4}\s+/.test(trimmed);
+    const lineWithoutHeading = isHeading ? trimmed.replace(/^#{1,4}\s+/, "") : line;
+    const parts = lineWithoutHeading.split(/(\*\*[^*]+\*\*)/g);
     const content = parts.map((part, j) =>
       part.startsWith("**") && part.endsWith("**") ? (
         <strong key={j} style={{ color: "#856404" }}>{part.slice(2, -2)}</strong>
@@ -124,6 +127,13 @@ function formatChatMessage(rawText) {
         part
       )
     );
+    if (isHeading) {
+      return (
+        <span key={i} style={{ display: "block", margin: "10px 0 4px 0", fontWeight: "700", color: "#6b4423", fontSize: "1.05em" }}>
+          {content}
+        </span>
+      );
+    }
     return (
       <span key={i} style={{ display: "block", margin: "3px 0", lineHeight: "1.5" }}>
         {content}
@@ -1223,12 +1233,14 @@ export default function YourSkin() {
       };
       setChatMessages((prev) => [...prev, botMsgObj]);
     } catch (err) {
+      console.warn("Lỗi gọi AI Chat YourSkin:", err.message);
+      const fallbackReply = generateSmartClinicalReply(textToSend);
       setChatMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           role: "assistant",
-          content: "⚠️ Không thể kết nối với hệ thống AI. Vui lòng thử lại sau!"
+          content: fallbackReply || "Đã xảy ra sự cố khi kết nối Trợ lý AI. Vui lòng thử lại sau!"
         }
       ]);
     } finally {

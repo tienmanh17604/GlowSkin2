@@ -6,6 +6,7 @@ import {
   analyzeSkinImage,
   isUsingDemoMode,
   sendFollowUp,
+  generateSmartClinicalReply,
 } from "../services/analyzeSkin";
 import { getRecommendedProducts } from "../services/recommendProducts";
 import { useApp } from "../context/AppContext";
@@ -587,13 +588,15 @@ export default function SkinAnalysis() {
       };
       setMessages((prev) => [...prev, botMsg]);
     } catch (err) {
+      console.warn("Lỗi gọi AI Chat SkinAnalysis:", err.message);
+      const fallbackText = generateSmartClinicalReply(input);
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           role: "assistant",
-          content: err.message || "Không thể gửi câu hỏi.",
-          isError: true,
+          content: fallbackText || err.message || "Không thể gửi câu hỏi.",
+          isError: false,
         },
       ]);
     } finally {

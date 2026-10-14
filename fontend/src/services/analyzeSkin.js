@@ -949,6 +949,8 @@ async function callGeminiNative(parts = []) {
 
       if (response.status === 429) {
         lastErrorMessage = "Tài khoản Gemini API tạm thời hết hạn ngạch miễn phí trong ngày (Lỗi 429 Rate Limit/Quota). Vui lòng thử lại sau ít phút.";
+      } else if (response.status === 402) {
+        lastErrorMessage = "Tài khoản Gemini API đã hết hạn mức credit (Lỗi 402 Payment Required).";
       } else {
         lastErrorMessage = msg || `API lỗi (${response.status})`;
       }
@@ -1264,18 +1266,160 @@ Quan sát THỰC TẾ từng góc ảnh, không bịa đặt tổn thương nế
 
 
 
-export async function sendFollowUp(chatHistory) {
-  if (!hasApiKey()) {
-    await new Promise((r) => setTimeout(r, 1200));
-    return {
-      content:
-        "Cảm ơn bạn đã hỏi thêm! Ở chế độ demo, tôi chưa thể trả lời chi tiết. Hãy thêm **VITE_GEMINI_API_KEY** vào file `.env` và khởi động lại server để chat AI hoạt động đầy đủ.",
-      isDemo: true,
-    };
+// --- BỘ MÁY PHẢN HỒI CỐ VẤN DA LIỄU CHUYÊN SÂU DỰ PHÒNG (SMART CLINICAL FALLBACK ENGINE) ---
+export function generateSmartClinicalReply(userMsg = "", medicalContext = "", chatHistory = []) {
+  const q = (userMsg || "").toLowerCase();
+
+  // 1. Nhận diện khu vực da nếu có nhắc đến
+  let zonePrefix = "";
+  if (q.includes("trán") || q.includes("forehead")) {
+    zonePrefix = "### 📍 Phân tích & Hướng dẫn Chăm sóc Vùng Trán:\n- **Đặc tính sinh lý:** Vùng trán thuộc trục chữ T, nơi tập trung mật độ tuyến bã nhờn cao, chịu cọ xát cơ học từ mũ bảo hiểm, tóc mái và mồ hôi đọng. Do đó, hiện tượng mụn ẩn li ti, bít tắc nang lông và thâm sau viêm rất dễ hình thành.\n\n";
+  } else if (q.includes("má") || q.includes("cheek")) {
+    zonePrefix = "### 📍 Phân tích & Hướng dẫn Chăm sóc Vùng Má:\n- **Đặc tính sinh lý:** Da vùng má có lớp sừng mỏng hơn chữ T, dễ mất nước và nhạy cảm với tia cực tím. Các vấn đề thường gặp là lỗ chân lông giãn nở kề cánh mũi, thâm mụn (PIH) và đỏ rát nếu màng lipid bị suy yếu.\n\n";
+  } else if (q.includes("cằm") || q.includes("chin") || q.includes("quai hàm") || q.includes("jaw")) {
+    zonePrefix = "### 📍 Phân tích & Hướng dẫn Chăm sóc Vùng Cằm & Quai Hàm:\n- **Đặc tính sinh lý:** Khu vực này chịu ảnh hưởng lớn từ nội tiết tố (Hormone), tăng sinh bã nhờn cục bộ và cọ xát từ khẩu trang. Dễ xuất hiện mụn bọc, mụn mủ hoặc sợi bã nhờn sâu.\n\n";
+  } else if (q.includes("mũi") || q.includes("nose")) {
+    zonePrefix = "### 📍 Phân tích & Hướng dẫn Chăm sóc Vùng Mũi:\n- **Đặc tính sinh lý:** Tuyến bã nhờn hoạt động mạnh nhất trên mặt. Đa phần các chấm li ti ở đây là **sợi bã nhờn (Sebaceous Filaments)** chứ không phải mụn đầu đen nguy hiểm, không nên dùng miếng lột mạnh gây giãn lỗ chân lông.\n\n";
   }
 
+  // 2. Phân loại theo chủ đề câu hỏi
+  // A. Hoạt chất trị mụn & thâm
+  if (q.includes("hoạt chất") || (q.includes("trị mụn") && q.includes("thâm")) || q.includes("mụn") || q.includes("thâm")) {
+    return `${zonePrefix}### 💡 Phác đồ Hoạt chất Trị Mụn & Mờ Thâm Tối Ưu:
+
+1. **Salicylic Acid (BHA 1% – 2%):**
+   - **Cơ chế:** Tan trong dầu, thâm nhập sâu vào nang lông, bẻ gãy liên kết tế bào sừng chết và hòa tan bã nhờn tích tụ, giải phóng mụn ẩn và mụn đầu đen.
+   - **Cách dùng:** Sử dụng 2 – 3 lần/tuần vào buổi tối sau bước làm sạch.
+
+2. **Niacinamide (Vitamin B3 5% – 10%):**
+   - **Cơ chế:** Kháng viêm mụn, điều tiết lượng dầu bài tiết, đồng thời ức chế chuyển giao sắc tố melanosome lên bề mặt da giúp mờ nhanh vết thâm nâu (PIH).
+   - **Cách dùng:** Có thể dùng cả sáng và tối hàng ngày.
+
+3. **Azelaic Acid (10% – 20%):**
+   - **Cơ chế:** Hoạt chất đa năng giúp ức chế vi khuẩn *C.acnes*, giảm sưng đỏ (PIE) và ức chế enzyme Tyrosinase làm sáng đều màu da.
+   - **Cách dùng:** Thoa một lớp mỏng lên vùng mụn thâm sau bước cấp ẩm mỏng nhẹ.
+
+4. **Adapalene (0.1%):**
+   - **Cơ chế:** Dẫn xuất Retinoid thế hệ 3, giúp bình thường hóa chu trình sừng hóa nang lông, ngăn chặn hình thành vi nhân mụn mới tận gốc.
+   - **Lưu ý:** Chỉ dùng buổi tối, bôi lớp mỏng cách ngày khi da đã làm quen.
+
+⚠️ **Lưu ý quan trọng:** Không bôi dồn dập các hoạt chất mạnh cùng một buổi. Luôn dưỡng ẩm phục hồi và bôi kem chống nắng kỹ lưỡng vào ban ngày.`;
+  }
+
+  // B. Routine Sáng & Tối
+  if (q.includes("routine") || q.includes("sáng và tối") || q.includes("quy trình") || q.includes("thứ tự")) {
+    return `${zonePrefix}### 📋 Routine Chăm Sóc Da Sáng & Tối Chuẩn Khoa Học:
+
+#### ☀️ BUỔI SÁNG (Bảo vệ & Kiềm dầu):
+1. **Làm sạch:** Sữa rửa mặt tạo bọt dịu nhẹ có độ pH chuẩn 5.0 – 5.5, không chứa cồn hoặc sulfate mạnh làm căng rát da.
+2. **Cân bằng & Cấp nước:** Toner hoặc Serum Hyaluronic Acid / Chiết xuất Rau má (Centella) làm dịu và cấp ẩm tức thì.
+3. **Serum Kiềm Dầu & Sáng Da:** Thoa 3–4 giọt Niacinamide 5% – 10% vỗ đều toàn mặt.
+4. **Khóa ẩm nhẹ:** Gel dưỡng ẩm (Oil-free / Water-based) thẩm thấu nhanh, không gây bóng nhờn.
+5. **Kem Chống Nắng (Bắt buộc):** Kem chống nắng phổ rộng SPF 50+, PA++++, bôi đủ lượng 2 đốt ngón tay trước khi ra ngoài 15–20 phút.
+
+---
+
+#### 🌙 BUỔI TỐI (Làm sạch sâu & Tái tạo tế bào):
+1. **Tẩy trang:** Nước tẩy trang Micellar Water dành cho da dầu nhạy cảm làm sạch bụi mịn, dầu thừa và cặn chống nắng.
+2. **Sữa rửa mặt:** Rửa kỹ lại với nước ấm vừa phải trong 60 giây.
+3. **Điều trị đặc hiệu (Treatment):**
+   - *Thứ 2, 4, 6:* Thoa dung dịch BHA 2% hoặc Azelaic Acid lên vùng trán/mụn.
+   - *Thứ 3, 5, 7:* Thoa Adapalene 0.1% (hoặc dưỡng phục hồi nguyên buổi).
+4. **Phục hồi & Củng cố hàng rào da:** Kem dưỡng chứa B5 (Panthenol), Ceramide và Madecassoside để da được sửa chữa và tái sinh qua đêm.`;
+  }
+
+  // C. Thành phần nên tránh / Kích ứng
+  if (q.includes("tránh") || q.includes("kích ứng") || q.includes("dị ứng") || q.includes("nguy hiểm")) {
+    return `${zonePrefix}### ⚠️ Các Thành Phần & Thói Quen Cần Tránh Để Da Không Kích Ứng:
+
+1. **Cồn khô nồng độ cao (Alcohol Denat, Ethanol, Isopropyl Alcohol):**
+   - Hòa tan lớp màng lipid tự nhiên, khiến bề mặt da khô căng và phản ứng ngược bằng cách tiết dầu ồ ạt hơn.
+
+2. **Hương liệu nhân tạo & Tinh dầu đậm đặc (Fragrance, Parfum, Essential Oils):**
+   - Dễ gây viêm da tiếp xúc và khiến các ổ mụn sưng đỏ lan rộng hơn.
+
+3. **Dầu khoáng nặng & Bơ đậm đặc (Mineral Oil, Lanolin, Shea Butter hàm lượng cao):**
+   - Tạo màng occlusion quá dày, dễ bít kín lỗ nang lông ở người có cơ địa da dầu mụn.
+
+4. **Tránh kết hợp sai hoạt chất:**
+   - Không bôi chung BHA nồng độ cao cùng Retinoids trong cùng một lượt bôi.
+   - Không tự ý nặn mụn non bằng tay bẩn làm lây lan vi khuẩn sang các vùng da lành lân cận.`;
+  }
+
+  // D. Kem chống nắng
+  if (q.includes("chống nắng") || q.includes("sunscreen") || q.includes("kcn")) {
+    return `${zonePrefix}### ☀️ Hướng Dẫn Chọn & Sử Dụng Kem Chống Nắng Phù Hợp:
+
+1. **Tiêu chuẩn chỉ số:**
+   - **SPF 50+:** Bảo vệ da khỏi 98% tia UVB gây bỏng rát và tăng sắc tố thâm sạm.
+   - **PA++++:** Khả năng ngăn chặn tia UVA xuyên sâu gây phá hủy collagen và lão hóa sớm.
+
+2. **Kết cấu khuyên dùng cho da mụn & bít tắc:**
+   - Chọn dạng **Sữa (Fluid)**, **Gel lỏng** hoặc **Gel-Cream** mỏng nhẹ, thấm nhanh, không bết dính.
+   - Tìm kiếm các nhãn chứng nhận: *"Non-comedogenic"* (không bít tắc lỗ chân lông) và *"Oil-control / Matte finish"*.
+
+3. **Màng lọc ưu tiên:**
+   - Màng lọc lai hoặc màng lọc quang phổ rộng thế hệ mới (như Tinosorb S, Tinosorb M, Uvinul A Plus) bảo vệ bền vững mà không gây châm chích.`;
+  }
+
+  // E. Phục hồi & Mờ thâm
+  if (q.includes("phục hồi") || q.includes("mờ thâm") || q.includes("sẹo") || q.includes("sắc tố")) {
+    return `${zonePrefix}### ✨ Phác Đồ Phục Hồi Màng Bảo Vệ Da & Đánh Bay Thâm Mụn:
+
+1. **Phân loại vết thâm chuẩn khoa học:**
+   - **Thâm đỏ (PIE):** Do mao mạch dưới da bị giãn hoặc tổn thương sau khi mụn lành. Hoạt chất tối ưu: *Vitamin B5 (Panthenol 5%), Centella Asiatica, Madecassoside và Azelaic Acid*.
+   - **Thâm nâu (PIH):** Do hắc sắc tố Melanin sản sinh quá mức. Hoạt chất tối ưu: *Niacinamide 10%, Tranexamic Acid 3-5%, Alpha Arbutin và Vitamin C*.
+
+2. **Tái thiết lập hàng rào bảo vệ da:**
+   - Cung cấp đủ **Ceramide NP/AP/EOP**, Acid béo và Hyaluronic Acid để vá lành khoảng hở giữa các tế bào sừng, giữ ẩm cho da không bị khô bong tróc.`;
+  }
+
+  // F. Ăn uống & Sinh hoạt
+  if (q.includes("ăn uống") || q.includes("sinh hoạt") || q.includes("thói quen") || q.includes("thực phẩm") || q.includes("dinh dưỡng")) {
+    return `${zonePrefix}### 🥗 Lối Sống & Dinh Dưỡng Giúp Giảm Tiết Dầu & Ngừa Mụn:
+
+1. **Thực phẩm nên hạn chế:**
+   - **Đường & Tinh bột tinh chế:** Trà sữa, nước ngọt, đồ ngọt làm tăng nhanh insulin trong máu, kích hoạt enzyme kích thích tuyến bã nhờn hoạt động quá mức.
+   - **Sữa bò & Chế phẩm từ sữa bò:** Chứa hormone tăng trưởng tự nhiên IGF-1 dễ thúc đẩy phản ứng viêm của mụn trứng cá.
+
+2. **Dinh dưỡng bổ trợ da:**
+   - Bổ sung thực phẩm giàu **Kẽm (Zinc)**: Hạt bí đỏ, đậu đỗ, hải sản giúp kháng viêm và hỗ trợ phục hồi mô hạt.
+   - Axit béo **Omega-3**: Có trong cá hồi, cá trích, hạt chia giúp làm dịu phản ứng sưng đỏ.
+   - Uống tối thiểu **2 - 2.5 lít nước/ngày** để thúc đẩy quá trình trao đổi chất của tế bào.
+
+3. **Thói quen bảo vệ da:**
+   - Ngủ trước 23h để làn da bước vào pha tự tái sinh tế bào từ 23h - 3h sáng.
+   - Thay vỏ gối 1 lần/tuần, vệ sinh bề mặt điện thoại và hạn chế tối đa việc đưa tay sờ nặn mụn.`;
+  }
+
+  // G. Mặc định / Tổng quát
+  return `${zonePrefix}### 🌿 Tư Vấn Chăm Sóc Da Toàn Diện Từ Cố Vấn GlowSkin:
+
+Dựa trên dữ liệu phân tích làn da của bạn:
+
+1. **Nguyên tắc cốt lõi:**
+   - **Làm sạch chuẩn:** Đảm bảo da được làm sạch sâu vào cuối ngày nhưng không bị mất đi độ ẩm tự nhiên (giữ pH 5.5).
+   - **Kiểm soát bã nhờn:** Sử dụng Niacinamide hoặc BHA nồng độ hợp lý (1-2%) để ngăn dầu thừa tích tụ tại các nang lông.
+   - **Kháng viêm & Phục hồi:** Khi có nốt mụn sưng, ưu tiên chấm Benzoyl Peroxide hoặc Azelaic Acid, kết hợp thoa kem dưỡng chứa B5 Panthenol để làm dịu da.
+   - **Bảo vệ ban ngày:** Thoa kem chống nắng đều đặn để ngăn chặn bức xạ UV làm vết thâm đen sạm và lão hóa sớm.
+
+Bạn có thể chọn thêm các gợi ý bên dưới hoặc gửi ảnh sản phẩm đang dùng để tôi đánh giá chi tiết độ phù hợp nhé!`;
+}
+
+export async function sendFollowUp(chatHistory) {
   const lastUserMsg = [...chatHistory].reverse().find(m => m.role === "user")?.content || "";
-  const medicalContext = await fetchMedicalContext(lastUserMsg);
+  let medicalContext = "";
+  try {
+    medicalContext = await fetchMedicalContext(lastUserMsg);
+  } catch (mErr) {
+    medicalContext = DEFAULT_CLINICAL_GUIDELINE;
+  }
+
+  if (!hasApiKey()) {
+    await new Promise((r) => setTimeout(r, 600));
+    const fallbackReply = generateSmartClinicalReply(lastUserMsg, medicalContext, chatHistory);
+    return { content: fallbackReply, isDemo: true };
+  }
 
   const apiMessages = [
     { role: "system", content: CHAT_SYSTEM_PROMPT + (medicalContext ? `\n\nCĂN CỨ TÀI LIỆU CHUYÊN KHOA DA LIỄU:\n${medicalContext}` : "") }
@@ -1309,9 +1453,15 @@ export async function sendFollowUp(chatHistory) {
     }
   }
 
-  const rawContent = await callOpenAI(apiMessages);
-  const cleanContent = cleanAiText(rawContent);
-  return { content: cleanContent, isDemo: false };
+  try {
+    const rawContent = await callOpenAI(apiMessages);
+    const cleanContent = cleanAiText(rawContent);
+    return { content: cleanContent, isDemo: false };
+  } catch (err) {
+    console.warn("Lỗi gọi Gemini AI trong chat, tự động chuyển sang Cố vấn Da liễu AI tích hợp:", err.message);
+    const fallbackReply = generateSmartClinicalReply(lastUserMsg, medicalContext, chatHistory);
+    return { content: fallbackReply, isDemo: true, error: err.message };
+  }
 }
 
 export function isUsingDemoMode() {
