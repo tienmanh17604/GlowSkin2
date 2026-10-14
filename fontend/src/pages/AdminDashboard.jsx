@@ -4,6 +4,7 @@ import { useApp } from "../context/AppContext";
 import Logo from "../components/Logo";
 import { formatPrice, CATEGORIES } from "../data/products";
 import { SKIN_TYPES, CONCERNS } from "../services/recommendProducts";
+import defaultMembershipTransactions from "../data/membership_transactions.json";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
@@ -50,7 +51,9 @@ export default function AdminDashboard() {
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
   // States & Effects for Membership Upgrade Transactions & Revenue Management
-  const [membershipTransactions, setMembershipTransactions] = useState([]);
+  const [membershipTransactions, setMembershipTransactions] = useState(() => {
+    return Array.isArray(defaultMembershipTransactions) ? defaultMembershipTransactions : [];
+  });
   const [txFilterPlan, setTxFilterPlan] = useState("all"); // "all" | "Premium" | "Professional"
   const [txFilterStatus, setTxFilterStatus] = useState("all"); // "all" | "PAID" | "PENDING" | "CANCELLED"
   const [txSearch, setTxSearch] = useState("");
@@ -66,13 +69,18 @@ export default function AdminDashboard() {
       const res = await fetch(`${API_URL}/membership-transactions`);
       if (res.ok) {
         const data = await res.json();
-        setMembershipTransactions(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setMembershipTransactions(data);
+          return;
+        }
       }
     } catch (err) {
       console.error("Lỗi tải danh sách giao dịch nâng cấp:", err);
     } finally {
       if (showLoading) setIsTxLoading(false);
     }
+    // Fallback: nếu API chưa sẵn sàng hoặc trả về rỗng, dùng danh sách mặc định
+    setMembershipTransactions((prev) => (prev && prev.length > 0 ? prev : defaultMembershipTransactions));
   };
 
   const handleSyncPayOS = async () => {
