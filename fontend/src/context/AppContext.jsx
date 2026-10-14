@@ -33,36 +33,18 @@ export function AppProvider({ children }) {
     }
   });
 
-  // Đồng bộ danh sách sản phẩm từ backend API nếu có kết nối
+  // Đồng bộ tồn kho sản phẩm từ backend API nếu có kết nối (tuyệt đối không đè thứ tự, không đè link Shopee)
   useEffect(() => {
     fetch(`${API_URL}/products`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
-          // Luôn cố định đúng thứ tự 12 Toner chuẩn theo tonerProducts, tránh nhảy giao diện
-          const orderMap = new Map(tonerProducts.map((p, idx) => [p.id, idx]));
-          const sortedData = [...data].sort((a, b) => {
-            const indexA = orderMap.has(a.id) ? orderMap.get(a.id) : 999;
-            const indexB = orderMap.has(b.id) ? orderMap.get(b.id) : 999;
-            return indexA - indexB;
-          });
-
-          // Hòa trộn an toàn với dữ liệu chuẩn để bảo toàn 100% link Shopee, hình ảnh và thông tin chi tiết
-          const mergedData = sortedData.map((prod) => {
-            const local = tonerProducts.find((p) => p.id === prod.id);
-            if (local) {
-              return {
-                ...prod,
-                ...local,
-                link: local.link, // Tuyệt đối giữ nguyên link Shopee chính xác
-                stock: typeof prod.stock === "number" ? prod.stock : local.stock,
-              };
-            }
-            return prod;
-          });
-
-          setProducts(mergedData);
-          localStorage.setItem(PRODUCTS_KEY, JSON.stringify(mergedData));
+          setProducts((prev) =>
+            prev.map((p) => {
+              const remote = data.find((r) => r.id === p.id);
+              return remote && typeof remote.stock === "number" ? { ...p, stock: remote.stock } : p;
+            })
+          );
         }
       })
       .catch(() => {});

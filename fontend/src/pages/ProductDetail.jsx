@@ -4,6 +4,7 @@ import { useApp } from "../context/AppContext";
 import { useCart } from "../context/CartContext";
 import Navbar from "../components/Navbar";
 import { formatPrice } from "../data/products";
+import tonerProducts from "../data/products.json";
 import { CATEGORIES } from "../services/recommendProducts";
 import Footer from "../components/Footer";
 import "./ProductDetail.css";
@@ -45,7 +46,14 @@ export default function ProductDetail() {
   
   // Find product
   const product = useMemo(() => {
-    return products.find((p) => p.id === productId);
+    const found = products.find((p) => p.id === productId);
+    const local = tonerProducts.find((p) => p.id === productId);
+    if (!found && !local) return null;
+    return {
+      ...(local || {}),
+      ...(found || {}),
+      link: local?.link || found?.link,
+    };
   }, [products, productId]);
 
   useEffect(() => {
@@ -99,6 +107,10 @@ export default function ProductDetail() {
   };
 
   const handleBuyNow = () => {
+    if (product?.link) {
+      window.open(product.link, "_blank", "noopener,noreferrer");
+      return;
+    }
     addToCart(product, qty);
     setIsCartOpen(true);
   };
@@ -240,21 +252,26 @@ export default function ProductDetail() {
                       background: "linear-gradient(135deg, #ee4d2d 0%, #ff5722 100%)",
                       color: "white",
                       textDecoration: "none",
-                      display: "inline-flex",
+                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "8px",
                       fontWeight: "700",
                       boxShadow: "0 4px 14px rgba(238, 77, 45, 0.35)",
-                      cursor: "pointer"
+                      cursor: "pointer",
+                      width: "100%",
+                      height: "48px",
+                      borderRadius: "10px",
+                      fontSize: "15px",
+                      marginBottom: "8px"
                     }}
                   >
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                       <polyline points="15 3 21 3 21 9"></polyline>
                       <line x1="10" y1="14" x2="21" y2="3"></line>
                     </svg>
-                    MUA TRÊN SHOPEE ↗
+                    MUA NGAY TRÊN SHOPEE CHÍNH HÃNG ↗
                   </a>
                 )}
 
@@ -302,7 +319,7 @@ export default function ProductDetail() {
                 <span className="policy-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </span>
-                <span className="policy-text">Nhận <strong>HSV Point</strong> cho mỗi lần mua</span>
+                <span className="policy-text">Tư vấn chuyên sâu <strong>da liễu 24/7</strong></span>
               </div>
               <div className="policy-item">
                 <span className="policy-icon">
