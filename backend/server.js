@@ -94,6 +94,79 @@ const syncProductsToMongo = async () => {
   }
 };
 
+const syncMembershipTransactionsToMongo = async () => {
+  try {
+    const localTxs = localDb.getMembershipTransactions();
+    if (localTxs && localTxs.length > 0) {
+      let insertedCount = 0;
+      for (const t of localTxs) {
+        const orderCodeNum = Number(t.orderCode);
+        if (!orderCodeNum) continue;
+        const txData = {
+          id: t.id || `SUB_${orderCodeNum}`,
+          orderCode: orderCodeNum,
+          userId: t.userId || "",
+          userName: t.userName || "Khách hàng",
+          userEmail: t.userEmail || "",
+          userPhone: t.userPhone || "",
+          plan: t.plan || "Premium",
+          amount: Number(t.amount) || 99000,
+          paymentMethod: t.paymentMethod || "PayOS (VietQR)",
+          status: t.status || "PAID",
+          createdAt: t.createdAt ? new Date(t.createdAt) : new Date(),
+          updatedAt: t.updatedAt ? new Date(t.updatedAt) : new Date(),
+        };
+        const res = await MembershipTransaction.updateOne(
+          { orderCode: orderCodeNum },
+          { $set: txData },
+          { upsert: true }
+        );
+        if (res.upsertedCount > 0) insertedCount++;
+      }
+      if (insertedCount > 0) {
+        console.log(`\x1b[32m--> [Giao dịch Doanh thu] Đã đồng bộ ${insertedCount} giao dịch mới lên MongoDB Atlas ✅\x1b[0m`);
+      }
+    }
+  } catch (err) {
+    console.warn("Lỗi khi tự động đồng bộ giao dịch lên MongoDB Atlas:", err.message);
+  }
+};
+
+const syncUsersToMongo = async () => {
+  try {
+    const localUsers = localDb.getUsers();
+    if (localUsers && localUsers.length > 0) {
+      let insertedCount = 0;
+      for (const u of localUsers) {
+        const cleanEmail = u.email ? u.email.trim().toLowerCase() : "";
+        if (!cleanEmail) continue;
+        const userData = {
+          id: u.id || `u_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+          name: u.name || "Khách hàng",
+          preferredName: u.preferredName || u.name || "",
+          phone: u.phone || u.userPhone || "",
+          email: cleanEmail,
+          password: u.password || "user123",
+          role: u.role || "user",
+          membership: u.membership || "Premium",
+          addresses: Array.isArray(u.addresses) ? u.addresses : [],
+        };
+        const res = await User.updateOne(
+          { email: cleanEmail },
+          { $set: userData },
+          { upsert: true }
+        );
+        if (res.upsertedCount > 0) insertedCount++;
+      }
+      if (insertedCount > 0) {
+        console.log(`\x1b[32m--> [Tài khoản] Đã đồng bộ ${insertedCount} tài khoản mới lên MongoDB Atlas ✅\x1b[0m`);
+      }
+    }
+  } catch (err) {
+    console.warn("Lỗi khi tự động đồng bộ người dùng lên MongoDB Atlas:", err.message);
+  }
+};
+
 const handleMongoSuccess = () => {
   if (!hasLoggedConnect) {
     hasLoggedConnect = true;
@@ -101,6 +174,8 @@ const handleMongoSuccess = () => {
     console.log("\x1b[32m--> MongoDB connection established.\x1b[0m");
     console.log("\x1b[32m--> Đã kết nối MongoDB Atlas thành công! ✅\x1b[0m");
     syncProductsToMongo();
+    syncMembershipTransactionsToMongo();
+    syncUsersToMongo();
   }
 };
 

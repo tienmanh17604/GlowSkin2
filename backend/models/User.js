@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    phone: {
+      type: String,
+      default: "",
+    },
     email: {
       type: String,
       required: true,
@@ -45,7 +49,7 @@ const UserSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 const User = mongoose.model("User", UserSchema);

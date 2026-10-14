@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const membershipTransactionSchema = new mongoose.Schema(
   {
+    id: { type: String },
     orderCode: { type: Number, required: true },
     userId: { type: String, required: true },
     userName: { type: String, default: "" },
@@ -12,7 +13,7 @@ const membershipTransactionSchema = new mongoose.Schema(
     paymentMethod: { type: String, default: "PayOS (VietQR)" },
     status: { type: String, default: "PAID" }, // "PAID" | "PENDING" | "CANCELLED"
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 export default mongoose.model("MembershipTransaction", membershipTransactionSchema);
