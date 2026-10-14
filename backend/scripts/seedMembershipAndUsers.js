@@ -73,7 +73,7 @@ async function run() {
     console.log(`--> Tìm thấy ${rawTxs.length} giao dịch trong membership_transactions.json. Bắt đầu đồng bộ...`);
 
     let txInserted = 0;
-    let txUpdated = 0;
+    await MembershipTransaction.deleteMany({});
 
     for (const t of rawTxs) {
       const orderCodeNum = Number(t.orderCode);
@@ -90,21 +90,15 @@ async function run() {
         amount: Number(t.amount) || 99000,
         paymentMethod: t.paymentMethod || "PayOS (VietQR)",
         status: t.status || "PAID",
-        createdAt: t.createdAt ? new Date(t.createdAt) : new Date(),
-        updatedAt: t.updatedAt ? new Date(t.updatedAt) : new Date(),
+        createdAt: new Date(t.createdAt),
+        updatedAt: new Date(t.updatedAt || t.createdAt),
       };
 
-      const res = await MembershipTransaction.updateOne(
-        { orderCode: orderCodeNum },
-        { $set: txData },
-        { upsert: true }
-      );
-
-      if (res.upsertedCount > 0) txInserted++;
-      else txUpdated++;
+      await MembershipTransaction.create(txData);
+      txInserted++;
     }
 
-    console.log(`--> [Giao dịch Doanh thu] Thêm mới: ${txInserted}, Cập nhật: ${txUpdated} giao dịch lên MongoDB Atlas! ✅`);
+    console.log(`--> [Giao dịch Doanh thu] Đã nạp lại ${txInserted} giao dịch với ngày giờ mới lên MongoDB Atlas! ✅`);
   }
 
   const finalUsersCount = await User.countDocuments();

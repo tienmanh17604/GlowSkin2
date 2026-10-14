@@ -12,8 +12,10 @@ const membershipTransactionSchema = new mongoose.Schema(
     amount: { type: Number, required: true },
     paymentMethod: { type: String, default: "PayOS (VietQR)" },
     status: { type: String, default: "PAID" }, // "PAID" | "PENDING" | "CANCELLED"
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
-  { timestamps: true, strict: false }
+  { timestamps: false, strict: false }
 );
 
 export default mongoose.model("MembershipTransaction", membershipTransactionSchema);
