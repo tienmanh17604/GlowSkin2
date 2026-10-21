@@ -1015,5 +1015,1685 @@
     "addresses": [],
     "createdAt": "2026-10-06T15:01:00.000Z",
     "updatedAt": "2026-10-06T15:01:00.000Z"
+  },
+  {
+    "id": "u_active_1",
+    "name": "Nguyễn Thảo Linh",
+    "preferredName": "Thảo Linh",
+    "email": "nguyenthaolinh99@gmail.com",
+    "phone": "0901001071",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 48 Nguyễn Thị Minh Khai, Phường Đa Kao, Quận 1, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "15/04/1999",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen & Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-08T07:07:00.000Z",
+    "updatedAt": "2026-10-08T07:07:00.000Z"
+  },
+  {
+    "id": "u_active_2",
+    "name": "Trần Quốc Bảo",
+    "preferredName": "Quốc Bảo",
+    "email": "tranquocbao.2209@gmail.com",
+    "phone": "0911471210",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 125 Hoàng Hoa Thám, Phường Thụy Khuê, Quận Tây Hồ, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "22/09/1997",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Kẽm ZinC",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-09T10:26:00.000Z",
+    "updatedAt": "2026-10-09T10:26:00.000Z"
+  },
+  {
+    "id": "u_active_3",
+    "name": "Lê Phương Nhi",
+    "preferredName": "Phương Nhi",
+    "email": "lephuongnhi2001@gmail.com",
+    "phone": "0931941349",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Số 78 Bạch Đằng, Phường Hải Châu 1, Quận Hải Châu, Đà Nẵng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "08/11/2001",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin E, Hyaluronic Acid",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-10T13:45:00.000Z",
+    "updatedAt": "2026-10-10T13:45:00.000Z"
+  },
+  {
+    "id": "u_active_4",
+    "name": "Phạm Minh Quân",
+    "preferredName": "Minh Quân",
+    "email": "phamminhquan00@gmail.com",
+    "phone": "0942411488",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Tòa S2.03 Vinhomes Grand Park, Phường Long Thạnh Mỹ, TP. Thủ Đức, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "17/02/2000",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-11T16:04:00.000Z",
+    "updatedAt": "2026-10-11T16:04:00.000Z"
+  },
+  {
+    "id": "u_active_5",
+    "name": "Hoàng Khánh Vy",
+    "preferredName": "Khánh Vy",
+    "email": "hoangkhanhvy.3006@gmail.com",
+    "phone": "0962881627",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 16 Ngõ 82 Chùa Láng, Phường Láng Thượng, Quận Đống Đa, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "30/06/2002",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Mẩn đỏ vùng gò má",
+      "skinType": "Da nhạy cảm",
+      "skinSensitivity": "Rất nhạy cảm"
+    },
+    "createdAt": "2026-10-12T19:23:00.000Z",
+    "updatedAt": "2026-10-12T19:23:00.000Z"
+  },
+  {
+    "id": "u_active_6",
+    "name": "Vũ Hữu Thắng",
+    "preferredName": "Hữu Thắng",
+    "email": "vuhuuthang1996@gmail.com",
+    "phone": "0973351766",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 42 Lạch Tray, Phường Lạch Tray, Quận Ngô Quyền, Hải Phòng"
+    ],
+    "gender": "Nam",
+    "birthDate": "14/08/1996",
+    "city": "Hải Phòng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin tổng hợp",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-13T07:42:00.000Z",
+    "updatedAt": "2026-10-13T07:42:00.000Z"
+  },
+  {
+    "id": "u_active_7",
+    "name": "Đặng Thùy Dương",
+    "preferredName": "Thùy Dương",
+    "email": "dangthuyduong98@gmail.com",
+    "phone": "0983821905",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 89 Nguyễn Đình Chiểu, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "05/12/1998",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-14T10:01:00.000Z",
+    "updatedAt": "2026-10-14T10:01:00.000Z"
+  },
+  {
+    "id": "u_active_8",
+    "name": "Bùi Quang Huy",
+    "preferredName": "Quang Huy",
+    "email": "buiquanghuy.2703@gmail.com",
+    "phone": "0864292044",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 130 Đường 30 Tháng 4, Phường An Phú, Quận Ninh Kiều, Cần Thơ"
+    ],
+    "gender": "Nam",
+    "birthDate": "27/03/1999",
+    "city": "Cần Thơ",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-15T13:20:00.000Z",
+    "updatedAt": "2026-10-15T13:20:00.000Z"
+  },
+  {
+    "id": "u_active_9",
+    "name": "Đỗ Yến Nhi",
+    "preferredName": "Yến Nhi",
+    "email": "doyennhi2003@gmail.com",
+    "phone": "0884762183",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 65 Đại lộ Bình Dương, Phường Phú Hòa, TP. Thủ Dầu Một, Bình Dương"
+    ],
+    "gender": "Nữ",
+    "birthDate": "19/07/2003",
+    "city": "Bình Dương",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-16T16:39:00.000Z",
+    "updatedAt": "2026-10-16T16:39:00.000Z"
+  },
+  {
+    "id": "u_active_10",
+    "name": "Hồ Văn Cường",
+    "preferredName": "Văn Cường",
+    "email": "hovancuong95@gmail.com",
+    "phone": "0895232322",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 104 Nguyễn Ái Quốc, Phường Tân Tiến, TP. Biên Hòa, Đồng Nai"
+    ],
+    "gender": "Nam",
+    "birthDate": "10/10/1995",
+    "city": "Đồng Nai",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-17T19:58:00.000Z",
+    "updatedAt": "2026-10-17T19:58:00.000Z"
+  },
+  {
+    "id": "u_active_11",
+    "name": "Ngô Lan Anh",
+    "preferredName": "Lan Anh",
+    "email": "ngolananh.2501@gmail.com",
+    "phone": "0705702461",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Số 22 Trần Duy Hưng, Phường Trung Hòa, Quận Cầu Giấy, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "25/01/2000",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Nước uống Collagen, Tinh dầu hoa anh thảo",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-18T07:17:00.000Z",
+    "updatedAt": "2026-10-18T07:17:00.000Z"
+  },
+  {
+    "id": "u_active_12",
+    "name": "Dương Thế Anh",
+    "preferredName": "Thế Anh",
+    "email": "duongtheanh1998@gmail.com",
+    "phone": "0766172600",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 215 Lê Văn Sỹ, Phường 14, Quận Phú Nhuận, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "11/05/1998",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-08T10:36:00.000Z",
+    "updatedAt": "2026-10-08T10:36:00.000Z"
+  },
+  {
+    "id": "u_active_13",
+    "name": "Lý Quỳnh Trang",
+    "preferredName": "Quỳnh Trang",
+    "email": "lyquynhtrang02@gmail.com",
+    "phone": "0776642739",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 56 Quang Trung, Phường Vạn Thắng, TP. Nha Trang, Khánh Hòa"
+    ],
+    "gender": "Nữ",
+    "birthDate": "03/09/2002",
+    "city": "Nha Trang",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-09T13:55:00.000Z",
+    "updatedAt": "2026-10-09T13:55:00.000Z"
+  },
+  {
+    "id": "u_active_14",
+    "name": "Đinh Hoàng Hải",
+    "preferredName": "Hoàng Hải",
+    "email": "dinhhoanghai.2012@gmail.com",
+    "phone": "0787112878",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 390 Lê Duẩn, Phường Chính Gián, Quận Thanh Khê, Đà Nẵng"
+    ],
+    "gender": "Nam",
+    "birthDate": "20/12/1997",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Kẽm ZinC",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-10T16:14:00.000Z",
+    "updatedAt": "2026-10-10T16:14:00.000Z"
+  },
+  {
+    "id": "u_active_15",
+    "name": "Đoàn Kim Ngân",
+    "preferredName": "Kim Ngân",
+    "email": "doankimngan2001@gmail.com",
+    "phone": "0797583017",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Chung cư Sunrise City, 27 Nguyễn Hữu Thọ, Phường Tân Hưng, Quận 7, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "18/06/2001",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Glutathione & Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-11T19:33:00.000Z",
+    "updatedAt": "2026-10-11T19:33:00.000Z"
+  },
+  {
+    "id": "u_active_16",
+    "name": "Trương Quốc Dũng",
+    "preferredName": "Quốc Dũng",
+    "email": "truongquocdung96@gmail.com",
+    "phone": "0338053156",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 71 Thụy Khuê, Phường Thụy Khuê, Quận Tây Hồ, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "07/04/1996",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-12T07:52:00.000Z",
+    "updatedAt": "2026-10-12T07:52:00.000Z"
+  },
+  {
+    "id": "u_active_17",
+    "name": "Lâm Thảo Vy",
+    "preferredName": "Thảo Vy",
+    "email": "lamthaovy.2910@gmail.com",
+    "phone": "0348523295",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 88 Mậu Thân, Phường An Hòa, Quận Ninh Kiều, Cần Thơ"
+    ],
+    "gender": "Nữ",
+    "birthDate": "29/10/2004",
+    "city": "Cần Thơ",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-13T10:11:00.000Z",
+    "updatedAt": "2026-10-13T10:11:00.000Z"
+  },
+  {
+    "id": "u_active_18",
+    "name": "Mai Bích Hạnh",
+    "preferredName": "Bích Hạnh",
+    "email": "maibichhanh1995@gmail.com",
+    "phone": "0358993434",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 152 Ba Cu, Phường 3, TP. Vũng Tàu, Bà Rịa - Vũng Tàu"
+    ],
+    "gender": "Nữ",
+    "birthDate": "12/03/1995",
+    "city": "Vũng Tàu",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen Peptide",
+      "hasBloodVessels": "Mạch máu nhỏ vùng cánh mũi",
+      "skinType": "Da lão hóa nhẹ, khô",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-14T13:30:00.000Z",
+    "updatedAt": "2026-10-14T13:30:00.000Z"
+  },
+  {
+    "id": "u_active_19",
+    "name": "Trịnh Công Sơn",
+    "preferredName": "Công Sơn",
+    "email": "trinhcongson99@gmail.com",
+    "phone": "0369463573",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 45 Lê Lợi, Phường Phú Hội, TP. Huế, Thừa Thiên Huế"
+    ],
+    "gender": "Nam",
+    "birthDate": "24/07/1999",
+    "city": "Huế",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-15T16:49:00.000Z",
+    "updatedAt": "2026-10-15T16:49:00.000Z"
+  },
+  {
+    "id": "u_active_20",
+    "name": "Lương Ngọc Hân",
+    "preferredName": "Ngọc Hân",
+    "email": "luongngochan.1611@gmail.com",
+    "phone": "0379933712",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Số 34 Đường Số 7, Phường An Phú, TP. Thủ Đức, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "16/11/2000",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen & Niacinamide",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-16T19:08:00.000Z",
+    "updatedAt": "2026-10-16T19:08:00.000Z"
+  },
+  {
+    "id": "u_active_21",
+    "name": "Nguyễn Khắc Triệu",
+    "preferredName": "Khắc Triệu",
+    "email": "nguyenkhactrieu1998@gmail.com",
+    "phone": "0381413851",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 95 Xã Đàn, Phường Phương Liên, Quận Đống Đa, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "04/02/1998",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-17T07:27:00.000Z",
+    "updatedAt": "2026-10-17T07:27:00.000Z"
+  },
+  {
+    "id": "u_active_22",
+    "name": "Trần Hải Yến",
+    "preferredName": "Hải Yến",
+    "email": "tranhaiyen01@gmail.com",
+    "phone": "0901883990",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 88 Lê Thánh Tông, Phường Bạch Đằng, TP. Hạ Long, Quảng Ninh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "21/08/2001",
+    "city": "Quảng Ninh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin E",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-18T10:46:00.000Z",
+    "updatedAt": "2026-10-18T10:46:00.000Z"
+  },
+  {
+    "id": "u_active_23",
+    "name": "Lê Diệu Huyền",
+    "preferredName": "Diệu Huyền",
+    "email": "ledieuhuyen.1305@gmail.com",
+    "phone": "0912354129",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 204 Pasteur, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "13/05/1999",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen nước",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-08T13:05:00.000Z",
+    "updatedAt": "2026-10-08T13:05:00.000Z"
+  },
+  {
+    "id": "u_active_24",
+    "name": "Phạm Thiên Ân",
+    "preferredName": "Thiên Ân",
+    "email": "phamthienan2003@gmail.com",
+    "phone": "0932824268",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 32 Phan Đình Phùng, Phường 2, TP. Đà Lạt, Lâm Đồng"
+    ],
+    "gender": "Nam",
+    "birthDate": "09/12/2003",
+    "city": "Đà Lạt",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-09T16:24:00.000Z",
+    "updatedAt": "2026-10-09T16:24:00.000Z"
+  },
+  {
+    "id": "u_active_25",
+    "name": "Hoàng Cẩm Tú",
+    "preferredName": "Cẩm Tú",
+    "email": "hoangcamtu97@gmail.com",
+    "phone": "0943294407",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 112 Trần Hưng Đạo, Phường Tiền An, TP. Bắc Ninh, Bắc Ninh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "17/10/1997",
+    "city": "Bắc Ninh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-10T19:43:00.000Z",
+    "updatedAt": "2026-10-10T19:43:00.000Z"
+  },
+  {
+    "id": "u_active_26",
+    "name": "Vũ Minh Châu",
+    "preferredName": "Minh Châu",
+    "email": "vuminhchau.0204@gmail.com",
+    "phone": "0963764546",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Tòa Park 6 Times City, 458 Minh Khai, Phường Vĩnh Tuy, Quận Hai Bà Trưng, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "02/04/2000",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Ceramides, Omega-3",
+      "hasBloodVessels": "Có nổi vân máu nhẹ ở má",
+      "skinType": "Da nhạy cảm",
+      "skinSensitivity": "Rất nhạy cảm"
+    },
+    "createdAt": "2026-10-11T07:02:00.000Z",
+    "updatedAt": "2026-10-11T07:02:00.000Z"
+  },
+  {
+    "id": "u_active_27",
+    "name": "Đặng Tiến Đạt",
+    "preferredName": "Tiến Đạt",
+    "email": "dangtiendat1995@gmail.com",
+    "phone": "0974234685",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 371 Đoàn Văn Bơ, Phường 13, Quận 4, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "15/09/1995",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-12T10:21:00.000Z",
+    "updatedAt": "2026-10-12T10:21:00.000Z"
+  },
+  {
+    "id": "u_active_28",
+    "name": "Bùi Tuyết Mai",
+    "preferredName": "Tuyết Mai",
+    "email": "buituyetmai98@gmail.com",
+    "phone": "0984704824",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 55 Hoàng Văn Thụ, Phường Hoàng Văn Thụ, Quận Hồng Bàng, Hải Phòng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "28/06/1998",
+    "city": "Hải Phòng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin E",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-13T13:40:00.000Z",
+    "updatedAt": "2026-10-13T13:40:00.000Z"
+  },
+  {
+    "id": "u_active_29",
+    "name": "Đỗ Minh Tuấn",
+    "preferredName": "Minh Tuấn",
+    "email": "dominhtuan.0601@gmail.com",
+    "phone": "0865174963",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 182 Phan Xích Long, Phường 2, Quận Phú Nhuận, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "06/01/2002",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-14T16:59:00.000Z",
+    "updatedAt": "2026-10-14T16:59:00.000Z"
+  },
+  {
+    "id": "u_active_30",
+    "name": "Hồ Ngọc Mai",
+    "preferredName": "Ngọc Mai",
+    "email": "hongocmai2001@gmail.com",
+    "phone": "0885645102",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 92 Nguyễn Thị Minh Khai, Phường Thạch Thang, Quận Hải Châu, Đà Nẵng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "23/11/2001",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen bột",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-15T19:18:00.000Z",
+    "updatedAt": "2026-10-15T19:18:00.000Z"
+  },
+  {
+    "id": "u_active_31",
+    "name": "Ngô Gia Huy",
+    "preferredName": "Gia Huy",
+    "email": "ngogiahuy99@gmail.com",
+    "phone": "0896115241",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 43 Nguyễn Chí Thanh, Phường Ngọc Khánh, Quận Ba Đình, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "19/03/1999",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-16T07:37:00.000Z",
+    "updatedAt": "2026-10-16T07:37:00.000Z"
+  },
+  {
+    "id": "u_active_32",
+    "name": "Dương Mai Chi",
+    "preferredName": "Mai Chi",
+    "email": "duongmaichi.3107@gmail.com",
+    "phone": "0706585380",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 108 Trần Não, Phường An Khánh, TP. Thủ Đức, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "31/07/2003",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-17T10:56:00.000Z",
+    "updatedAt": "2026-10-17T10:56:00.000Z"
+  },
+  {
+    "id": "u_active_33",
+    "name": "Lý Gia Hưng",
+    "preferredName": "Gia Hưng",
+    "email": "lygiahung1996@gmail.com",
+    "phone": "0767055519",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 250 Thích Quảng Đức, Phường Chánh Nghĩa, TP. Thủ Dầu Một, Bình Dương"
+    ],
+    "gender": "Nam",
+    "birthDate": "11/10/1996",
+    "city": "Bình Dương",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-18T13:15:00.000Z",
+    "updatedAt": "2026-10-18T13:15:00.000Z"
+  },
+  {
+    "id": "u_active_34",
+    "name": "Đinh Thục Quyên",
+    "preferredName": "Thục Quyên",
+    "email": "dinhthucquyen00@gmail.com",
+    "phone": "0777525658",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 54 Huỳnh Tấn Phát, Phường Tân Thuận Đông, Quận 7, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "05/05/2000",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen & Hyaluronic Acid",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-08T16:34:00.000Z",
+    "updatedAt": "2026-10-08T16:34:00.000Z"
+  },
+  {
+    "id": "u_active_35",
+    "name": "Đoàn Văn Hậu",
+    "preferredName": "Văn Hậu",
+    "email": "doanvanhau.1904@gmail.com",
+    "phone": "0787995797",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 148 Lạc Long Quân, Phường Bưởi, Quận Tây Hồ, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "19/04/1999",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Whey Protein & Vitamin D3",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-09T19:53:00.000Z",
+    "updatedAt": "2026-10-09T19:53:00.000Z"
+  },
+  {
+    "id": "u_active_36",
+    "name": "Trương Như Ý",
+    "preferredName": "Như Ý",
+    "email": "truongnhuy2002@gmail.com",
+    "phone": "0798465936",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 21 Trần Văn Khéo, Phường Cái Khế, Quận Ninh Kiều, Cần Thơ"
+    ],
+    "gender": "Nữ",
+    "birthDate": "26/12/2002",
+    "city": "Cần Thơ",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-10T07:12:00.000Z",
+    "updatedAt": "2026-10-10T07:12:00.000Z"
+  },
+  {
+    "id": "u_active_37",
+    "name": "Lâm Chí Vĩ",
+    "preferredName": "Chí Vĩ",
+    "email": "lamchivi97@gmail.com",
+    "phone": "0338936075",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 82 Hùng Vương, Phường 9, Quận 5, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "08/08/1997",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-11T10:31:00.000Z",
+    "updatedAt": "2026-10-11T10:31:00.000Z"
+  },
+  {
+    "id": "u_active_38",
+    "name": "Mai Thục Anh",
+    "preferredName": "Thục Anh",
+    "email": "maithucanh.1402@gmail.com",
+    "phone": "0349406214",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Số 67 Lý Thường Kiệt, Phường Cửa Nam, Quận Hoàn Kiếm, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "14/02/2001",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen tươi & Vitamin E",
+      "hasBloodVessels": "Mạch máu đỏ li ti hai bên má",
+      "skinType": "Da nhạy cảm, khô",
+      "skinSensitivity": "Rất nhạy cảm"
+    },
+    "createdAt": "2026-10-12T13:50:00.000Z",
+    "updatedAt": "2026-10-12T13:50:00.000Z"
+  },
+  {
+    "id": "u_active_39",
+    "name": "Trịnh Thúy Diễm",
+    "preferredName": "Thúy Diễm",
+    "email": "trinhthuydiem1998@gmail.com",
+    "phone": "0359876353",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 15 Phan Chu Trinh, Phường Thắng Lợi, TP. Buôn Ma Thuột, Đắk Lắk"
+    ],
+    "gender": "Nữ",
+    "birthDate": "03/06/1998",
+    "city": "Buôn Ma Thuột",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin E",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-13T16:09:00.000Z",
+    "updatedAt": "2026-10-13T16:09:00.000Z"
+  },
+  {
+    "id": "u_active_40",
+    "name": "Lương Thế Vinh",
+    "preferredName": "Thế Vinh",
+    "email": "luongthevinh00@gmail.com",
+    "phone": "0361356492",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 14 Tô Hiến Thành, Phường 15, Quận 10, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "22/10/2000",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Kẽm ZinC",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-14T19:28:00.000Z",
+    "updatedAt": "2026-10-14T19:28:00.000Z"
+  },
+  {
+    "id": "u_active_41",
+    "name": "Nguyễn Kiều Oanh",
+    "preferredName": "Kiều Oanh",
+    "email": "nguyenkieuoanh.1801@gmail.com",
+    "phone": "0371826631",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 52 Nguyễn Văn Linh, Phường Nam Dương, Quận Hải Châu, Đà Nẵng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "18/01/1999",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen & Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-15T07:47:00.000Z",
+    "updatedAt": "2026-10-15T07:47:00.000Z"
+  },
+  {
+    "id": "u_active_42",
+    "name": "Trần Trung Kiên",
+    "preferredName": "Trung Kiên",
+    "email": "trantrungkien1996@gmail.com",
+    "phone": "0382296770",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 234 Đội Cấn, Phường Liễu Giai, Quận Ba Đình, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "07/09/1996",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-16T10:06:00.000Z",
+    "updatedAt": "2026-10-16T10:06:00.000Z"
+  },
+  {
+    "id": "u_active_43",
+    "name": "Lê Bảo Long",
+    "preferredName": "Bảo Long",
+    "email": "lebaolong02@gmail.com",
+    "phone": "0902766909",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 630 Trường Chinh, Phường 15, Quận Tân Bình, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "12/12/2002",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-17T13:25:00.000Z",
+    "updatedAt": "2026-10-17T13:25:00.000Z"
+  },
+  {
+    "id": "u_active_44",
+    "name": "Phạm Thanh Trúc",
+    "preferredName": "Thanh Trúc",
+    "email": "phamthanhtruc.2504@gmail.com",
+    "phone": "0913237048",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 18 Điện Biên Phủ, Phường Máy Tơ, Quận Ngô Quyền, Hải Phòng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "25/04/2000",
+    "city": "Hải Phòng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin E",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên khô",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-18T16:44:00.000Z",
+    "updatedAt": "2026-10-18T16:44:00.000Z"
+  },
+  {
+    "id": "u_active_45",
+    "name": "Hoàng Trọng Nghĩa",
+    "preferredName": "Trọng Nghĩa",
+    "email": "hoangtrongnghia1995@gmail.com",
+    "phone": "0933707187",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 19 Huỳnh Văn Bánh, Phường 17, Quận Phú Nhuận, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "30/08/1995",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin tổng hợp",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-08T19:03:00.000Z",
+    "updatedAt": "2026-10-08T19:03:00.000Z"
+  },
+  {
+    "id": "u_active_46",
+    "name": "Vũ Đức Thắng",
+    "preferredName": "Đức Thắng",
+    "email": "vuducthang97@gmail.com",
+    "phone": "0944177326",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 84 Nguyễn Thị Minh Khai, Phường Hưng Bình, TP. Vinh, Nghệ An"
+    ],
+    "gender": "Nam",
+    "birthDate": "15/11/1997",
+    "city": "Nghệ An",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-09T07:22:00.000Z",
+    "updatedAt": "2026-10-09T07:22:00.000Z"
+  },
+  {
+    "id": "u_active_47",
+    "name": "Đặng Hoài An",
+    "preferredName": "Hoài An",
+    "email": "danghoaian.2003@gmail.com",
+    "phone": "0964647465",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 15 Phố Huế, Phường Hàng Bài, Quận Hoàn Kiếm, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "20/03/2004",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C",
+      "hasBloodVessels": "Không",
+      "skinType": "Da nhạy cảm",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-10T10:41:00.000Z",
+    "updatedAt": "2026-10-10T10:41:00.000Z"
+  },
+  {
+    "id": "u_active_48",
+    "name": "Bùi Nhật Tân",
+    "preferredName": "Nhật Tân",
+    "email": "buinhattan2001@gmail.com",
+    "phone": "0975117604",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 115 Hùng Vương, Phường Hải Châu 2, Quận Hải Châu, Đà Nẵng"
+    ],
+    "gender": "Nam",
+    "birthDate": "04/07/2001",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-11T13:00:00.000Z",
+    "updatedAt": "2026-10-11T13:00:00.000Z"
+  },
+  {
+    "id": "u_active_49",
+    "name": "Đỗ Hương Tràm",
+    "preferredName": "Hương Tràm",
+    "email": "dohuongtram98@gmail.com",
+    "phone": "0985587743",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 92 Nam Kỳ Khởi Nghĩa, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "16/05/1998",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen & Vitamin E",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-12T16:19:00.000Z",
+    "updatedAt": "2026-10-12T16:19:00.000Z"
+  },
+  {
+    "id": "u_active_50",
+    "name": "Hồ Trọng Nhân",
+    "preferredName": "Trọng Nhân",
+    "email": "hotrongnhan.2810@gmail.com",
+    "phone": "0866057882",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 40 Đại Lộ Hòa Bình, Phường An Cư, Quận Ninh Kiều, Cần Thơ"
+    ],
+    "gender": "Nam",
+    "birthDate": "28/10/2003",
+    "city": "Cần Thơ",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-13T19:38:00.000Z",
+    "updatedAt": "2026-10-13T19:38:00.000Z"
+  },
+  {
+    "id": "u_active_51",
+    "name": "Nguyễn Phúc Thịnh",
+    "preferredName": "Phúc Thịnh",
+    "email": "nguyenphucthinh1999@gmail.com",
+    "phone": "0886528021",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 105 Bùi Viện, Phường Phạm Ngũ Lão, Quận 1, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "02/08/1999",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Kẽm ZinC",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu mụn",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-14T07:57:00.000Z",
+    "updatedAt": "2026-10-14T07:57:00.000Z"
+  },
+  {
+    "id": "u_active_52",
+    "name": "Trần Mỹ Duyên",
+    "preferredName": "Mỹ Duyên",
+    "email": "tranmyduyen01@gmail.com",
+    "phone": "0896998160",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 89 Nguyễn Khang, Phường Yên Hòa, Quận Cầu Giấy, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "11/12/2001",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin C, L-Cystine",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-15T10:16:00.000Z",
+    "updatedAt": "2026-10-15T10:16:00.000Z"
+  },
+  {
+    "id": "u_active_53",
+    "name": "Lê Gia Hân",
+    "preferredName": "Gia Hân",
+    "email": "legiahan.2702@gmail.com",
+    "phone": "0707468299",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 382 Cách Mạng Tháng 8, Phường 10, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "27/02/2004",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-16T13:35:00.000Z",
+    "updatedAt": "2026-10-16T13:35:00.000Z"
+  },
+  {
+    "id": "u_active_54",
+    "name": "Phạm Hữu Đạt",
+    "preferredName": "Hữu Đạt",
+    "email": "phamhuudat1997@gmail.com",
+    "phone": "0767938438",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 204 Đống Đa, Phường Thuận Phước, Quận Hải Châu, Đà Nẵng"
+    ],
+    "gender": "Nam",
+    "birthDate": "09/06/1997",
+    "city": "Đà Nẵng",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-17T16:54:00.000Z",
+    "updatedAt": "2026-10-17T16:54:00.000Z"
+  },
+  {
+    "id": "u_active_55",
+    "name": "Hoàng Ngân Hà",
+    "preferredName": "Ngân Hà",
+    "email": "hoangnganha00@gmail.com",
+    "phone": "0778408577",
+    "password": "user123",
+    "role": "user",
+    "membership": "VIP",
+    "addresses": [
+      "Tòa Imperia Garden, 203 Nguyễn Huy Tưởng, Phường Thanh Xuân Trung, Quận Thanh Xuân, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "14/09/2000",
+    "city": "Hà Nội",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Trên 500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Collagen nước DHC & Astaxanthin",
+      "hasBloodVessels": "Không",
+      "skinType": "Da khô lão hóa sớm",
+      "skinSensitivity": "Nhạy cảm nhẹ"
+    },
+    "createdAt": "2026-10-18T19:13:00.000Z",
+    "updatedAt": "2026-10-18T19:13:00.000Z"
+  },
+  {
+    "id": "u_active_56",
+    "name": "Vũ Quang Dũng",
+    "preferredName": "Quang Dũng",
+    "email": "vuquangdung.1803@gmail.com",
+    "phone": "0788878716",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 14 Yersin, Phường Hiệp Thành, TP. Thủ Dầu Một, Bình Dương"
+    ],
+    "gender": "Nam",
+    "birthDate": "18/03/1996",
+    "city": "Bình Dương",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-08T07:32:00.000Z",
+    "updatedAt": "2026-10-08T07:32:00.000Z"
+  },
+  {
+    "id": "u_active_57",
+    "name": "Đặng Tú Uyên",
+    "preferredName": "Tú Uyên",
+    "email": "dangtuuyen2002@gmail.com",
+    "phone": "0799348855",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Số 445 Hai Bà Trưng, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "23/07/2002",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Biotin, Vitamin E",
+      "hasBloodVessels": "Da mỏng thấy mạch máu",
+      "skinType": "Da nhạy cảm",
+      "skinSensitivity": "Rất nhạy cảm"
+    },
+    "createdAt": "2026-10-09T10:51:00.000Z",
+    "updatedAt": "2026-10-09T10:51:00.000Z"
+  },
+  {
+    "id": "u_active_58",
+    "name": "Bùi Văn Nam",
+    "preferredName": "Văn Nam",
+    "email": "buivannam98@gmail.com",
+    "phone": "0339818994",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 68 Võ Thị Sáu, Phường Quyết Thắng, TP. Biên Hòa, Đồng Nai"
+    ],
+    "gender": "Nam",
+    "birthDate": "05/11/1998",
+    "city": "Đồng Nai",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 200-300k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da thường",
+      "skinSensitivity": "Khỏe mạnh"
+    },
+    "createdAt": "2026-10-10T13:10:00.000Z",
+    "updatedAt": "2026-10-10T13:10:00.000Z"
+  },
+  {
+    "id": "u_active_59",
+    "name": "Đỗ Cẩm Ly",
+    "preferredName": "Cẩm Ly",
+    "email": "docamly.1204@gmail.com",
+    "phone": "0341299133",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 18 Yersin, Phường Phương Sài, TP. Nha Trang, Khánh Hòa"
+    ],
+    "gender": "Nữ",
+    "birthDate": "12/04/2003",
+    "city": "Nha Trang",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Dưới 200k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Không",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-11T16:29:00.000Z",
+    "updatedAt": "2026-10-11T16:29:00.000Z"
+  },
+  {
+    "id": "u_active_60",
+    "name": "Hồ Minh Đăng",
+    "preferredName": "Minh Đăng",
+    "email": "hominhdang1995@gmail.com",
+    "phone": "0351769272",
+    "password": "user123",
+    "role": "user",
+    "membership": "Free",
+    "addresses": [
+      "Số 98 Hoàng Văn Thụ, Phường 9, Quận Phú Nhuận, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "30/01/1995",
+    "city": "TP. Hồ Chí Minh",
+    "onboardingCompleted": true,
+    "skinSurvey": {
+      "budget": "Từ 300-500k/sản phẩm.",
+      "hasMedicalCondition": "Không",
+      "hasPrescriptionMedication": "Không",
+      "hasSupplements": "Vitamin tổng hợp",
+      "hasBloodVessels": "Không",
+      "skinType": "Da hỗn hợp thiên dầu",
+      "skinSensitivity": "Bình thường"
+    },
+    "createdAt": "2026-10-12T19:48:00.000Z",
+    "updatedAt": "2026-10-12T19:48:00.000Z"
   }
 ]

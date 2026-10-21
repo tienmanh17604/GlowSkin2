@@ -1119,7 +1119,6 @@ app.post("/api/payments/verify-membership-payment", async (req, res) => {
     }
 
     // Update user membership to Premium or VIP
-    const userToUpdate = (userId ? localDb.findUserById(userId) : null) || (userEmail ? localDb.findUserByEmail(userEmail) : null);
     let updatedUser = null;
     if (userToUpdate) {
       updatedUser = localDb.updateUser(userToUpdate.id || userToUpdate._id, { membership: targetPlan });
