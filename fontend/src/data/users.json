@@ -1,5 +1,158 @@
 [
   {
+    "id": "u_premium_24",
+    "name": "Ngô Thu Uyên",
+    "preferredName": "Thu Uyên",
+    "phone": "0938176542",
+    "email": "thuuyenngo2k@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "Tòa S2.05 Vinhomes Ocean Park, Gia Lâm, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "14/09/2000",
+    "city": "Hà Nội",
+    "createdAt": "2026-10-21T01:23:00.000Z"
+  },
+  {
+    "id": "u_premium_23",
+    "name": "Trương Minh Châu",
+    "preferredName": "Minh Châu",
+    "phone": "0789234561",
+    "email": "minhchautruong.99@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "245 Nguyễn Đình Chiểu, Phường 5, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "28/11/1999",
+    "city": "TP. Hồ Chí Minh",
+    "createdAt": "2026-10-19T09:40:00.000Z"
+  },
+  {
+    "id": "u_premium_22",
+    "name": "Vũ Đình Khang",
+    "preferredName": "Đình Khang",
+    "phone": "0857912345",
+    "email": "dinhkhangvu01@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "86 Bạch Đằng, Quận Hải Châu, TP. Đà Nẵng"
+    ],
+    "gender": "Nam",
+    "birthDate": "19/04/2001",
+    "city": "Đà Nẵng",
+    "createdAt": "2026-10-19T03:28:00.000Z"
+  },
+  {
+    "id": "u_premium_21",
+    "name": "Đặng Ngọc Ánh",
+    "preferredName": "Ngọc Ánh",
+    "phone": "0974512390",
+    "email": "ngocanhdang98@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "112 Lạch Tray, Quận Ngô Quyền, Hải Phòng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "05/12/1998",
+    "city": "Hải Phòng",
+    "createdAt": "2026-10-16T14:05:00.000Z"
+  },
+  {
+    "id": "u_premium_20",
+    "name": "Hoàng Trọng Nghĩa",
+    "preferredName": "Trọng Nghĩa",
+    "phone": "0869123876",
+    "email": "trongnghiahoang96@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "78 Nguyễn Trãi, Phường 3, Quận 5, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nam",
+    "birthDate": "22/07/1996",
+    "city": "TP. Hồ Chí Minh",
+    "createdAt": "2026-10-16T06:22:00.000Z"
+  },
+  {
+    "id": "u_premium_19",
+    "name": "Phạm Gia Linh",
+    "preferredName": "Gia Linh",
+    "phone": "0396452189",
+    "email": "gialinhpham2k1@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "42 Hoàng Quốc Việt, Cầu Giấy, Hà Nội"
+    ],
+    "gender": "Nữ",
+    "birthDate": "10/03/2001",
+    "city": "Hà Nội",
+    "createdAt": "2026-10-16T01:45:00.000Z"
+  },
+  {
+    "id": "u_premium_18",
+    "name": "Trần Thảo Nguyên",
+    "preferredName": "Thảo Nguyên",
+    "phone": "0908765412",
+    "email": "thaonguyentran99@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "15/8 Phan Văn Trị, Phường 11, Quận Bình Thạnh, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "18/06/1999",
+    "city": "TP. Hồ Chí Minh",
+    "createdAt": "2026-10-15T07:15:00.000Z"
+  },
+  {
+    "id": "u_premium_17",
+    "name": "Lê Hoàng Long",
+    "preferredName": "Hoàng Long",
+    "phone": "0915678234",
+    "email": "hoanglongle97@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "88 Láng Hạ, Đống Đa, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "03/10/1997",
+    "city": "Hà Nội",
+    "createdAt": "2026-10-13T11:50:00.000Z"
+  },
+  {
+    "id": "u_premium_16",
+    "name": "Nguyễn Hà My",
+    "preferredName": "Hà My",
+    "phone": "0982341567",
+    "email": "hamynguyen02@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "124 đường 30/4, Quận Ninh Kiều, Cần Thơ"
+    ],
+    "gender": "Nữ",
+    "birthDate": "15/08/2002",
+    "city": "Cần Thơ",
+    "createdAt": "2026-10-13T02:34:00.000Z"
+  },
+  {
     "id": "u1",
     "name": "Nguyễn Văn Admin",
     "preferredName": "Nguyễn Văn Admin",
