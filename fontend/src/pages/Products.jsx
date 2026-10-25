@@ -22,8 +22,6 @@ export default function Products() {
   const [concern, setConcern] = useState("");
   const [brand, setBrand] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState("");
-  const [sortBy, setSortBy] = useState("all");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [paymentSuccessCode, setPaymentSuccessCode] = useState("");
 
@@ -86,35 +84,13 @@ export default function Products() {
       );
     }
 
-    // 4. Price range filter
-    if (priceRange) {
-      list = list.filter((p) => {
-        const price = p.price;
-        if (priceRange === "under500") return price < 500000;
-        if (priceRange === "500to1000") return price >= 500000 && price <= 1000000;
-        if (priceRange === "1000to1500") return price >= 1000000 && price <= 1500000;
-        if (priceRange === "1500to2000") return price >= 1500000 && price <= 2000000;
-        if (priceRange === "over2000") return price > 2000000;
-        return true;
-      });
-    }
-
     // 5. Filter by favorites
     if (showFavoritesOnly) {
       list = list.filter((p) => wishlist[p.id]);
     }
 
-    // 6. Sort list
-    if (sortBy === "priceAsc") {
-      list = [...list].sort((a, b) => a.price - b.price);
-    } else if (sortBy === "priceDesc") {
-      list = [...list].sort((a, b) => b.price - a.price);
-    } else if (sortBy === "ratingDesc") {
-      list = [...list].sort((a, b) => b.rating - a.rating);
-    }
-
     return list;
-  }, [products, skinType, category, concern, brand, searchQuery, priceRange, sortBy, showFavoritesOnly, wishlist]);
+  }, [products, skinType, category, concern, brand, searchQuery, showFavoritesOnly, wishlist]);
 
   // Calculate dynamic category counts based on full products list
   const categoryCounts = useMemo(() => {
@@ -136,8 +112,6 @@ export default function Products() {
     setConcern("");
     setBrand("");
     setSearchQuery("");
-    setPriceRange("");
-    setSortBy("all");
     setShowFavoritesOnly(false);
     setSearchParams({});
   };
@@ -207,60 +181,8 @@ export default function Products() {
             </div>
           </div>
 
-          {/* Price Range Filter */}
-          <div className="filter-section">
-            <h3 className="filter-section-title">Giá sản phẩm</h3>
-            <div className="filter-options-list">
-              <label className="checkbox-filter-item">
-                <input
-                  type="checkbox"
-                  checked={priceRange === "under500"}
-                  onChange={() => setPriceRange(priceRange === "under500" ? "" : "under500")}
-                />
-                <span className="checkbox-custom"></span>
-                <span className="filter-label-text">Dưới 500.000đ</span>
-              </label>
-              <label className="checkbox-filter-item">
-                <input
-                  type="checkbox"
-                  checked={priceRange === "500to1000"}
-                  onChange={() => setPriceRange(priceRange === "500to1000" ? "" : "500to1000")}
-                />
-                <span className="checkbox-custom"></span>
-                <span className="filter-label-text">500.000đ - 1.000.000đ</span>
-              </label>
-              <label className="checkbox-filter-item">
-                <input
-                  type="checkbox"
-                  checked={priceRange === "1000to1500"}
-                  onChange={() => setPriceRange(priceRange === "1000to1500" ? "" : "1000to1500")}
-                />
-                <span className="checkbox-custom"></span>
-                <span className="filter-label-text">1.000.000đ - 1.500.000đ</span>
-              </label>
-              <label className="checkbox-filter-item">
-                <input
-                  type="checkbox"
-                  checked={priceRange === "1500to2000"}
-                  onChange={() => setPriceRange(priceRange === "1500to2000" ? "" : "1500to2000")}
-                />
-                <span className="checkbox-custom"></span>
-                <span className="filter-label-text">1.500.000đ - 2.000.000đ</span>
-              </label>
-              <label className="checkbox-filter-item">
-                <input
-                  type="checkbox"
-                  checked={priceRange === "over2000"}
-                  onChange={() => setPriceRange(priceRange === "over2000" ? "" : "over2000")}
-                />
-                <span className="checkbox-custom"></span>
-                <span className="filter-label-text">Trên 2.000.000đ</span>
-              </label>
-            </div>
-          </div>
-
           {/* Clear Filters Button */}
-          {(skinType || category || concern || brand || searchQuery || priceRange || sortBy !== "all" || showFavoritesOnly) && (
+          {(skinType || category || concern || brand || searchQuery || showFavoritesOnly) && (
             <button type="button" className="filter-clear-all-btn" onClick={clearFilters}>
               Xóa tất cả bộ lọc
             </button>
@@ -269,11 +191,8 @@ export default function Products() {
 
         {/* Products Grid Column */}
         <main className="products-main-content">
-          <div className="products-content-topbar">
-            <div className="topbar-left">
-              <span className="total-results">
-                <strong>{filteredAndSorted.length}</strong> Kết quả
-              </span>
+          {(brand || showFavoritesOnly) && (
+            <div className="active-filters-tags" style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
               {brand && (
                 <span className="active-brand-tag">
                   Lọc theo: <strong>{brand}</strong>
@@ -287,23 +206,7 @@ export default function Products() {
                 </span>
               )}
             </div>
-
-            <div className="topbar-right">
-              <div className="sort-by-wrapper">
-                <label htmlFor="sort-select">Lọc theo</label>
-                <select
-                  id="sort-select"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                >
-                  <option value="all">Tất cả</option>
-                  <option value="priceAsc">Giá tăng dần</option>
-                  <option value="priceDesc">Giá giảm dần</option>
-                  <option value="ratingDesc">Đánh giá cao nhất</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          )}
 
           <div className="products-grid-wrapper">
             <ProductRecommendations

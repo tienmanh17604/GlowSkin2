@@ -15,7 +15,7 @@ function StarRating({ rating }) {
   );
 }
 
-// Reviews will be loaded dynamically from the AppContext database.
+const CLEAN_SKINCARE_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23fbf9f5'/%3E%3Cpath d='M135 75h30v25h-30z' fill='%23c5a082'/%3E%3Cpath d='M120 100h60a12 12 0 0 1 12 12v120a12 12 0 0 1-12 12h-60a12 12 0 0 1-12-12V112a12 12 0 0 1 12-12z' fill='%23ffffff' stroke='%23e0d4c8' stroke-width='3'/%3E%3Cpath d='M130 140h40' stroke='%23c5a082' stroke-width='2' stroke-linecap='round'/%3E%3Ctext x='150' y='175' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='600' fill='%238c6b53' letter-spacing='1'%3EGLOWSKIN%3C/text%3E%3Ctext x='150' y='195' text-anchor='middle' font-family='sans-serif' font-size='9' fill='%23b59a84'%3EChăm Sóc Da%3C/text%3E%3C/svg%3E";
 
 export default function ProductRecommendations({
   products,
@@ -229,6 +229,10 @@ export default function ProductRecommendations({
                 alt={product.name}
                 className="primary-img"
                 loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
+                }}
               />
               {product.hoverImage && (
                 <img
@@ -236,6 +240,10 @@ export default function ProductRecommendations({
                   alt={`${product.name} hover`}
                   className="hover-img"
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
+                  }}
                 />
               )}
               
@@ -349,7 +357,14 @@ export default function ProductRecommendations({
                       onMouseEnter={() => setActiveImage(imgUrl)}
                       onClick={() => setActiveImage(imgUrl)}
                     >
-                      <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} />
+                      <img 
+                        src={imgUrl} 
+                        alt={`Thumbnail ${idx + 1}`} 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
+                        }}
+                      />
                     </div>
                   ))}
                 </div>
@@ -374,6 +389,10 @@ export default function ProductRecommendations({
                     transition: "transform 0.1s ease-out", 
                     ...zoomStyle 
                   }} 
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
+                  }}
                 />
               </div>
             </div>

@@ -90,6 +90,41 @@ const ZONE_CROP_BOUNDS = {
 export async function cropPoints(imageSrc, points = [], defaultLabel = "Điểm tổn thương") {
   if (!imageSrc || !points || !points.length) return [];
 
+  // Hàm xác định tên vùng từ tọa độ
+  function getLocName(p) {
+    const topPct = p.top || 50;
+    const leftPct = p.left || 50;
+    if (topPct < 34) return "Vùng Trán";
+    else if (topPct > 58 && topPct < 78) return "Vùng Cằm";
+    else if (leftPct < 40) return "Vùng Má Trái";
+    else if (leftPct > 60) return "Vùng Má Phải";
+    else if (topPct >= 34 && topPct <= 58) return "Vùng Mũi & Trung tâm";
+    return defaultLabel;
+  }
+
+  // Gộp các điểm cùng vùng, chọn điểm đại diện (gần tâm nhất)
+  const zoneMap = new Map();
+  points.forEach((p) => {
+    const zoneName = getLocName(p);
+    if (!zoneMap.has(zoneName)) {
+      zoneMap.set(zoneName, []);
+    }
+    zoneMap.get(zoneName).push(p);
+  });
+
+  // Chọn điểm đại diện cho mỗi vùng: lấy điểm median (giữa mảng sau khi sort)
+  const representatives = [];
+  zoneMap.forEach((pts, zoneName) => {
+    // Sort theo khoảng cách tới trung tâm vùng
+    const sorted = [...pts].sort((a, b) => {
+      const da = Math.abs((a.left || 50) - 50) + Math.abs((a.top || 50) - 50);
+      const db = Math.abs((b.left || 50) - 50) + Math.abs((b.top || 50) - 50);
+      return da - db;
+    });
+    const rep = sorted[Math.floor(sorted.length / 2)];
+    representatives.push({ point: rep, zoneName, count: pts.length });
+  });
+
   return new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -99,7 +134,7 @@ export async function cropPoints(imageSrc, points = [], defaultLabel = "Điểm 
         const naturalH = img.naturalHeight || img.height;
         const boxSize = Math.max(120, Math.round(naturalW * 0.24));
 
-        const results = points.map((p, idx) => {
+        const results = representatives.map(({ point: p, zoneName, count }) => {
           const cx = ((p.left || 50) / 100) * naturalW;
           const cy = ((p.top || 50) / 100) * naturalH;
 
@@ -118,19 +153,9 @@ export async function cropPoints(imageSrc, points = [], defaultLabel = "Điểm 
 
           ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outSize, outSize);
 
-          // Nhận diện tên vùng theo tọa độ điểm
-          let locName = defaultLabel;
-          const topPct = p.top || 50;
-          const leftPct = p.left || 50;
-          if (topPct < 34) locName = "Vùng Trán";
-          else if (topPct > 58 && topPct < 78) locName = "Vùng Cằm";
-          else if (leftPct < 40) locName = "Vùng Má Trái";
-          else if (leftPct > 60) locName = "Vùng Má Phải";
-          else if (topPct >= 34 && topPct <= 58) locName = "Vùng Mũi & Trung tâm";
-
           return {
-            label: `${locName}`,
-            subLabel: `Nốt tổn thương #${idx + 1}`,
+            label: zoneName,
+            subLabel: count > 1 ? `${count} điểm tổn thương` : "1 điểm tổn thương",
             url: canvas.toDataURL("image/jpeg", 0.95)
           };
         });
@@ -145,6 +170,7 @@ export async function cropPoints(imageSrc, points = [], defaultLabel = "Điểm 
     img.src = imageSrc;
   });
 }
+
 
 /**
  * Trích xuất ảnh cắt từng vùng khuôn mặt từ ảnh gốc của khách hàng

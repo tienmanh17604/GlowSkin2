@@ -24,7 +24,9 @@ export const CATEGORIES = {
   serum: "Serum",
   moisturizer: "Kem dưỡng",
   sunscreen: "Kem chống nắng",
-  treatment: "Điều trị",
+  mask: "Mặt nạ",
+  exfoliator: "Tẩy da chết",
+  makeup_remover: "Tẩy trang",
 };
 
 export function formatPrice(price) {

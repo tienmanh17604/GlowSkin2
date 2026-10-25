@@ -50,7 +50,7 @@ export function AppProvider({ children }) {
     }
   });
 
-  // Products state (with stock) - Danh sách các sản phẩm Toner từ Toner.xlsx
+  // Products state (with stock) - Toàn bộ sản phẩm đầy đủ từ các file Excel
   const [products, setProducts] = useState(() => {
     try {
       localStorage.setItem(PRODUCTS_KEY, JSON.stringify(tonerProducts));
@@ -60,18 +60,16 @@ export function AppProvider({ children }) {
     }
   });
 
-  // Đồng bộ tồn kho sản phẩm từ backend API nếu có kết nối (tuyệt đối không đè thứ tự, không đè link Shopee)
+  // Đồng bộ toàn bộ sản phẩm và trạng thái mới nhất từ backend API
   useEffect(() => {
     fetch(`${API_URL}/products`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
-          setProducts((prev) =>
-            prev.map((p) => {
-              const remote = data.find((r) => r.id === p.id);
-              return remote && typeof remote.stock === "number" ? { ...p, stock: remote.stock } : p;
-            })
-          );
+          setProducts(data);
+          try {
+            localStorage.setItem(PRODUCTS_KEY, JSON.stringify(data));
+          } catch {}
         }
       })
       .catch(() => {});
