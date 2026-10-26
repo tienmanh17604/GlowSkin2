@@ -25,6 +25,14 @@ export default function Products() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [paymentSuccessCode, setPaymentSuccessCode] = useState("");
 
+  const PAGE_SIZE = 32;
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
+
+  // Reset displayCount whenever any filter or search query changes
+  useEffect(() => {
+    setDisplayCount(PAGE_SIZE);
+  }, [skinType, category, concern, brand, searchQuery, showFavoritesOnly]);
+
   // Sync brand from query param
   useEffect(() => {
     const brandParam = searchParams.get("brand");
@@ -91,6 +99,10 @@ export default function Products() {
 
     return list;
   }, [products, skinType, category, concern, brand, searchQuery, showFavoritesOnly, wishlist]);
+
+  const visibleProducts = useMemo(() => {
+    return filteredAndSorted.slice(0, displayCount);
+  }, [filteredAndSorted, displayCount]);
 
   // Calculate dynamic category counts based on full products list
   const categoryCounts = useMemo(() => {
@@ -210,11 +222,34 @@ export default function Products() {
 
           <div className="products-grid-wrapper">
             <ProductRecommendations
-              products={filteredAndSorted.map((p) => ({ ...p, matchReasons: [] }))}
+              products={visibleProducts.map((p) => ({ ...p, matchReasons: [] }))}
               title=""
               subtitle=""
               compact={true}
             />
+
+            {displayCount < filteredAndSorted.length && (
+              <div className="load-more-container">
+                <p className="load-more-counter">
+                  Đang hiển thị <strong>{visibleProducts.length}</strong> trên <strong>{filteredAndSorted.length}</strong> sản phẩm
+                </p>
+                <div className="load-more-progress-bar">
+                  <div
+                    className="load-more-progress-fill"
+                    style={{
+                      width: `${Math.min(100, (visibleProducts.length / filteredAndSorted.length) * 100)}%`,
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="load-more-btn"
+                  onClick={() => setDisplayCount((prev) => prev + PAGE_SIZE)}
+                >
+                  <span>Xem thêm sản phẩm ({filteredAndSorted.length - visibleProducts.length} sản phẩm còn lại) ▾</span>
+                </button>
+              </div>
+            )}
           </div>
         </main>
       </div>

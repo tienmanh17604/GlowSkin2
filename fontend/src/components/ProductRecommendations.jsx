@@ -214,7 +214,7 @@ export default function ProductRecommendations({
           <article
             key={product.id}
             className={`product-card beauty-box-card ${product.hoverImage ? "has-hover-image" : ""}`}
-            style={{ animationDelay: `${index * 0.08}s` }}
+            style={{ animationDelay: `${(index % 12) * 0.03}s` }}
             onClick={() => {
               if (product.link) {
                 window.open(product.link, "_blank", "noopener,noreferrer");
@@ -229,6 +229,7 @@ export default function ProductRecommendations({
                 alt={product.name}
                 className="primary-img"
                 loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
@@ -240,6 +241,7 @@ export default function ProductRecommendations({
                   alt={`${product.name} hover`}
                   className="hover-img"
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;

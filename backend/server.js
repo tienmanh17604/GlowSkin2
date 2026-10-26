@@ -206,12 +206,25 @@ mongoose.connection.on("disconnected", () => {
 
 // --- API Endpoints ---
 
+// In-memory cache for ultra-fast products loading (<5ms)
+let productsMemoryCache = null;
+let productsCacheTime = 0;
+const PRODUCTS_CACHE_TTL = 60 * 1000; // 60s cache
+
+const invalidateProductsCache = () => {
+  productsMemoryCache = null;
+  productsCacheTime = 0;
+};
+
 // 1. PRODUCTS ENDPOINTS
 // GET all products
 app.get("/api/products", async (req, res) => {
+  if (productsMemoryCache && Date.now() - productsCacheTime < PRODUCTS_CACHE_TTL) {
+    return res.json(productsMemoryCache);
+  }
   try {
     if (isMongoConnected) {
-      const products = await Product.find();
+      const products = await Product.find().lean();
       if (products && products.length > 0) {
         const localProducts = localDb.getProducts();
         const orderMap = new Map(localProducts.map((p, idx) => [p.id, idx]));
@@ -220,6 +233,8 @@ app.get("/api/products", async (req, res) => {
           const idxB = orderMap.has(b.id) ? orderMap.get(b.id) : 999;
           return idxA - idxB;
         });
+        productsMemoryCache = sortedProducts;
+        productsCacheTime = Date.now();
         return res.json(sortedProducts);
       }
     }
@@ -227,6 +242,8 @@ app.get("/api/products", async (req, res) => {
     console.warn("MongoDB products query failed, using localDb:", error.message);
   }
   const localProducts = localDb.getProducts();
+  productsMemoryCache = localProducts;
+  productsCacheTime = Date.now();
   res.json(localProducts);
 });
 
@@ -247,6 +264,7 @@ app.post("/api/products", async (req, res) => {
 
     // Save to localDb
     const savedLocal = localDb.saveProduct(newProduct);
+    invalidateProductsCache();
 
     // Also save to MongoDB if connected
     if (isMongoConnected) {
@@ -271,6 +289,7 @@ app.put("/api/products/:id", async (req, res) => {
     const updatedData = req.body;
 
     const updatedLocal = localDb.updateProduct(id, updatedData);
+    invalidateProductsCache();
 
     if (isMongoConnected) {
       try {
@@ -295,6 +314,7 @@ app.delete("/api/products/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedLocal = localDb.deleteProduct(id);
+    invalidateProductsCache();
 
     if (isMongoConnected) {
       try {

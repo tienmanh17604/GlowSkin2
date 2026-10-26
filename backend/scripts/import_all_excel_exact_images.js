@@ -126,14 +126,20 @@ function generateDescription(name, brand, category) {
   return `${name} — ${catNames[category] || "sản phẩm"} cao cấp của thương hiệu ${brand}. Sản phẩm giúp chăm sóc và bảo vệ làn da mỗi ngày với công thức tiên tiến, phù hợp cho nhiều loại da.`;
 }
 
+function cleanImageUrl(rawUrl) {
+  if (!rawUrl) return "";
+  let url = rawUrl.trim();
+  const secondHttp = url.indexOf("http", 8);
+  if (secondHttp > 0) {
+    url = url.substring(0, secondHttp).trim();
+  }
+  return url;
+}
+
 // Function to resolve ibb.co url to direct image link
 async function resolveIbb(rawUrl) {
   if (!rawUrl) return "";
-  let url = rawUrl.trim();
-  // Handle double urls in some cells like "https://ibb.co/abchttps://ibb.co/abc"
-  if (url.includes("https://ibb.co/") && url.lastIndexOf("https://ibb.co/") > 0) {
-    url = url.substring(0, url.indexOf("https", 8)).trim();
-  }
+  let url = cleanImageUrl(rawUrl);
   // If already direct image
   if (url.includes("i.ibb.co") || url.includes("susercontent.com")) return url;
   if (cache[url]) return cache[url];
@@ -254,10 +260,7 @@ async function main() {
   // Collect unique image URLs that need resolution
   const uniqueUrls = new Set();
   items.forEach(it => {
-    let u = it.rawImg.trim();
-    if (u.includes("https://ibb.co/") && u.lastIndexOf("https://ibb.co/") > 0) {
-      u = u.substring(0, u.indexOf("https", 8)).trim();
-    }
+    let u = cleanImageUrl(it.rawImg);
     if (u && !cache[u] && !u.includes("i.ibb.co") && !u.includes("susercontent.com")) {
       uniqueUrls.add(u);
     }
@@ -302,10 +305,7 @@ async function main() {
     if (slugCount[slug]) { slugCount[slug]++; slug = `${baseSlug}-${slugCount[slug]}`; }
     else slugCount[slug] = 1;
 
-    let cleanRaw = item.rawImg.trim();
-    if (cleanRaw.includes("https://ibb.co/") && cleanRaw.lastIndexOf("https://ibb.co/") > 0) {
-      cleanRaw = cleanRaw.substring(0, cleanRaw.indexOf("https", 8)).trim();
-    }
+    let cleanRaw = cleanImageUrl(item.rawImg);
     const finalImage = cache[cleanRaw] || cleanRaw;
 
     return {

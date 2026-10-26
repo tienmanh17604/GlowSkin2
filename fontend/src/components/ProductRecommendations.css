@@ -85,19 +85,9 @@
   justify-content: center;
 }
 
-/* Overlay tối khi hover để nút Shopee nổi bật */
+/* Không sử dụng overlay xám khi hover ảnh sản phẩm */
 .product-card-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  transition: background 0.3s ease;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.product-card:hover .product-card-image::after {
-  background: rgba(0, 0, 0, 0.2);
+  display: none;
 }
 
 
