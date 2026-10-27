@@ -1292,44 +1292,78 @@ export default function YourSkin() {
           </p>
         </div>
 
-        {!currentUser && (
-          <div style={{
-            maxWidth: "620px",
-            margin: "0 auto 20px auto",
-            padding: "10px 18px",
-            background: "rgba(217, 119, 6, 0.08)",
-            border: "1px solid rgba(217, 119, 6, 0.25)",
-            borderRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "13px",
-            color: "#856404",
-            gap: "10px"
-          }}>
-            <span>💡 Bạn đang xem báo cáo mẫu. Hãy đăng nhập để lưu kết quả phân tích riêng của bạn.</span>
-            <button
-              type="button"
-              onClick={() => setIsLoginOpen(true)}
-              style={{
-                background: "#8c6239",
-                color: "white",
-                border: "none",
-                borderRadius: "99px",
-                padding: "6px 16px",
-                fontSize: "12px",
-                fontWeight: "700",
-                cursor: "pointer",
-                whiteSpace: "nowrap"
-              }}
-            >
-              Đăng nhập
-            </button>
-          </div>
-        )}
+        {!currentUser ? (
+          <div className="your-skin-auth-card">
+            <div className="auth-card-icon-wrap">
+              <span className="auth-card-icon">✨</span>
+            </div>
+            <h2 className="auth-card-title">Đăng nhập để xem hồ sơ làn da</h2>
+            <p className="auth-card-subtitle">
+              Báo cáo phân tích làn da chuyên sâu và phác đồ chăm sóc cá nhân hóa được bảo mật riêng tư theo tài khoản của bạn. Vui lòng đăng nhập để xem lại kết quả và theo dõi tiến trình cải thiện làn da.
+            </p>
 
-        {/* Luôn hiển thị giao diện Báo Cáo Phân Tích Làn Da Chuyên Sâu */}
-        <div className="skin-result-screen-wrapper">
+            <div className="auth-card-features">
+              <div className="auth-feature-item">
+                <span className="feature-icon">📸</span>
+                <div>
+                  <h4>Báo cáo hình ảnh đa góc độ</h4>
+                  <p>Lưu trữ chi tiết ảnh chính diện và hai bên má</p>
+                </div>
+              </div>
+              <div className="auth-feature-item">
+                <span className="feature-icon">📊</span>
+                <div>
+                  <h4>Đánh giá 6 chỉ số da liễu</h4>
+                  <p>Theo dõi điểm số mụn, bã nhờn, lỗ chân lông, sắc tố và sẹo</p>
+                </div>
+              </div>
+              <div className="auth-feature-item">
+                <span className="feature-icon">🧴</span>
+                <div>
+                  <h4>Chu trình &amp; mỹ phẩm phù hợp</h4>
+                  <p>Phác đồ chăm sóc cá nhân hóa chuẩn khoa học</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="auth-card-actions">
+              <button
+                type="button"
+                className="auth-btn-primary"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Đăng nhập / Đăng ký ngay
+              </button>
+              <Link to="/analyze" className="auth-btn-secondary">
+                Chưa phân tích da? Quét ngay ➔
+              </Link>
+            </div>
+          </div>
+        ) : !latestScan ? (
+          <div className="your-skin-auth-card">
+            <div className="auth-card-icon-wrap">
+              <span className="auth-card-icon">🔍</span>
+            </div>
+            <h2 className="auth-card-title">Chào {currentUser.preferredName || currentUser.name || "bạn"}!</h2>
+            <p className="auth-card-subtitle">
+              Tài khoản của bạn hiện chưa có kết quả phân tích da nào. Hãy bắt đầu quét và phân tích làn da bằng AI để nhận báo cáo chuyên sâu và phác đồ chăm sóc cá nhân hóa nhé!
+            </p>
+
+            <div className="auth-card-actions">
+              <Link to="/analyze" className="auth-btn-primary">
+                Bắt đầu phân tích da ngay ➔
+              </Link>
+              <button
+                type="button"
+                className="auth-btn-secondary"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                📷 Tải ảnh từ thiết bị
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="skin-result-screen-wrapper">
             {/* ================= SCREENSHOT 3 VIEW ================= */}
             <div className="skin-result-phone-frame">
                 {/* TOP PHOTO CAROUSEL */}
@@ -2274,6 +2308,7 @@ export default function YourSkin() {
                   </div>
               </div>
             </div>
+        )}
 
         {/* WEBCAM CAPTURE MODAL */}
         {isCameraOpen && (
