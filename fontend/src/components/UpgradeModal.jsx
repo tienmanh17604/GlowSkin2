@@ -45,7 +45,7 @@ export default function UpgradeModal() {
       name: "Professional",
       badge: "Chuyên Nghiệp",
       price: "249.000đ",
-      period: "/ tháng",
+      period: "/ 3 tháng",
       amount: 249000,
       membershipCode: "VIP",
       features: [
@@ -133,28 +133,6 @@ export default function UpgradeModal() {
           </p>
         </div>
 
-        {/* Tab chuyển đổi gói */}
-        <div className="upgrade-plan-tabs">
-          <button
-            type="button"
-            className={`upgrade-plan-tab ${selectedPlan === "Premium" ? "active" : ""}`}
-            onClick={() => setSelectedPlan("Premium")}
-          >
-            <div className="tab-tag">Khuyên dùng</div>
-            <div className="tab-name">Premium</div>
-            <div className="tab-price">99.000đ<span>/tháng</span></div>
-          </button>
-
-          <button
-            type="button"
-            className={`upgrade-plan-tab ${selectedPlan === "Professional" ? "active" : ""}`}
-            onClick={() => setSelectedPlan("Professional")}
-          >
-            <div className="tab-tag pro">Chuyên nghiệp</div>
-            <div className="tab-name">Professional</div>
-            <div className="tab-price">249.000đ<span>/tháng</span></div>
-          </button>
-        </div>
 
         {/* Nội dung chi tiết gói được chọn */}
         <div className="upgrade-plan-details">

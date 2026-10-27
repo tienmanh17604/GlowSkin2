@@ -205,6 +205,14 @@ export default function ProductDetail() {
                   e.currentTarget.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23fbf9f5'/%3E%3Cpath d='M135 75h30v25h-30z' fill='%23c5a082'/%3E%3Cpath d='M120 100h60a12 12 0 0 1 12 12v120a12 12 0 0 1-12 12h-60a12 12 0 0 1-12-12V112a12 12 0 0 1 12-12z' fill='%23ffffff' stroke='%23e0d4c8' stroke-width='3'/%3E%3Ctext x='150' y='175' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='600' fill='%238c6b53'%3EGLOWSKIN%3C/text%3E%3C/svg%3E";
                 }}
               />
+              <img
+                src="/khungShopee.png"
+                alt="Khung Shopee"
+                className="detail-main-shopee-frame"
+                loading="lazy"
+                decoding="async"
+                aria-hidden="true"
+              />
             </div>
           </div>
 

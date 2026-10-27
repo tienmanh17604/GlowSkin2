@@ -248,6 +248,16 @@ export default function ProductRecommendations({
                   }}
                 />
               )}
+
+              {/* Khung Shopee overlay */}
+              <img
+                src="/khungShopee.png"
+                alt="Khung Shopee"
+                className="product-card-shopee-frame"
+                loading="lazy"
+                decoding="async"
+                aria-hidden="true"
+              />
               
               {/* Heart icon on top right */}
               <button
@@ -395,6 +405,14 @@ export default function ProductRecommendations({
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = CLEAN_SKINCARE_PLACEHOLDER;
                   }}
+                />
+                <img
+                  src="/khungShopee.png"
+                  alt="Khung Shopee"
+                  className="product-card-shopee-frame"
+                  loading="lazy"
+                  decoding="async"
+                  aria-hidden="true"
                 />
               </div>
             </div>

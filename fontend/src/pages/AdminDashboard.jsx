@@ -1138,7 +1138,7 @@ export default function AdminDashboard() {
                       >
                         <option value="all">Tất cả gói</option>
                         <option value="Premium">Premium (99.000đ)</option>
-                        <option value="Professional">Professional (249.000đ)</option>
+                        <option value="Professional">Professional (249.000đ/3 tháng)</option>
                       </select>
                     </div>
                   </div>

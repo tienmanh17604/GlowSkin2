@@ -1073,7 +1073,7 @@ export default function Home({ videoReady = false }) {
           <div className="pricing-card">
             <span className="plan-badge">Chuyên nghiệp</span>
             <h3 className="plan-name">Professional</h3>
-            <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ tháng</span></div>
+            <div className="plan-price"><span className="price-val">249.000đ</span><span className="price-period">/ 3 tháng</span></div>
             <p className="plan-desc">Phù hợp cho các cơ sở spa hoặc trung tâm chăm sóc khách hàng.</p>
             <ul className="plan-features">
               <li>✓ Đầy đủ tính năng gói Premium</li>
