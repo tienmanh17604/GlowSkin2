@@ -1,5 +1,90 @@
 [
   {
+    "id": "u_premium_32",
+    "name": "Bùi Đức Mạnh",
+    "preferredName": "Đức Mạnh",
+    "phone": "0868741258",
+    "email": "ducmanhbui95@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "102 Lương Khánh Thiện, Quận Ngô Quyền, TP. Hải Phòng"
+    ],
+    "gender": "Nam",
+    "birthDate": "29/11/1995",
+    "city": "Hải Phòng",
+    "createdAt": "2026-10-30T13:10:00.000Z"
+  },
+  {
+    "id": "u_premium_31",
+    "name": "Nguyễn Thùy Linh",
+    "preferredName": "Thùy Linh",
+    "phone": "0903185296",
+    "email": "thuylinh.nguyen98@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "42/5 Đường 30/4, Phường Hưng Lợi, Quận Ninh Kiều, TP. Cần Thơ"
+    ],
+    "gender": "Nữ",
+    "birthDate": "17/03/1998",
+    "city": "Cần Thơ",
+    "createdAt": "2026-10-30T07:30:00.000Z"
+  },
+  {
+    "id": "u_premium_30",
+    "name": "Đặng Quỳnh Anh",
+    "preferredName": "Quỳnh Anh",
+    "phone": "0888294561",
+    "email": "quynhanhdang.02@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "74 Lê Duẩn, Phường Thạch Thang, Quận Hải Châu, TP. Đà Nẵng"
+    ],
+    "gender": "Nữ",
+    "birthDate": "08/12/2002",
+    "city": "Đà Nẵng",
+    "createdAt": "2026-10-29T02:15:00.000Z"
+  },
+  {
+    "id": "u_premium_29",
+    "name": "Phạm Thanh Tùng",
+    "preferredName": "Thanh Tùng",
+    "phone": "0987321654",
+    "email": "phamthanhtung96.hn@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "15 ngõ 68 Cầu Giấy, Phường Quan Hoa, Quận Cầu Giấy, Hà Nội"
+    ],
+    "gender": "Nam",
+    "birthDate": "22/09/1996",
+    "city": "Hà Nội",
+    "createdAt": "2026-10-28T09:40:00.000Z"
+  },
+  {
+    "id": "u_premium_28",
+    "name": "Vũ Hoàng Yến",
+    "preferredName": "Hoàng Yến",
+    "phone": "0918452319",
+    "email": "hoangyenvu2000@gmail.com",
+    "password": "user123",
+    "role": "user",
+    "membership": "Premium",
+    "addresses": [
+      "256/18 Pasteur, Phường Võ Thị Sáu, Quận 3, TP. Hồ Chí Minh"
+    ],
+    "gender": "Nữ",
+    "birthDate": "14/05/2000",
+    "city": "Hồ Chí Minh",
+    "createdAt": "2026-10-27T04:25:00.000Z"
+  },
+  {
     "id": "u_premium_27",
     "name": "Phan Tuấn Kiệt",
     "preferredName": "Tuấn Kiệt",
