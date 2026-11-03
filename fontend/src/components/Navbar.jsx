@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import { useApp } from "../context/AppContext";
@@ -10,15 +10,16 @@ const NAV_LINKS = [
   { label: "Phân tích da", isAnalysis: true },
   { label: "Da của bạn", to: "/your-skin" },
   { label: "Sản phẩm", to: "/products" },
-  { label: "Nhật ký", to: "/diary" },
+  { label: "Nhật ký", isDiary: true },
   { label: "Liên hệ", to: "/contact" },
 ];
 
 export default function Navbar() {
-  const { currentUser, setIsLoginOpen, openLoginModal, setIsNameModalOpen } = useApp();
+  const { currentUser, setIsLoginOpen, openLoginModal, setIsNameModalOpen, openUpgradeModal } = useApp();
   const { setIsCartOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -29,6 +30,24 @@ export default function Navbar() {
   }, []);
 
   const isActive = (to) => to && location.pathname === to;
+
+  const handleDiaryClick = () => {
+    if (!currentUser) {
+      openLoginModal("Tính năng Nhật Ký Làn Da 28 Ngày chỉ dành riêng cho tài khoản Premium. Vui lòng đăng nhập tài khoản để tiếp tục!");
+      return;
+    }
+    const isPremium =
+      currentUser.membership === "Premium" ||
+      currentUser.membership === "VIP" ||
+      currentUser.membership === "Professional" ||
+      currentUser.role === "admin";
+
+    if (!isPremium) {
+      openUpgradeModal("Premium");
+      return;
+    }
+    navigate("/diary");
+  };
 
   return (
     <nav className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
@@ -58,6 +77,17 @@ export default function Navbar() {
                 }}
               >
                 {link.label}
+              </button>
+            ) : link.isDiary ? (
+              <button
+                type="button"
+                className={`nav-link-btn ${isActive("/diary") ? "nav-link-active" : ""}`}
+                onClick={handleDiaryClick}
+              >
+                {link.label}
+                {(!currentUser || currentUser.membership === "Free") && (
+                  <span className="navbar-premium-crown" title="Dành riêng cho gói Premium" style={{ marginLeft: "4px", fontSize: "12px" }}>👑</span>
+                )}
               </button>
             ) : link.to ? (
               <Link

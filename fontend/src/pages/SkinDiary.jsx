@@ -2,54 +2,10 @@ import { useState, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useApp } from "../context/AppContext";
+import { PERSONALIZED_ROUTINES, getAssignedRoutineIndex } from "../data/personalizedRoutines";
 import "./SkinDiary.css";
 
-// 28-day cycle calendar cells (from Monday 28/09/2026 to Sunday 25/10/2026)
-const CALENDAR_DAYS_CONFIG = [
-  // Week 1: 28/9 - 4/10
-  { date: 28, month: 9, year: 2026, dateKey: "2026-09-28", type: "pre-cycle" },
-  { date: 29, month: 9, year: 2026, dateKey: "2026-09-29", type: "pre-cycle" },
-  { date: 30, month: 9, year: 2026, dateKey: "2026-09-30", type: "pre-cycle" },
-  { date: 1,  month: 10, year: 2026, dateKey: "2026-10-01", type: "pre-cycle" },
-  { 
-    date: 2, 
-    month: 10, 
-    year: 2026, 
-    dateKey: "2026-10-02", 
-    type: "cycle-day", 
-    dayIndex: 1, 
-    hasGift: true 
-  },
-  { date: 3,  month: 10, year: 2026, dateKey: "2026-10-03", type: "today", dayIndex: 2 },
-  { date: 4,  month: 10, year: 2026, dateKey: "2026-10-04", type: "future", dayIndex: 3, hasGift: true },
-
-  // Week 2: 5/10 - 11/10
-  { date: 5,  month: 10, year: 2026, dateKey: "2026-10-05", type: "future", dayIndex: 4 },
-  { date: 6,  month: 10, year: 2026, dateKey: "2026-10-06", type: "future", dayIndex: 5 },
-  { date: 7,  month: 10, year: 2026, dateKey: "2026-10-07", type: "future", dayIndex: 6 },
-  { date: 8,  month: 10, year: 2026, dateKey: "2026-10-08", type: "future", dayIndex: 7, hasGift: true },
-  { date: 9,  month: 10, year: 2026, dateKey: "2026-10-09", type: "future", dayIndex: 8 },
-  { date: 10, month: 10, year: 2026, dateKey: "2026-10-10", type: "future", dayIndex: 9 },
-  { date: 11, month: 10, year: 2026, dateKey: "2026-10-11", type: "future", dayIndex: 10 },
-
-  // Week 3: 12/10 - 18/10
-  { date: 12, month: 10, year: 2026, dateKey: "2026-10-12", type: "future", dayIndex: 11 },
-  { date: 13, month: 10, year: 2026, dateKey: "2026-10-13", type: "future", dayIndex: 12 },
-  { date: 14, month: 10, year: 2026, dateKey: "2026-10-14", type: "future", dayIndex: 13 },
-  { date: 15, month: 10, year: 2026, dateKey: "2026-10-15", type: "future", dayIndex: 14, hasGift: true },
-  { date: 16, month: 10, year: 2026, dateKey: "2026-10-16", type: "future", dayIndex: 15 },
-  { date: 17, month: 10, year: 2026, dateKey: "2026-10-17", type: "future", dayIndex: 16 },
-  { date: 18, month: 10, year: 2026, dateKey: "2026-10-18", type: "future", dayIndex: 17 },
-
-  // Week 4: 19/10 - 25/10
-  { date: 19, month: 10, year: 2026, dateKey: "2026-10-19", type: "future", dayIndex: 18 },
-  { date: 20, month: 10, year: 2026, dateKey: "2026-10-20", type: "future", dayIndex: 19 },
-  { date: 21, month: 10, year: 2026, dateKey: "2026-10-21", type: "future", dayIndex: 20 },
-  { date: 22, month: 10, year: 2026, dateKey: "2026-10-22", type: "future", dayIndex: 21, hasGift: true },
-  { date: 23, month: 10, year: 2026, dateKey: "2026-10-23", type: "future", dayIndex: 22 },
-  { date: 24, month: 10, year: 2026, dateKey: "2026-10-24", type: "future", dayIndex: 23 },
-  { date: 25, month: 10, year: 2026, dateKey: "2026-10-25", type: "future", dayIndex: 24 },
-];
+// CALENDAR_DAYS_CONFIG is now dynamically generated in real-time
 
 const MOOD_TYPES = [
   { id: "tuyet_voi", label: "Tuyệt vời" },
@@ -168,8 +124,104 @@ export default function SkinDiary() {
     toggleDiaryRoutine,
     latestScan,
     currentUser,
-    setIsNameModalOpen
+    setIsNameModalOpen,
+    openUpgradeModal,
+    openLoginModal
   } = useApp();
+
+  // Kiểm tra quyền hạn tài khoản Premium
+  const isPremiumUser = Boolean(
+    currentUser && (
+      currentUser.membership === "Premium" ||
+      currentUser.membership === "VIP" ||
+      currentUser.membership === "Professional" ||
+      currentUser.role === "admin"
+    )
+  );
+
+  // ================= DYNAMIC REAL-TIME 28-DAY CYCLE =================
+  const now = new Date();
+  const userId = currentUser ? (currentUser.id || currentUser._id || currentUser.email || "user") : "guest";
+  const startKey = `glowskin_cycle_start_${userId}`;
+
+  // Tính Thứ Hai của tuần hiện tại để neo 4 tuần dương lịch chuẩn (MON -> SUN)
+  const dayOfWeek = now.getDay(); // 0: CN, 1: T2...
+  const distanceToMonday = (dayOfWeek + 6) % 7;
+
+  let cycleStart = null;
+  try {
+    const saved = localStorage.getItem(startKey);
+    if (saved) {
+      const parsed = new Date(saved);
+      if (!isNaN(parsed.getTime())) {
+        const diffDays = Math.floor((now.getTime() - parsed.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays >= 0 && diffDays < 28) {
+          cycleStart = parsed;
+        }
+      }
+    }
+  } catch (e) {}
+
+  if (!cycleStart) {
+    cycleStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - distanceToMonday, 0, 0, 0, 0);
+    try {
+      localStorage.setItem(startKey, cycleStart.toISOString());
+    } catch (e) {}
+  }
+
+  const todayYear = now.getFullYear();
+  const todayMonth = String(now.getMonth() + 1).padStart(2, "0");
+  const todayDate = String(now.getDate()).padStart(2, "0");
+  const todayKey = `${todayYear}-${todayMonth}-${todayDate}`;
+
+  const diffDays = Math.floor((new Date(todayYear, now.getMonth(), now.getDate()).getTime() - cycleStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  const currentDayIndex = Math.min(28, Math.max(1, diffDays));
+  const remainingDays = Math.max(0, 28 - currentDayIndex);
+  const progressPercent = Math.min(100, Math.round((currentDayIndex / 28) * 100));
+
+  const cycleEnd = new Date(cycleStart.getFullYear(), cycleStart.getMonth(), cycleStart.getDate() + 27);
+
+  const fmt = (d) => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
+  const fmtFull = (d) => `${fmt(d)}/${d.getFullYear()}`;
+
+  const rangeTitle = `${fmt(cycleStart)} - ${fmt(cycleEnd)}, ${cycleEnd.getFullYear()}`;
+  const startDateStr = fmtFull(cycleStart);
+  const endDateStr = fmtFull(cycleEnd);
+
+  // Sinh danh sách 28 ngày thực tế (4 tuần x 7 ngày)
+  const giftDayIndices = [1, 3, 7, 14, 21];
+  const dynamicCalendarDays = useMemo(() => {
+    const list = [];
+    const todayMidnight = new Date(todayYear, now.getMonth(), now.getDate()).getTime();
+
+    for (let i = 0; i < 28; i++) {
+      const d = new Date(cycleStart.getFullYear(), cycleStart.getMonth(), cycleStart.getDate() + i);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const dateNum = d.getDate();
+      const dateKey = `${y}-${String(m).padStart(2, "0")}-${String(dateNum).padStart(2, "0")}`;
+      const dayIndex = i + 1;
+      const dMidnight = new Date(y, m - 1, dateNum).getTime();
+
+      let type = "future";
+      if (dateKey === todayKey) {
+        type = "today";
+      } else if (dMidnight < todayMidnight) {
+        type = "past";
+      }
+
+      list.push({
+        date: dateNum,
+        month: m,
+        year: y,
+        dateKey,
+        dayIndex,
+        type,
+        hasGift: giftDayIndices.includes(dayIndex)
+      });
+    }
+    return list;
+  }, [cycleStart, todayKey]);
 
   // Top view tab: "diary" (Nhật ký da) | "mood_jar" (Hũ tâm trạng)
   const [activeTab, setActiveTab] = useState("diary");
@@ -191,6 +243,20 @@ export default function SkinDiary() {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(""), 2600);
   };
+
+  // Chu trình cá nhân hóa gán cho người dùng
+  const assignedRoutine = useMemo(() => {
+    const idx = getAssignedRoutineIndex(currentUser);
+    return PERSONALIZED_ROUTINES[idx] || PERSONALIZED_ROUTINES[0];
+  }, [currentUser]);
+
+  const routineSteps = useMemo(() => {
+    const steps = assignedRoutine?.steps || [];
+    if (routineTime === "morning") {
+      return steps.filter((p) => p.timing === "morning" || p.timing === "both");
+    }
+    return steps.filter((p) => p.timing === "night" || p.timing === "both");
+  }, [assignedRoutine, routineTime]);
 
   // Image Upload File Input ref
   const fileInputRef = useRef(null);
@@ -235,8 +301,8 @@ export default function SkinDiary() {
   // Quy tắc: Chỉ ngày nào người dùng thực sự chụp thì mới hiển thị ảnh.
   // Nếu ngày hôm đó chụp nhiều lần, luôn ghi nhận và hiển thị ảnh lần chụp cuối cùng!
   const calendarItems = useMemo(() => {
-    return CALENDAR_DAYS_CONFIG.map((day) => {
-      // Tìm bản ghi nhật ký của ngày này
+    return dynamicCalendarDays.map((day) => {
+      // Tìm bản ghi nhật ký của ngày này theo dateKey chuẩn YYYY-MM-DD
       const diaryRecord = skinDiary.find((d) => d.dateKey === day.dateKey);
 
       let photoUrl = diaryRecord?.photo || null;
@@ -273,23 +339,25 @@ export default function SkinDiary() {
         cleanNotes = rawNotes.title || rawNotes.overview || "Ảnh chụp phân tích da AI Vision";
       }
 
+      const realCapturedTime = diaryRecord?.lastCapturedAt || (day.type === "today" ? (latestScan?.date || "Hôm nay " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })) : null);
+
       return {
         ...day,
         photo: photoUrl,
         score: cleanScore,
         routineDone: diaryRecord?.routineDone !== undefined ? diaryRecord.routineDone : false,
         notes: cleanNotes,
-        lastCapturedAt: diaryRecord?.lastCapturedAt || null
+        lastCapturedAt: realCapturedTime
       };
     });
-  }, [skinDiary, latestScan]);
+  }, [dynamicCalendarDays, skinDiary, latestScan]);
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
 
     if (day.hasGift && !day.photo) {
       setActiveGiftContent(
-        `🎁 Quà tặng Cột mốc Ngày ${day.date}/10: Voucher giảm 20% Serum B5 & Kem Chống Nắng Phục Hồi!`
+        `🎁 Quà tặng Cột mốc Ngày ${day.date}/${day.month}: Voucher giảm 20% Serum B5 & Kem Chống Nắng Phục Hồi!`
       );
       setIsGiftModalOpen(true);
       return;
@@ -354,6 +422,63 @@ export default function SkinDiary() {
       />
 
       <main className="skin-diary-main">
+        {!isPremiumUser ? (
+          <div className="diary-premium-lock-container">
+            <div className="diary-premium-lock-card">
+              <div className="diary-lock-crown-wrap">
+                <span>👑</span>
+              </div>
+              <div className="diary-lock-badge">TÍNH NĂNG ĐỘC QUYỀN PREMIUM</div>
+              <h2 className="diary-lock-title">Nhật Ký Làn Da 28 Ngày</h2>
+              <p className="diary-lock-desc">
+                Hệ thống theo dõi tiến trình tái tạo da chuyên sâu theo thời gian thực tế, tự động lưu trữ ảnh chụp thực tế mỗi ngày và cá nhân hóa chu trình chăm sóc chuẩn y khoa.
+              </p>
+              <div className="diary-lock-features">
+                <div className="diary-lock-feat-item">
+                  <strong>✓</strong> Theo dõi chu trình 28 ngày thời gian thực tế & lưu ảnh chụp mỗi ngày
+                </div>
+                <div className="diary-lock-feat-item">
+                  <strong>✓</strong> Nhắc nhở quy trình chăm sóc da sáng - tối đúng giờ
+                </div>
+                <div className="diary-lock-feat-item">
+                  <strong>✓</strong> Thả Hũ tâm trạng & chia sẻ cảm xúc cùng bạn bè
+                </div>
+                <div className="diary-lock-feat-item">
+                  <strong>✓</strong> Nhận quà tặng voucher độc quyền tại các cột mốc tái tạo da
+                </div>
+              </div>
+              <div className="diary-lock-actions">
+                {!currentUser ? (
+                  <button
+                    type="button"
+                    className="diary-btn-primary"
+                    onClick={() => openLoginModal("Vui lòng đăng nhập tài khoản Premium để sử dụng tính năng Nhật Ký Làn Da!")}
+                    style={{ width: "100%", justifyContent: "center", padding: "14px", fontSize: "15px" }}
+                  >
+                    Đăng nhập tài khoản Premium
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="diary-btn-primary"
+                    onClick={() => openUpgradeModal("Premium")}
+                    style={{ width: "100%", justifyContent: "center", padding: "14px", fontSize: "15px" }}
+                  >
+                    Nâng Cấp Gói Premium Ngay (99.000đ)
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="diary-btn-secondary"
+                  onClick={() => navigate("/your-skin")}
+                  style={{ width: "100%", justifyContent: "center" }}
+                >
+                  Quay lại Báo Cáo Da
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
         <div className="skin-diary-dashboard-wrapper">
           
           {/* ================= 1. TOP HEADER & SWITCHER BAR ================= */}
@@ -394,7 +519,7 @@ export default function SkinDiary() {
                       ‹
                     </button>
                     <div className="diary-range-title">
-                      <span>28/9 - 25/10, 2026</span>
+                      <span>{rangeTitle}</span>
                       <span className="diary-range-chevron">⌄</span>
                     </div>
                     <button type="button" className="diary-range-arrow" aria-label="Kỳ kế tiếp">
@@ -503,7 +628,7 @@ export default function SkinDiary() {
                 <div className="diary-calendar-legend">
                   <span className="legend-item">📸 Ngày đã lưu ảnh</span>
                   <span className="legend-item">🎁 Cột mốc nhận quà</span>
-                  <span className="legend-item">⭐ Hôm nay (Ngày 3)</span>
+                  <span className="legend-item">⭐ Hôm nay (Ngày {now.getDate()}/{now.getMonth() + 1})</span>
                 </div>
               </div>
 
@@ -526,7 +651,7 @@ export default function SkinDiary() {
                       <span className="diary-pill-tag gold">28 ngày</span>
                       <span className="diary-pill-tag green">Chu trình đang sử dụng</span>
                     </div>
-                    <p className="diary-card-created-date">Đã tạo ngày 02/10/2026</p>
+                    <p className="diary-card-created-date">Đã tạo ngày {startDateStr}</p>
                   </div>
                 </div>
 
@@ -541,23 +666,23 @@ export default function SkinDiary() {
                     >
                       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
-                    <span>Bạn đang ở ngày <strong>2</strong></span>
+                    <span>Bạn đang ở ngày <strong>{currentDayIndex}</strong></span>
                   </div>
-                  <span className="diary-percent-pill">7% hoàn thành</span>
+                  <span className="diary-percent-pill">{progressPercent}% hoàn thành</span>
                 </div>
 
                 {/* Progress Bar Track */}
                 <div className="diary-progress-track">
-                  <div className="diary-progress-fill" style={{ width: "7%" }} />
+                  <div className="diary-progress-fill" style={{ width: `${progressPercent}%` }} />
                 </div>
 
                 {/* Countdown & Dates */}
                 <div className="diary-countdown-block">
                   <p className="diary-days-left-text">
-                    Chỉ còn <strong>26</strong> ngày nữa là hoàn thành chu trình!
+                    Chỉ còn <strong>{remainingDays}</strong> ngày nữa là hoàn thành chu trình!
                   </p>
                   <p className="diary-date-span-text">
-                    Bắt đầu từ 02/10/2026 đến 29/10/2026
+                    Bắt đầu từ {startDateStr} đến {endDateStr}
                   </p>
                 </div>
 
@@ -569,44 +694,17 @@ export default function SkinDiary() {
                     </span>
                   </div>
 
-                  {routineTime === "morning" ? (
-                    <>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">1</span>
-                        <span>Sữa rửa mặt dịu nhẹ pH 5.5 (SVR / CeraVe)</span>
+                  {routineSteps.length > 0 ? (
+                    routineSteps.map((step, idx) => (
+                      <div key={step.id || idx} className="diary-step-item">
+                        <span className="diary-step-num">{idx + 1}</span>
+                        <span><strong>{step.stepCategory}:</strong> {step.shortName || step.name}</span>
                       </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">2</span>
-                        <span>Toner cấp ẩm & cân bằng da (Klairs Unscented)</span>
-                      </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">3</span>
-                        <span>Serum Niacinamide 5% / Vitamin C phục hồi</span>
-                      </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">4</span>
-                        <span>Kem chống nắng phổ rộng SPF 50+ PA++++</span>
-                      </div>
-                    </>
+                    ))
                   ) : (
-                    <>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">1</span>
-                        <span>Tẩy trang dạng nước Micellar (Cocoon / Bioderma)</span>
-                      </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">2</span>
-                        <span>Sữa rửa mặt sạch sâu thông thoáng lỗ chân lông</span>
-                      </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">3</span>
-                        <span>BHA 2% Salicylic Acid (3 lần/tuần) ngừa mụn</span>
-                      </div>
-                      <div className="diary-step-item">
-                        <span className="diary-step-num">4</span>
-                        <span>Kem dưỡng phục hồi màng bảo vệ Ceramide</span>
-                      </div>
-                    </>
+                    <div style={{ padding: "12px 0", fontSize: "13.5px", color: "#8a7561" }}>
+                      Đang cập nhật các bước chu trình...
+                    </div>
                   )}
                 </div>
 
@@ -864,6 +962,7 @@ export default function SkinDiary() {
           )}
 
         </div>
+        )}
       </main>
 
       {/* ================= MODAL 1: VIEW DAY PHOTO DETAILS ================= */}
@@ -879,8 +978,13 @@ export default function SkinDiary() {
             </button>
 
             <div className="diary-modal-date-badge">
-              📅 Ngày {selectedDay.date}/{selectedDay.month}/2026 {selectedDay.type === "today" ? "(Hôm nay)" : ""}
+              📅 Ngày {selectedDay.date}/{selectedDay.month}/{selectedDay.year} {selectedDay.type === "today" ? "(Hôm nay)" : ""}
             </div>
+            {selectedDay.lastCapturedAt && (
+              <div style={{ fontSize: "13px", color: "#8a7561", marginBottom: "8px", fontWeight: 600 }}>
+                🕒 Thời gian chụp thực tế: <span style={{ color: "#b45309" }}>{selectedDay.lastCapturedAt}</span>
+              </div>
+            )}
 
             <h3 className="diary-modal-title">Ảnh Chụp Làn Da Trong Ngày</h3>
 
@@ -917,15 +1021,15 @@ export default function SkinDiary() {
                 onClick={() => {
                   saveDiaryEntry({
                     dateKey: selectedDay.dateKey,
-                    displayDate: `${selectedDay.date < 10 ? "0" + selectedDay.date : selectedDay.date}/10/2026`,
+                    displayDate: `${String(selectedDay.date).padStart(2, "0")}/${String(selectedDay.month).padStart(2, "0")}/${selectedDay.year}`,
                     dayIndex: selectedDay.dayIndex || 1,
                     photo: null,
                     facePhoto: null,
                     notes: ""
                   });
-                  setSelectedDay((prev) => ({ ...prev, photo: null }));
+                  setSelectedDay((prev) => ({ ...prev, photo: null, lastCapturedAt: null }));
                   setIsPhotoModalOpen(false);
-                  showToast(`Đã gỡ ảnh ngày ${selectedDay.date}/10`);
+                  showToast(`Đã gỡ ảnh ngày ${selectedDay.date}/${selectedDay.month}`);
                 }}
               >
                 🗑️ Xóa ảnh ngày này
@@ -948,7 +1052,7 @@ export default function SkinDiary() {
             </button>
 
             <div className="diary-modal-date-badge">
-              📅 Ngày {selectedDay.date}/{selectedDay.month}/2026 {selectedDay.type === "today" ? "(Hôm nay)" : ""}
+              📅 Ngày {selectedDay.date}/{selectedDay.month}/{selectedDay.year} {selectedDay.type === "today" ? "(Hôm nay)" : ""}
             </div>
 
             <h3 className="diary-modal-title">Chụp Hoặc Tải Ảnh Làn Da</h3>

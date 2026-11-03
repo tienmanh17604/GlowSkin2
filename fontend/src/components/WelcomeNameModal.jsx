@@ -1256,7 +1256,7 @@ export default function WelcomeNameModal() {
       const finalScanData = {
         id: "scan-" + Date.now(),
         date: new Date().toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-        score: parsedData.jsonData?.score || Math.round((diagResult.averageScore || 6.7) * 10),
+        score: Math.round(diagResult.averageScore * 10),
         averageScore: diagResult.averageScore,
         detectedIssues: diagResult.detectedIssues,
         metrics: diagResult.metrics,

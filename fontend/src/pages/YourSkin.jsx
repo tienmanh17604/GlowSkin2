@@ -17,9 +17,9 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 export const DEFAULT_DEMO_SCAN = {
   id: "demo-scan-01",
   date: "Chẩn đoán vừa thực hiện",
-  score: 67,
-  averageScore: 6.7,
-  detectedIssues: ["Lỗ chân lông", "Mụn không viêm"],
+  score: 75,
+  averageScore: 7.5,
+  detectedIssues: ["Lỗ chân lông", "Sợi bã nhờn"],
   metrics: DEFAULT_DIAGNOSTIC_METRICS,
   skinType: "Da hỗn hợp thiên dầu",
   sensitivity: "Có",
@@ -195,6 +195,11 @@ function getZone2DCoordinates(zone, idx) {
   return fallback[idx % fallback.length];
 }
 
+import { PERSONALIZED_ROUTINES, PERSONALIZED_ROUTINE_STEPS, getAssignedRoutineIndex } from "../data/personalizedRoutines";
+export { PERSONALIZED_ROUTINES, PERSONALIZED_ROUTINE_STEPS, getAssignedRoutineIndex };
+
+
+
 export default function YourSkin() {
   const { latestScan, saveLatestScan, currentUser, setIsLoginOpen, openLoginModal, products, openUpgradeModal, updateUserMembership } = useApp();
   const navigate = useNavigate();
@@ -330,6 +335,31 @@ export default function YourSkin() {
   const [productScanSearch, setProductScanSearch] = useState("");
   const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState("unlock_single");
+  const [isRoutineModalOpen, setIsRoutineModalOpen] = useState(false);
+  const [selectedRoutineIndex, setSelectedRoutineIndex] = useState(() => {
+    return getAssignedRoutineIndex(currentUser);
+  });
+  const [routineFilterTab, setRoutineFilterTab] = useState("all");
+
+  // Đồng bộ chu trình cố định theo từng tài khoản đăng nhập
+  useEffect(() => {
+    setSelectedRoutineIndex(getAssignedRoutineIndex(currentUser));
+  }, [currentUser]);
+
+  const currentRoutine = useMemo(() => {
+    return PERSONALIZED_ROUTINES[selectedRoutineIndex] || PERSONALIZED_ROUTINES[0];
+  }, [selectedRoutineIndex]);
+
+  const filteredRoutineProducts = useMemo(() => {
+    const steps = currentRoutine?.steps || PERSONALIZED_ROUTINE_STEPS;
+    if (routineFilterTab === "morning") {
+      return steps.filter((p) => p.timing === "morning" || p.timing === "both");
+    }
+    if (routineFilterTab === "night") {
+      return steps.filter((p) => p.timing === "night" || p.timing === "both");
+    }
+    return steps;
+  }, [currentRoutine, routineFilterTab]);
 
   // Clinical Report Cards Accordion State (Matching user reference images 1, 3, 4, 5)
   const [expandedClinicalItems, setExpandedClinicalItems] = useState({
@@ -603,13 +633,11 @@ export default function YourSkin() {
   };
 
   const handleGetPersonalizedRoutine = () => {
-    const el =
-      document.querySelector(".product-recommendations-wrapper") ||
-      document.getElementById("recommended-products-section") ||
-      document.querySelector(".skin-result-feedback-bar");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    // Giữ nguyên chu trình cố định của tài khoản, không random lại mỗi lần ấn
+    const assignedIdx = getAssignedRoutineIndex(currentUser);
+    setSelectedRoutineIndex(assignedIdx);
+    setRoutineFilterTab("all");
+    setIsRoutineModalOpen(true);
   };
 
   const SUBSCRIPTION_PLANS = [
@@ -651,11 +679,13 @@ export default function YourSkin() {
       badge: "Chuyên nghiệp",
       price: "249.000đ",
       period: "/ tháng",
-      desc: "Phù hợp cho người muốn theo dõi dài hạn hoặc kết nối tư vấn da liễu.",
+      desc: "Phù hợp cho các cơ sở spa hoặc người dùng theo dõi da chuyên sâu.",
       features: [
         "Đầy đủ tính năng gói Premium",
-        "Báo cáo phân tích chuyên sâu PDF",
-        "Kết nối tư vấn 1-1 với bác sĩ da liễu",
+        "Quét da AI chuyên sâu",
+        "Gợi ý thành phần mỹ phẩm chi tiết",
+        "Không giới hạn số lần phân tích",
+        "Lưu lịch sử & theo dõi tiến trình da",
         "Công cụ quản lý hồ sơ da chuyên sâu"
       ],
       buttonText: "Đăng ký ngay (249k)",
@@ -709,11 +739,18 @@ export default function YourSkin() {
 
   const diagnosticData = useMemo(() => {
     if (displayScan?.metrics && displayScan?.averageScore) {
-      return {
-        metrics: displayScan.metrics,
-        averageScore: displayScan.averageScore,
-        detectedIssues: displayScan.detectedIssues || ["Lỗ chân lông", "Mụn không viêm"]
-      };
+      const isOld67 = (displayScan.averageScore === 6.7 || displayScan.score === 67) &&
+        displayScan.metrics.mun_viem?.score === 9 &&
+        displayScan.metrics.mun_khong_viem?.score === 6 &&
+        displayScan.metrics.lo_chan_long?.score === 5;
+
+      if (!isOld67) {
+        return {
+          metrics: displayScan.metrics,
+          averageScore: displayScan.averageScore,
+          detectedIssues: displayScan.detectedIssues || ["Lỗ chân lông", "Sợi bã nhờn"]
+        };
+      }
     }
     return computeDiagnosticMetrics(
       {
@@ -1157,7 +1194,7 @@ export default function YourSkin() {
       const newScanData = {
         id: "scan-" + Date.now(),
         date: new Date().toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
-        score: parsedData.jsonData?.score || Math.round((diagResult.averageScore || 7.2) * 10),
+        score: Math.round(diagResult.averageScore * 10),
         averageScore: diagResult.averageScore,
         detectedIssues: diagResult.detectedIssues,
         metrics: diagResult.metrics,
@@ -1472,54 +1509,8 @@ export default function YourSkin() {
                       );
                     })}
                   </div>
-
-                  {/* User Satisfaction Feedback Bar */}
-                  <div className="skin-result-feedback-bar">
-                    <span className="skin-feedback-text">
-                      {feedbackGiven ? "Cảm ơn bạn đã phản hồi kết quả da! ❤️" : "Bạn có hài lòng với kết quả phân tích da không?"}
-                    </span>
-                    <div className="skin-feedback-buttons">
-                      <button
-                        type="button"
-                        className={`skin-feedback-btn ${feedbackVote === "up" ? "active" : ""}`}
-                        onClick={() => handleFeedback("up")}
-                        title="Hài lòng"
-                      >
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        className={`skin-feedback-btn ${feedbackVote === "down" ? "active" : ""}`}
-                        onClick={() => handleFeedback("down")}
-                        title="Chưa hài lòng"
-                      >
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Extra Quick Action: Chat with AI Doctor */}
+                  {/* Thẻ: Loại da (Đưa lên trên thanh phản hồi) */}
                   <div className="skin-result-extra-actions">
-                    <button
-                      type="button"
-                      className="skin-result-btn-consult-ai"
-                      onClick={() => handleOpenAiDoctor(zones[0])}
-                    >
-                      💬 Chat Trực Tiếp Với Bác Sĩ AI
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* BÊN CẠNH: CÁC THẺ BÁO CÁO LÂM SÀNG (Loại da, Tình trạng da chưa tốt, Tình trạng da tốt, Chu trình chăm sóc) */}
-              <div className="skin-clinical-panel">
-                {/* ================= THẺ CHẨN ĐOÁN LÂM SÀNG (Images 1, 3, 4, 5) ================= */}
-                  <div className="skin-clinical-cards-wrapper">
-                    {/* Thẻ 1: Loại da */}
                     <div className="skin-report-card">
                       <div className="skin-report-card-header">
                         <div className="skin-report-header-title-wrap">
@@ -1593,6 +1584,44 @@ export default function YourSkin() {
                         )}
                       </div>
                     </div>
+                  </div>
+
+                  {/* User Satisfaction Feedback Bar (Đưa xuống dưới thẻ Loại da) */}
+                  <div className="skin-result-feedback-bar">
+                    <span className="skin-feedback-text">
+                      {feedbackGiven ? "Cảm ơn bạn đã phản hồi kết quả da! ❤️" : "Bạn có hài lòng với kết quả phân tích da không?"}
+                    </span>
+                    <div className="skin-feedback-buttons">
+                      <button
+                        type="button"
+                        className={`skin-feedback-btn ${feedbackVote === "up" ? "active" : ""}`}
+                        onClick={() => handleFeedback("up")}
+                        title="Hài lòng"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        className={`skin-feedback-btn ${feedbackVote === "down" ? "active" : ""}`}
+                        onClick={() => handleFeedback("down")}
+                        title="Chưa hài lòng"
+                      >
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* BÊN CẠNH: CÁC THẺ BÁO CÁO LÂM SÀNG (Loại da, Tình trạng da chưa tốt, Tình trạng da tốt, Chu trình chăm sóc) */}
+              <div className="skin-clinical-panel">
+                {/* ================= THẺ CHẨN ĐOÁN LÂM SÀNG (Images 1, 3, 4, 5) ================= */}
+                  <div className="skin-clinical-cards-wrapper">
+                    
 
                     {/* Thẻ 2: Tình trạng da chưa tốt (7 mục) */}
                     <div className="skin-report-card">
@@ -2641,6 +2670,108 @@ export default function YourSkin() {
                     </div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PERSONALIZED SKINCARE ROUTINE MODAL */}
+        {isRoutineModalOpen && (
+          <div className="routine-modal-overlay" onClick={() => setIsRoutineModalOpen(false)}>
+            <div className="routine-modal-container" onClick={(e) => e.stopPropagation()}>
+              <div className="routine-modal-header">
+                <div className="routine-modal-header-info">
+                  <h3 className="routine-modal-title" style={{ margin: 0 }}>
+                    Chu Trình Chăm Sóc Da Dành Riêng Cho Bạn
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  className="routine-modal-close-btn"
+                  onClick={() => setIsRoutineModalOpen(false)}
+                  title="Đóng"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="routine-modal-toolbar">
+                <div className="routine-filter-tabs">
+                  <button
+                    type="button"
+                    className={`routine-filter-tab ${routineFilterTab === "all" ? "active" : ""}`}
+                    onClick={() => setRoutineFilterTab("all")}
+                  >
+                    🌟 Tất cả ({(currentRoutine?.steps || []).length} bước)
+                  </button>
+                  <button
+                    type="button"
+                    className={`routine-filter-tab ${routineFilterTab === "morning" ? "active" : ""}`}
+                    onClick={() => setRoutineFilterTab("morning")}
+                  >
+                    ☀️ Buổi sáng ({(currentRoutine?.steps || []).filter((p) => p.timing === "morning" || p.timing === "both").length} bước)
+                  </button>
+                  <button
+                    type="button"
+                    className={`routine-filter-tab ${routineFilterTab === "night" ? "active" : ""}`}
+                    onClick={() => setRoutineFilterTab("night")}
+                  >
+                    🌙 Buổi tối ({(currentRoutine?.steps || []).filter((p) => p.timing === "night" || p.timing === "both").length} bước)
+                  </button>
+                </div>
+                <span className="routine-toolbar-hint">
+                  Nhấn "Shopee ↗" để xem chi tiết sản phẩm chính hãng
+                </span>
+              </div>
+
+              <div className="routine-modal-body">
+                <div className="routine-products-grid">
+                  {filteredRoutineProducts.map((prod) => (
+                    <div key={prod.id} className="routine-product-card">
+                      <div className="routine-card-top-bar">
+                        <span className="routine-step-pill">BƯỚC {prod.stepNumber}: {prod.stepCategory}</span>
+                        <span className="routine-timing-pill">{prod.timingBadge}</span>
+                      </div>
+
+                      <div className="routine-product-img-wrapper">
+                        <img src={prod.image} alt={prod.name} className="routine-product-img" />
+                        <img src="/khungShopee.png" alt="Khung Shopee" className="product-card-shopee-frame" />
+                      </div>
+
+                      <div className="routine-product-details">
+                        <div className="routine-product-brand">{prod.brand}</div>
+                        <h4 className="routine-product-title" title={prod.name}>
+                          {prod.name}
+                        </h4>
+
+                        <div className="routine-product-footer">
+                          <a
+                            href={prod.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="routine-shopee-link"
+                            style={{ width: "100%", justifyContent: "center" }}
+                          >
+                            Mua trên Shopee ↗
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="routine-modal-footer">
+                <div className="routine-modal-tip">
+                  💡 <strong>Khuyên dùng:</strong> Hãy tuân thủ thứ tự các bước từ lỏng đến đặc (Làm sạch ➔ Toner ➔ Serum ➔ Khóa ẩm ➔ Chống nắng). Kiên trì 14-28 ngày để thấy sự biến chuyển tích cực!
+                </div>
+                <button
+                  type="button"
+                  className="routine-modal-confirm-btn"
+                  onClick={() => setIsRoutineModalOpen(false)}
+                >
+                  Đã hiểu, đóng lại
+                </button>
               </div>
             </div>
           </div>

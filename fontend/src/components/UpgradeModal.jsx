@@ -50,10 +50,12 @@ export default function UpgradeModal() {
       membershipCode: "VIP",
       features: [
         "Đầy đủ toàn bộ quyền lợi cao cấp của gói Premium",
-        "Xuất báo cáo phân tích chuyên sâu định dạng PDF chuẩn hồ sơ",
-        "Kết nối tư vấn 1-1 trực tiếp với Bác sĩ Da Liễu chuyên khoa",
+        "Quét da AI chuyên sâu",
+        "Gợi ý thành phần mỹ phẩm chi tiết",
+        "Không giới hạn số lần phân tích",
+        "Lưu lịch sử & theo dõi tiến trình da",
         "Công cụ quản lý hồ sơ da cho khách hàng & người thân",
-        "Ưu tiên hỗ trợ riêng từ đội ngũ chuyên gia da liễu 24/7",
+        "Ưu tiên hỗ trợ riêng 24/7",
       ],
     },
   };

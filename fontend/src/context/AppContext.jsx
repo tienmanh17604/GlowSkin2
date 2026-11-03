@@ -303,7 +303,7 @@ export function AppProvider({ children }) {
         notes: notesText,
         routineDone: true,
         hasGift: false,
-        lastCapturedAt: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+        lastCapturedAt: `${new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })} ngày ${displayDate}`,
         updatedAt: new Date().toISOString()
       });
     }

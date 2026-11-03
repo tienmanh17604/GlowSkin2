@@ -1077,8 +1077,10 @@ export default function Home({ videoReady = false }) {
             <p className="plan-desc">Phù hợp cho các cơ sở spa hoặc trung tâm chăm sóc khách hàng.</p>
             <ul className="plan-features">
               <li>✓ Đầy đủ tính năng gói Premium</li>
-              <li>✓ Báo cáo phân tích chuyên sâu PDF</li>
-              <li>✓ Kết nối tư vấn 1-1 với bác sĩ da liễu</li>
+              <li>✓ Quét da AI chuyên sâu</li>
+              <li>✓ Gợi ý thành phần mỹ phẩm chi tiết</li>
+              <li>✓ Không giới hạn số lần phân tích</li>
+              <li>✓ Lưu lịch sử & theo dõi tiến trình da</li>
               <li>✓ Công cụ quản lý hồ sơ da khách hàng</li>
             </ul>
             <button className="plan-btn" onClick={() => openUpgradeModal("Professional")}>Đăng ký ngay</button>
